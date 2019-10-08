@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema; //Para crear documentos en la coleccion
 
 var TicketSchema = Schema({
-    num: Number,
+    numTicket: Number,
     sub: String,
     requester: {type: Schema.ObjectId, ref:'User'},
     agent: {type: Schema.ObjectId, ref:'User'},
