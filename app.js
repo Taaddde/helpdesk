@@ -7,7 +7,7 @@ var path = require('path');
 var app = express();
 
 //cargar rutas
-//var user_routes = require('./routes/user');
+var user_routes = require('./routes/user');
 
 app.use(bodyparser.urlencoded({extended:false}));
 app.use(bodyparser.json());
@@ -24,7 +24,7 @@ app.use((req, res, next)=>{
 
 //rutas base
 //app.use('/', express.static('client', {redirect:false}));
-//app.use('/api', user_routes);
+app.use('/api/user', user_routes);
 /*
 app.get('*', function(req, res, next){
 	res.sendFile(path.resolve('client/index.html'));

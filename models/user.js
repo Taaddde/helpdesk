@@ -9,8 +9,8 @@ var UserSchema = Schema({
     userName: String,
     password: String,
     email: String,
-    role: String,
-    sign: String,
+    role: {type: String, default:'ROLE_AGENT'},
+    sign: {type: String, default:''},
     teams: [
         {
             team: {type: Schema.ObjectId, ref:'Team'}
