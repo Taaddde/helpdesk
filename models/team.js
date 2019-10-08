@@ -5,7 +5,7 @@ var Schema = mongoose.Schema; //Para crear documentos en la coleccion
 
 var TeamSchema = Schema({
     name: String,
-    surname: String,
+    image: {type: String, default:'null'},
     default: {type: Boolean, default:false},
 });
 

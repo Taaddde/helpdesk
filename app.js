@@ -8,6 +8,7 @@ var app = express();
 
 //cargar rutas
 var user_routes = require('./routes/user');
+var team_routes = require('./routes/team');
 
 app.use(bodyparser.urlencoded({extended:false}));
 app.use(bodyparser.json());
@@ -25,6 +26,8 @@ app.use((req, res, next)=>{
 //rutas base
 //app.use('/', express.static('client', {redirect:false}));
 app.use('/api/user', user_routes);
+app.use('/api/team', team_routes);
+
 /*
 app.get('*', function(req, res, next){
 	res.sendFile(path.resolve('client/index.html'));
