@@ -8,10 +8,12 @@ var md_upload = multipart({uploadDir: './uploads/users'}); //Donde se van a subi
 
 var api = express.Router(); 
 // segundo parametro = middleware
-api.get('/:id', md_auth.ensureAuth, userController.getUser);
+api.get('/user/:id', md_auth.ensureAuth, userController.getUser);
 api.get('/users', md_auth.ensureAuth, userController.getUsers);
+
 api.post('/add-team/:id', md_auth.ensureAuth, userController.addTeam);
 api.post('/login', userController.loginUser);
+
 api.post('/image/:id',[md_auth.ensureAuth, md_upload], userController.uploadImage);
 api.get('/image/:imageFile', userController.getImageFile);
 //Put para actualizar
