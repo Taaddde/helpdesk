@@ -11,6 +11,7 @@ var user_routes = require('./routes/user');
 var team_routes = require('./routes/team');
 var response_routes = require('./routes/response');
 var tag_routes = require('./routes/tag');
+var company_routes = require('./routes/company');
 
 app.use(bodyparser.urlencoded({extended:false}));
 app.use(bodyparser.json());
@@ -31,6 +32,7 @@ app.use('/api/user', user_routes);
 app.use('/api/team', team_routes);
 app.use('/api/response', response_routes);
 app.use('/api/tag', tag_routes);
+app.use('/api/company', company_routes);
 
 /*
 app.get('*', function(req, res, next){
