@@ -5,7 +5,7 @@ var moment = require('moment')
 var Schema = mongoose.Schema; //Para crear documentos en la coleccion
 
 var TagSchema = Schema({
-    text: String,
+    name: String,
     uses: {type: Number, default:0}    
 });
 
