@@ -9,6 +9,7 @@ var app = express();
 //cargar rutas
 var user_routes = require('./routes/user');
 var team_routes = require('./routes/team');
+var response_routes = require('./routes/response');
 
 app.use(bodyparser.urlencoded({extended:false}));
 app.use(bodyparser.json());
@@ -27,6 +28,7 @@ app.use((req, res, next)=>{
 //app.use('/', express.static('client', {redirect:false}));
 app.use('/api/user', user_routes);
 app.use('/api/team', team_routes);
+app.use('/api/response', response_routes);
 
 /*
 app.get('*', function(req, res, next){

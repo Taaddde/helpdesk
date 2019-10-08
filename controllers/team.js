@@ -80,7 +80,7 @@ function updateTeam(req, res){
 function deleteTeam(req, res){
     var teamId = req.params.id;
 
-    Team.findByIdAndDelete(teamId, update, (err, teamRemoved) =>{
+    Team.findByIdAndDelete(teamId, (err, teamRemoved) =>{
         if(err){
             res.status(500).send({message: 'Error en la petición'});
         }else{
