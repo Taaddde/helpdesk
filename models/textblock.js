@@ -6,8 +6,9 @@ var Schema = mongoose.Schema; //Para crear documentos en la coleccion
 
 var TextBlockSchema = Schema({
     text: String,
+    user: {type: Schema.ObjectId, ref:'User'},
     createDate: {type: Date, default:Date.now()},
-    ticket: {type: Schema.ObjectId, ref:'ticket'},
+    ticket: {type: Schema.ObjectId, ref:'Ticket'},
 });
 
 module.exports = mongoose.model('TextBlock', TextBlockSchema);

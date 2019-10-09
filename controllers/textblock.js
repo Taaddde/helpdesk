@@ -19,7 +19,6 @@ function getTextBlock(req, res){
 }
 
 function getTextBlocks(req, res){
-    var textblockId = req.params.id;
 
     TextBlock.find({}, (err, textblocks) =>{
         if(err){
@@ -40,6 +39,7 @@ function saveTextBlock(req, res){
     var params = req.body;
 
     textblock.text = params.text;
+    textblock.user = params.user;
     textblock.ticket = params.ticket;
 
     textblock.save((err, textblockStored) =>{
