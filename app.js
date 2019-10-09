@@ -13,6 +13,7 @@ var response_routes = require('./routes/response');
 var tag_routes = require('./routes/tag');
 var company_routes = require('./routes/company');
 var ticket_routes = require('./routes/ticket');
+var textblock_routes = require('./routes/textblock');
 
 app.use(bodyparser.urlencoded({extended:false}));
 app.use(bodyparser.json());
@@ -35,6 +36,7 @@ app.use('/api/response', response_routes);
 app.use('/api/tag', tag_routes);
 app.use('/api/company', company_routes);
 app.use('/api/ticket', ticket_routes);
+app.use('/api/textblock', textblock_routes);
 
 /*
 app.get('*', function(req, res, next){
