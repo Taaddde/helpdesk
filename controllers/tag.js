@@ -56,7 +56,7 @@ function getTags(req, res){
 }
 
 function getTagsForName(req, res){
-    var name = req.body.name;
+    var name = req.params.name;
     Tag.find({name: { "$regex": name, "$options": "i" }}).sort('name').exec(function(err, tags){
         if(err){
             res.status(500).send({message: 'Error del servidor en la peticion'})

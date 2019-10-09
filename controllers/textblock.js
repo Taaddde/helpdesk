@@ -56,7 +56,7 @@ function saveTextBlock(req, res){
 }
 
 function getTextBlockForText(req, res){
-    var text = req.body.text;
+    var text = req.params.text;
     TextBlock.find({text: { "$regex": text, "$options": "i" }}).sort('createDate').exec(function(err, textblocks){
         if(err){
             res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -73,7 +73,7 @@ function getTextBlockForText(req, res){
 }
 
 function getTextBlockForTicket(req, res){
-    var ticket = req.body.ticket;
+    var ticket = req.params.ticket;
     TextBlock.find({ticket: ticket}).sort('createDate').exec(function(err, textblocks){
         if(err){
             res.status(500).send({message: 'Error del servidor en la peticion'})

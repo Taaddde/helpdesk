@@ -9,8 +9,8 @@ var api = express.Router();
 //CONSULTAS
 api.get('/textblock/:id', md_auth.ensureAuth, textblockController.getTextBlock);
 api.get('/textblocks', md_auth.ensureAuth, textblockController.getTextBlocks);
-api.get('/for-text', md_auth.ensureAuth, textblockController.getTextBlockForText);
-api.get('/for-ticket', md_auth.ensureAuth, textblockController.getTextBlockForTicket);
+api.get('/for-text/:text', md_auth.ensureAuth, textblockController.getTextBlockForText);
+api.get('/for-ticket/:ticket', md_auth.ensureAuth, textblockController.getTextBlockForTicket);
 
 //ABM
 api.post('/add',md_auth.ensureAuth, textblockController.saveTextBlock);

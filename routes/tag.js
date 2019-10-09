@@ -9,7 +9,7 @@ var api = express.Router();
 //CONSULTAS
 api.get('/tag/:id', md_auth.ensureAuth, tagController.getTag);
 api.get('/tags', md_auth.ensureAuth, tagController.getTags);
-api.get('/for-name', md_auth.ensureAuth, tagController.getTagsForName);
+api.get('/for-name/:name', md_auth.ensureAuth, tagController.getTagsForName);
 
 //ABM
 api.post('/add',md_auth.ensureAuth, tagController.saveTag);

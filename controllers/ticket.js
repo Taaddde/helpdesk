@@ -61,7 +61,7 @@ function getTickets(req, res){
 }
 
 function getTicketsForNumber(req, res){
-    var num = req.body.num;
+    var num = req.params.num;
     Ticket.findOne({numTicket:num}).exec(function(err, ticket){
         if(err){
             res.status(500).send({message: 'Error del servidor en la peticion'})

@@ -57,7 +57,7 @@ function getResponses(req, res){
 }
 
 function getResponsesForName(req, res){
-    var hashtag = req.body.hashtag;
+    var hashtag = req.params.hashtag;
     Response.find({hashtag: { "$regex": hashtag, "$options": "i" }}).sort('hashtag').exec(function(err, responses){
         if(err){
             res.status(500).send({message: 'Error del servidor en la peticion'})
