@@ -2,7 +2,7 @@ export class Ticket{
 
     constructor(
         public _id: string,
-        public num: number,
+        public numTicket: number,
         public requester: string,
         public agent: string,
         public status: string,

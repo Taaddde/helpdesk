@@ -9,8 +9,8 @@ var TicketSchema = Schema({
     requester: {type: Schema.ObjectId, ref:'User'},
     agent: {type: Schema.ObjectId, ref:'User'},
     status: {type: String, default:"Pendiente"},
-    lastActivity: {type: Date, default:Date.now()},
-    createDate: {type: Date, default:Date.now()},
+    lastActivity: {type: String},
+    createDate: {type: String},
     rating: {type: Number, default:0},
     source: {type: String, default:"NN"},
     tags: [

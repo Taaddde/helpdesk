@@ -1,6 +1,8 @@
 'use strict'
 
 var Ticket = require('../models/ticket');
+const moment = require('moment');
+var moment_tz = require('moment-timezone');
 
 function getTicket(req, res){
     var ticketId = req.params.id;
@@ -27,7 +29,10 @@ function saveTicket(req, res){
         ticket.numTicket = count+1;
         ticket.sub = params.sub;
         ticket.requester = params.requester;
+        ticket.agent = params.agent;
         ticket.source = params.source;
+        ticket.createDate = moment().format("DD-MM-YYYY HH:mm");
+        ticket.lastActivity = moment().format("DD-MM-YYYY HH:mm");
     
         ticket.save((err, ticketStored) =>{
             if(err){
@@ -45,7 +50,12 @@ function saveTicket(req, res){
 
 
 function getTickets(req, res){
-    Ticket.find({}).sort('hashtag').exec(function(err, tickets){
+    var populateQuery = [
+        {path:'requester',select:['name','surname','image']},
+        {path:'agent',select:['name','surname','image']}, 
+    ];
+
+    Ticket.find({}).sort('hashtag').populate(populateQuery).exec(function(err, tickets){
         if(err){
             res.status(500).send({message: 'Error del servidor en la peticion'})
         }else{

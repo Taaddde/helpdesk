@@ -6,11 +6,13 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 
 import {routing, appRoutingProviders} from './app.routing';
+import { TicketListComponent } from './components/ticket-list/ticket-list.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TicketListComponent
   ],
   imports: [
     BrowserModule,
