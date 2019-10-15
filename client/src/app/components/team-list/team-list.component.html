@@ -1,0 +1,35 @@
+<div class="card-body">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="text-md-right dataTables_filter" id="dataTable_filter"><label><input type="search" class="form-control form-control-sm" placeholder="Buscar" /></label></div>
+        </div>
+        <div class="col-lg-10">
+            <input type="button" class="btn btn-dark" value="Nuevo equipo">
+        </div>
+    </div>
+    <div class="table-responsive table mt-2" id="dataTable">
+        <table class="table dataTable my-0" id="dataTable">
+            <thead>
+                <tr>
+                    <th>Img</th>
+                    <th>Nombre</th>
+                    <th>Usuarios</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let team of teams">
+                <tr class="select">
+                    <td data-title="Img"><img class="rounded-circle mr-2" width="30" height="30" src="{{url+'team/image/'+team.image}}" /></td>
+                    <td data-title="Nombre">{{team.name}}</td>
+                    <td data-title="Usuarios">{{cantUsers(team.users)}}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td><strong>Img</strong></td>
+                    <td><strong>Nombre</strong></td>
+                    <td><strong>Usuarios</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

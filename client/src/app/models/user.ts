@@ -8,8 +8,6 @@ export class User{
         public password: string,
         public email: string,
 
-        public teams: [string],
-
         public role: string,
         public sign: string,
         public image: string,

@@ -21,4 +21,9 @@ api.post('/add',md_auth.ensureAuth, teamController.saveTeam);
 api.put('/update/:id', md_auth.ensureAuth, teamController.updateTeam);
 api.delete('/delete/:id', md_auth.ensureAuth, teamController.deleteTeam);
 
+//AÑADIR UN USUARIO
+api.put('/add-user/:id', md_auth.ensureAuth, teamController.addUser);
+api.put('/remove-user/:id', md_auth.ensureAuth, teamController.removeUser);
+
+
 module.exports = api;

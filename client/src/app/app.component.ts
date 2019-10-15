@@ -28,8 +28,8 @@ export class AppComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router
   ){
-    this.user = new User('','','','','','',[''],'ROLE_REQUESTER','','');
-    this.user_register = new User('','','','','','',[''],'ROLE_REQUESTER','','');
+    this.user = new User('','','','','','','ROLE_REQUESTER','','');
+    this.user_register = new User('','','','','','','ROLE_REQUESTER','','');
     this.url=GLOBAL.url;
     this.alertMessage = '';
   } 
@@ -67,7 +67,7 @@ export class AppComponent implements OnInit {
               }else{
                 // Crear elemento en el localstorage para tener el token en sesion
                 localStorage.setItem('token', token);
-                this.user = new User('','','','','','',[''],'ROLE_REQUESTER','','');
+                this.user = new User('','','','','','','ROLE_REQUESTER','','');
                 location.reload();
               }
             },

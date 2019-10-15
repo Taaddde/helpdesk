@@ -139,48 +139,6 @@ function getUsers(req, res){
     });
 }
 
-function addTeam(req, res){
-    var userId = req.params.id;
-    var team = req.body;
-
-    /** assume here we get 54fcb3890cba9c4234f5c925 id 
-    of article as shown in our demo json bve
-     "_id" : ObjectId("54fcb3890cba9c4234f5c925"),
-     **/ 
-    /** assume your req.body like is below
-        you can set your logic your own ways
-        for this article i am assuming that data
-        would come like below
-    **/
-    //req.body={post: "this is the test comments"};
-     
-     User.findByIdAndUpdate(
-     userId,
-     { $push: {"teams": req.body}},
-     {  safe: true, upsert: true},
-       function(err, model) {
-         if(err){
-        	console.log(err);
-        	return res.send(err);
-         }
-          return res.json(model);
-      });
-/*
-    var populateQuery = [{path:'teams', select:'team'}];
-
-    User.findByIdAndUpdate(userId, {'$push': {'teams':  mongoose.Types.ObjectId(team._id)}}, { new: true, upsert: true }, (err, userUpdated) =>{
-        if(err){
-            res.status(500).send({message:'Error en la petición', team, userId});
-        }else{
-            if(!userUpdated){
-                res.status(404).send({message:'El usuario no existe'});
-            }else{
-                res.status(200).send({user:userUpdated});
-            }
-        }
-    }).populate(populateQuery);*/
-}
-
 function loginUser(req, res){
     var params = req.body;
 
@@ -291,6 +249,4 @@ module.exports = {
     getUsers,
 
     loginUser,
-    
-    addTeam,
 };

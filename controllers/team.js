@@ -44,7 +44,12 @@ function saveTeam(req, res){
 
 
 function getTeams(req, res){
-    Team.find({}).sort('name').exec(function(err, teams){
+    var populateQuery = [
+        {path:'users', model:'User', select:['name','surname','image']},
+    ];
+
+
+    Team.find({}).sort('name').populate(populateQuery).exec(function(err, teams){
         if(err){
             res.status(500).send({message: 'Error del servidor en la peticion'})
         }else{
@@ -142,13 +147,78 @@ function getImageFile(req, res){
 }
 
 
+function addUser(req, res){
+    var teamId = req.params.id;
+    var user = req.body.user;
+
+    Team.find({users:user}, (err, userCheck)=>{
+        if(err){
+            res.status(500).send({message:err})
+        }else{
+            if(userCheck && userCheck.length != 0){
+                res.status(400).send({message:'El usuario ya esta dentro del equipo'})
+            }else{
+                Team.findByIdAndUpdate(
+                    teamId,
+                    { $push: {"users": {_id:user}}},
+                    {  safe: true, upsert: true},
+                      function(err, model) {
+                        if(err){
+                           console.log(err);
+                           return res.send(err);
+                        }
+                         return res.json(model);
+                     });
+            }
+        }
+    })
+     
+     
+/*
+    var populateQuery = [{path:'teams', select:'team'}];
+
+    User.findByIdAndUpdate(userId, {'$push': {'teams':  mongoose.Types.ObjectId(team._id)}}, { new: true, upsert: true }, (err, userUpdated) =>{
+        if(err){
+            res.status(500).send({message:'Error en la petición', team, userId});
+        }else{
+            if(!userUpdated){
+                res.status(404).send({message:'El usuario no existe'});
+            }else{
+                res.status(200).send({user:userUpdated});
+            }
+        }
+    }).populate(populateQuery);*/
+}
+
+function removeUser(req, res){
+    var teamId = req.params.id;
+    var user = req.body.user;
+     
+     Team.findByIdAndUpdate(
+     teamId,
+     { $pull: {"users": user}},
+     {  safe: true, upsert: false},
+       function(err, model) {
+         if(err){
+        	console.log(err);
+        	return res.send(err);
+         }
+          return res.json(model);
+      });
+}
+
+
  
 module.exports = {
     getTeam,
-    saveTeam,
     getTeams,
+
+    saveTeam,
     updateTeam,
     deleteTeam,
     uploadImage,
-    getImageFile
+    getImageFile,
+
+    addUser,
+    removeUser
 };

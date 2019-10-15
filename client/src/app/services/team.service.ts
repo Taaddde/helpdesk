@@ -73,6 +73,25 @@ export class teamService{
                             .map(res => res.json());
     }
 
+    addUser(token, id:string, userId: string){
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+        });
+
+        return this._http.put(this.url+'team/add-user/'+id, {user:userId}, {headers: headers})
+                            .map(res => res.json());
+    }
+
+    removeUser(token, id:string, userId: string){
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+        });
+
+        return this._http.put(this.url+'team/remove-user/'+id, {user:userId}, {headers: headers})
+                            .map(res => res.json());
+    }
     
 
 }

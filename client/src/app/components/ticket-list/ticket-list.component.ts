@@ -9,7 +9,7 @@ import { ticketService } from 'app/services/ticket.service';
 @Component({
   selector: 'app-ticket-list',
   templateUrl: './ticket-list.component.html',
-  styleUrls: ['./ticket-list.component.scss'],
+  styleUrls: ['../../styles/list.scss'],
   providers:[userService, ticketService]
 })
 export class TicketListComponent implements OnInit {
@@ -45,22 +45,22 @@ export class TicketListComponent implements OnInit {
   getTickets(){
 
   
-        this._ticketService.getList(this.token).subscribe(
-            response =>{
-                if(!response.tickets){
-                  this._router.navigate(['/']);
-                }else{
-                  this.tickets = response.tickets;
-                }
-            },
-            error =>{
-                var errorMessage = <any>error;
-                if(errorMessage != null){
-                var body = JSON.parse(error._body);
-                //this.alertMessage = body.message;
-                console.log(error);
-                }
+    this._ticketService.getList(this.token).subscribe(
+        response =>{
+            if(!response.tickets){
+              this._router.navigate(['/']);
+            }else{
+              this.tickets = response.tickets;
             }
-        );
+        },
+        error =>{
+            var errorMessage = <any>error;
+            if(errorMessage != null){
+            var body = JSON.parse(error._body);
+            //this.alertMessage = body.message;
+            console.log(error);
+            }
+        }
+    );
   }
 }

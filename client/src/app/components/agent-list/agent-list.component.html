@@ -1,0 +1,50 @@
+<div class="card-body">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="text-md-right dataTables_filter" id="dataTable_filter"><label><input type="search" class="form-control form-control-sm" placeholder="Buscar" /></label></div>
+        </div>
+        <div class="col-lg-10">
+            <input type="button" class="btn btn-dark" value="Nuevo agente" [routerLink]="['/agent/new']">
+        </div>
+    </div>
+    <div class="table-responsive table mt-2" id="dataTable">
+        <table class="table dataTable my-0" id="dataTable">
+            <thead>
+                <tr>
+                    <th>Img</th>
+                    <th>Apellido</th>
+                    <th>Nombre</th>
+                    <th>E-mail</th>
+                    <th>Rol</th>
+                    <th>ID</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let user of users">
+                <tr class="select" [routerLink]="['/agent/edit',user._id]">
+                    <td data-title="Img">
+                        <img *ngIf="user.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+user.image}}" />
+                        <img *ngIf="user.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="../../../assets/img/system/user-placeholder.png" />
+                    </td>
+                    <td data-title="Apellido">{{user.surname}}</td>
+                    <td data-title="Nombre">{{user.name}}</td>
+                    <td data-title="E-mail">{{user.email}}</td>
+                    <td data-title="Rol">
+                      <span *ngIf="user.role == 'ROLE_AGENT'">Agente</span>
+                      <span *ngIf="user.role == 'ROLE_ADMIN'">Administrador</span>
+                    </td>
+                    <td data-title="ID">{{user.userName}}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td><strong>Img</strong></td>
+                    <td><strong>Apellido</strong></td>
+                    <td><strong>Nombre</strong></td>
+                    <td><strong>E-mail</strong></td>
+                    <td><strong>Rol</strong></td>
+                    <td><strong>ID</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

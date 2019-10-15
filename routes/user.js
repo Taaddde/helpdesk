@@ -12,9 +12,6 @@ var api = express.Router();
 api.get('/user/:id', md_auth.ensureAuth, userController.getUser);
 api.get('/users', md_auth.ensureAuth, userController.getUsers);
 
-//AÑADIR UN TEAM
-api.post('/add-team/:id', md_auth.ensureAuth, userController.addTeam);
-
 //LOGIN
 api.post('/login', userController.loginUser);
 
