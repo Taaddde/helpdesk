@@ -12,9 +12,11 @@ const appRoutes: Routes = [
     //Redireccion
     //{path: '', redirectTo: 'home', pathMatch: 'full'},
 
-    {path: 'ticket', component: TicketListComponent},
-    {path: 'agent', component: AgentTeamComponent},
+    {path: 'ticket/:page/:perPage', component: TicketListComponent},
+    { path: 'ticket', redirectTo: 'ticket/1/10', pathMatch: 'full' },
+    { path: 'ticket/:page', redirectTo: 'ticket/1/10', pathMatch: 'full' },
 
+    {path: 'agent', component: AgentTeamComponent},
     {path: 'agent/new', component: AgentNewComponent},
     {path: 'agent/edit/:id', component: AgentEditComponent},
 

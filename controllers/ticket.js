@@ -2,6 +2,8 @@
 
 var Ticket = require('../models/ticket');
 const moment = require('moment');
+var mongoosePaginate = require('mongoose-pagination');
+
 var moment_tz = require('moment-timezone');
 
 function getTicket(req, res){
@@ -70,6 +72,37 @@ function getTickets(req, res){
     });
 }
 
+function getTicketsPaged(req, res){
+    var populateQuery = [
+        {path:'requester',select:['name','surname','image']},
+        {path:'agent',select:['name','surname','image']}, 
+    ];
+
+    if(req.params.page){
+        var page = req.params.page;
+    }else{
+        var page = 1;
+    }
+
+    var perPage = req.params.perPage;
+
+    
+    
+        Ticket.paginate({},{page:page, limit:perPage, populate:populateQuery, sort:{numTicket:-1}}, function(err, tickets){
+            if(err){
+                res.status(500).send({message: 'Error en la peticion'})
+            }else{
+                if(!tickets){
+                    res.status(404).send({message: 'No hay items'})
+                }else{
+                    return res.status(200).send({
+                        tickets
+                    });
+                }
+            }
+        });
+}
+
 function getTicketsForNumber(req, res){
     var num = req.params.num;
     Ticket.findOne({numTicket:num}).exec(function(err, ticket){
@@ -125,6 +158,7 @@ module.exports = {
     getTicket,
     getTicketsForNumber,
     getTickets,
+    getTicketsPaged,
 
     saveTicket,
     updateTicket,

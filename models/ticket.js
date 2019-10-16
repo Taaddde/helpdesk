@@ -1,6 +1,8 @@
 'use strict'
 
 var mongoose = require('mongoose');
+var mongoosePaginate = require('mongoose-paginate-v2');
+
 var Schema = mongoose.Schema; //Para crear documentos en la coleccion
 
 var TicketSchema = Schema({
@@ -19,5 +21,7 @@ var TicketSchema = Schema({
         }
     ]
 });
+
+TicketSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('Ticket', TicketSchema);

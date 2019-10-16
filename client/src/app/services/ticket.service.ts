@@ -62,6 +62,17 @@ export class ticketService{
                           .map(res => res.json());
     }
 
+    getPaginatedList(token, page, perPage){
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+        });
+  
+        let options = new RequestOptions({headers: headers});
+        return this._http.get(this.url+'ticket/ticketsPaged/'+page+'&'+perPage, options)
+                            .map(res => res.json());
+      }
+
     getOne(token, id){
         let headers = new Headers({
             'Content-Type':'application/json',

@@ -10,6 +10,7 @@ var api = express.Router();
 api.get('/ticket/:id', md_auth.ensureAuth, ticketController.getTicket);
 api.get('/tickets', md_auth.ensureAuth, ticketController.getTickets);
 api.get('/for-number/:num', md_auth.ensureAuth, ticketController.getTicketsForNumber);
+api.get('/ticketsPaged/:page&:perPage', md_auth.ensureAuth, ticketController.getTicketsPaged);
 
 //ABM
 api.post('/add',md_auth.ensureAuth, ticketController.saveTicket);

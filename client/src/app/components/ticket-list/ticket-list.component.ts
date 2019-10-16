@@ -19,9 +19,16 @@ export class TicketListComponent implements OnInit {
   public identity;
   public token;
   public url: string;
-  public nextPage;
-  public prevPage;
-  public confirmado: String;
+
+  public limit: number;
+  public page: number;
+  public nextPage: boolean;
+  public prevPage: boolean;
+  public totalDocs: number;
+  public totalPages: number;
+  public pagingCounter: number;
+
+
   
   constructor(
     private _route: ActivatedRoute,
@@ -33,9 +40,14 @@ export class TicketListComponent implements OnInit {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
-    this.nextPage = 1;
-    this.prevPage = 1;
-}
+    this.limit= 10;
+    this.page= 1;
+    this.nextPage = true;
+    this.prevPage= false;
+    this.totalDocs= null;
+    this.totalPages= 1;
+    this.pagingCounter = 1;
+  }
 
   ngOnInit() {
 
@@ -44,23 +56,38 @@ export class TicketListComponent implements OnInit {
 
   getTickets(){
 
-  
-    this._ticketService.getList(this.token).subscribe(
-        response =>{
-            if(!response.tickets){
-              this._router.navigate(['/']);
-            }else{
-              this.tickets = response.tickets;
-            }
-        },
-        error =>{
-            var errorMessage = <any>error;
-            if(errorMessage != null){
-            var body = JSON.parse(error._body);
-            //this.alertMessage = body.message;
-            console.log(error);
-            }
-        }
-    );
+    this._route.params.forEach((params: Params) =>{
+      this.page = params['page'];
+      this.limit = params['perPage'];
+
+      this._ticketService.getPaginatedList(this.token, this.page, this.limit).subscribe(
+          response =>{
+              if(!response.tickets){
+                this._router.navigate(['/']);
+              }else{
+                this.tickets = response.tickets.docs;
+                this.limit = response.tickets.limit;
+                this.nextPage = response.tickets.nextPage;
+                this.prevPage = response.tickets.prevPage;
+                this.totalDocs = response.tickets.totalDocs;
+                this.totalPages = response.tickets.totalPages;
+                this.pagingCounter = response.tickets.pagingCounter
+              }
+          },
+          error =>{
+              var errorMessage = <any>error;
+              if(errorMessage != null){
+              var body = JSON.parse(error._body);
+              //this.alertMessage = body.message;
+              console.log(error);
+              }
+          }
+      );
+    })
+  }
+
+  changeLimit(val: number){
+    this.limit = val;
+    this._router.navigate(['/ticket',this.page,this.limit]);
   }
 }
