@@ -1,9 +1,42 @@
 'use strict'
 
+var moment = require('moment');
+
+var User = require('../models/user');
 var Team = require('../models/team');
 //Sistema de ficheros
 var fs = require('fs');
 var path = require('path');
+
+function getAgentsInTeam(req, res){
+    var teamId = req.params.id;
+
+    var populateQuery = [
+        {path:'users', model:'User', select:['name','surname','image']},
+    ];
+
+    Team.findById(teamId, (err, team) =>{
+        if(err){
+            res.status(500).send({message: 'Error del servidor en la peticion'});
+        }else{
+            if(!team){
+                res.status(404).send({message: 'El equipo no existe'});
+            }else{
+                User.find({_id:{$nin:team.users}},(err, users) =>{
+                    if(err){
+                        res.status(500).send({message: 'Error del servidor en la peticion', err:err});
+                    }else{
+                        if(!users){
+                            res.status(404).send({message: 'Los usuarios no existen'});
+                        }else{
+                            res.status(200).send({usersIn:team.users, usersOut:users});
+                        }
+                    }
+                })
+            }
+        }
+    }).populate(populateQuery);
+}
 
 function getTeam(req, res){
     var teamId = req.params.id;
@@ -28,6 +61,8 @@ function saveTeam(req, res){
 
     team.name = params.name;
     team.default = false;
+    team.createDate = moment().format("DD-MM-YYYY HH:mm");
+
 
     team.save((err, teamStored) =>{
         if(err){
@@ -155,20 +190,24 @@ function addUser(req, res){
         if(err){
             res.status(500).send({message:err})
         }else{
-            if(userCheck && userCheck.length != 0){
-                res.status(400).send({message:'El usuario ya esta dentro del equipo'})
+            if(!userCheck){
+                res.status(404).send({message:'El usuario no existe'})
             }else{
-                Team.findByIdAndUpdate(
-                    teamId,
-                    { $push: {"users": {_id:user}}},
-                    {  safe: true, upsert: true},
-                      function(err, model) {
-                        if(err){
-                           console.log(err);
-                           return res.send(err);
-                        }
-                         return res.json(model);
-                     });
+                if(userCheck.length != 0){
+                    res.status(400).send({message:'El usuario ya esta dentro del equipo'})
+                }else{
+                    Team.findByIdAndUpdate(
+                        teamId,
+                        { $push: {"users": {_id:user}}},
+                        {  safe: true, upsert: true},
+                          function(err, team) {
+                            if(err){
+                               console.log(err);
+                               return res.send(err);
+                            }
+                             return res.status(200).send({team:team});
+                         });
+                }
             }
         }
     })
@@ -198,13 +237,13 @@ function removeUser(req, res){
      teamId,
      { $pull: {"users": user}},
      {  safe: true, upsert: false},
-       function(err, model) {
-         if(err){
-        	console.log(err);
-        	return res.send(err);
-         }
-          return res.json(model);
-      });
+     function(err, team) {
+        if(err){
+           console.log(err);
+           return res.send(err);
+        }
+         return res.status(200).send({team:team});
+     });
 }
 
 
@@ -212,6 +251,7 @@ function removeUser(req, res){
 module.exports = {
     getTeam,
     getTeams,
+    getAgentsInTeam,
 
     saveTeam,
     updateTeam,

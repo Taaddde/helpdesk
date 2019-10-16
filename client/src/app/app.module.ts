@@ -12,6 +12,8 @@ import { AgentListComponent } from './components/agent-list/agent-list.component
 import { TeamListComponent } from './components/team-list/team-list.component';
 import { AgentNewComponent } from './components/agent-new/agent-new.component';
 import { AgentEditComponent } from './components/agent-new/agent-edit.component';
+import { TeamNewComponent } from './components/team-new/team-new.component';
+import { TeamEditComponent } from './components/team-new/team-edit.component';
 
 
 @NgModule({
@@ -22,7 +24,9 @@ import { AgentEditComponent } from './components/agent-new/agent-edit.component'
     AgentListComponent,
     TeamListComponent,
     AgentNewComponent,
-    AgentEditComponent
+    AgentEditComponent,
+    TeamNewComponent,
+    TeamEditComponent
   ],
   imports: [
     BrowserModule,

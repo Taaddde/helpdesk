@@ -12,6 +12,7 @@ var TeamSchema = Schema({
         default: undefined
     },
     default: {type: Boolean, default:false},
+    createDate: {type: String, default:''},
 });
 
 module.exports = mongoose.model('Team', TeamSchema);

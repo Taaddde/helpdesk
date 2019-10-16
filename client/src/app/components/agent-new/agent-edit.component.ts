@@ -8,7 +8,7 @@ import { uploadService } from 'app/services/upload.service';
 @Component({
   selector: 'app-agent-edit',
   templateUrl: './agent-new.component.html',
-  styleUrls: ['./agent-new.component.scss'],
+  styleUrls: ['../../styles/form.scss'],
   providers: [userService, uploadService]
 })
 export class AgentEditComponent implements OnInit {

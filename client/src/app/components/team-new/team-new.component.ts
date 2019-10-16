@@ -2,62 +2,68 @@ import { Component, OnInit } from '@angular/core';
 import { userService } from 'app/services/user.service';
 import {Router, ActivatedRoute, Params} from '@angular/router'
 import {GLOBAL} from '../../services/global'
-import { User } from 'app/models/user';
 import { uploadService } from 'app/services/upload.service';
+import { Team } from 'app/models/team';
+import { teamService } from 'app/services/team.service';
+import { User } from 'app/models/user';
 
 @Component({
-  selector: 'app-agent-new',
-  templateUrl: './agent-new.component.html',
+  selector: 'app-team-new',
+  templateUrl: './team-new.component.html',
   styleUrls: ['../../styles/form.scss'],
-  providers: [userService, uploadService]
+  providers: [userService, uploadService, teamService]
 })
-export class AgentNewComponent implements OnInit {
+export class TeamNewComponent implements OnInit {
 
-  public user: User;
+  public team: Team;
   public identity;
   public token;
   public url: string;
-  public isAdm: boolean;
+  public isDefault: boolean;
 
   public alertMessage: string;
+
+  public usersInTeam: User[];
+  public usersOutTeam: User[];
+
 
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
     private _userService: userService,
     private _uploadService: uploadService,
+    private _teamService: teamService,
   ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
-    this.user = new User('','','','','','','','','null');
-    this.isAdm = false;
+    this.team = new Team('','',[''],'null','');
+    this.isDefault = false;
     this.alertMessage = '';
+
+
+    this.usersInTeam = [];
+    this.usersOutTeam = [];
+
    }
 
   ngOnInit() {
+    
   }
 
   onSubmit(){
-    if(!this.isAdm){
-      this.user.role = 'ROLE_AGENT';
-    }else{
-      this.user.role = 'ROLE_ADMIN';
-    }
-
-
-    this._userService.add(this.user).subscribe(
+    this._teamService.add(this.token,this.team).subscribe(
       response =>{
-          if(!response.user){
+          if(!response.team){
               this.alertMessage = 'Error en el servidor';
           }else{
                   if(!this.filesToUpload){
-                      this._router.navigate(['/agent']);
+                      this._router.navigate(['/team/edit',response.team._id]);
                   }else{
-                      this._uploadService.makeFileRequest(this.url+'user/image/'+response.user._id, [], this.filesToUpload, this.token, 'image')
+                      this._uploadService.makeFileRequest(this.url+'team/image/'+response.team._id, [], this.filesToUpload, this.token, 'image')
                       .then(
                           result =>{
-                              this._router.navigate(['/agent']);
+                            this._router.navigate(['/team/edit',response.team._id]);
                           }, 
                           error =>{
                               console.log('Error');
