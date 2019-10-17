@@ -6,6 +6,7 @@ import { AgentNewComponent } from './components/agent-new/agent-new.component';
 import { AgentEditComponent } from './components/agent-new/agent-edit.component';
 import { TeamNewComponent } from './components/team-new/team-new.component';
 import { TeamEditComponent } from './components/team-new/team-edit.component';
+import { TicketGestionComponent } from './components/ticket-gestion/ticket-gestion.component';
 
 
 const appRoutes: Routes = [
@@ -15,6 +16,7 @@ const appRoutes: Routes = [
     {path: 'ticket/:page/:perPage', component: TicketListComponent},
     { path: 'ticket', redirectTo: 'ticket/1/10', pathMatch: 'full' },
     { path: 'ticket/:page', redirectTo: 'ticket/1/10', pathMatch: 'full' },
+    { path: 'ticket-gestion/:id', component: TicketGestionComponent},
 
     {path: 'agent', component: AgentTeamComponent},
     {path: 'agent/new', component: AgentNewComponent},

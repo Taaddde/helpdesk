@@ -6,10 +6,12 @@ export class Ticket{
         public requester: string,
         public agent: string,
         public status: string,
-        public lastActivity: Date,
-        public createDate: Date,
+        public lastActivity: string,
+        public createDate: string,
+        public resolveDate: string,
         public rating: number,
         public source: string,
         public tags: [string],
+        public priority: string, 
     ){}
 }

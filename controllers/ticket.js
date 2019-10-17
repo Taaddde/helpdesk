@@ -7,6 +7,11 @@ var mongoosePaginate = require('mongoose-pagination');
 var moment_tz = require('moment-timezone');
 
 function getTicket(req, res){
+    var populateQuery = [
+        {path:'requester',select:['name','surname','image','email']},
+        {path:'agent',select:['name','surname','image']}, 
+        {path:'team',select:['users','name','image'], populate:{path: 'users', model: 'User',select:['name','surname']}},
+    ];
     var ticketId = req.params.id;
 
     Ticket.findById(ticketId, (err, ticket) =>{
@@ -19,7 +24,7 @@ function getTicket(req, res){
                 res.status(200).send({ticket});
             }
         }
-    });
+    }).populate(populateQuery);
 }
 
 function saveTicket(req, res){
@@ -32,6 +37,7 @@ function saveTicket(req, res){
         ticket.sub = params.sub;
         ticket.requester = params.requester;
         ticket.agent = params.agent;
+        ticket.team = params.team;
         ticket.source = params.source;
         ticket.createDate = moment().format("DD-MM-YYYY HH:mm");
         ticket.lastActivity = moment().format("DD-MM-YYYY HH:mm");

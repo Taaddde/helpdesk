@@ -1,0 +1,136 @@
+<div class="row" id="ticket">
+  <div class="col text-break" id="ticket-dates">
+      <div class="row" id="info">
+          <div class="card info-card">
+              <div class="container title-container" style="padding-right: 0;padding-left: 0;">
+                  <div class="text-center title"><label style="margin-left: 13px;font-size: 24px;"><strong>Información del ticket</strong></label></div>
+              </div>
+              <div class="card-body info-card">
+                  <ul class="list-group">
+                      <li class="list-group-item"><span>Número: </span><span><strong>#{{ticket.numTicket}}</strong></span></li>
+                      <li class="list-group-item"><span>Creación: </span><span><strong>{{ticket.createDate}}</strong></span></li>
+                      <li class="list-group-item"><span>Actualizado: </span><span><strong>{{ticket.lastActivity}}</strong></span></li>
+                      <li class="list-group-item"><span>Prioridad: </span><span><strong>{{ticket.priority}}</strong></span></li>
+                      <li class="list-group-item"><span>Valoración: </span><span><strong>5</strong></span><i class="fa fa-star"></i></li>
+                      <li class="list-group-item"><span>Fuente: </span><span><strong>{{ticket.source}}</strong></span></li>
+                      <li class="list-group-item"><span>Etiquetas: </span>
+                        <span *ngFor="let tag of ticket.tags">
+                          <strong>{{tag.name}}<span>;</span></strong>
+                        </span>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+      <div class="row" id="requester">
+          <div class="card info-card">
+              <div class="container title-container" style="padding-right: 0;padding-left: 0;">
+                  <div class="text-center title"><label style="margin-left: 13px;font-size: 24px;"><strong>Solicitante</strong></label></div>
+              </div>
+              <div class="card-body info-card">
+                  <ul class="list-group">
+                      <li class="list-group-item">
+                          <div class="row">
+                              <div class="col-xl-3">
+                                <img *ngIf="ticket.requester.image == 'null'" class="img-requester" src="../../../assets/img/system/user-placeholder.png" />
+                                <img *ngIf="ticket.requester.image != 'null'" class="img-requester" src="{{url+'user/image/'+ticket.requester.image}}" />
+                              </div>
+                              <div class="col-xl-8 align-self-center" *ngIf="ticket.requester">
+                                  <div class="row">
+                                      <div class="col"><span><strong>{{ticket.requester.name+' '+ticket.requester.surname}}</strong></span></div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="col"><span><em>{{ticket.requester.email}}</em></span></div>
+                                  </div>
+                              </div>
+                          </div>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+      <div class="row" id="responsibility">
+          <div class="card info-card">
+              <div class="container title-container">
+                  <div class="text-center title"><label style="margin-left: 13px;font-size: 24px;"><strong>Responsabilidad</strong></label></div>
+              </div>
+              <div class="card-body info-card">
+                  <ul class="list-group">
+                      <li class="list-group-item"><span style="font-size: 18px;"><strong>Equipo</strong></span>
+                          <div class="dropdown d-inline float-right"><button class="btn btn-primary dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button">Cambiar</button>
+                              <div role="menu" class="dropdown-menu"><a role="presentation" class="dropdown-item dark" href="#">First Item</a></div>
+                          </div>
+                          <div style="margin-bottom: 25px;"></div>
+                          <img *ngIf="!ticket.team || ticket.team.image == 'null'" class="rounded-circle img-agent-team" src="../../../assets/img/system/team-placeholder.png" />
+                          <img *ngIf="ticket.team && ticket.team.image != 'null'" class="rounded-circle img-agent-team" src="{{url+'team/image/'+ticket.team.image}}" />
+
+                          <p *ngIf="ticket.team" class="d-inline" style="margin-left: 10px;"><strong>{{ticket.team.name}}</strong></p>
+                          <hr /><span style="font-size: 18px;"><strong>Agente</strong></span>
+                          <div class="dropdown d-inline float-right">
+                            <button class="btn btn-primary dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button">
+                              Cambiar
+                            </button>
+                              <div role="menu" class="dropdown-menu">
+                                <a role="presentation" class="dropdown-item dark" href="#">
+                                </a>
+                              </div>
+                          </div>
+                          <div style="margin-bottom: 25px;"></div>
+                          <img *ngIf="!ticket.agent || ticket.agent.image == 'null'" class="rounded-circle img-agent-team" src="../../../assets/img/system/user-placeholder.png" />
+                          <img *ngIf="ticket.agent && ticket.agent.image != 'null'" class="rounded-circle img-agent-team" src="{{url+'user/image/'+ticket.agent.image}}" />
+                          
+                          <p *ngIf="ticket.agent" class="d-inline" style="margin-left: 10px;"><strong>{{ticket.agent.name+' '+ticket.agent.surname}}</strong></p>
+                          <p *ngIf="!ticket.agent" class="d-inline" style="margin-left: 10px;"><strong>Sin agente</strong></p>
+                          
+                          <div style="margin-top: 10px;"><span>Fecha estimada de solución  </span><input type="date" style="margin-right: 5px;" /><button class="btn btn-primary dark" type="button"><strong>Aceptar</strong></button></div>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+      <div class="row" id="requester-tickets">
+          <div class="card info-card">
+              <div class="container title-container" style="padding-right: 0;padding-left: 0;">
+                  <div class="text-center title"><label style="margin-left: 13px;font-size: 24px;"><strong>Tickets del solicitante</strong></label></div>
+              </div>
+              <div class="card-body card-req-tickets">
+                  <ul class="list-group">
+                      <li class="list-group-item"><a href="#"><span class="border rounded-circle" style="color: rgb(255,255,255);padding-right: 10px;padding-left: 10px;padding-bottom: 5px;padding-top: 5px;background-color: #277ecd;"><strong>Pendiente</strong></span><span><strong>Computadora no funciona</strong></span></a></li>
+                      <li
+                          class="list-group-item"><a href="#"><span class="border rounded-circle" style="color: rgb(255,255,255);padding-right: 10px;padding-left: 10px;padding-bottom: 5px;padding-top: 5px;background-color: #277ecd;"><strong>Pendiente</strong></span><span><strong>Computadora no funciona</strong></span></a></li>
+                          <li
+                              class="list-group-item"><a href="#"><span class="border rounded-circle" style="color: rgb(255,255,255);padding-right: 10px;padding-left: 10px;padding-bottom: 5px;padding-top: 5px;background-color: #277ecd;"><strong>Pendiente</strong></span><span><strong>Computadora no funciona</strong></span></a></li>
+                              <li
+                                  class="list-group-item"><a href="#"><span class="border rounded-circle" style="color: rgb(255,255,255);padding-right: 10px;padding-left: 10px;padding-bottom: 5px;padding-top: 5px;background-color: #277ecd;"><strong>Pendiente</strong></span><span><strong>Computadora no funciona</strong></span></a></li>
+                                  <li
+                                      class="list-group-item"><a href="#"><span class="border rounded-circle" style="color: rgb(255,255,255);padding-right: 10px;padding-left: 10px;padding-bottom: 5px;padding-top: 5px;background-color: #277ecd;"><strong>Pendiente</strong></span><span><strong>Computadora no funciona</strong></span></a></li>
+                                      <li
+                                          class="list-group-item"><a href="#"><span class="border rounded-circle" style="color: rgb(255,255,255);padding-right: 10px;padding-left: 10px;padding-bottom: 5px;padding-top: 5px;background-color: #277ecd;"><strong>Pendiente</strong></span><span><strong>Computadora no funciona</strong></span></a></li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="col-xl-8">
+      <div class="container text-center">
+          <h6 class="d-inline"><strong>Computadora no funciona</strong></h6><a href="#"><i class="fa fa-pencil adjunt" style="margin-left: 6px;"></i></a></div>
+      <div class="row">
+          <div class="col chatbox-scroll" id="chatbox-scroll">
+          
+          </div>
+      </div>
+      <div class="row" style="margin-top: 10px;">
+          <div class="col" id="chat-text">
+              <div class="container"><textarea id="chat-textbox" placeholder="Ingresa un texto para enviar" style="margin-top: 8px;"></textarea></div>
+              <div class="container" id="options-container"><button class="btn btn-primary float-right" type="button"><i class="fa fa-send-o"></i></button><input type="checkbox" /><span style="margin-left: 5px;margin-right: 5px;">Privado</span><span>|</span>
+                  <div class="dropdown d-inline" id="hashtag"><button class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"><i class="fa fa-hashtag adjunt"></i></button>
+                      <div role="menu" class="dropdown-menu"><a role="presentation" class="dropdown-item" href="#">First Item</a><a role="presentation" class="dropdown-item" href="#">Second Item</a></div>
+                  </div><label class="d-inline" style="margin-left: 10px;margin-bottom: 0px;margin-top: 0;"><i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 5px;"></i><input type="file" class="d-none" /></label>
+                  <div class="dropdown d-inline float-right"><button class="btn btn-primary dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">Estado</button>
+                      <div role="menu" class="dropdown-menu dark"><a role="presentation" class="dropdown-item" href="#">First Item</a></div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

@@ -33,7 +33,7 @@
                   </tr>
               </thead>
               <tbody *ngFor="let ticket of tickets">
-                  <tr class="select">
+                  <tr class="select" [routerLink]="['/ticket-gestion',ticket._id]">
                       <td data-title="Numero">{{ticket.numTicket}}</td>
                       <td data-title="Solicitante">
                         <img class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+ticket.requester.image}}" />
