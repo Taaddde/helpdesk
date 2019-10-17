@@ -35,6 +35,7 @@ function saveTicket(req, res){
         ticket.source = params.source;
         ticket.createDate = moment().format("DD-MM-YYYY HH:mm");
         ticket.lastActivity = moment().format("DD-MM-YYYY HH:mm");
+        ticket.priority = params.priority;
     
         ticket.save((err, ticketStored) =>{
             if(err){

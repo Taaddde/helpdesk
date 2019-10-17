@@ -13,13 +13,16 @@ var TicketSchema = Schema({
     status: {type: String, default:"Pendiente"},
     lastActivity: {type: String},
     createDate: {type: String},
+    resolveDate: {type: String, default:"null"},
     rating: {type: Number, default:0},
     source: {type: String, default:"NN"},
     tags: [
         {
             tag: {type: Schema.ObjectId, ref:'Tag'}
         }
-    ]
+    ],
+    priority: {type: String, default:"NORMAL"}
+
 });
 
 TicketSchema.plugin(mongoosePaginate);
