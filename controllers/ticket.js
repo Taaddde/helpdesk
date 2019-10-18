@@ -10,7 +10,7 @@ function getTicket(req, res){
     var populateQuery = [
         {path:'requester',select:['name','surname','image','email']},
         {path:'agent',select:['name','surname','image']}, 
-        {path:'team',select:['users','name','image'], populate:{path: 'users', model: 'User',select:['name','surname']}},
+        {path:'team',select:['users','name','image'], populate:{path: 'users', model: 'User',select:['name','surname','image']}},
     ];
     var ticketId = req.params.id;
 
@@ -27,6 +27,22 @@ function getTicket(req, res){
     }).populate(populateQuery);
 }
 
+function getTicketsForUser(req, res){
+    var userId = req.params.id;
+
+    Ticket.find({$or: [{agent: userId}, {requester: userId}]}, (err, tickets) =>{
+        if(err){
+            res.status(500).send({message: 'Error del servidor en la peticion'});
+        }else{
+            if(!tickets){
+                res.status(404).send({message: 'La ticket no existe'});
+            }else{
+                res.status(200).send({tickets});
+            }
+        }
+    });
+}
+
 function saveTicket(req, res){
     var ticket = new Ticket();
     var c;
@@ -37,6 +53,7 @@ function saveTicket(req, res){
         ticket.sub = params.sub;
         ticket.requester = params.requester;
         ticket.agent = params.agent;
+        ticket.status = params.status;
         ticket.team = params.team;
         ticket.source = params.source;
         ticket.createDate = moment().format("DD-MM-YYYY HH:mm");
@@ -166,6 +183,7 @@ module.exports = {
     getTicketsForNumber,
     getTickets,
     getTicketsPaged,
+    getTicketsForUser,
 
     saveTicket,
     updateTicket,

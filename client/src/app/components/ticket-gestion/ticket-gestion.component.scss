@@ -77,3 +77,27 @@
   width: 30px;
   height: 30px;
 }
+
+.status-buble{
+  color: rgb(255,255,255);
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+
+.pending{
+  background-color: #277ecd;
+}
+
+.finish{
+  background-color: #31d02e;
+}
+
+.closer{
+  background-color: #929292;
+}
+
+.open{
+  background-color: #47b8b8;
+}
