@@ -8,6 +8,11 @@ var path = require('path');
 
 
 function getTextBlock(req, res){
+
+    var populateQuery = [
+        {path:'user', select:['name','surname','image']},
+    ];
+
     var textblockId = req.params.id;
 
     TextBlock.findById(textblockId, (err, textblock) =>{
@@ -20,7 +25,7 @@ function getTextBlock(req, res){
                 res.status(200).send({textblock});
             }
         }
-    });
+    }).populate(populateQuery);
 }
 
 function getTextBlocks(req, res){
@@ -39,6 +44,9 @@ function getTextBlocks(req, res){
 }
 
 function saveTextBlock(req, res){
+
+    
+
     var textblock = new TextBlock();
 
     var params = req.body;
@@ -49,7 +57,6 @@ function saveTextBlock(req, res){
     textblock.type = params.type;
     textblock.read = textblock.read;
     textblock.createDate = moment().format("DD-MM-YYYY HH:mm");
-
 
     textblock.save((err, textblockStored) =>{
         if(err){

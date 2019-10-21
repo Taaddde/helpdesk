@@ -77,7 +77,7 @@
                                   Cambiar
                                 </button>
                               <div role="menu" class="dropdown-menu">
-                                <a role="presentation" class="dropdown-item dark" *ngFor="let team of teams" (click)="selectTeam(team._id)">
+                                <a role="presentation" class="dropdown-item dark" *ngFor="let team of teams" (click)="selectTeam(team._id, team.name)">
                                     {{team.name}}
                                 </a>
                             </div>
@@ -93,7 +93,7 @@
                               Cambiar
                             </button>
                               <div role="menu" class="dropdown-menu">
-                                <a role="presentation" class="dropdown-item dark" *ngFor="let agent of agents" (click)="selectAgent(agent._id)">
+                                <a role="presentation" class="dropdown-item dark" *ngFor="let agent of agents" (click)="selectAgent(agent._id, agent.name, agent.surname)">
                                     {{agent.name+' '+agent.surname}}
                                 </a>
                               </div>
@@ -161,7 +161,7 @@
             <app-chatbox *ngFor="let textblock of chat"
             text={{textblock.text}}
             type={{textblock.type}}
-            user={{textblock.user.name}}
+            user={{textblock.user.name+space+textblock.user.surname}}
             date={{textblock.createDate}}
             files={{textblock.files}}
             ></app-chatbox>
@@ -174,14 +174,17 @@
 
       <div class="row" style="margin-top: 10px;">
           <div class="col" id="chat-text" [ngClass]="{privatechattext:isPrivate}">
-              <div class="container"><textarea id="chat-textbox" placeholder="Ingresa un texto para enviar" style="margin-top: 8px;"></textarea></div>
-              <div class="container" id="options-container">
-                    <button class="btn btn-primary float-right" type="button">
+              <form #form="ngForm" (ngSubmit)="onSubmit()">
+                <div class="container">
+                  <textarea id="chat-textbox" #text="ngModel" name="text" [(ngModel)]="textblock.text" required placeholder="Ingresa un texto para enviar" style="margin-top: 8px;"></textarea>
+                </div>
+                <div class="container" id="options-container">
+                    <button class="btn btn-primary float-right" type="submit">
                       <i class="fa fa-arrow-circle-right"></i>
                     </button>
                     <input type="checkbox"  name="isPrivate" [(ngModel)]="isPrivate" />
                     <span style="margin-left: 5px;margin-right: 5px;">Privado</span><span>|</span>
-                  <div class="dropdown d-inline" id="hashtag">
+                    <div class="dropdown d-inline" id="hashtag">
                       <button class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">
                           <i class="fa fa-hashtag adjunt"></i>
                       </button>
@@ -193,15 +196,18 @@
                   </div>
                   <label class="d-inline" style="margin-left: 10px;margin-bottom: 0px;margin-top: 0;">
                     <i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 5px;"></i>
-                    <input type="file" class="d-none" />
-                </label>
+                    <input type="file" class="d-none" (change)="fileChangeEvent($event)" />
+                    <span *ngIf="filesToUpload">
+                        +{{filesToUpload.length}}
+                    </span>
+                    </label>
                   <div class="dropdown d-inline float-right">
                       <button class="btn btn-dark dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
                         {{ticket.status}}
                     </button>
                       <div role="menu" class="dropdown-menu dark">
                             <a role="presentation" class="dropdown-item" *ngIf="ticket.status != 'Pendiente'" (click)="setStatus('Pendiente')">
-                              Pendiente
+                                Pendiente
                             </a>
                             <a role="presentation" class="dropdown-item" *ngIf="ticket.status != 'Finalizado'" (click)="setStatus('Finalizado')">
                                 Finalizado
@@ -212,6 +218,7 @@
                         </div>
                   </div>
               </div>
+            </form>
           </div>
       </div>
   </div>

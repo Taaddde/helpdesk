@@ -17,10 +17,14 @@ export class ChatboxComponent implements AfterViewInit {
 
   public url: string;
 
-
   constructor() {
     this.url = GLOBAL.url;
    }
+
+  ngOnInit(){
+    
+    console.log(this.files.slice(0,29))
+  }
 
   ngAfterViewInit() {
     this.scrollElement();

@@ -9,19 +9,19 @@ import { teamService } from 'app/services/team.service';
 import { Team } from 'app/models/team';
 import { textblockService } from 'app/services/textblock.service';
 import { TextBlock } from 'app/models/textblock';
-import { elementAt } from 'rxjs/operators';
-import { SelectControlValueAccessor } from '@angular/forms';
+import { uploadService } from 'app/services/upload.service';
 
 @Component({
   selector: 'app-ticket-gestion',
   templateUrl: './ticket-gestion.component.html',
   styleUrls: ['./ticket-gestion.component.scss'],
-  providers: [userService, ticketService, teamService, textblockService]
+  providers: [userService, ticketService, teamService, textblockService, uploadService]
 })
 export class TicketGestionComponent implements OnInit {
   
   public ticket: Ticket;
   public reqTickets: [Ticket];
+  public textblock: TextBlock;
   public chat: [TextBlock];
   public identity;
   public token;
@@ -31,6 +31,7 @@ export class TicketGestionComponent implements OnInit {
   public editSub: boolean;
   public subMod:string;
   public isPrivate: boolean;
+  public space: string;
 
   constructor(
     private _route: ActivatedRoute,
@@ -38,7 +39,8 @@ export class TicketGestionComponent implements OnInit {
     private _userService: userService,
     private _ticketService: ticketService,
     private _teamService: teamService,
-    private _textblockService: textblockService
+    private _textblockService: textblockService,
+    private _uploadService: uploadService
   ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
@@ -47,21 +49,16 @@ export class TicketGestionComponent implements OnInit {
     this.editSub = false;
     this.subMod = '';
     this.isPrivate = false;
+    this.space = ' ';
 
     this.ticket = new Ticket('','',null,'','','','','','','',null,'',[''],'');
+    this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false)
    }
 
   ngOnInit() {
     this.getTicket();
     this.getTeams();
     this.getChat();   
-  }
-
-  scrollElement(){
-     //get container element
-     var container = document.getElementById('chatbox-scroll');
-     //scroll down
-     container.scrollTop = container.scrollHeight;
   }
 
   getTeams(){
@@ -154,21 +151,24 @@ export class TicketGestionComponent implements OnInit {
     });
   }
 
-  selectAgent(val: string){
+  selectAgent(val: string, name:string, surname:string){
     this.ticket.agent = val;
     this.editTicket();
+    this.newInfo(this.identity['name']+' '+this.identity['surname']+' asignó a '+name+' '+surname+' como agente de esta solicitud')
   }
 
-  selectTeam(val: string){
+  selectTeam(val: string, name:string){
     this.ticket.team = val;
     this.ticket.agent = null;
     this.editTicket();
+    this.newInfo(this.identity['name']+' '+this.identity['surname']+' asignó a '+name+' como equipo de esta solicitud')
   }
 
   selectResolveDate(){
     var splitDate = this.ticket.resolveDate.split('-');
     this.ticket.resolveDate = splitDate[2]+'-'+splitDate[1]+'-'+splitDate[0];
     this.editTicket();
+    this.newInfo(this.identity['name']+' '+this.identity['surname']+' ha actualizado la fecha estimada de solución a '+this.ticket.resolveDate)
   }
 
   calculateClasses(status: string){
@@ -193,17 +193,20 @@ export class TicketGestionComponent implements OnInit {
   }
 
   editTicketSub(){
+    this.newInfo(this.identity['name']+' '+this.identity['surname']+' ha cambiado el asunto de la solicitud de '+this.ticket.sub+' a '+this.subMod)
     this.ticket.sub = this.subMod;
     this.editTicket();
     this.editSub = false;
   }
 
   setStatus(val:string){
+    this.newInfo(this.identity['name']+' '+this.identity['surname']+' ha cambiado el estado de la solicitud de '+this.ticket.status+' a '+val)
     this.ticket.status = val;
     this.editTicket();
   }
 
   setPriority(val:string){
+    this.newInfo(this.identity['name']+' '+this.identity['surname']+' ha cambiado la prioridad de la solicitud de '+this.ticket.priority+' a '+val)
     this.ticket.priority = val;
     this.editTicket();
   }
@@ -229,6 +232,103 @@ export class TicketGestionComponent implements OnInit {
       }
     );
     });
+  }
+
+  newInfo(message: string){
+    var textblock:TextBlock;
+    textblock = new TextBlock('',message,this.identity['_id'],'','','INFO',[''],false)
+
+    this._route.params.forEach((params: Params) =>{
+      textblock.ticket = params['id'];
+    });
+    console.log(textblock)
+    this._textblockService.add(this.token,textblock).subscribe(
+      response =>{
+          if(!response.textblock){
+            console.log('Error en el chat');
+          }else{
+            this.pushText(response.textblock._id);
+          }
+      },
+      error =>{
+        var errorMessage = <any>error;
+        if(errorMessage != null){
+          var body = JSON.parse(error._body);
+          console.log(error);
+        }
+      }
+    );
+
+  }
+
+  onSubmit(){
+    if(this.identity['role'] == 'ROLE_REQUESTER'){
+      this.textblock.type = 'REQUEST'
+    }else{
+      if(this.isPrivate){
+        this.textblock.type = 'PRIVATE'
+      }else{
+        this.textblock.type = 'PUBLIC'
+      }
+    }
+
+    this._route.params.forEach((params: Params) =>{
+      this.textblock.ticket = params['id'];
+    });
+
+    this._textblockService.add(this.token,this.textblock).subscribe(
+      response =>{
+          if(!response.textblock){
+            console.log('Error en el chat');
+          }else{
+              if(!this.filesToUpload){
+              }else{
+                  this._uploadService.makeFileRequest(this.url+'textblock/file/'+response.textblock._id, [], this.filesToUpload, this.token, 'file')
+                  .then(
+                      result =>{
+                      }, 
+                      error =>{
+                          console.log('Error');
+                      }
+                  );
+              }
+          }
+          this.pushText(response.textblock._id);
+          this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false)
+          this.filesToUpload = new Array<File>();
+      },
+      error =>{
+        var errorMessage = <any>error;
+        if(errorMessage != null){
+          var body = JSON.parse(error._body);
+          console.log(error);
+        }
+      }
+    );
+  }
+
+  pushText(id:string){
+    this._textblockService.getOne(this.token, id).subscribe(
+      response =>{
+          if(!response.textblock){
+          }else{
+            this.chat.push(response.textblock)
+          }
+      },
+      error =>{
+          var errorMessage = <any>error;
+          if(errorMessage != null){
+          var body = JSON.parse(error._body);
+          //this.alertMessage = body.message;
+          console.log(error);
+          }
+      }
+    );
+  }
+
+  public filesToUpload: Array<File>;
+  public fileChangeEvent(fileInput:any){
+      this.filesToUpload = <Array<File>>fileInput.target.files;
   }
 
 

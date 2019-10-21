@@ -1,14 +1,15 @@
 <div [ngClass]="getCardClass()">
     <div [ngClass]="getContainerClass()" style="padding-right: 0;padding-left: 0;">
         <div class="user-date" style="margin-top: 4px;">
-            <label style="margin-left: 13px;">{{user}}</label>
+            <label *ngIf="type != 'INFO'" style="margin-left: 13px;">{{user}}</label>
+            <label *ngIf="type == 'INFO'" style="margin-left: 13px;">Información</label>
             <label class="float-right" style="margin-right: 15px;">{{date}}</label>
         </div>
     </div>
     <div [ngClass]="getCardBodyClass()">
         <p class="card-text">{{text}}</p>
         <div class="text-right" *ngIf="files">
-            <a>
+            <a target="blank" href="{{url+'textblock/file/'+files}}">
                 <i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 5px;"></i>
             </a>
         </div>
