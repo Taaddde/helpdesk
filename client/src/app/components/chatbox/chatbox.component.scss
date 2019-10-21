@@ -1,0 +1,62 @@
+.chatheader {
+    height: 30px;
+    display: flex;
+    background-color: #1e2833;
+    color: white;
+  }
+  
+  .chatinfo {
+    border: 1px solid #1e2833;
+    margin: 10px;
+  }
+  
+  .user-date {
+    width: 100%;
+  }
+  
+  @media (min-width: 300px) {
+    .user-date {
+      font-size: 12px;
+    }
+  }
+  
+  .user-date {
+    width: 80%;
+  }
+  
+  .infoheader {
+    background-color: rgb(90,179,230);
+    color: rgb(0,0,0);
+  }
+  
+  .card.chatbox {
+    max-width: 80%;
+    min-height: 30%;
+    border: 1px solid #1e2833;
+    margin: 10px;
+  }
+  
+  .user-date {
+    width: 100%;
+  }
+  
+.chatheaderreq{
+    height: 30px;
+    display: flex;
+    background-color: #46a376;
+    color: white;
+}    
+
+.chatprivate {
+    background-color: #676767;
+    color: white;
+  }
+  
+  .adjunt {
+    cursor: pointer;
+    font-size: 20px;
+    color: rgb(121,121,255);
+  }
+  
+  
+  

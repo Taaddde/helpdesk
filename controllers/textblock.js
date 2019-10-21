@@ -83,7 +83,12 @@ function getTextBlockForText(req, res){
 
 function getTextBlockForTicket(req, res){
     var ticket = req.params.ticket;
-    TextBlock.find({ticket: ticket}).sort('createDate').exec(function(err, textblocks){
+
+    var populateQuery = [
+        {path:'user', select:['name','surname','image']},
+    ];
+
+    TextBlock.find({ticket: ticket}).populate(populateQuery).sort('createDate').exec(function(err, textblocks){
         if(err){
             res.status(500).send({message: 'Error del servidor en la peticion'})
         }else{
@@ -143,7 +148,6 @@ function uploadFile(req, res){
 
         var ext_split = file_name.split('\.');
         var file_ext = ext_split [1]; //Comprueba si es un jpg [ 'j5HRZbfL7qgOgp2YRQ3F0ub8', 'jpg' ]
-
         if(true){
 
             TextBlock.findByIdAndUpdate(tbId, {$push: {files: file_name}}, (err, textblockUpdated) =>{

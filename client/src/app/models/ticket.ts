@@ -6,6 +6,7 @@ export class Ticket{
         public numTicket: number,
         public requester: string,
         public agent: string,
+        public team: string,
         public status: string,
         public lastActivity: string,
         public createDate: string,

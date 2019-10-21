@@ -7,17 +7,22 @@ import { Ticket } from 'app/models/ticket';
 import { Agent } from 'http';
 import { teamService } from 'app/services/team.service';
 import { Team } from 'app/models/team';
+import { textblockService } from 'app/services/textblock.service';
+import { TextBlock } from 'app/models/textblock';
+import { elementAt } from 'rxjs/operators';
+import { SelectControlValueAccessor } from '@angular/forms';
 
 @Component({
   selector: 'app-ticket-gestion',
   templateUrl: './ticket-gestion.component.html',
   styleUrls: ['./ticket-gestion.component.scss'],
-  providers: [userService, ticketService, teamService]
+  providers: [userService, ticketService, teamService, textblockService]
 })
 export class TicketGestionComponent implements OnInit {
   
   public ticket: Ticket;
-  public reqTickets: [Ticket]
+  public reqTickets: [Ticket];
+  public chat: [TextBlock];
   public identity;
   public token;
   public url: string;
@@ -25,13 +30,15 @@ export class TicketGestionComponent implements OnInit {
   public teams: [Team];
   public editSub: boolean;
   public subMod:string;
+  public isPrivate: boolean;
 
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
     private _userService: userService,
     private _ticketService: ticketService,
-    private _teamService: teamService
+    private _teamService: teamService,
+    private _textblockService: textblockService
   ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
@@ -39,13 +46,22 @@ export class TicketGestionComponent implements OnInit {
 
     this.editSub = false;
     this.subMod = '';
+    this.isPrivate = false;
 
-    this.ticket = new Ticket('','',null,'','','','','','',null,'',[''],'');
+    this.ticket = new Ticket('','',null,'','','','','','','',null,'',[''],'');
    }
 
   ngOnInit() {
     this.getTicket();
     this.getTeams();
+    this.getChat();   
+  }
+
+  scrollElement(){
+     //get container element
+     var container = document.getElementById('chatbox-scroll');
+     //scroll down
+     container.scrollTop = container.scrollHeight;
   }
 
   getTeams(){
@@ -90,6 +106,28 @@ export class TicketGestionComponent implements OnInit {
     }
   }
 
+  getChat(){
+    this._route.params.forEach((params: Params) =>{
+      let id = params['id'];
+      this._textblockService.getForTicket(this.token, id).subscribe(
+        response =>{
+            if(!response.textblocks){
+            }else{
+              this.chat = response.textblocks;
+            }
+        },
+        error =>{
+            var errorMessage = <any>error;
+            if(errorMessage != null){
+            var body = JSON.parse(error._body);
+            //this.alertMessage = body.message;
+            console.log(error);
+            }
+        }
+      );
+    });
+  }
+
   getTicket(){
     this._route.params.forEach((params: Params) =>{
       let id = params['id'];
@@ -117,15 +155,20 @@ export class TicketGestionComponent implements OnInit {
   }
 
   selectAgent(val: string){
-    console.log(val);
+    this.ticket.agent = val;
+    this.editTicket();
   }
 
   selectTeam(val: string){
-    console.log(val);
+    this.ticket.team = val;
+    this.ticket.agent = null;
+    this.editTicket();
   }
 
   selectResolveDate(){
-    console.log(this.ticket.resolveDate)
+    var splitDate = this.ticket.resolveDate.split('-');
+    this.ticket.resolveDate = splitDate[2]+'-'+splitDate[1]+'-'+splitDate[0];
+    this.editTicket();
   }
 
   calculateClasses(status: string){
@@ -153,20 +196,27 @@ export class TicketGestionComponent implements OnInit {
     this.ticket.sub = this.subMod;
     this.editTicket();
     this.editSub = false;
+  }
 
+  setStatus(val:string){
+    this.ticket.status = val;
+    this.editTicket();
+  }
+
+  setPriority(val:string){
+    this.ticket.priority = val;
+    this.editTicket();
   }
 
   editTicket(){
-    console.log('Llegue')
     this._route.params.forEach((params: Params) =>{
       let id = params['id'];
 
     this._ticketService.edit(this.token, id, this.ticket).subscribe(
       response =>{
-          if(!response.ticketUpdated){
+          if(!response.ticket){
           }else{
-            this.ticket = response.ticketUpdated;
-            this.agents = response.ticketUpdated.team.users;
+            this.getTicket();
           }
       },
       error =>{
@@ -180,5 +230,7 @@ export class TicketGestionComponent implements OnInit {
     );
     });
   }
+
+
 
 }

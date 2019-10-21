@@ -9,7 +9,7 @@ var TextBlockSchema = Schema({
     user: {type: Schema.ObjectId, ref:'User'},
     createDate: {type: String, default:''},
     ticket: {type: Schema.ObjectId, ref:'Ticket'},
-    type: {type: String, default:'PUBLIC'}, //PRIVATE, PUBLIC, INFO
+    type: {type: String, default:'PUBLIC'}, //PRIVATE, PUBLIC, INFO, REQ
     files:{
         type: [String],
         default: undefined

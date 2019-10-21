@@ -1,3 +1,16 @@
-<p>
-  chatbox works!
-</p>
+<div [ngClass]="getCardClass()">
+    <div [ngClass]="getContainerClass()" style="padding-right: 0;padding-left: 0;">
+        <div class="user-date" style="margin-top: 4px;">
+            <label style="margin-left: 13px;">{{user}}</label>
+            <label class="float-right" style="margin-right: 15px;">{{date}}</label>
+        </div>
+    </div>
+    <div [ngClass]="getCardBodyClass()">
+        <p class="card-text">{{text}}</p>
+        <div class="text-right" *ngIf="files">
+            <a>
+                <i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 5px;"></i>
+            </a>
+        </div>
+    </div>
+</div>

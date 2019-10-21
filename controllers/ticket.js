@@ -54,6 +54,7 @@ function saveTicket(req, res){
         ticket.requester = params.requester;
         ticket.agent = params.agent;
         ticket.status = params.status;
+        ticket.rating = params.rating;
         ticket.team = params.team;
         ticket.source = params.source;
         ticket.createDate = moment().format("DD-MM-YYYY HH:mm");
@@ -151,7 +152,7 @@ function updateTicket(req, res){
     //ticketId = ticket buscado, update = datos nuevos a actualizar
     Ticket.findByIdAndUpdate(ticketId, update, (err, ticketUpdated) =>{
         if(err){
-            res.status(500).send({message: 'Error del servidor en la petición'});
+            res.status(500).send({message: 'Error del servidor en la petición',err:err});
         }else{
             if(!ticketUpdated){
                 res.status(404).send({message: 'No se ha encontrado el ticket'});

@@ -1,5 +1,5 @@
 <div class="row" id="ticket">
-  <div class="col text-break" id="ticket-dates">
+  <div class="col-md-5 col-lg-5 col-xl-4 text-break" id="ticket-dates">
       <div class="row" id="info">
           <div class="card info-card">
               <div class="container title-container" style="padding-right: 0;padding-left: 0;">
@@ -10,8 +10,23 @@
                       <li class="list-group-item"><span>Número: </span><span><strong>#{{ticket.numTicket}}</strong></span></li>
                       <li class="list-group-item"><span>Creación: </span><span><strong>{{ticket.createDate}}</strong></span></li>
                       <li class="list-group-item"><span>Actualizado: </span><span><strong>{{ticket.lastActivity}}</strong></span></li>
-                      <li class="list-group-item"><span>Prioridad: </span><span><strong>{{ticket.priority}}</strong></span></li>
-                      <li class="list-group-item"><span>Valoración: </span><span><strong>5</strong></span><i class="fa fa-star"></i></li>
+                      <li class="list-group-item">
+                          <span>Prioridad: </span>
+                          <div class="dropdown d-inline">
+                                <button class="btn btn-dark dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
+                                  {{ticket.priority}}
+                              </button>
+                                <div role="menu" class="dropdown-menu dark">
+                                      <a role="presentation" class="dropdown-item" *ngIf="ticket.priority != 'Urgente'" (click)="setPriority('Urgente')">
+                                        Urgente
+                                      </a>
+                                      <a role="presentation" class="dropdown-item" *ngIf="ticket.priority != 'Normal'" (click)="setPriority('Normal')">
+                                        Normal
+                                      </a>
+                                  </div>
+                            </div>
+                        </li>
+                      <li class="list-group-item"><span>Valoración: </span><span><strong *ngIf="ticket.rating != 0">{{ticket.rating}}</strong></span><i *ngIf="ticket.rating != 0" class="fa fa-star"></i></li>
                       <li class="list-group-item"><span>Fuente: </span><span><strong>{{ticket.source}}</strong></span></li>
                       <li class="list-group-item"><span>Etiquetas: </span>
                         <span *ngFor="let tag of ticket.tags">
@@ -128,7 +143,7 @@
           </div>
       </div>
   </div>
-  <div class="col-xl-8">
+  <div class="col-md-6 col-lg-7 col-xl-8">
       <div class="container text-center">
             <input type="text" *ngIf="editSub" name="sub" [(ngModel)]="subMod" />
             <input type="button" class="btn btn-dark dark" *ngIf="editSub" value="Aplicar" (click)="editTicketSub()">
@@ -137,19 +152,34 @@
               <strong>{{ticket.sub}}</strong>
             </h6>
         </div>
+
+
+
+
       <div class="row">
           <div class="col chatbox-scroll" id="chatbox-scroll">
-          
+            <app-chatbox *ngFor="let textblock of chat"
+            text={{textblock.text}}
+            type={{textblock.type}}
+            user={{textblock.user.name}}
+            date={{textblock.createDate}}
+            files={{textblock.files}}
+            ></app-chatbox>
           </div>
+          <span></span>
       </div>
+
+
+
+
       <div class="row" style="margin-top: 10px;">
-          <div class="col" id="chat-text">
+          <div class="col" id="chat-text" [ngClass]="{privatechattext:isPrivate}">
               <div class="container"><textarea id="chat-textbox" placeholder="Ingresa un texto para enviar" style="margin-top: 8px;"></textarea></div>
               <div class="container" id="options-container">
                     <button class="btn btn-primary float-right" type="button">
                       <i class="fa fa-arrow-circle-right"></i>
                     </button>
-                    <input type="checkbox" />
+                    <input type="checkbox"  name="isPrivate" [(ngModel)]="isPrivate" />
                     <span style="margin-left: 5px;margin-right: 5px;">Privado</span><span>|</span>
                   <div class="dropdown d-inline" id="hashtag">
                       <button class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">
@@ -167,11 +197,17 @@
                 </label>
                   <div class="dropdown d-inline float-right">
                       <button class="btn btn-dark dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
-                        Estado
+                        {{ticket.status}}
                     </button>
                       <div role="menu" class="dropdown-menu dark">
-                          <a role="presentation" class="dropdown-item" href="#">
-                              First Item
+                            <a role="presentation" class="dropdown-item" *ngIf="ticket.status != 'Pendiente'" (click)="setStatus('Pendiente')">
+                              Pendiente
+                            </a>
+                            <a role="presentation" class="dropdown-item" *ngIf="ticket.status != 'Finalizado'" (click)="setStatus('Finalizado')">
+                                Finalizado
+                            </a>
+                            <a role="presentation" class="dropdown-item" *ngIf="ticket.status != 'Cerrado'" (click)="setStatus('Cerrado')">
+                                Cerrado
                             </a>
                         </div>
                   </div>
