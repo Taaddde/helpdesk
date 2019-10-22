@@ -149,6 +149,7 @@ function updateTicket(req, res){
     var ticketId = req.params.id;
     var update =  req.body;
 
+    req.body.lastActivity = moment().format("DD-MM-YYYY HH:mm");
     //ticketId = ticket buscado, update = datos nuevos a actualizar
     Ticket.findByIdAndUpdate(ticketId, update, (err, ticketUpdated) =>{
         if(err){

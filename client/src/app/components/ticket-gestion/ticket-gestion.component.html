@@ -86,6 +86,7 @@
                           <img *ngIf="!ticket.team || ticket.team.image == 'null'" class="rounded-circle img-agent-team" src="../../../assets/img/system/team-placeholder.png" />
                           <img *ngIf="ticket.team && ticket.team.image != 'null'" class="rounded-circle img-agent-team" src="{{url+'team/image/'+ticket.team.image}}" />
 
+                          <p *ngIf="!ticket.team" class="d-inline" style="margin-left: 10px;"><strong>Sin equipo</strong></p>
                           <p *ngIf="ticket.team" class="d-inline" style="margin-left: 10px;"><strong>{{ticket.team.name}}</strong></p>
                           <hr /><span style="font-size: 18px;"><strong>Agente</strong></span>
                           <div class="dropdown d-inline float-right">

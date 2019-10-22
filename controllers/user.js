@@ -148,19 +148,36 @@ function getUsers(req, res){
             }
         });
     }else{
-        User.find({role:role}).sort('name').exec(function(err, users){
-            if(err){
-                res.status(500).send({message: 'Error del servidor en la peticion'})
-            }else{
-                if(!users){
-                    res.status(404).send({message: 'No hay usuarios'})
+        if(role == 'ROLE_AGENT'){
+            User.find({$or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}]}).sort('name').exec(function(err, users){
+                if(err){
+                    res.status(500).send({message: 'Error del servidor en la peticion'})
                 }else{
-                    return res.status(200).send({
-                        users: users
-                    });
+                    if(!users){
+                        res.status(404).send({message: 'No hay usuarios'})
+                    }else{
+                        return res.status(200).send({
+                            users: users
+                        });
+                    }
                 }
-            }
-        });
+            });
+        }else{
+            User.find({role:role}).sort('name').exec(function(err, users){
+                if(err){
+                    res.status(500).send({message: 'Error del servidor en la peticion'})
+                }else{
+                    if(!users){
+                        res.status(404).send({message: 'No hay usuarios'})
+                    }else{
+                        return res.status(200).send({
+                            users: users
+                        });
+                    }
+                }
+            });
+        }
+        
     }
     
 }

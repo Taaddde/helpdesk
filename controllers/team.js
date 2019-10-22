@@ -22,7 +22,7 @@ function getAgentsInTeam(req, res){
             if(!team){
                 res.status(404).send({message: 'El equipo no existe'});
             }else{
-                User.find({_id:{$nin:team.users}},(err, users) =>{
+                User.find({_id:{$nin:team.users}, $or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}]},(err, users) =>{
                     if(err){
                         res.status(500).send({message: 'Error del servidor en la peticion', err:err});
                     }else{

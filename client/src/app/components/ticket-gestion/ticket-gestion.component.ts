@@ -295,6 +295,7 @@ export class TicketGestionComponent implements OnInit {
                   );
               }
           }
+          this.editTicket()
           this.pushText(response.textblock._id);
           this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false)
           this.filesToUpload = new Array<File>();
