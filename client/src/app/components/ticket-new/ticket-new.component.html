@@ -1,0 +1,143 @@
+<div class="card">
+  <div class="card-body">
+      <form #form="ngForm" (ngSubmit)="onSubmit()">
+          <div class="form-row">
+              <div class="col-sm-6 col-md-5 col-lg-5 col-xl-5 card-profile" *ngIf="!newRequester">
+                  <h5>Datos del solicitante</h5>
+                  <div class="form-group">
+                      <div class="dropdown d-inline">
+                        <button class="btn btn-dark dropdown-toggle d-inline dark" data-toggle="dropdown" aria-expanded="false" type="button" style="width: 118px;">
+                          <span *ngIf="!requester">Solicitante</span>
+                          <span *ngIf="requester">{{requester.name+' '+requester.surname}}</span>
+                        </button>
+                          <div class="dropdown-menu" role="menu">
+                            <a class="dropdown-item" role="presentation" *ngFor="let r of requesters" (click)="setRequester(r)">
+                              {{r.name+' '+r.surname}}
+                            </a>
+                          </div>
+                      </div>
+                      <a (click)="createRequester()">
+                        <button class="btn btn-dark dark" type="button">
+                          Nuevo solicitante
+                        </button>
+                      </a>
+                    </div>
+                  <div class="form-row">
+                      <div class="col-xl-5">
+                          <img *ngIf="requester && requester.image != 'null'" style="width: 150px;height: 150px;" src="#" />
+                          <img *ngIf="!requester || requester.image == 'null'" style="width: 150px;height: 150px;" src="../../../assets/img/system/user-placeholder.png" />
+                      </div>
+                      <div class="col-xl-6 align-self-center" *ngIf="requester">
+                          <div class="form-row">
+                              <div class="col"><span><strong>{{requester.name}}</strong></span></div>
+                          </div>
+                          <div class="form-row">
+                              <div class="col"><span><em>{{requester.email}}</em></span></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-sm-6 col-md-7 col-lg-7 col-xl-7">
+                  <h5>Datos del ticket</h5>
+                      <div class="form-group"><label>Asunto</label>
+                        <input required class="form-control" #sub="ngModel" name="sub" [(ngModel)]="ticket.sub" type="text" required placeholder="Ingresa aqui el asunto del ticket" /></div>
+                      <div class="form-group"><label>Requerimiento</label>
+                        <label class="d-inline" style="margin-left: 10px;margin-bottom: 0px;margin-top: 0;">
+                          <i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 5px;"></i>
+                          <input class="d-none" type="file" (change)="fileChangeEvent($event)"/>
+                          <span *ngIf="filesToUpload">
+                              +{{filesToUpload.length}}
+                          </span>
+                        </label>
+                        <textarea required placeholder="Describa el requerimiento solicitado" class="form-control message" #text="ngModel" name="text" [(ngModel)]="textblock.text"></textarea>
+                      </div>
+                      <div class="form-group">
+                          <div class="dropdown d-inline">
+                            <button class="btn btn-dark dropdown-toggle d-inline dark" data-toggle="dropdown" aria-expanded="false" type="button" style="width: 118px;">
+                              <span *ngIf="priority != ''">{{priority}}</span>
+                              <span *ngIf="priority == ''">Prioridad</span>
+                            </button>
+                              <div class="dropdown-menu" role="menu">
+                                  <a role="presentation" class="dropdown-item" *ngIf="ticket.priority != 'Urgente'" (click)="setPriority('Urgente')">
+                                    Urgente
+                                  </a>
+                                  <a role="presentation" class="dropdown-item" *ngIf="ticket.priority != 'Normal'" (click)="setPriority('Normal')">
+                                    Normal
+                                  </a>
+                                </div>
+                          </div>
+                          <div class="dropdown d-inline">
+                            <button class="btn btn-dark dropdown-toggle d-inline dark" data-toggle="dropdown" aria-expanded="false" type="button" style="width: 118px;margin-right: 5px;margin-left: 5px;">
+                              <span *ngIf="!team">Equipo</span>
+                              <span *ngIf="team">{{team.name}}</span>
+                            </button>
+                              <div class="dropdown-menu" role="menu">
+                                <a class="dropdown-item" role="presentation" *ngFor="let t of teams" (click)="setTeam(t)">
+                                  {{t.name}}
+                                </a>
+                              </div>
+                          </div>
+                          <div class="dropdown d-inline" *ngIf="team">
+                            <button class="btn btn-dark dropdown-toggle d-inline dark" data-toggle="dropdown" aria-expanded="false" type="button" style="width: 118px;">
+                                <span *ngIf="!agent">Agente</span>
+                                <span *ngIf="agent">{{agent.name+' '+agent.surname}}</span>
+                            </button>
+                              <div class="dropdown-menu" role="menu">
+                                <a class="dropdown-item" role="presentation" *ngFor="let a of agents" (click)="setAgent(a)">
+                                  {{a.name+' '+a.surname}}
+                                </a>
+                              </div>
+                          </div>
+                      </div><label class="d-inline" style="margin-left: 10px;margin-bottom: 0px;margin-top: 0;"><input class="d-none" type="file" /></label>
+              </div>
+          </div>
+          <hr />
+          <div class="text-center title" style="margin-bottom: 10px;" *ngIf="newRequester">
+              <h3 >
+                Datos del solicitante
+                  <a class="float-right" (click)="unSetRequester()">
+                      <i class="fa fa-window-close border rounded-0" style="background-color: #000000;color: rgb(255,255,255);font-size: 20px;">
+                      </i>
+                    </a>
+              </h3>
+          </div>
+          <div class="form-row agent-system" id="newrequester" *ngIf="newRequester">
+              <div class="col card-profile">
+                  <h5>
+                    Datos personales
+                  </h5>
+                  <div class="form-group">
+                    <label>Nombre</label>
+                    <input #name="ngModel" name="name" [(ngModel)]="requester.name" class="form-control" type="text" required placeholder="Ingresa aqui el nombre del usuario" />
+                  </div>
+                  <div class="form-group">
+                    <label>Apellido</label>
+                    <input #surname="ngModel" name="surname" [(ngModel)]="requester.surname" class="form-control" type="text" required placeholder="Ingrese aqui el apellido del usuario" />
+                  </div>
+              </div>
+              <div class="col card-profile">
+                  <h5>Datos del sistema</h5>
+                  <div class="form-group">
+                    <label>ID de usuario</label>
+                    <input #userName="ngModel" name="userName" [(ngModel)]="requester.userName" class="form-control" type="text" placeholder="Ingresa aqui el ID del usuario" /></div>
+                  <div class="form-group" *ngIf="requester.userName != ''">
+                    <label>Contraseña</label>
+                    <input #password="ngModel" name="password" [(ngModel)]="requester.password" class="form-control" required type="password" placeholder="Ingrese aqui una constraseña" />
+                  </div>
+                  <div class="form-group">
+                    <label>E-mail</label>
+                    <input #email="ngModel" name="email" [(ngModel)]="requester.email" required class="form-control" type="text" inputmode="email" placeholder="Ingrese aqui el e-mail del agente" />
+                  </div>
+              </div>
+          </div>
+          <hr>
+          <div class="form-row">
+              <div class="col confirm">
+                <button class="btn btn-success btn-lg float-right acept" type="submit">
+                  Aceptar
+                </button>
+              </div>
+          </div>
+      </form>
+  </div>
+</div>

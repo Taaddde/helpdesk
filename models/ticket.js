@@ -22,7 +22,7 @@ var TicketSchema = Schema({
             tag: {type: Schema.ObjectId, ref:'Tag'}
         }
     ],
-    priority: {type: String, default:"NORMAL"}
+    priority: {type: String, default:"Normal"}
 
 });
 

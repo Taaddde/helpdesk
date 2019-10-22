@@ -135,7 +135,9 @@ export class TicketGestionComponent implements OnInit {
             this._router.navigate(['/']);
           }else{
             this.ticket = response.ticket;
-            this.agents = response.ticket.team.users;
+            if(response.ticket.team){
+              this.agents = response.ticket.team.users;
+            }
             this.getReqTickets(response.ticket.requester);
           }
       },

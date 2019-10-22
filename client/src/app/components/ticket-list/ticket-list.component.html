@@ -36,14 +36,16 @@
                   <tr class="select" [routerLink]="['/ticket-gestion',ticket._id]">
                       <td data-title="Numero">{{ticket.numTicket}}</td>
                       <td data-title="Solicitante">
-                        <img class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+ticket.requester.image}}" />
+                        <img *ngIf="ticket.requester && ticket.requester.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+ticket.requester.image}}" />
+                        <img *ngIf="!ticket.requester || ticket.requester.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="../../../assets/img/system/user-placeholder.png" />
                         {{ticket.requester.name}}
                         <span> </span>
                         {{ticket.requester.surname}}
                       </td>
                       <td data-title="Asunto">{{ticket.sub}}</td>
                       <td data-title="Agente" *ngIf="ticket.agent">
-                          <img class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+ticket.agent.image}}" />
+                          <img *ngIf="ticket.agent.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+ticket.agent.image}}" />
+                          <img *ngIf="ticket.agent.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="../../../assets/img/system/user-placeholder.png" />
                           {{ticket.agent.name}}
                           <span> </span>
                           {{ticket.agent.surname}}

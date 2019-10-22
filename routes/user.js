@@ -10,7 +10,7 @@ var api = express.Router();
 
 //CONSULTAS
 api.get('/user/:id', md_auth.ensureAuth, userController.getUser);
-api.get('/users', md_auth.ensureAuth, userController.getUsers);
+api.get('/users/:role?', md_auth.ensureAuth, userController.getUsers);
 
 //LOGIN
 api.post('/login', userController.loginUser);

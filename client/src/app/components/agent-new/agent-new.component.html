@@ -9,7 +9,10 @@
                 </div>
                 <div class="col-sm-7 col-md-7 col-lg-9 card-profile">
                     <h5>Datos personales</h5>
-                    <div class="form-group"><label>Nombre</label><input type="text" class="form-control" placeholder="Ingresa aqui el nombre de la persona" #name="ngModel" name="name" [(ngModel)]="user.name" required /></div>
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" class="form-control" placeholder="Ingresa aqui el nombre de la persona" #name="ngModel" name="name" [(ngModel)]="user.name" required />
+                    </div>
                     <div class="form-group"><label>Apellido</label><input type="text" class="form-control" placeholder="Ingresa aqui el apellido de la persona" #surname="ngModel" name="surname" [(ngModel)]="user.surname" required /></div>
                 </div>
             </div>

@@ -43,7 +43,17 @@ function saveUser(req, res){
             }
         });
     }else{
-        res.status(400).send({message:'Introduce la contraseña'});
+        user.save((err, userStore) => {
+            if(err){
+                res.status(500).send({message:'Error en el servidor al guardar el usuario'});
+            }else{
+               if(!userStore){
+                res.status(404).send({message:'No se ha encontrado el usuario'});
+               }else{
+                res.status(200).send({user:userStore});
+               }
+            }
+        });
     }
 }
 
@@ -122,21 +132,37 @@ function getUser(req, res){
 
 function getUsers(req, res){
     //var populateQuery = [{path:'sector'}];
-
-
-    User.find({}).sort('name').exec(function(err, users){
-        if(err){
-            res.status(500).send({message: 'Error del servidor en la peticion'})
-        }else{
-            if(!users){
-                res.status(404).send({message: 'No hay usuarios'})
+    var role = req.params.role;
+    if(!role){
+        User.find({}).sort('name').exec(function(err, users){
+            if(err){
+                res.status(500).send({message: 'Error del servidor en la peticion'})
             }else{
-                return res.status(200).send({
-                    users: users
-                });
+                if(!users){
+                    res.status(404).send({message: 'No hay usuarios'})
+                }else{
+                    return res.status(200).send({
+                        users: users
+                    });
+                }
             }
-        }
-    });
+        });
+    }else{
+        User.find({role:role}).sort('name').exec(function(err, users){
+            if(err){
+                res.status(500).send({message: 'Error del servidor en la peticion'})
+            }else{
+                if(!users){
+                    res.status(404).send({message: 'No hay usuarios'})
+                }else{
+                    return res.status(200).send({
+                        users: users
+                    });
+                }
+            }
+        });
+    }
+    
 }
 
 function loginUser(req, res){

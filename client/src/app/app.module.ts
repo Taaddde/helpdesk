@@ -16,6 +16,7 @@ import { TeamNewComponent } from './components/team-new/team-new.component';
 import { TeamEditComponent } from './components/team-new/team-edit.component';
 import { TicketGestionComponent } from './components/ticket-gestion/ticket-gestion.component';
 import { ChatboxComponent } from './components/chatbox/chatbox.component';
+import { TicketNewComponent } from './components/ticket-new/ticket-new.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { ChatboxComponent } from './components/chatbox/chatbox.component';
     TeamNewComponent,
     TeamEditComponent,
     TicketGestionComponent,
-    ChatboxComponent
+    ChatboxComponent,
+    TicketNewComponent
   ],
   imports: [
     BrowserModule,
