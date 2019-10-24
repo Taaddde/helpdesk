@@ -10,6 +10,7 @@ import {GLOBAL} from '../../services/global'
 export class ChatboxComponent implements AfterViewInit {
 
   @Input() text: string;
+  @Input() sign: string;
   @Input() user: string;
   @Input() date: string;
   @Input() type: string;
@@ -17,13 +18,13 @@ export class ChatboxComponent implements AfterViewInit {
 
   public url: string;
 
-  constructor() {
+  constructor(
+    
+  ) {
     this.url = GLOBAL.url;
    }
 
   ngOnInit(){
-    
-    console.log(this.files.slice(0,29))
   }
 
   ngAfterViewInit() {

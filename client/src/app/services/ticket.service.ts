@@ -62,16 +62,16 @@ export class ticketService{
                           .map(res => res.json());
     }
 
-    getPaginatedList(token, page, perPage){
+    getPaginatedList(token, page, perPage, status, userId){
         let headers = new Headers({
             'Content-Type':'application/json',
             'Authorization':token
         });
   
         let options = new RequestOptions({headers: headers});
-        return this._http.get(this.url+'ticket/ticketsPaged/'+page+'&'+perPage, options)
+        return this._http.get(this.url+'ticket/ticketsPaged/'+page+'&'+perPage+'&'+status+'&'+userId, options)
                             .map(res => res.json());
-      }
+    }
 
     getOne(token, id){
         let headers = new Headers({
@@ -106,6 +106,15 @@ export class ticketService{
                             .map(res => res.json());
     }
 
-    
+    getCountsTickets(token, id:string){
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+          });
+
+          let options = new RequestOptions({headers: headers});
+          return this._http.get(this.url+'ticket/counts-agent/'+id, ({headers: headers}))
+                            .map(res => res.json());
+    }
 
 }

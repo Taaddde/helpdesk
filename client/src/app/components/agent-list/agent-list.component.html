@@ -20,7 +20,7 @@
                 </tr>
             </thead>
             <tbody *ngFor="let user of users">
-                <tr class="select" [routerLink]="['/agent/edit',user._id]">
+                <tr class="select" [routerLink]="['/user/edit',user._id]">
                     <td data-title="Img">
                         <img *ngIf="user.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+user.image}}" />
                         <img *ngIf="user.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="../../../assets/img/system/user-placeholder.png" />

@@ -92,7 +92,7 @@ function getTextBlockForTicket(req, res){
     var ticket = req.params.ticket;
 
     var populateQuery = [
-        {path:'user', select:['name','surname','image']},
+        {path:'user', select:['name','surname','image', 'sign']},
     ];
 
     TextBlock.find({ticket: ticket}).populate(populateQuery).sort('createDate').exec(function(err, textblocks){

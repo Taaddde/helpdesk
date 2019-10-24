@@ -285,18 +285,11 @@ export class TicketGestionComponent implements OnInit {
           }else{
               if(!this.filesToUpload){
               }else{
-                  this._uploadService.makeFileRequest(this.url+'textblock/file/'+response.textblock._id, [], this.filesToUpload, this.token, 'file')
-                  .then(
-                      result =>{
-                      }, 
-                      error =>{
-                          console.log('Error');
-                      }
-                  );
+                  this._uploadService.makeFileRequest(this.url+'textblock/file/'+response.textblock._id, [], this.filesToUpload, this.token, 'file');
               }
           }
           this.editTicket()
-          this.pushText(response.textblock._id);
+          this.pushText(response.textblock._id) ;
           this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false)
           this.filesToUpload = new Array<File>();
       },

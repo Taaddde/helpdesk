@@ -10,13 +10,17 @@ import { TeamNewComponent } from './components/team-new/team-new.component';
 import { TeamEditComponent } from './components/team-new/team-edit.component';
 import { TicketGestionComponent } from './components/ticket-gestion/ticket-gestion.component';
 import { TicketNewComponent } from './components/ticket-new/ticket-new.component';
+import { HomeComponent } from './components/home/home.component';
 
 
 const appRoutes: Routes = [
     //Redireccion
-    //{path: '', redirectTo: 'home', pathMatch: 'full'},
+    {path: 'home', component: HomeComponent},
+    {path: '', redirectTo: 'home', pathMatch: 'full'},
 
     {path: 'ticket/:page/:perPage', component: TicketListComponent},
+    {path: 'ticket/:page/:perPage/:status', component: TicketListComponent},
+    {path: 'ticket/:page/:perPage/:status/:userId', component: TicketListComponent},
     { path: 'ticket', redirectTo: 'ticket/1/10', pathMatch: 'full' },
     { path: 'ticket/:page', redirectTo: 'ticket/1/10', pathMatch: 'full' },
     { path: 'ticket-gestion/:id', component: TicketGestionComponent},
@@ -24,7 +28,7 @@ const appRoutes: Routes = [
 
     {path: 'agent', component: AgentTeamComponent},
     {path: 'agent/new', component: AgentNewComponent},
-    {path: 'agent/edit/:id', component: AgentEditComponent},
+    {path: 'user/edit/:id', component: AgentEditComponent},
 
     {path: 'team/new', component: TeamNewComponent},
     {path: 'team/edit/:id', component: TeamEditComponent},

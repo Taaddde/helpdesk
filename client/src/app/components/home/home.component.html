@@ -1,0 +1,54 @@
+
+<div class="card">
+    <div class="card-body">
+        <h1 style="font-family: Nunito, sans-serif;">Panel principal</h1>
+        <hr />
+        <div class="row">
+            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 offset-lg-0 offset-xl-0">
+                <a [routerLink]="['/ticket/1',10,'Pendiente',identity['_id']]">
+                    <div class="card shadow border-left-warning py-2">
+                        <div class="card-body">
+                            <div class="row align-items-center no-gutters">
+                                <div class="col mr-2">
+                                    <div class="text-uppercase text-warning font-weight-bold text-xs mb-1"><span>TICKETS PENDIENTES</span></div>
+                                    <div class="text-dark font-weight-bold h5 mb-0"><span>{{pending}}</span></div>
+                                </div>
+                                <div class="col-auto"><i class="fas fa-comments fa-2x text-gray-300"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 offset-lg-0 offset-xl-0">
+                <a [routerLink]="['/ticket/1',10,'Abierto']">
+                    <div class="card shadow border-left-info py-2">
+                        <div class="card-body">
+                            <div class="row align-items-center no-gutters">
+                                <div class="col mr-2">
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1"><span>TICKETS ABIERTOS</span></div>
+                                    <div class="text-dark font-weight-bold h5 mb-0"><span>{{open}}</span></div>
+                                </div>
+                                <div class="col-auto"><i class="fas fa-comments fa-2x text-gray-300"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 offset-lg-0 offset-xl-0">
+                <a [routerLink]="['/ticket/1',10,'Finalizado',identity['_id']]">
+                    <div class="card shadow border-left-success py-2">
+                        <div class="card-body">
+                            <div class="row align-items-center no-gutters">
+                                <div class="col mr-2">
+                                    <div class="text-uppercase text-success font-weight-bold text-xs mb-1"><span>TICKETS RESUELTOS</span></div>
+                                    <div class="text-dark font-weight-bold h5 mb-0"><span>{{finish+close}}</span></div>
+                                </div>
+                                <div class="col-auto"><i class="fas fa-comments fa-2x text-gray-300"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

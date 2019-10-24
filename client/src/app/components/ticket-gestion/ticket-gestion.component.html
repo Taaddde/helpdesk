@@ -161,6 +161,7 @@
           <div class="col chatbox-scroll" id="chatbox-scroll">
             <app-chatbox *ngFor="let textblock of chat"
             text={{textblock.text}}
+            sign={{textblock.user.sign}}
             type={{textblock.type}}
             user={{textblock.user.name+space+textblock.user.surname}}
             date={{textblock.createDate}}
@@ -181,7 +182,7 @@
                 </div>
                 <div class="container" id="options-container">
                     <button class="btn btn-primary float-right" type="submit">
-                      <i class="fa fa-arrow-circle-right"></i>
+                      <i class="fa fa-paper-plane"></i>
                     </button>
                     <input type="checkbox"  name="isPrivate" [(ngModel)]="isPrivate" />
                     <span style="margin-left: 5px;margin-right: 5px;">Privado</span><span>|</span>

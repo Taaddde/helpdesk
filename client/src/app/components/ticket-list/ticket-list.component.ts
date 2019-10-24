@@ -22,6 +22,8 @@ export class TicketListComponent implements OnInit {
 
   public limit: number;
   public page: number;
+  public user: string;
+  public status: string;
   public nextPage: boolean;
   public prevPage: boolean;
   public totalDocs: number;
@@ -42,6 +44,8 @@ export class TicketListComponent implements OnInit {
     this.url = GLOBAL.url;
     this.limit= 10;
     this.page= 1;
+    this.user = '';
+    this.status = '';
     this.nextPage = true;
     this.prevPage= false;
     this.totalDocs= null;
@@ -59,8 +63,16 @@ export class TicketListComponent implements OnInit {
     this._route.params.forEach((params: Params) =>{
       this.page = params['page'];
       this.limit = params['perPage'];
+      if(params['userId']){
+        this.user = params['userId'];
+      }
+      if(params['status']){
+        this.status = params['status']
+      }
+      
+      
 
-      this._ticketService.getPaginatedList(this.token, this.page, this.limit).subscribe(
+      this._ticketService.getPaginatedList(this.token, this.page, this.limit, this.status, this.user).subscribe(
           response =>{
               if(!response.tickets){
                 this._router.navigate(['/']);

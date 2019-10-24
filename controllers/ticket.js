@@ -2,7 +2,10 @@
 
 var Ticket = require('../models/ticket');
 const moment = require('moment');
+const mongoose =require('mongoose')
 var mongoosePaginate = require('mongoose-pagination');
+
+const ObjectId = mongoose.Types.ObjectId;
 
 var moment_tz = require('moment-timezone');
 
@@ -33,6 +36,39 @@ function getTicketsForUser(req, res){
     Ticket.find({$or: [{agent: userId}, {requester: userId}]}, (err, tickets) =>{
         if(err){
             res.status(500).send({message: 'Error del servidor en la peticion'});
+        }else{
+            if(!tickets){
+                res.status(404).send({message: 'La ticket no existe'});
+            }else{
+                res.status(200).send({tickets});
+            }
+        }
+    });
+}
+
+
+function getCountTickets(req, res){
+
+    let userId = req.params.userId
+
+    let query =[
+        // First Stage
+        {
+          $match : { $or: [ { agent: ObjectId(userId) }, { status: 'Abierto' } ] }
+          
+        },
+        // Second Stage
+        {
+          $group : {
+             _id : '$status' ,
+             count: { $sum: 1 }
+            },
+        },
+       ]
+
+    Ticket.aggregate(query, (err, tickets) =>{
+        if(err){
+            res.status(500).send({message: 'Error del servidor en la peticion',err:err});
         }else{
             if(!tickets){
                 res.status(404).send({message: 'La ticket no existe'});
@@ -110,10 +146,28 @@ function getTicketsPaged(req, res){
     }
 
     var perPage = req.params.perPage;
+    var userId = req.params.userId;
+    var status = req.params.status;
 
+    var query = {};
+    if(req.params.userId){
+        query = {agent:req.params.userId,status:req.params.status};
+        if(req.params.status == 'Finalizado'){
+            query = {$or: [ {agent:req.params.userId,status:req.params.status}, {agent:req.params.userId,status:'Cerrado'} ]};
+        }
+    }else{
+        if(req.params.status){
+            if(req.params.status == 'Finalizado'){
+                query = {$or: [ {status:req.params.status}, {status:'Cerrado'} ]};
+                console.log('Pase por aca')
+            }else{
+                query = {status:req.params.status};
+            }
+        }
+    }
     
     
-        Ticket.paginate({},{page:page, limit:perPage, populate:populateQuery, sort:{numTicket:-1}}, function(err, tickets){
+        Ticket.paginate(query,{page:page, limit:perPage, populate:populateQuery, sort:{numTicket:-1}}, function(err, tickets){
             if(err){
                 res.status(500).send({message: 'Error en la peticion'})
             }else{
@@ -186,6 +240,7 @@ module.exports = {
     getTickets,
     getTicketsPaged,
     getTicketsForUser,
+    getCountTickets,
 
     saveTicket,
     updateTicket,
