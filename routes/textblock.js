@@ -22,6 +22,7 @@ api.get('/file/:fileName', textblockController.getFile);
 
 //ABM
 api.post('/add',md_auth.ensureAuth, textblockController.saveTextBlock);
+api.put('/read/:id', md_auth.ensureAuth, textblockController.readAll);
 api.put('/update/:id', md_auth.ensureAuth, textblockController.updateTextBlock);
 api.delete('/delete/:id', md_auth.ensureAuth, textblockController.deletetextblock);
 

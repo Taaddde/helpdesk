@@ -147,6 +147,8 @@ export class TicketNewComponent implements OnInit {
 
   onSubmit(){
 
+    this.ticket.priority = this.priority;
+
     if(this.identity['role'] == 'ROLE_REQUESTER'){
       this.ticket.source = 'PORTAL';
       this.textblock.type = 'REQUEST'
@@ -162,7 +164,8 @@ export class TicketNewComponent implements OnInit {
     }
 
     if(this.ticket.priority == ''){
-      this.ticket.priority = 'Normal'
+      this.ticket.priority = 'Normal';
+      console.log('Pase por aca')
     }
 
     if(this.ticket.agent == null){
@@ -181,6 +184,7 @@ export class TicketNewComponent implements OnInit {
         delete this.requester.userName;
         delete this.requester.password;
       }
+
       //Se crea un ticket con un nuevo solicitante
       this._userService.add(this.requester).subscribe(
         response =>{

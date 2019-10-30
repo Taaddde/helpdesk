@@ -1,6 +1,8 @@
 'use strict'
 
 var Ticket = require('../models/ticket');
+var TextBlock = require('../models/textblock');
+var User = require('../models/user');
 const moment = require('moment');
 const mongoose =require('mongoose')
 var mongoosePaginate = require('mongoose-pagination');
@@ -22,7 +24,7 @@ function getTicket(req, res){
             res.status(500).send({message: 'Error del servidor en la peticion'});
         }else{
             if(!ticket){
-                res.status(404).send({message: 'La ticket no existe'});
+                res.status(404).send({message: 'El ticket no existe'});
             }else{
                 res.status(200).send({ticket});
             }
@@ -38,7 +40,7 @@ function getTicketsForUser(req, res){
             res.status(500).send({message: 'Error del servidor en la peticion'});
         }else{
             if(!tickets){
-                res.status(404).send({message: 'La ticket no existe'});
+                res.status(404).send({message: 'El ticket no existe'});
             }else{
                 res.status(200).send({tickets});
             }
@@ -71,12 +73,174 @@ function getCountTickets(req, res){
             res.status(500).send({message: 'Error del servidor en la peticion',err:err});
         }else{
             if(!tickets){
-                res.status(404).send({message: 'La ticket no existe'});
+                res.status(404).send({message: 'El ticket no existe'});
             }else{
                 res.status(200).send({tickets});
             }
         }
     });
+}
+
+function getUnreadTickets(req, res){
+
+    let userId = req.params.userId;
+    
+    let query =[
+        {
+          $match : {read:false, type:'REQUEST'}
+        },
+        {
+          $group : {
+             _id : '$ticket' ,
+             textblock: { $last: "$_id" },
+             count: { $sum: 1 }
+            },
+        },
+        { 
+            $lookup: {
+                from: 'textblocks', 
+                localField: 'textblock', 
+                foreignField: '_id', 
+                as: 'tbDesc'} 
+        },
+        {
+            $unwind:"$tbDesc"
+        },
+        {
+            $lookup: {
+                from: 'users', 
+                localField: 'tbDesc.user', 
+                foreignField: '_id', 
+                as: 'tbDesc.user'} 
+        },
+        {
+            $unwind:"$tbDesc.user"
+        },
+        {
+            $lookup: {
+                from: 'tickets', 
+                localField: 'tbDesc.ticket', 
+                foreignField: '_id', 
+                as: 'tbDesc.ticket'} 
+        },
+        {
+            $unwind:"$tbDesc.ticket"
+        },
+        {
+            $lookup: {
+                from: 'users', 
+                localField: 'tbDesc.ticket.agent', 
+                foreignField: '_id', 
+                as: 'tbDesc.ticket.agent'} 
+        },
+        {
+            $unwind:"$tbDesc.ticket.agent"
+        },
+        {
+            $match : {'tbDesc.ticket.agent._id':ObjectId(userId)}
+        },
+        {
+            $project : {
+                _id:1, 
+                count:1, 
+                tbDesc :{
+                    _id: 1,
+                    createDate:1,
+                    text: 1,
+                    user: {
+                        _id: 1,
+                        name: 1,
+                        surname: 1,
+                        image: 1,
+                    },
+                    ticket: {
+                        _id: 1,
+                        numTicket: 1,
+                        sub: 1,
+                }
+            }
+        }
+    }]
+    TextBlock.aggregate(query, (err, textblocks) =>{
+        if(err){
+            res.status(500).send({message: 'Error del servidor en la peticion',err:err});
+        }else{
+            if(!textblocks){
+                res.status(404).send({message: 'No se encontro el elemento'});
+            }else{
+                res.status(200).send({textblocks:textblocks});                            
+            }
+        }
+    })
+}
+
+function getTicketReports(req, res){
+
+    let query =[
+        {
+            $facet: {
+              "byStatus": [
+                {
+                    $group : {
+                        _id: "$status",
+                        count: { $sum: 1 }
+                    },
+                },
+              ],
+              "byTime": [
+                { 
+                    $group : {
+                        _id: {$substr: ['$createDate', 3, 7]},
+                        count: { $sum: 1 }
+                    } 
+                },
+              ],
+              "byAgent": [
+                {
+                    $group : {
+                        _id: {agent:"$agent",status:"$status"},
+                        count: { $sum: 1 }
+                    },
+                },
+                { $sort : {"_id.agent":1 }},
+                {
+                    $lookup: {
+                        from: 'users', 
+                        localField: '_id.agent', 
+                        foreignField: '_id', 
+                        as: '_id.agent'} 
+                },
+                {
+                    $unwind:"$_id.agent"
+                },
+                {
+                    $project : {
+                        count:1, 
+                        _id :{
+                            agent: {
+                                _id:1,
+                                name:1,
+                                surname:1,
+                            },
+                            status: 1,
+                        }
+                    }
+                },
+              ],
+            },
+        },
+    ]
+    Ticket.aggregate(query, (err, tickets) =>{
+        if(err){
+            res.status(500).send({message: 'Error del servidor en la peticion',err:err});
+        }else{
+            if(!tickets){
+                res.status(404).send({message: 'No se encontro el elemento'});
+            }else{
+                res.status(200).send({tickets:tickets});                            
+            }
+        }
+    })
 }
 
 function saveTicket(req, res){
@@ -241,6 +405,9 @@ module.exports = {
     getTicketsPaged,
     getTicketsForUser,
     getCountTickets,
+    getUnreadTickets,
+    //getNotificationTickets,
+    getTicketReports,
 
     saveTicket,
     updateTicket,

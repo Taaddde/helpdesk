@@ -6,6 +6,10 @@ var moment = require('moment');
 var fs = require('fs');
 var path = require('path');
 
+const mongoose =require('mongoose')
+const ObjectId = mongoose.Types.ObjectId;
+
+
 
 function getTextBlock(req, res){
 
@@ -128,6 +132,24 @@ function updateTextBlock(req, res){
     });
 }
 
+function readAll(req, res){
+    var ticketId = req.params.id;
+    var update =  req.body;
+
+    //textblockId = textblock buscado, update = datos nuevos a actualizar
+    TextBlock.updateMany({ticket:ObjectId(ticketId)}, update, (err, textblockUpdated) =>{
+        if(err){
+            res.status(500).send({message: 'Error del servidor en la petición'});
+        }else{
+            if(!textblockUpdated){
+                res.status(404).send({message: 'No se ha encontrado El bloque de texto'});
+            }else{
+                res.status(200).send({textblock:textblockUpdated});
+            }
+        }
+    });
+}
+
 function deletetextblock(req, res){
     var textblockId = req.params.id;
 
@@ -200,6 +222,7 @@ module.exports = {
     saveTextBlock,
     updateTextBlock,
     deletetextblock,
+    readAll,
 
     uploadFile,
     getFile

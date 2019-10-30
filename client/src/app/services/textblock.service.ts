@@ -51,6 +51,16 @@ export class textblockService{
                             .map(res => res.json());
     }
 
+    readAll(token, id){
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+        });
+
+        return this._http.put(this.url+'textblock/read/'+id, {read:true}, {headers: headers})
+                            .map(res => res.json());
+    }
+
     getList(token){
       let headers = new Headers({
           'Content-Type':'application/json',

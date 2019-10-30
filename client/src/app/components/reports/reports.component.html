@@ -1,0 +1,61 @@
+<div class="card">
+  <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+          <li class="nav-item"><a [className]="state == 'ticket' ? 'nav-link active' : 'nav-link'" (click)="changeTo('ticket')">Tickets</a></li>
+          <li class="nav-item"><a [className]="state == 'agent' ? 'nav-link active' : 'nav-link'" (click)="changeTo('agent')">Agentes</a></li>
+      </ul>
+  </div>
+  <div class="card-body" *ngIf="state == ''">
+      <h3 class="text-center">Seleccione un tipo de reporte</h3>
+  </div>
+  <div class="card-body" *ngIf="state == 'ticket'">
+      <h3 class="text-center">Reporte por tickets</h3>
+      <hr />
+      <div class="row">
+          <div class="col-md-12 col-lg-6 col-xl-6">
+              <div style="width: 100%;">
+                  <app-ticket-report 
+                  typeChart='status_pie'
+                  [labelChart]=statusReportId
+                  [dataChart]=statusReportCount
+                  ></app-ticket-report>
+              </div>
+          </div>
+          <div class="col-md-12 col-lg-6 col-xl-6">
+              <div style="width: 100%;">
+                <app-ticket-report 
+                typeChart='time_bar'
+                [labelChart]=timeReportId
+                [dataChart]=timeReportCount
+                ></app-ticket-report>
+              </div>
+          </div>
+      </div>      
+      
+  </div>
+
+  <div class="card-body" *ngIf="state == 'agent'">
+      <h3 class="text-center">Reporte por agente</h3>
+      <hr />
+      <div class="row">
+          <div class="col-md-12 col-lg-6 col-xl-6">
+              <div style="width: 100%;">
+                  <app-agent-report 
+                    typeChart='status_horizontalBar'
+                    [labelChart]=statusAgentName
+                    [dataChartP]=statusAgentPending
+                    [dataChartF]=statusAgentFinish
+                  ></app-agent-report>
+              </div>
+          </div>
+          <div class="col-md-12 col-lg-6 col-xl-6">
+              <div style="width: 100%;">
+                <app-agent-report 
+                
+                ></app-agent-report>
+              </div>
+          </div>
+      </div>      
+      
+  </div>
+</div>

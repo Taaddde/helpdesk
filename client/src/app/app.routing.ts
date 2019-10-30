@@ -11,6 +11,7 @@ import { TeamEditComponent } from './components/team-new/team-edit.component';
 import { TicketGestionComponent } from './components/ticket-gestion/ticket-gestion.component';
 import { TicketNewComponent } from './components/ticket-new/ticket-new.component';
 import { HomeComponent } from './components/home/home.component';
+import { ReportsComponent } from './components/reports/reports.component';
 
 
 const appRoutes: Routes = [
@@ -33,6 +34,7 @@ const appRoutes: Routes = [
     {path: 'team/new', component: TeamNewComponent},
     {path: 'team/edit/:id', component: TeamEditComponent},
 
+    {path: 'report', component: ReportsComponent},
 
 ];
 

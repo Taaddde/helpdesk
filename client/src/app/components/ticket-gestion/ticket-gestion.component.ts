@@ -111,17 +111,29 @@ export class TicketGestionComponent implements OnInit {
             if(!response.textblocks){
             }else{
               this.chat = response.textblocks;
+              if(this.identity['role'] != 'ROLE_REQUESTER' && this.identity['_id'] == this.ticket.agent['_id']){
+                this._textblockService.readAll(this.token, id).subscribe(
+                  response =>{
+                      if(!response.textblocks){
+                      }else{
+                        console.log('Realizado')
+                      }
+                  },
+                  error =>{
+                      console.log(error);
+                  }
+                );
+              }else{
+                console.log('No realizado')
+              }
             }
         },
         error =>{
-            var errorMessage = <any>error;
-            if(errorMessage != null){
-            var body = JSON.parse(error._body);
-            //this.alertMessage = body.message;
             console.log(error);
-            }
         }
       );
+      
+      
     });
   }
 
@@ -267,6 +279,7 @@ export class TicketGestionComponent implements OnInit {
     if(this.identity['role'] == 'ROLE_REQUESTER'){
       this.textblock.type = 'REQUEST'
     }else{
+      this.textblock.read = true;
       if(this.isPrivate){
         this.textblock.type = 'PRIVATE'
       }else{

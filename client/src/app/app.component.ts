@@ -1,15 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import {User} from './models/user';
 
 import {Router, ActivatedRoute, Params} from '@angular/router'
 import {GLOBAL} from './services/global';
 import { userService } from './services/user.service';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/interval';
+import { ticketService } from './services/ticket.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers:[userService]
+  providers:[userService, ticketService]
 })
 export class AppComponent implements OnInit {
   public title = 'HelpDesk';
@@ -19,12 +22,14 @@ export class AppComponent implements OnInit {
   public token;
   public alertMessage;
   public url: string;
-
+  public sub;
+  public notifications;
   
 
   //Asigna un valor a una propiedad
   constructor(
     private _userService: userService,
+    private _ticketService: ticketService,
     private _route: ActivatedRoute,
     private _router: Router
   ){
@@ -32,11 +37,39 @@ export class AppComponent implements OnInit {
     this.user_register = new User('','','','','','','ROLE_REQUESTER','','');
     this.url=GLOBAL.url;
     this.alertMessage = '';
+    this.sub = Observable.interval(15000).subscribe((val) => { this.getMessages(); });
+    this.notifications = '';
   } 
 
   ngOnInit(){
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
+    if(this.identity){
+      this.getMessages();
+    }
+  }
+
+  getMessages(){
+    this._ticketService.getMessages(this.token, this.identity['_id']).subscribe(
+      response =>{
+          if(!response.textblocks){
+          }else{
+            this.notifications = response.textblocks;
+          }
+      },
+      error =>{
+          var errorMessage = <any>error;
+          if(errorMessage != null){
+          var body = JSON.parse(error._body);
+          //this.alertMessage = body.message;
+          console.log(error);
+          }
+      }
+    );
+  }
+
+  getLenght(a: Array<any>){
+    return a.length;
   }
 
   public onSubmit(){
@@ -103,34 +136,5 @@ export class AppComponent implements OnInit {
 
     this._router.navigate(['/']);
   }
-/*
-  public alertRegister;
 
-  onSubmitRegister(){
-    console.log(this.user_register);
-
-    this._userService.register(this.user_register).subscribe(
-      response => {
-        let user = response.user;
-        this.user_register = user;
-
-        if(!user._id){
-          this.alertRegister = 'Error al registrarse';
-        }else{
-          this.alertRegister = 'El registro se ha realizado correctamente';
-          this.user_register = new User('','','','','','ROLE_USER','');
-        }
-
-      },
-      error =>{
-        var errorMessage = <any>error;
-        if(errorMessage != null){
-          var body = JSON.parse(error._body);
-          this.alertRegister = body.message;
-
-          console.log(error);
-        }
-      }
-    );
-  }*/
 }

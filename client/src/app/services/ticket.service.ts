@@ -117,4 +117,25 @@ export class ticketService{
                             .map(res => res.json());
     }
 
+    getReports(token){
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+          });
+
+          return this._http.get(this.url+'ticket/report', ({headers: headers}))
+                            .map(res => res.json());
+    }
+
+    getMessages(token, id:string){
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+          });
+
+          let options = new RequestOptions({headers: headers});
+          return this._http.get(this.url+'ticket/unread/'+id, ({headers: headers}))
+                            .map(res => res.json());
+    }
+
 }

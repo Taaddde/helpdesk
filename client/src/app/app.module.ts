@@ -18,7 +18,11 @@ import { TicketGestionComponent } from './components/ticket-gestion/ticket-gesti
 import { ChatboxComponent } from './components/chatbox/chatbox.component';
 import { TicketNewComponent } from './components/ticket-new/ticket-new.component';
 import { HomeComponent } from './components/home/home.component';
+import { ReportsComponent } from './components/reports/reports.component';
+import { TicketReportComponent } from './components/ticket-report/ticket-report.component';
+import { AgentReportComponent } from './components/agent-report/agent-report.component';
 
+import { ChartModule } from 'angular2-chartjs';
 
 @NgModule({
   declarations: [
@@ -34,15 +38,19 @@ import { HomeComponent } from './components/home/home.component';
     TicketGestionComponent,
     ChatboxComponent,
     TicketNewComponent,
-    HomeComponent
+    HomeComponent,
+    ReportsComponent,
+    TicketReportComponent,
+    AgentReportComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     routing,
+    ChartModule
   ],
   providers: [appRoutingProviders],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
