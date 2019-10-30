@@ -21,6 +21,8 @@ export class AgentEditComponent implements OnInit {
 
   public alertMessage: string;
 
+  public isUser: boolean;
+
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
@@ -32,6 +34,7 @@ export class AgentEditComponent implements OnInit {
     this.url = GLOBAL.url;
     this.user = new User('','','','','','','','','');
     this.isAdm = false;
+    this.isUser = false;
     this.alertMessage = '';
    }
 
@@ -42,6 +45,10 @@ export class AgentEditComponent implements OnInit {
   getUser(){
     this._route.params.forEach((params: Params) =>{
       let id = params['id'];
+
+      if(this.identity['_id'] == id){
+        this.isUser = true;
+      }
 
     this._userService.getOne(this.token, id).subscribe(
       response =>{

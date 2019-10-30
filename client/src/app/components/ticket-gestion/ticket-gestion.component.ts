@@ -166,16 +166,34 @@ export class TicketGestionComponent implements OnInit {
   }
 
   selectAgent(val: string, name:string, surname:string){
-    this.ticket.agent = val;
-    this.editTicket();
-    this.newInfo(this.identity['name']+' '+this.identity['surname']+' asignó a '+name+' '+surname+' como agente de esta solicitud')
+    if(this.ticket.status != 'Pendiente'){
+      this.ticket.agent = val;
+      this.ticket.status = 'Pendiente'
+      this.editTicket();
+      this.newInfo(this.identity['name']+' '+this.identity['surname']+' asignó a '+name+' '+surname+' como agente de esta solicitud')
+      this.newInfo(this.identity['name']+' '+this.identity['surname']+' ha cambiado el estado de la solicitud a pendiente');
+    }else{
+      this.ticket.agent = val;
+      this.editTicket();
+      this.newInfo(this.identity['name']+' '+this.identity['surname']+' asignó a '+name+' '+surname+' como agente de esta solicitud')
+    }
   }
 
   selectTeam(val: string, name:string){
-    this.ticket.team = val;
-    this.ticket.agent = null;
-    this.editTicket();
-    this.newInfo(this.identity['name']+' '+this.identity['surname']+' asignó a '+name+' como equipo de esta solicitud')
+    if(this.ticket.status != 'Pendiente'){
+      this.ticket.team = val;
+      this.ticket.agent = null;
+      this.ticket.status = 'Pendiente';
+      this.editTicket();
+      this.newInfo(this.identity['name']+' '+this.identity['surname']+' asignó a '+name+' como equipo de esta solicitud');
+      this.newInfo(this.identity['name']+' '+this.identity['surname']+' ha cambiado el estado de la solicitud a pendiente');
+    }else{
+      this.ticket.team = val;
+      this.ticket.agent = null;
+      this.editTicket();
+      this.newInfo(this.identity['name']+' '+this.identity['surname']+' asignó a '+name+' como equipo de esta solicitud');
+    }
+
   }
 
   selectResolveDate(){
@@ -214,9 +232,19 @@ export class TicketGestionComponent implements OnInit {
   }
 
   setStatus(val:string){
-    this.newInfo(this.identity['name']+' '+this.identity['surname']+' ha cambiado el estado de la solicitud de '+this.ticket.status+' a '+val)
-    this.ticket.status = val;
-    this.editTicket();
+    if(
+      ((val == 'Cerrado' || val == 'Finalizado') && this.ticket.team && this.ticket.agent)
+      ||
+      (val == 'Pendiente' && this.ticket.team)
+      ||
+      (val == 'Abierto')
+    ){
+      this.newInfo(this.identity['name']+' '+this.identity['surname']+' ha cambiado el estado de la solicitud de '+this.ticket.status+' a '+val)
+      this.ticket.status = val;
+      this.editTicket();  
+    }else{
+      alert('Debe seleccionar un responsable para cambiar el ticket a ese estado')
+    }
   }
 
   setPriority(val:string){
