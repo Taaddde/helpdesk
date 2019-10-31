@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit {
   }
 
   getCountTickets(){
-    this._ticketService.getCountsTickets(this.token, this.identity['_id']).subscribe(
+    this._ticketService.getCountsTickets(this.token,this.identity['company']['_id'], this.identity['_id']).subscribe(
       response =>{
           if(!response.tickets){
             this._router.navigate(['/']);

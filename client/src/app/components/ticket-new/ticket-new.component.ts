@@ -57,7 +57,7 @@ export class TicketNewComponent implements OnInit {
     this.priority = '';
     this.newRequester = false;
 
-    this.ticket = new Ticket('','',null,'',null,null,'','','',null,null,'',[null],'');
+    this.ticket = new Ticket('','',null,'',null,null,'','','',null,null,'',[null],'',this.identity['company']['_id']);
     this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false)
    }
 
@@ -126,6 +126,7 @@ export class TicketNewComponent implements OnInit {
     this.agents = team.users;
     this.team = team;
     this.ticket.team = team._id;
+    this.ticket.company = team.company._id;
   }
 
   setAgent(agent){

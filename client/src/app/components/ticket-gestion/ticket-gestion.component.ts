@@ -14,12 +14,14 @@ import { responseService } from 'app/services/response.service';
 import { Response } from 'app/models/response';
 
 import * as moment from 'moment';
+import { companyService } from 'app/services/company.service';
+import { Company } from 'app/models/company';
 
 @Component({
   selector: 'app-ticket-gestion',
   templateUrl: './ticket-gestion.component.html',
   styleUrls: ['./ticket-gestion.component.scss'],
-  providers: [userService, ticketService, teamService, textblockService, uploadService, responseService]
+  providers: [userService, ticketService, teamService, textblockService, uploadService, responseService, companyService]
 })
 export class TicketGestionComponent implements OnInit {
   
@@ -28,6 +30,7 @@ export class TicketGestionComponent implements OnInit {
   public textblock: TextBlock;
   public responses: Response[];
   public chat: [TextBlock];
+  public companies: [Company];
   public identity;
   public token;
   public url: string;
@@ -46,7 +49,8 @@ export class TicketGestionComponent implements OnInit {
     private _teamService: teamService,
     private _textblockService: textblockService,
     private _uploadService: uploadService,
-    private _responseService: responseService
+    private _responseService: responseService,
+    private _companyService: companyService
   ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
@@ -57,19 +61,19 @@ export class TicketGestionComponent implements OnInit {
     this.isPrivate = false;
     this.space = ' ';
 
-    this.ticket = new Ticket('','',null,'','','','','','','',null,'',[''],'');
+    this.ticket = new Ticket('','',null,'','','','','','','',null,'',[''],'','');
     this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false)
    }
 
   ngOnInit() {
     this.getTicket();
-    this.getTeams();
     this.getChat();  
     this.getHashtags(); 
+    this.getCompanies();
   }
 
-  getTeams(){
-    this._teamService.getList(this.token, this.identity['company']['_id']).subscribe(
+  getTeams(company){
+    this._teamService.getList(this.token, company).subscribe(
       response =>{
           if(!response.teams){
             this._router.navigate(['/']);
@@ -84,6 +88,21 @@ export class TicketGestionComponent implements OnInit {
           //this.alertMessage = body.message;
           console.log(error);
           }
+      }
+    );
+  }
+
+  getCompanies(){
+    this._companyService.getList(this.token).subscribe(
+      response =>{
+          if(!response.companies){
+            this._router.navigate(['/']);
+          }else{
+            this.companies = response.companies;
+          }
+      },
+      error =>{
+          console.log(error);
       }
     );
   }
@@ -169,6 +188,7 @@ export class TicketGestionComponent implements OnInit {
             this._router.navigate(['/']);
           }else{
             this.ticket = response.ticket;
+            this.getTeams(response.ticket['company']['_id']);
             if(response.ticket.team){
               this.agents = response.ticket.team.users;
             }
@@ -218,6 +238,29 @@ export class TicketGestionComponent implements OnInit {
       this.ticket.agent = null;
       this.editTicket();
       this.newInfo(this.identity['name']+' '+this.identity['surname']+' asignó a '+name+' como equipo de esta solicitud');
+    }
+
+  }
+
+  selectCompany(val: string, name:string){
+    if(this.ticket.status != 'Abierto'){
+      this.ticket.company = val;
+      this.ticket.team = null;
+      this.ticket.agent = null;
+      this.agents = null;
+      this.ticket.status = 'Abierto';
+      this.ticket.resolveDate = null;
+      this.editTicket();
+      this.getTeams(val);
+      this.newInfo(this.identity['name']+' '+this.identity['surname']+' asignó a '+name+' como departamento responsable de esta solicitud');
+      this.newInfo(this.identity['name']+' '+this.identity['surname']+' ha cambiado el estado de la solicitud a abierto');
+    }else{
+      this.ticket.company = val;
+      this.ticket.team = null;
+      this.agents = null;
+      this.ticket.agent = null;
+      this.editTicket();
+      this.newInfo(this.identity['name']+' '+this.identity['surname']+' asignó a '+name+' como departamento responsable de esta solicitud');
     }
 
   }

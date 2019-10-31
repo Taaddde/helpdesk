@@ -15,5 +15,6 @@ export class Ticket{
         public source: string,
         public tags: [string],
         public priority: string, 
+        public company:string
     ){}
 }

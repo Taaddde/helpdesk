@@ -64,7 +64,7 @@ export class ReportsComponent implements OnInit {
   }
 
   getTicketReports(){
-    this._ticketService.getReports(this.token).subscribe(
+    this._ticketService.getReports(this.token, this.identity['company']['_id']).subscribe(
       response =>{
         if(!response.tickets){
 

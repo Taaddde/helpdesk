@@ -52,7 +52,7 @@ export class teamService{
                             .map(res => res.json());
     }
 
-    getList(token, company:string){
+    getList(token, company){
       let headers = new Headers({
           'Content-Type':'application/json',
           'Authorization':token

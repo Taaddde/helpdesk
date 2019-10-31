@@ -45,6 +45,11 @@ export class AgentNewComponent implements OnInit {
       this.user.role = 'ROLE_ADMIN';
     }
 
+    if(this.user.userName = ''){
+      delete this.user.userName;
+      delete this.user.password;
+    }
+
 
     this._userService.add(this.user).subscribe(
       response =>{

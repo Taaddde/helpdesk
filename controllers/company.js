@@ -8,14 +8,14 @@ var path = require('path');
 
 function getCompanies(req, res){
 
-    Company.find({}, (err, company) =>{
+    Company.find({}, (err, companies) =>{
         if(err){
             res.status(500).send({message: 'Error del servidor en la peticion'});
         }else{
-            if(!company){
+            if(!companies){
                 res.status(404).send({message: 'La compañia no existe'});
             }else{
-                res.status(200).send({company});
+                res.status(200).send({companies:companies});
             }
         }
     });

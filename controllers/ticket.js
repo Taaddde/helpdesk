@@ -16,6 +16,7 @@ function getTicket(req, res){
         {path:'requester',select:['name','surname','image','email']},
         {path:'agent',select:['name','surname','image']}, 
         {path:'team',select:['users','name','image'], populate:{path: 'users', model: 'User',select:['name','surname','image']}},
+        {path:'company'},
     ];
     var ticketId = req.params.id;
 
@@ -52,11 +53,12 @@ function getTicketsForUser(req, res){
 function getCountTickets(req, res){
 
     let userId = req.params.userId
+    let company = req.params.company
 
     let query =[
         // First Stage
         {
-          $match : { $or: [ { agent: ObjectId(userId) }, { status: 'Abierto' } ] }
+          $match : { $or: [ { agent: ObjectId(userId) }, { company:ObjectId(company), status: 'Abierto' } ] }
           
         },
         // Second Stage
@@ -176,7 +178,12 @@ function getUnreadTickets(req, res){
 
 function getTicketReports(req, res){
 
+    let company = req.params.company;
+
     let query =[
+        {
+            $match: {company: ObjectId(company)}
+        },
         {
             $facet: {
               "byStatus": [
@@ -260,6 +267,7 @@ function saveTicket(req, res){
         ticket.createDate = moment().format("DD-MM-YYYY HH:mm");
         ticket.lastActivity = moment().format("DD-MM-YYYY HH:mm");
         ticket.priority = params.priority;
+        ticket.company = params.company;
     
         ticket.save((err, ticketStored) =>{
             if(err){
@@ -312,20 +320,20 @@ function getTicketsPaged(req, res){
     var perPage = req.params.perPage;
     var userId = req.params.userId;
     var status = req.params.status;
+    var company = req.params.company;
 
-    var query = {};
-    if(req.params.userId){
-        query = {agent:req.params.userId,status:req.params.status};
-        if(req.params.status == 'Finalizado'){
-            query = {$or: [ {agent:req.params.userId,status:req.params.status}, {agent:req.params.userId,status:'Cerrado'} ]};
+    var query = {company:company};
+    if(userId){
+        query = {agent: userId,status: status, company:company};
+        if(status == 'Finalizado'){
+            query = {company:company, $or: [ {agent: userId,status: status}, {agent: userId,status:'Cerrado'} ]};
         }
     }else{
-        if(req.params.status){
-            if(req.params.status == 'Finalizado'){
-                query = {$or: [ {status:req.params.status}, {status:'Cerrado'} ]};
-                console.log('Pase por aca')
+        if(status){
+            if(status == 'Finalizado'){
+                query = {company:company, $or: [ {status:status}, {status:'Cerrado'} ]};
             }else{
-                query = {status:req.params.status};
+                query = {company:company, status:status};
             }
         }
     }

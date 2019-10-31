@@ -12,7 +12,7 @@
                       <li class="list-group-item"><span>Actualizado: </span><span><strong>{{ticket.lastActivity}}</strong></span></li>
                       <li class="list-group-item">
                           <span>Prioridad: </span>
-                          <div class="dropdown d-inline">
+                          <div class="dropdown d-inline" *ngIf="identity['company']['_id'] == ticket.company['_id']">
                                 <button class="btn btn-dark dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
                                   {{ticket.priority}}
                               </button>
@@ -25,6 +25,7 @@
                                       </a>
                                   </div>
                             </div>
+                            <span *ngIf="identity['company']['_id'] != ticket.company['_id']"><strong>{{ticket.priority}}</strong></span>
                         </li>
                       <li class="list-group-item"><span>Valoración: </span><span><strong *ngIf="ticket.rating != 0">{{ticket.rating}}</strong></span><i *ngIf="ticket.rating != 0" class="fa fa-star"></i></li>
                       <li class="list-group-item"><span>Fuente: </span><span><strong>{{ticket.source}}</strong></span></li>
@@ -71,8 +72,29 @@
               </div>
               <div class="card-body info-card">
                   <ul class="list-group">
-                      <li class="list-group-item"><span style="font-size: 18px;"><strong>Equipo</strong></span>
-                          <div class="dropdown d-inline float-right">
+
+                      <li class="list-group-item"><span style="font-size: 18px;"><strong>Departamento</strong></span>
+                        <div class="dropdown d-inline float-right" *ngIf="identity['company']['_id'] == ticket.company['_id']">
+                          <button class="btn btn-dark dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button">
+                              Cambiar
+                            </button>
+                          <div role="menu" class="dropdown-menu">
+                            <a role="presentation" class="dropdown-item dark" *ngFor="let company of companies" (click)="selectCompany(company._id, company.name)">
+                                {{company.name}}
+                            </a>
+                        </div>
+                      </div>
+                      <div style="margin-bottom: 25px;"></div>
+                      <img *ngIf="!ticket.company || ticket.company.image == 'null'" class="rounded-circle img-agent-team" src="../../../assets/img/system/company-placeholder.png" />
+                      <img *ngIf="ticket.company && ticket.company.image != 'null'" class="rounded-circle img-agent-team" src="{{url+'company/image/'+ticket.company.image}}" />
+
+                      <p *ngIf="!ticket.company" class="d-inline" style="margin-left: 10px;"><strong>Sin departamento</strong></p>
+                      <p *ngIf="ticket.company" class="d-inline" style="margin-left: 10px;"><strong>{{ticket.company.name}}</strong></p>
+                      <hr />
+                        
+                      <span style="font-size: 18px;"><strong>Equipo</strong></span>
+
+                        <div class="dropdown d-inline float-right" *ngIf="identity['company']['_id'] == ticket.company['_id']">
                               <button class="btn btn-dark dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button">
                                   Cambiar
                                 </button>
@@ -89,7 +111,7 @@
                           <p *ngIf="!ticket.team" class="d-inline" style="margin-left: 10px;"><strong>Sin equipo</strong></p>
                           <p *ngIf="ticket.team" class="d-inline" style="margin-left: 10px;"><strong>{{ticket.team.name}}</strong></p>
                           <hr /><span style="font-size: 18px;"><strong>Agente</strong></span>
-                          <div class="dropdown d-inline float-right">
+                          <div class="dropdown d-inline float-right" *ngIf="identity['company']['_id'] == ticket.company['_id']">
                             <button class="btn btn-dark dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button">
                               Cambiar
                             </button>
@@ -106,7 +128,7 @@
                           <p *ngIf="ticket.agent" class="d-inline" style="margin-left: 10px;"><strong>{{ticket.agent.name+' '+ticket.agent.surname}}</strong></p>
                           <p *ngIf="!ticket.agent" class="d-inline" style="margin-left: 10px;"><strong>Sin agente</strong></p>
                           
-                          <div style="margin-top: 10px;">
+                          <div style="margin-top: 10px;" *ngIf="identity['company']['_id'] == ticket.company['_id']">
                             <span>Fecha estimada de solución  </span>
                             <input type="date" style="margin-right: 5px;" #resolveDate="ngModel" name="resolveDate" [(ngModel)]="ticket.resolveDate"  (change)="selectResolveDate()"/>
                         </div>
@@ -175,13 +197,13 @@
           <div class="col" id="chat-text" [ngClass]="{privatechattext:isPrivate}">
               <form #form="ngForm" (ngSubmit)="onSubmit()">
                 <div class="container">
-                  <textarea id="chat-textbox" #text="ngModel" name="text" [(ngModel)]="textblock.text" required placeholder="Ingresa un texto para enviar" style="margin-top: 8px;"></textarea>
+                  <textarea [readonly]="identity['company']['_id'] != ticket.company['_id']" id="chat-textbox" #text="ngModel" name="text" [(ngModel)]="textblock.text" required placeholder="Ingresa un texto para enviar" style="margin-top: 8px;"></textarea>
                 </div>
                 <div class="container" id="options-container">
-                    <button class="btn btn-primary float-right" type="submit">
+                    <button class="btn btn-primary float-right" [disabled]="identity['company']['_id'] != ticket.company['_id']" type="submit">
                       <i class="fa fa-paper-plane"></i>
                     </button>
-                    <input type="checkbox"  name="isPrivate" [(ngModel)]="isPrivate" />
+                    <input type="checkbox" [disabled]="identity['company']['_id'] != ticket.company['_id']" name="isPrivate" [(ngModel)]="isPrivate" />
                     <span style="margin-left: 5px;margin-right: 5px;">Privado</span><span>|</span>
                     <div class="dropdown d-inline" id="hashtag">
                       <button class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">
@@ -189,7 +211,7 @@
                       </button>
 
 
-                      <div role="menu" class="dropdown-menu" >
+                      <div role="menu" class="dropdown-menu" *ngIf="identity['company']['_id'] == ticket.company['_id']" >
                         <a role="presentation" class="dropdown-item" *ngFor="let resp of responses" (click)="selectHashtag(resp.resp)">
                            {{resp.hashtag}}
                         </a>
@@ -199,13 +221,13 @@
                   </div>
                   <label class="d-inline" style="margin-left: 10px;margin-bottom: 0px;margin-top: 0;">
                     <i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 5px;"></i>
-                    <input type="file" class="d-none" (change)="fileChangeEvent($event)" />
+                    <input type="file" class="d-none" [disabled]="identity['company']['_id'] != ticket.company['_id']" (change)="fileChangeEvent($event)" />
                     <span *ngIf="filesToUpload">
                         +{{filesToUpload.length}}
                     </span>
                     </label>
                   <div class="dropdown d-inline float-right">
-                      <button class="btn btn-dark dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
+                      <button class="btn btn-dark dropdown-toggle dark" [disabled]="identity['company']['_id'] != ticket.company['_id']" data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
                         {{ticket.status}}
                     </button>
                       <div role="menu" class="dropdown-menu dark">
@@ -219,7 +241,7 @@
                                 Cerrado
                             </a>
                         </div>
-                  </div>
+                    </div>
               </div>
             </form>
           </div>

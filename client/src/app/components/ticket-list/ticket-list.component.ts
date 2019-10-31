@@ -72,7 +72,7 @@ export class TicketListComponent implements OnInit {
       
       
 
-      this._ticketService.getPaginatedList(this.token, this.page, this.limit, this.status, this.user).subscribe(
+      this._ticketService.getPaginatedList(this.token, this.page, this.limit,this.identity['company']['_id'], this.status, this.user).subscribe(
           response =>{
               if(!response.tickets){
                 this._router.navigate(['/']);
