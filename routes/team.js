@@ -10,8 +10,8 @@ var api = express.Router();
 
 //CONSULTAS
 api.get('/team/:id', md_auth.ensureAuth, teamController.getTeam);
-api.get('/teams', md_auth.ensureAuth, teamController.getTeams);
-api.get('/agents/:id', md_auth.ensureAuth, teamController.getAgentsInTeam);
+api.get('/teams/:company', md_auth.ensureAuth, teamController.getTeams);
+api.get('/agents/:id/:company', md_auth.ensureAuth, teamController.getAgentsInTeam);
 
 //Imagenes
 api.post('/image/:id',[md_auth.ensureAuth, md_upload], teamController.uploadImage);

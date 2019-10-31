@@ -37,7 +37,7 @@ export class TeamNewComponent implements OnInit {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
-    this.team = new Team('','',[''],'null','');
+    this.team = new Team('','',[''],'null','',this.identity['company']['_id']);
     this.isDefault = false;
     this.alertMessage = '';
 

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/observable';
 import {GLOBAL} from './global'; // Hecho a mano
 import {map} from 'rxjs/operators';
 import {Team} from '../models/team';
+import { cpus } from 'os';
 
 //Inyeccion de dependencias
 @Injectable()
@@ -51,25 +52,25 @@ export class teamService{
                             .map(res => res.json());
     }
 
-    getList(token){
+    getList(token, company:string){
       let headers = new Headers({
           'Content-Type':'application/json',
           'Authorization':token
       });
 
       let options = new RequestOptions({headers: headers});
-      return this._http.get(this.url+'team/teams', options)
+      return this._http.get(this.url+'team/teams/'+company, options)
                           .map(res => res.json());
     }
 
-    getAgentsList(token, id){
+    getAgentsList(token, id, company:string){
         let headers = new Headers({
             'Content-Type':'application/json',
             'Authorization':token
         });
   
         let options = new RequestOptions({headers: headers});
-        return this._http.get(this.url+'team/agents/'+id, options)
+        return this._http.get(this.url+'team/agents/'+id+'/'+company, options)
                             .map(res => res.json());
       }
 

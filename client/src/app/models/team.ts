@@ -5,6 +5,7 @@ export class Team{
         public name: string,
         public users: [string],
         public image: string,
-        public createDate: string
+        public createDate: string,
+        public company: string,
     ){}
 }

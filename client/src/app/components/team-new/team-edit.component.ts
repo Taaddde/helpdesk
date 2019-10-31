@@ -40,7 +40,7 @@ export class TeamEditComponent implements OnInit {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
-    this.team = new Team('','',[''],'null','');
+    this.team = new Team('','',[''],'null','','');
     this.isDefault = false;
     this.alertMessage = '';
 
@@ -83,7 +83,7 @@ export class TeamEditComponent implements OnInit {
   getAgents(){
     this._route.params.forEach((params: Params) =>{
       let id = params['id'];
-      this._teamService.getAgentsList(this.token, id).subscribe(
+      this._teamService.getAgentsList(this.token, id, this.identity['company']['_id']).subscribe(
         response =>{
             if(!response.usersOut && !!response.usersIn){
               this._router.navigate(['/']);

@@ -69,7 +69,7 @@ export class TicketGestionComponent implements OnInit {
   }
 
   getTeams(){
-    this._teamService.getList(this.token).subscribe(
+    this._teamService.getList(this.token, this.identity['company']['_id']).subscribe(
       response =>{
           if(!response.teams){
             this._router.navigate(['/']);

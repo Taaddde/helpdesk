@@ -10,6 +10,7 @@ var path = require('path');
 
 function getAgentsInTeam(req, res){
     var teamId = req.params.id;
+    var company = req.params.company;
 
     var populateQuery = [
         {path:'users', model:'User', select:['name','surname','image']},
@@ -22,7 +23,7 @@ function getAgentsInTeam(req, res){
             if(!team){
                 res.status(404).send({message: 'El equipo no existe'});
             }else{
-                User.find({_id:{$nin:team.users}, $or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}]},(err, users) =>{
+                User.find({_id:{$nin:team.users}, company:company, $or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}]},(err, users) =>{
                     if(err){
                         res.status(500).send({message: 'Error del servidor en la peticion', err:err});
                     }else{
@@ -62,6 +63,7 @@ function saveTeam(req, res){
     team.name = params.name;
     team.default = false;
     team.createDate = moment().format("DD-MM-YYYY HH:mm");
+    team.company = params.company;
 
 
     team.save((err, teamStored) =>{
@@ -83,8 +85,10 @@ function getTeams(req, res){
         {path:'users', model:'User', select:['name','surname','image']},
     ];
 
+    let company = req.params.company
 
-    Team.find({}).sort('name').populate(populateQuery).exec(function(err, teams){
+
+    Team.find({company:company}).sort('name').populate(populateQuery).exec(function(err, teams){
         if(err){
             res.status(500).send({message: 'Error del servidor en la peticion'})
         }else{
