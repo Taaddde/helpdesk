@@ -77,13 +77,14 @@ export class AppComponent implements OnInit {
     this._userService.login(this.user).subscribe(
       response =>{
         let identity = response.user;
-        this.identity = identity;
 
         if(!identity._id){
           this.alertMessage = "El usuario no esta correctamente identificado";
 
         }else{
-          // Crear elemento en el localstorage para tener el usuario en sesion
+          if(identity.role && identity.role != 'ROLE_REQUESTER'){
+            this.identity = identity;
+            // Crear elemento en el localstorage para tener el usuario en sesion
           //Como si fuera una session
           localStorage.setItem('identity', JSON.stringify(identity));
 
@@ -113,6 +114,10 @@ export class AppComponent implements OnInit {
               }
             }
           )
+          }else{
+            this.alertMessage = 'No tiene los permisos para acceder al sistema de gestión de tickets, por favor ingrese al sistema de solicitud de tickets.'
+          }
+          
         }   
       },
       error =>{

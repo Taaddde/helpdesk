@@ -23,7 +23,8 @@ var TicketSchema = Schema({
         }
     ],
     priority: {type: String, default:"Normal"},
-    company: {type: Schema.ObjectId, ref:'Company'}
+    company: {type: Schema.ObjectId, ref:'Company'},
+    subTypeTicket: {type: Schema.ObjectId, ref:'SubTypeTicket',},
 
 });
 

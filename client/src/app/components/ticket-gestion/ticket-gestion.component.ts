@@ -137,20 +137,12 @@ export class TicketGestionComponent implements OnInit {
             if(!response.textblocks){
             }else{
               this.chat = response.textblocks;
-              if(this.identity['role'] != 'ROLE_REQUESTER' && this.identity['_id'] == this.ticket.agent['_id']){
-                this._textblockService.readAll(this.token, id).subscribe(
-                  response =>{
-                      if(!response.textblocks){
-                      }else{
-                        console.log('Realizado')
-                      }
-                  },
-                  error =>{
-                      console.log(error);
-                  }
-                );
-              }else{
-                console.log('No realizado')
+              if(this.ticket.agent['_id']){
+                if(this.identity['role'] != 'ROLE_REQUESTER' && this.identity['_id'] == this.ticket.agent['_id']){
+                  this._textblockService.readAll(this.token, id)
+                }else{
+                  console.log('No realizado')
+                }  
               }
             }
         },
@@ -357,7 +349,6 @@ export class TicketGestionComponent implements OnInit {
     this._route.params.forEach((params: Params) =>{
       textblock.ticket = params['id'];
     });
-    console.log(textblock)
     this._textblockService.add(this.token,textblock).subscribe(
       response =>{
           if(!response.textblock){
