@@ -23,6 +23,7 @@ import { TicketReportComponent } from './components/ticket-report/ticket-report.
 import { AgentReportComponent } from './components/agent-report/agent-report.component';
 
 import { ChartModule } from 'angular2-chartjs';
+import { ConfigComponent } from './components/config/config.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { ChartModule } from 'angular2-chartjs';
     HomeComponent,
     ReportsComponent,
     TicketReportComponent,
-    AgentReportComponent
+    AgentReportComponent,
+    ConfigComponent
   ],
   imports: [
     BrowserModule,

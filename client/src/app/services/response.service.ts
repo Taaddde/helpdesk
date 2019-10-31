@@ -51,14 +51,14 @@ export class responseService{
                             .map(res => res.json());
     }
 
-    getList(token){
+    getList(token, userId:string){
       let headers = new Headers({
           'Content-Type':'application/json',
           'Authorization':token
       });
 
       let options = new RequestOptions({headers: headers});
-      return this._http.get(this.url+'response/responses', options)
+      return this._http.get(this.url+'response/responses/'+userId, options)
                           .map(res => res.json());
     }
 

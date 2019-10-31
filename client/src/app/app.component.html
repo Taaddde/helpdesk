@@ -21,6 +21,7 @@
                 <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
                     <div class="sidebar-brand-icon rotate-n-15"></div>
                     <div class="sidebar-brand-text mx-3"><i><span style="font-family: Audiowide, cursive;font-size: 24px;">TR&nbsp;</span></i><span>helpdesk</span>
+                    <p *ngIf="identity['company']['name']">{{identity['company']['name']}}</p>
                     </div>
                 </a>
                 <hr class="sidebar-divider my-0">

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router, ActivatedRoute, Params} from '@angular/router'
 import { userService } from 'app/services/user.service';
-import { elementAt } from 'rxjs/operators';
 
 @Component({
   selector: 'app-agent-team',

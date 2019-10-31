@@ -108,10 +108,7 @@
                           
                           <div style="margin-top: 10px;">
                             <span>Fecha estimada de solución  </span>
-                            <input type="date" style="margin-right: 5px;" #resolveDate="ngModel" name="resolveDate" [(ngModel)]="ticket.resolveDate" />
-                            <button class="btn btn-dark dark" type="button" (click)="selectResolveDate()">
-                                <strong>Aplicar</strong>
-                            </button>
+                            <input type="date" style="margin-right: 5px;" #resolveDate="ngModel" name="resolveDate" [(ngModel)]="ticket.resolveDate"  (change)="selectResolveDate()"/>
                         </div>
                       </li>
                   </ul>
@@ -190,11 +187,15 @@
                       <button class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">
                           <i class="fa fa-hashtag adjunt"></i>
                       </button>
-                      <div role="menu" class="dropdown-menu">
-                        <a role="presentation" class="dropdown-item" href="#">
-                             First Item
+
+
+                      <div role="menu" class="dropdown-menu" >
+                        <a role="presentation" class="dropdown-item" *ngFor="let resp of responses" (click)="selectHashtag(resp.resp)">
+                           {{resp.hashtag}}
                         </a>
-                    </div>
+                      </div>
+
+
                   </div>
                   <label class="d-inline" style="margin-left: 10px;margin-bottom: 0px;margin-top: 0;">
                     <i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 5px;"></i>

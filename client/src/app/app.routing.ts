@@ -12,6 +12,7 @@ import { TicketGestionComponent } from './components/ticket-gestion/ticket-gesti
 import { TicketNewComponent } from './components/ticket-new/ticket-new.component';
 import { HomeComponent } from './components/home/home.component';
 import { ReportsComponent } from './components/reports/reports.component';
+import { ConfigComponent } from './components/config/config.component';
 
 
 const appRoutes: Routes = [
@@ -35,6 +36,7 @@ const appRoutes: Routes = [
     {path: 'team/edit/:id', component: TeamEditComponent},
 
     {path: 'report', component: ReportsComponent},
+    {path: 'config', component: ConfigComponent},
 
 ];
 

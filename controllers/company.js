@@ -6,7 +6,7 @@ var fs = require('fs');
 var path = require('path');
 
 
-function getCompany(req, res){
+function getCompanies(req, res){
 
     Company.find({}, (err, company) =>{
         if(err){
@@ -126,7 +126,7 @@ function getImageFile(req, res){
 }
 
 module.exports = {
-    getCompany,
+    getCompanies,
     saveCompany,
     updateCompany,
     deleteCompany,

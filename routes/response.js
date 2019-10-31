@@ -8,7 +8,7 @@ var api = express.Router();
 
 //CONSULTAS
 api.get('/response/:id', md_auth.ensureAuth, responseController.getResponse);
-api.get('/responses', md_auth.ensureAuth, responseController.getResponses);
+api.get('/responses/:userId', md_auth.ensureAuth, responseController.getResponses);
 api.get('/for-name/:name', md_auth.ensureAuth, responseController.getResponsesForName);
 
 //ABM

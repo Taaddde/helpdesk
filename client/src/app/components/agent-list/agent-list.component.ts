@@ -38,7 +38,7 @@ export class AgentListComponent implements OnInit {
   }
 
   getUsers(){
-    this._userService.getListAgents(this.token).subscribe(
+    this._userService.getListAgents(this.token, this.identity['company']['_id']).subscribe(
       response =>{
           if(!response.users){
             this._router.navigate(['/']);

@@ -10,18 +10,23 @@ import { Team } from 'app/models/team';
 import { textblockService } from 'app/services/textblock.service';
 import { TextBlock } from 'app/models/textblock';
 import { uploadService } from 'app/services/upload.service';
+import { responseService } from 'app/services/response.service';
+import { Response } from 'app/models/response';
+
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-ticket-gestion',
   templateUrl: './ticket-gestion.component.html',
   styleUrls: ['./ticket-gestion.component.scss'],
-  providers: [userService, ticketService, teamService, textblockService, uploadService]
+  providers: [userService, ticketService, teamService, textblockService, uploadService, responseService]
 })
 export class TicketGestionComponent implements OnInit {
   
   public ticket: Ticket;
   public reqTickets: [Ticket];
   public textblock: TextBlock;
+  public responses: Response[];
   public chat: [TextBlock];
   public identity;
   public token;
@@ -40,7 +45,8 @@ export class TicketGestionComponent implements OnInit {
     private _ticketService: ticketService,
     private _teamService: teamService,
     private _textblockService: textblockService,
-    private _uploadService: uploadService
+    private _uploadService: uploadService,
+    private _responseService: responseService
   ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
@@ -58,7 +64,8 @@ export class TicketGestionComponent implements OnInit {
   ngOnInit() {
     this.getTicket();
     this.getTeams();
-    this.getChat();   
+    this.getChat();  
+    this.getHashtags(); 
   }
 
   getTeams(){
@@ -137,6 +144,21 @@ export class TicketGestionComponent implements OnInit {
     });
   }
 
+  getHashtags(){
+    this._responseService.getList(this.token, this.identity['_id']).subscribe(
+      response =>{
+          if(!response.responses){
+            this._router.navigate(['/']);
+          }else{
+            this.responses = response.responses;
+          }
+      },
+      error =>{
+          console.log(error);
+      }
+    );
+  }
+
   getTicket(){
     this._route.params.forEach((params: Params) =>{
       let id = params['id'];
@@ -165,6 +187,10 @@ export class TicketGestionComponent implements OnInit {
     });
   }
 
+
+  selectHashtag(val){
+    this.textblock.text = this.textblock.text + val;
+  }
   selectAgent(val: string, name:string, surname:string){
     if(this.ticket.status != 'Pendiente'){
       this.ticket.agent = val;
@@ -197,10 +223,15 @@ export class TicketGestionComponent implements OnInit {
   }
 
   selectResolveDate(){
-    var splitDate = this.ticket.resolveDate.split('-');
-    this.ticket.resolveDate = splitDate[2]+'-'+splitDate[1]+'-'+splitDate[0];
-    this.editTicket();
-    this.newInfo(this.identity['name']+' '+this.identity['surname']+' ha actualizado la fecha estimada de solución a '+this.ticket.resolveDate)
+    if(moment(this.ticket.resolveDate).isSameOrAfter((moment().format("YYYY-MM-DD")))){
+      var splitDate = this.ticket.resolveDate.split('-');
+      this.ticket.resolveDate = splitDate[2]+'-'+splitDate[1]+'-'+splitDate[0];
+      this.editTicket();
+      this.newInfo(this.identity['name']+' '+this.identity['surname']+' ha actualizado la fecha estimada de solución a '+this.ticket.resolveDate)  
+    }else{
+      alert('No puede seleccionar una fecha anterior a la actual')
+      this.ticket.resolveDate = '';
+    }
   }
 
   calculateClasses(status: string){

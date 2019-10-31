@@ -25,6 +25,7 @@ function saveResponse(req, res){
 
     response.hashtag = params.hashtag;
     response.resp = params.resp;
+    response.user = params.user;
 
     response.save((err, responseStored) =>{
         if(err){
@@ -41,7 +42,9 @@ function saveResponse(req, res){
 
 
 function getResponses(req, res){
-    Response.find({}).sort('hashtag').exec(function(err, responses){
+    var userId = req.params.userId;
+
+    Response.find({user:userId}).sort('hashtag').exec(function(err, responses){
         if(err){
             res.status(500).send({message: 'Error del servidor en la peticion'})
         }else{

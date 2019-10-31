@@ -11,5 +11,6 @@ export class User{
         public role: string,
         public sign: string,
         public image: string,
+        public company: string,
     ){}
 }

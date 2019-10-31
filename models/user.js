@@ -12,6 +12,7 @@ var UserSchema = Schema({
     role: {type: String, default:'ROLE_AGENT'},
     sign: {type: String, default:''},
     image:String,
+    company: {type: Schema.ObjectId, ref:'Company'}
 });
 
 module.exports = mongoose.model('User', UserSchema);

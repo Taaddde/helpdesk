@@ -18,7 +18,8 @@ function saveUser(req, res){
     user.email = params.email;
     user.sign = params.sign;
     user.role = params.role;
-    user.image = 'null'
+    user.image = 'null';
+    user.company = params.company;
 
     if(params.password){
         //encriptar y guardar
@@ -92,27 +93,14 @@ function updateUser(req, res){
             }
         });
     }
-
-
-    
-
-    //Actualiza datos dado un ID
-    /*User.findByIdAndUpdate(userId, update, (err, userUpdated) =>{
-        if(err){
-            res.status(500).send({message: 'Error al actualizar el usuario'});
-        }else{
-            if(!userUpdated){
-                res.status(404).send({message: 'No se ha podido actualizar el usuario'});
-            }else{
-                res.status(200).send({user: userUpdated});
-            }
-        }
-    });*/
 }
 
 function getUser(req, res){
     var userId = req.params.id;
-    //var populateQuery = [{path:'sector'}];
+
+    var populateQuery = [
+        {path:'company'},
+    ];
     User.findById(userId, (err, user) =>{
         if(err){
             res.status(500).send({message: 'Error del servidor en la petición'});
@@ -123,16 +111,13 @@ function getUser(req, res){
                 res.status(200).send({user:user});
             }
         }
-    })/*.populate(populateQuery).exec((err, done) =>{
-        if(err){
-            res.status(500).send({message: 'Error en la petición del populate'});
-        }
-    });*/
+    }).populate(populateQuery)
 }
 
 function getUsers(req, res){
-    //var populateQuery = [{path:'sector'}];
     var role = req.params.role;
+    var company = req.params.company;
+
     if(!role){
         User.find({}).sort('name').exec(function(err, users){
             if(err){
@@ -149,7 +134,7 @@ function getUsers(req, res){
         });
     }else{
         if(role == 'ROLE_AGENT'){
-            User.find({$or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}]}).sort('name').exec(function(err, users){
+            User.find({$or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}],company:company}).sort('name').exec(function(err, users){
                 if(err){
                     res.status(500).send({message: 'Error del servidor en la peticion'})
                 }else{
@@ -187,6 +172,10 @@ function loginUser(req, res){
 
     var userName = params.userName;
     var password = params.password;
+    
+    var populateQuery = [
+        {path:'company'},
+    ];
 
     User.findOne({userName: userName.toLowerCase()}, (err, user) => {
         if(err){
@@ -213,7 +202,7 @@ function loginUser(req, res){
                 });
             }
         }
-    });
+    }).populate(populateQuery);
 }
 
 function uploadImage(req, res){
