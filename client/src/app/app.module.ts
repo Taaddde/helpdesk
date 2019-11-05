@@ -24,6 +24,8 @@ import { AgentReportComponent } from './components/agent-report/agent-report.com
 
 import { ChartModule } from 'angular2-chartjs';
 import { ConfigComponent } from './components/config/config.component';
+import { ResponsesComponent } from './components/responses/responses.component';
+import { TypeSubtypeComponent } from './components/type-subtype/type-subtype.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,9 @@ import { ConfigComponent } from './components/config/config.component';
     ReportsComponent,
     TicketReportComponent,
     AgentReportComponent,
-    ConfigComponent
+    ConfigComponent,
+    ResponsesComponent,
+    TypeSubtypeComponent
   ],
   imports: [
     BrowserModule,

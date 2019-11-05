@@ -1,47 +1,13 @@
 <div class="card">
   <div class="card-header">
       <ul class="nav nav-tabs card-header-tabs">
-          <li class="nav-item"><a [className]="state == 'response' ? 'nav-link active' : 'nav-link'" (click)="changeTo('agent')">Respuestas</a></li>
-          <li class="nav-item"><a [className]="state == 'team' ? 'nav-link active' : 'nav-link'" (click)="changeTo('team')">Equipos</a></li>
+          <li class="nav-item"><a [className]="state == 'response' ? 'nav-link active' : 'nav-link'" (click)="changeTo('response')">Respuestas</a></li>
+          <li class="nav-item"><a [className]="state == 'type-subtype' ? 'nav-link active' : 'nav-link'" (click)="changeTo('type-subtype')">Tipos de tickets</a></li>
     </ul>
   </div>
-  <div class="card-body">
-      <div class="table-responsive">
-          <form name="my-form" #form="ngForm" (ngSubmit)="onSubmit()">
-          <table class="table">
-              <thead>
-                  <tr>
-                      <th style="width: 154px;">#Nombre</th>
-                      <th>Respuesta</th>
-                      <th style="width: 50px;"></th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr *ngFor="let resp of responses">
-                      <td>{{resp.hashtag}}</td>
-                      <td>{{resp.resp}}</td>
-                      <td class="text-center">
-                        <a class="btn btn-dark dark">
-                          <i class="fa fa-check"></i>
-                        </a>
-                      </td>
-                  </tr>
-                  
-              </tbody>
-              <tfoot>
-                <tr>
-                    <td><input type="text" #hashtag="ngModel" name="hashtag" [(ngModel)]="response.hashtag" class="form-control" /></td>
-                    <td><input type="text" #resp="ngModel" name="resp" [(ngModel)]="response.resp" class="form-control" /></td>
-                    <td class="text-center">
-                      <button class="btn btn-dark dark" value="" type="submit">
-                          <i class="fa fa-plus"></i>
-                      </button>
-                    </td>
-                </tr>
-              </tfoot>
-          </table>
-          </form>
-      </div>
-      
+  <div class="card-body" *ngIf="state == ''">
+      <h3 class="text-center">Utilice la barra superior para navegar en la configuración</h3>
   </div>
+  <app-responses *ngIf="state == 'response'"></app-responses>
+  <app-type-subtype *ngIf="state == 'type-subtype'"></app-type-subtype>
 </div>

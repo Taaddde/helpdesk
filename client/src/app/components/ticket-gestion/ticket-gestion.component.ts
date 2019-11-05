@@ -61,7 +61,7 @@ export class TicketGestionComponent implements OnInit {
     this.isPrivate = false;
     this.space = ' ';
 
-    this.ticket = new Ticket('','',null,'','','','','','','',null,'',[''],'','');
+    this.ticket = new Ticket('','',null,'','','','','','','',null,'',[''],'','','');
     this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false)
    }
 

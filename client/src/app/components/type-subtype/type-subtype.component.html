@@ -1,0 +1,285 @@
+<a class="btn btn-success newtype" role="button" href="#newtype" data-toggle="modal">Nuevo tipo de solicitud</a>
+
+<ul class="list-group">
+  <li class="list-group-item" *ngFor="let type of types">
+      <div class="card" style="margin-right: 15px;margin-left: 15px;padding-right: 0;padding-left: 0;">
+          <a class="text-secondary" (click)="selectType(type._id)">
+              <h5>
+                {{type.name}}
+                <i class="fa fa-arrow-down float-right" *ngIf="type._id == typeSelected" style="margin-top: 5px;"></i>
+                <i class="fa fa-arrow-left float-right" *ngIf="type._id != typeSelected" style="margin-top: 5px;"></i>
+              </h5>
+          </a>
+          <div class="card-body" style="padding: 0;" *ngIf="type._id == typeSelected">
+              <ul class="list-group">
+                  <li class="list-group-item">
+                      <div class="table-responsive">
+                          <form name="my-form" #form="ngForm" (ngSubmit)="onSubmit()">
+                          <table class="table">
+                              <thead>
+                                  <tr>
+                                      <th>Subtipo</th>
+                                      <th>Equipo responsable</th>
+                                      <th>Tiempo de resolución</th>
+                                      <th>Validaciones</th>
+                                      <th>Editar</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <tr *ngFor="let subtype of subtypes">
+                                      <td>
+                                        <span *ngIf="subtype._id != subtypeSelected._id">{{subtype.name}}</span>
+                                        <span *ngIf="subtype._id == subtypeSelected._id">
+                                            <input type="text" 
+                                            placeholder="Nombre del subtipo" 
+                                            #name="ngModel" name="name" 
+                                            [(ngModel)]="subtypeSelected.name"
+                                            class="form-control" 
+                                          />  
+                                        </span>       
+                                      </td>
+                                      <td>
+                                        <span *ngIf="subtype._id != subtypeSelected._id">
+                                            <img *ngIf="!subtype.team || subtype.team.image == 'null'" class="rounded-circle img-agent-team" src="../../../assets/img/system/team-placeholder.png" />
+                                            <img *ngIf="subtype.team && subtype.team.image != 'null'" class="rounded-circle img-agent-team" src="{{url+'team/image/'+subtype.team.image}}" />                
+                                            <span *ngIf="subtype.team">{{subtype.team['name']}}</span> 
+                                            <span *ngIf="!subtype.team">Sin equipo</span> 
+                                        </span>
+
+                                        <span *ngIf="subtype._id == subtypeSelected._id">
+                                            <div class="dropdown d-inline">
+                                                <button 
+                                                  class="btn btn-dark dropdown-toggle dark" 
+                                                  data-toggle="dropdown" 
+                                                  aria-expanded="false" 
+                                                  type="button"
+                                                >
+                                                  <span *ngIf="!subtypeTeamSelected">Equipo responsable</span>
+                                                  <span *ngIf="subtypeTeamSelected">{{subtypeTeamSelected}}</span>
+                                                </button>
+                                                  <div role="menu" class="dropdown-menu">
+                                                    <a 
+                                                      role="presentation" 
+                                                      class="dropdown-item dark" 
+                                                      *ngFor="let team of teams" 
+                                                      (click)="subtypeSelected.team = team._id; subtypeTeamSelected = team.name"
+                                                    >
+                                                        {{team.name}}
+                                                    </a>
+                                                  </div>
+                                            </div>
+                                        </span>
+                                      </td>
+                                      <td>
+                                        <span *ngIf="subtype._id != subtypeSelected._id">{{subtype.resolveDays}} días</span>
+                                        <span *ngIf="subtype._id == subtypeSelected._id">
+                                            <input type="number" 
+                                            min="0"
+                                            placeholder="Número de días para la resolución" 
+                                            #resolveDays="ngModel" 
+                                            name="resolveDays" 
+                                            [(ngModel)]="subtypeSelected.resolveDays" 
+                                            class="form-control" 
+                                          />
+                                        </span>
+                                      </td>
+                                      <td>
+                                          <a href="#newsubtype" data-toggle="modal" (click)="setValidation(subtype)" style="margin-left: 10px;">
+                                        <span>{{getLenght(subtype.checks)}} validaciones</span>
+                                          <i class="fa fa-info-circle"></i>
+                                        </a>
+                                      </td>
+                                      <td class="text-center">
+                                        <button *ngIf="subtype._id != subtypeSelected._id" class="btn btn-dark dark" type="button" (click)="selectSubtype(subtype)">
+                                          <i class="fa fa-pencil-alt"></i>
+                                        </button>
+                                        <button *ngIf="subtype._id != subtypeSelected._id" class="btn btn-danger" type="button" (click)="delete(subtype)">
+                                            <i class="fa fa-trash"></i>
+                                          </button>  
+                                        <button *ngIf="subtype._id == subtypeSelected._id" class="btn btn-success" type="button" (click)="confirmSubtype()">
+                                            <i class="fa fa-check"></i>
+                                        </button>
+                                        <button *ngIf="subtype._id == subtypeSelected._id" class="btn btn-danger" type="button" (click)="cancelSubtype()">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                      </td>
+                                  </tr>
+                              </tbody>
+                              <tfoot >
+                                  <tr class="newSubType">
+                                      <td>
+                                        <input type="text" 
+                                          placeholder="Nombre del subtipo" 
+                                          #name="ngModel" name="name" 
+                                          [(ngModel)]="newSubtype.name"
+                                          class="form-control" 
+                                        />
+                                      </td>
+                                      <td>
+                                          <div class="dropdown d-inline">
+                                              <button class="btn btn-dark dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button">
+                                                <span *ngIf="teamSelected == ''">Equipo responsable</span>
+                                                <span *ngIf="teamSelected != ''">{{teamSelected}}</span>
+                                              </button>
+                                                <div role="menu" class="dropdown-menu">
+                                                  <a 
+                                                    role="presentation" 
+                                                    class="dropdown-item dark" 
+                                                    *ngFor="let team of teams" 
+                                                    (click)="selectTeam(team._id, team.name)"
+                                                  >
+                                                      {{team.name}}
+                                                  </a>
+                                                </div>
+                                            </div>
+                                          </td>
+                                      <td>
+                                          <input type="number" 
+                                            min="0"
+                                            placeholder="Número de días para la resolución" 
+                                            #resolveDays="ngModel" 
+                                            name="resolveDays" 
+                                            [(ngModel)]="newSubtype.resolveDays" 
+                                            class="form-control" 
+                                          />
+                                      </td>  
+                                      <td></td>  
+                                      <td class="text-center">
+                                        <button class="btn btn-dark dark" value="" type="submit">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                      </td>
+                                  </tr>
+                                </tfoot>                      
+                          </table>
+                          </form>
+                      </div>
+                  </li>
+
+              </ul>
+
+          </div>
+      </div>
+  </li>
+</ul>
+
+
+<div role="dialog" tabindex="-1" class="modal fade" id="newtype">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Nuevo tipo de solicitud</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+            <form name="my-form" #form="ngForm" (ngSubmit)="typeSubmit()">
+                <div class="modal-body">
+                    <div class="form-group">
+                      <input 
+                        type="text" 
+                        class="form-control form-control-lg" 
+                        placeholder="Ingrese el nombre del tipo de solicitud" 
+                        #name="ngModel" 
+                        name="name" 
+                        [(ngModel)]="newType.name" 
+                        autofocus 
+                        required 
+                      />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-light" type="button" data-dismiss="modal">
+                    Cerrar
+                  </button>
+                  <button class="btn btn-success" type="submit">
+                    Guardar</button>
+                  </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<div role="dialog" tabindex="-1" class="modal fade" id="newsubtype">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Validaciones</h4><button type="button" class="close" (click)="cancelValidation()" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+            <form name="my-form" #form="ngForm" (ngSubmit)="checkSubmit()">
+                <div class="modal-body">
+                    <div class="form-group">
+                      <label for="desc">Descripción</label>
+                      <textarea 
+                        class="form-control" 
+                        placeholder="Ingrese el texto que desee que el usuario visualice" 
+                        required
+                        #desc="ngModel" 
+                        name="desc" 
+                        [(ngModel)]="subtypeSelected.desc" 
+                      ></textarea>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-check">
+                          <input type="checkbox" 
+                            class="form-check-input" 
+                            id="formCheck-1" 
+                            #requireAttach="ngModel" 
+                            name="requireAttach" 
+                            [(ngModel)]="subtypeSelected.requireAttach"
+                          />
+                          <label class="form-check-label" for="formCheck-1">Requiere un adjunto</label></div>
+                    </div>
+                    <div class="form-group"><label for="desc">Validaciones</label>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Descripción</th>
+                                        <th>Editar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let c of subtypeSelected.checks">
+                                        <td>
+                                          {{c}}
+                                        </td>
+                                        <td class="text-center">
+                                          <button class="btn btn-danger" type="button" (click)="deleteCheck(c)">
+                                            <i class="fa fa-trash"></i>
+                                          </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>
+                                            <input 
+                                            type="text" 
+                                            class="form-control form-control-lg" 
+                                            placeholder="Ingrese una validación" 
+                                            [(ngModel)]="check"
+                                            name="check"
+                                            required 
+                                          />                    
+                                        </td>
+                                        <td class="text-center">
+                                          <button class="btn btn-dark" type="submit">
+                                            <i class="fa fa-plus"></i>
+                                          </button>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-light" type="button" (click)="cancelValidation()">
+                    Cerrar
+                  </button>
+                  <button class="btn btn-success" type="button" (click)="saveSubtype()">
+                    Guardar
+                  </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

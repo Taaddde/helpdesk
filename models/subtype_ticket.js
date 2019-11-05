@@ -7,10 +7,11 @@ var SubTypeTicketSchema = Schema({
     name: String,
     typeTicket: {type: Schema.ObjectId, ref:'TypeTicket',},
     team: {type: Schema.ObjectId, ref:'Team',},
-    resolveDate: {type: String, default:"null"},
-    checks: {type: [], default:"null"},
+    resolveDays: {type: Number, default:0},
+    checks: {type: [], default:[]},
     goodChecks: {type: Number, default:0},
-    requireAttach: {type:Boolean, default:false}
+    requireAttach: {type:Boolean, default:false},
+    desc: {type:String, default:'Por favor, describa los detalles de su solicitud, muchas gracias'}
 });
 
 module.exports = mongoose.model('SubTypeTicket', SubTypeTicketSchema);

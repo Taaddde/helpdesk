@@ -57,7 +57,7 @@ export class TicketNewComponent implements OnInit {
     this.priority = '';
     this.newRequester = false;
 
-    this.ticket = new Ticket('','',null,'',null,null,'','','',null,null,'',[null],'',this.identity['company']['_id']);
+    this.ticket = new Ticket('','',null,'',null,null,'','','',null,null,'',[null],'',this.identity['company']['_id'],'');
     this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false)
    }
 

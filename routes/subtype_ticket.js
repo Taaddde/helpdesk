@@ -14,6 +14,9 @@ api.get('/for-name/:name/:typeId', md_auth.ensureAuth, subTypeTicketController.g
 //ABM
 api.post('/add',md_auth.ensureAuth, subTypeTicketController.saveSubTypeTicket);
 api.put('/update/:id', md_auth.ensureAuth, subTypeTicketController.updateSubTypeTicket);
+api.put('/goodcheck/:id', md_auth.ensureAuth, subTypeTicketController.addGoodCheck);
+api.put('/add-check/:id', md_auth.ensureAuth, subTypeTicketController.addCheck);
 api.delete('/delete/:id', md_auth.ensureAuth, subTypeTicketController.deleteSubTypeTicket);
+api.delete('/delete-check/:id', md_auth.ensureAuth, subTypeTicketController.deleteCheck);
 
 module.exports = api;

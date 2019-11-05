@@ -1,6 +1,13 @@
 'use strict'
 
 var SubTypeTicket = require('../models/subtype_ticket');
+var moment = require('moment');
+
+var populateQuery = [
+    {path:'team', select:['_id','name', 'image']},
+    {path:'typeTicket'},
+]
+
 
 function getSubTypeTicket(req, res){
     var subTypeTicketId = req.params.id;
@@ -15,19 +22,32 @@ function getSubTypeTicket(req, res){
                 res.status(200).send({subTypeTicket});
             }
         }
-    });
+    }).populate(populateQuery);
 }
 
 function saveSubTypeTicket(req, res){
-    var subTypeTicket = new subTypeTicket();
+    var subTypeTicket = new SubTypeTicket();
 
     var params = req.body;
 
     subTypeTicket.name = params.name;
     subTypeTicket.team = params.team;
-    subTypeTicket.resolveDate = params.resolveDate;
+    subTypeTicket.desc = params.desc;
+    /* PARA CUANDO SE DEBA HACER EL CALCULO DE DIAS
+    if(params.resolveDate){
+        let day = moment().add(params.resolveDate, "days").format("DD-MM-YYYY");
+        // 0 = DOM
+        // 6 = SAB
+        if(moment(day, "DD-MM-YYYY").weekday() == 6 || moment(day, "DD-MM-YYYY").weekday() == 0){ 
+            day = moment(day, "DD-MM-YYYY").add(2, "days").format("DD-MM-YYYY");
+        }
+        subTypeTicket.resolveDate = day;
+    }*/
+
+    subTypeTicket.resolveDays = params.resolveDays;
+
+
     subTypeTicket.typeTicket = params.typeTicket;
-    subTypeTicket.checks = params.checks;
     subTypeTicket.requireAttach = params.requireAttach;
 
     subTypeTicket.save((err, subTypeTicketStored) =>{
@@ -35,7 +55,7 @@ function saveSubTypeTicket(req, res){
             res.status(500).send({message: 'Error del servidor en la petición'})
         }else{
             if(!subTypeTicketStored){
-                res.status(404).send({message: 'El respuesta no ha sido guardado'})
+                res.status(404).send({message: 'el subtipo no ha sido guardado'})
             }else{
                 res.status(200).send({subTypeTicket:subTypeTicketStored})
             }
@@ -47,7 +67,7 @@ function saveSubTypeTicket(req, res){
 function getSubTypeTickets(req, res){
     var typeId = req.params.typeId;
 
-    SubTypeTicket.find({typeTicket:typeId}).sort('name').exec(function(err, subTypeTickets){
+    SubTypeTicket.find({typeTicket:typeId}).populate(populateQuery).sort('name').exec(function(err, subTypeTickets){
         if(err){
             res.status(500).send({message: 'Error del servidor en la peticion'})
         }else{
@@ -64,8 +84,8 @@ function getSubTypeTickets(req, res){
 
 function getSubTypeTicketsForName(req, res){
     var name = req.params.name;
-    var typeTicket = req.params.typeTicket;
-    SubTypeTicket.find({name: { "$regex": name, "$options": "i" }, typeTicket:typeTicket}).sort('name').exec(function(err, subTypeTickets){
+    var typeId = req.params.typeId;
+    SubTypeTicket.find({name: { "$regex": name, "$options": "i" }, typeTicket:typeId}).populate(populateQuery).sort('name').exec(function(err, subTypeTickets){
         if(err){
             res.status(500).send({message: 'Error del servidor en la peticion'})
         }else{
@@ -80,6 +100,42 @@ function getSubTypeTicketsForName(req, res){
     });
 }
 
+function addGoodCheck(req, res){
+    var subTypeTicketId = req.params.id;
+    var update = {$inc: {goodChecks: 1}};
+
+    //subTypeTicketId = subTypeTicket buscado, update = datos nuevos a actualizar
+    SubTypeTicket.findByIdAndUpdate(subTypeTicketId, update, (err, subTypeTicketUpdated) =>{
+        if(err){
+            res.status(500).send({message: 'Error del servidor en la petición'});
+        }else{
+            if(!subTypeTicketUpdated){
+                res.status(404).send({message: 'No se ha encontrado el subtipo'});
+            }else{
+                res.status(200).send({subTypeTicket:subTypeTicketUpdated});
+            }
+        }
+    });
+}
+
+function addCheck(req, res){
+    var subTypeTicketId = req.params.id;
+    var update = {$push:{checks:req.body.check}}
+
+    SubTypeTicket.findByIdAndUpdate(subTypeTicketId, update, (err, subTypeTicketUpdated) =>{
+        if(err){
+            res.status(500).send({message: 'Error del servidor en la petición'});
+        }else{
+            if(!subTypeTicketUpdated){
+                res.status(404).send({message: 'No se ha encontrado el subtipo'});
+            }else{
+                res.status(200).send({subTypeTicket:subTypeTicketUpdated});
+            }
+        }
+    });
+
+}
+
 function updateSubTypeTicket(req, res){
     var subTypeTicketId = req.params.id;
     var update =  req.body;
@@ -90,7 +146,7 @@ function updateSubTypeTicket(req, res){
             res.status(500).send({message: 'Error del servidor en la petición'});
         }else{
             if(!subTypeTicketUpdated){
-                res.status(404).send({message: 'No se ha encontrado el respuesta'});
+                res.status(404).send({message: 'No se ha encontrado el subtipo'});
             }else{
                 res.status(200).send({subTypeTicket:subTypeTicketUpdated});
             }
@@ -106,7 +162,7 @@ function deleteSubTypeTicket(req, res){
             res.status(500).send({message: 'Error en la petición'});
         }else{
             if(!subTypeTicketRemoved){
-                res.status(404).send({message: 'No se ha encontrado el respuesta'});
+                res.status(404).send({message: 'No se ha encontrado el subtipo'});
             }else{
                 res.status(200).send({subTypeTicket: subTypeTicketRemoved});
             }
@@ -114,12 +170,34 @@ function deleteSubTypeTicket(req, res){
     });
 }
 
+function deleteCheck(req, res){
+
+    var subTypeTicketId = req.params.id;
+    var check = req.body.check;
+
+    SubTypeTicket.findByIdAndUpdate(subTypeTicketId,{$pull: {checks:check}}, (err, checkRemoved) =>{
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            if(!checkRemoved){
+                res.status(404).send({message: 'No se ha encontrado el subtipo'});
+            }else{
+                res.status(200).send({check: checkRemoved});
+            }
+        }
+    });
+
+}
+
 module.exports = {
     getSubTypeTicket,
     getSubTypeTicketsForName,
     getSubTypeTickets,
 
+    addGoodCheck,
+    addCheck,
     saveSubTypeTicket,
     updateSubTypeTicket,
     deleteSubTypeTicket,
+    deleteCheck,
 };
