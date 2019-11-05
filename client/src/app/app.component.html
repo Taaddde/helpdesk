@@ -15,35 +15,36 @@
 
 <div *ngIf="identity">
     <div id="page-top">
-        <div id="wrapper">
+        <div id="wrapper" >
             <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0" style="background-color: #1e2833;">
                 <div class="container-fluid d-flex flex-column p-0">
                     <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
                         <div class="sidebar-brand-icon rotate-n-15"></div>
                         <div class="sidebar-brand-text mx-3"><i><span style="font-family: Audiowide, cursive;font-size: 24px;">TR&nbsp;</span></i><span>helpdesk</span>
-                        <p *ngIf="identity['company']['name']">{{identity['company']['name']}}</p>
+                        <p *ngIf="identity['company']">{{identity['company']['name']}}</p>
                         </div>
                     </a>
                     <hr class="sidebar-divider my-0">
                     <ul class="nav navbar-nav text-light" id="accordionSidebar">
                         <li class="nav-item" role="presentation"><a class="nav-link" [routerLink]="['/home']"><i class="fas fa-home"></i><span>Principal</span></a></li>
-                        <li class="nav-item" role="presentation"><a class="nav-link" [routerLink]="['/ticket']"><i class="fas fa-ticket-alt"></i><span>Tickets</span></a></li>
-                        <li class="nav-item" role="presentation"><a class="nav-link" [routerLink]="['/agent']"><i class="fas fa-user-friends"></i><span>Agentes</span></a></li>
-                        <li class="nav-item" role="presentation"><a class="nav-link" [routerLink]="['/report']"><i class="far fa-chart-bar"></i><span>Reportes</span></a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" [routerLink]="['/ticket']"><i class="fas fa-ticket-alt"></i><span *ngIf="identity['role'] != 'ROLE_REQUESTER'">Tickets</span><span *ngIf="identity['role'] == 'ROLE_REQUESTER'">Mis tickets</span></a></li>
+                        <li *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="nav-item" role="presentation"><a class="nav-link" [routerLink]="['/agent']"><i class="fas fa-user-friends"></i><span>Agentes</span></a></li>
+                        <li *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="nav-item" role="presentation"><a class="nav-link" [routerLink]="['/report']"><i class="far fa-chart-bar"></i><span>Reportes</span></a></li>
                     </ul>
                 </div>
             </nav>
             <div class="d-flex flex-column" id="content-wrapper">
                 <div id="content">
                     <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
-                        <div class="container-fluid">
-                            <form class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="container-fluid" >
+                            <form *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                                 <div class="input-group"><input class="bg-light form-control border-0 small" type="text" placeholder="Buscar por ...">
                                     <div class="input-group-append"><button class="btn btn-primary py-0" type="button" style="background-color: #1e2833;"><i class="fas fa-search"></i></button></div>
                                 </div>
                             </form>
 
-                            <a class="btn btn-dark dark" type="button" [routerLink]="['/ticket-new']">Nuevo ticket</a>
+                            <a *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="btn btn-dark dark" type="button" [routerLink]="['/ticket-new']">Nuevo ticket</a>
+                            <a *ngIf="identity['role'] == 'ROLE_REQUESTER'" data-toggle="modal" data-target="#newticket" class="btn btn-dark dark" type="button">Nuevo Ticket</a>
 
                             <ul class="nav navbar-nav flex-nowrap ml-auto">
                                 <li class="nav-item dropdown d-sm-none no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><i class="fas fa-search"></i></a>
@@ -149,7 +150,4 @@
     </div>
 </div>
 
-<div>
-<a class="dropdown-item" role="presentation" (click)="logout()"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Cerrar sesión</a>
-</div>
-    
+<app-ticket-portal></app-ticket-portal>

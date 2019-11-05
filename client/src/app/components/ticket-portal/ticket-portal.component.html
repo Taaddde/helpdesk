@@ -1,0 +1,88 @@
+<div role="dialog" tabindex="-1" class="modal fade" id="newticket">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="modal-title">Nueva solicitud</h4><button type="button" class="close" (click)="cancelTicket" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+          <form>
+              <div class="modal-body"><label style="font-size: 20px;">Clasificación de solicitud</label>
+                  <div class="form-group">
+                      <div class="dropdown">
+                          <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              {{companyName}}
+                          </button>        
+                          <div class="dropdown-menu">
+                              <input type="text" class="form-control form-control dropdown-search-input" placeholder="Buscar.." (keyup)="filterCompany()" [(ngModel)]="companyFilter" name="companyFilter"/>
+                              <a class="dropdown-item" *ngFor="let company of companies" (click)="clickCompany(company)">{{company.name}}</a>
+                          </div>
+                      </div>
+                      <div class="dropdown">
+                              <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: 10px;">
+                                  {{typeName}}
+                              </button>
+                              <div class="dropdown-menu">
+                                  <input type="text" class="form-control form-control dropdown-search-input" placeholder="Buscar.." (keyup)="filterType()" [(ngModel)]="typeFilter" name="typeFilter"/>
+                                  <a class="dropdown-item" *ngFor="let type of types" (click)="clickType(type)">{{type.name}}</a>
+                              </div>
+                          </div>
+                          <div class="dropdown">
+                          <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: 10px;">
+                              {{subTypeName}}
+                          </button>
+                          <div class="dropdown-menu">
+                              <input type="text" class="form-control form-control dropdown-search-input" placeholder="Buscar.." (keyup)="filterSubType()" [(ngModel)]="subTypeFilter" name="subTypeFilter" />
+                              <a class="dropdown-item" *ngFor="let subtype of subtypes" (click)="clickSubtype(subtype)">{{subtype.name}}</a>
+                          </div>
+                      </div>
+                  </div>
+                  <div style="margin-top: 12px;" *ngIf="selectedSubtype._id != '' && getLenght(selectedSubtype.checks) != 0">
+                    <label>
+                      Este tipo de solicitud necesita una serie de validaciones, verifique que su requerimiento no se encuentre en estos tips y tildelos para seguir.
+                    </label>
+                      <div class="form-check ">
+                        <div *ngFor="let check of selectedSubtype.checks">
+                            <input type="checkbox" (change)="checkValidates()" class="form-check-input checkvalidate" />
+                            <label class="form-check-label">
+                              {{check}}
+                            </label>
+                        </div>
+                        <div class="text-center" style="margin-top: 6px;">
+                          <button class="btn btn-primary" type="button">Estas validaciones me sirvieron para solucionar mi problema</button>
+                        </div>
+                      </div>
+                  </div>
+                  <hr/>
+                  <div class="form-group" style="margin-bottom: 2px;" *ngIf="selectedSubtype._id != ''">
+                    <div *ngIf="getLenght(selectedSubtype.checks) == 0 || allChecked">
+                        <label class="d-block" style="font-size: 20px;">
+                            Descripción de solicitud
+                        </label>
+                        <label>
+                          {{selectedSubtype.desc}}
+                        </label>
+                        <input type="text" class="form-control" placeholder="Asunto" />
+                        <textarea 
+                          class="form-control" 
+                          placeholder="Descripción" 
+                          style="margin-top: 11px;"></textarea>
+
+                        <label class="d-inline" style="margin-left: 10px;margin-bottom: 0px;margin-top: 0;">
+                          <span>Adjuntar archivo </span>
+                          <i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 5px;"></i>
+                          <input type="file" class="d-none" />
+                        </label>
+                    </div>
+                  </div>
+                </div>
+              <div
+          class="modal-footer">
+          <button class="btn btn-light" type="button" (click)="cancelTicket">
+            Cancelar
+          </button>
+          <button class="btn btn-success" type="submit" [disabled]="">
+            Aceptar
+          </button>
+        </div>
+      </form>
+  </div>
+</div>
+</div>

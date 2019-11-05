@@ -26,6 +26,8 @@ import { ChartModule } from 'angular2-chartjs';
 import { ConfigComponent } from './components/config/config.component';
 import { ResponsesComponent } from './components/responses/responses.component';
 import { TypeSubtypeComponent } from './components/type-subtype/type-subtype.component';
+import { PortalTicketComponent } from './components/portal-ticket/portal-ticket.component';
+import { TicketPortalComponent } from './components/ticket-portal/ticket-portal.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { TypeSubtypeComponent } from './components/type-subtype/type-subtype.com
     AgentReportComponent,
     ConfigComponent,
     ResponsesComponent,
-    TypeSubtypeComponent
+    TypeSubtypeComponent,
+    PortalTicketComponent,
+    TicketPortalComponent
   ],
   imports: [
     BrowserModule,

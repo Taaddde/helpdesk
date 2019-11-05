@@ -1,7 +1,8 @@
 
 <div class="card">
     <div class="card-body">
-        <h1 style="font-family: Nunito, sans-serif;">Panel principal - {{identity['company']['name']}}</h1>
+        <h1 style="font-family: Nunito, sans-serif;" *ngIf="identity['company']">Panel principal - {{identity['company']['name']}}</h1>
+        <h1 style="font-family: Nunito, sans-serif;" *ngIf="!identity['company']">Panel principal</h1>
         <hr />
         <div class="row">
             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 offset-lg-0 offset-xl-0">
@@ -19,7 +20,7 @@
                     </div>
                 </a>
             </div>
-            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 offset-lg-0 offset-xl-0">
+            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 offset-lg-0 offset-xl-0" *ngIf="identity['role'] != 'ROLE_REQUESTER'">
                 <a [routerLink]="['/ticket/1',10,'Abierto']">
                     <div class="card shadow border-left-info py-2">
                         <div class="card-body">

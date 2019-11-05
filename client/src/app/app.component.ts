@@ -7,12 +7,18 @@ import { userService } from './services/user.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/interval';
 import { ticketService } from './services/ticket.service';
+import { companyService } from './services/company.service';
+import { typeTicketService } from './services/typeticket.service';
+import { subTypeTicketService } from './services/subtypeticket.service';
+import { Company } from './models/company';
+import { TypeTicket } from './models/typeticket';
+import { SubTypeTicket } from './models/subtypeticket';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers:[userService, ticketService]
+  providers:[userService, ticketService, companyService, typeTicketService, subTypeTicketService]
 })
 export class AppComponent implements OnInit {
   public title = 'HelpDesk';
@@ -24,12 +30,34 @@ export class AppComponent implements OnInit {
   public url: string;
   public sub;
   public notifications;
+
+  public companies: Company[];
+  public types: TypeTicket[];
+  public subtypes: SubTypeTicket[];
+
+  public allCompanies: Company[];
+  public allTypes: TypeTicket[];
+  public allSubtypes: SubTypeTicket[];
+
+
+  public companyName: string;
+  public typeName: string;
+  public subTypeName: string;
+
+  public companyFilter:string;
+  public typeFilter:string;
+  public subTypeFilter:string;
+
   
 
   //Asigna un valor a una propiedad
   constructor(
     private _userService: userService,
     private _ticketService: ticketService,
+    private _companyService: companyService,
+    private _typeTicketService: typeTicketService,
+    private _subTypeTicketService: subTypeTicketService,
+
     private _route: ActivatedRoute,
     private _router: Router
   ){
@@ -39,6 +67,15 @@ export class AppComponent implements OnInit {
     this.alertMessage = '';
     this.sub = Observable.interval(15000).subscribe((val) => { this.getMessages(); });
     this.notifications = '';
+
+    this.companyName = 'Sector'
+    this.typeName = 'Tipo';
+    this.subTypeName = 'Sub-tipo';
+    this.companyFilter = '';
+    this.typeFilter = '';
+    this.subTypeFilter = '';
+  
+  
   } 
 
   ngOnInit(){
@@ -48,6 +85,95 @@ export class AppComponent implements OnInit {
       this.getMessages();
     }
   }
+
+  getCompanies(){
+    this._companyService.getList(this.token).subscribe(
+      response =>{
+          if(!response.companies){
+              alert('Error en el servidor');
+          }else{
+            this.companies = response.companies;
+            this.allCompanies = response.companies;
+          }
+      },
+      error =>{
+          console.log(error);
+      }
+    );
+  }
+
+  getTypes(companyId:string){
+    this._typeTicketService.getList(this.token,companyId).subscribe(
+      response =>{
+          if(!response.typeTickets){
+              alert('Error en el servidor');
+          }else{
+            this.types = response.typeTickets;
+            this.allTypes = response.typeTickets;
+          }
+      },
+      error =>{
+          console.log(error);
+      }
+    );
+  }
+
+  getSubtypes(typeId:string){
+    this._subTypeTicketService.getList(this.token,typeId).subscribe(
+      response =>{
+          if(!response.subTypeTickets){
+              alert('Error en el servidor');
+          }else{
+            this.subtypes = response.subTypeTickets;
+            this.allSubtypes = response.subTypeTickets;
+          }
+      },
+      error =>{
+          console.log(error);
+      }
+    );
+  }
+
+  filterCompany(){
+    this.companies = this.allCompanies.filter(company =>{
+      return (company['name']).toLowerCase().includes(this.companyFilter.toString().toLowerCase());
+    })
+  }
+
+  filterType(){
+    this.types = this.allTypes.filter(type =>{
+      return (type['name']).toLowerCase().includes(this.typeFilter.toString().toLowerCase());
+    })
+  }
+
+  filterSubType(){
+    this.subtypes = this.allSubtypes.filter(subtype =>{
+      return (subtype['name']).toLowerCase().includes(this.subTypeFilter.toString().toLowerCase());
+    })
+  }
+
+  clickCompany(val:Company){
+    this.getTypes(val._id);
+    this.companyName = val.name;
+    this.companyFilter = '';
+    this.typeName = 'Tipo';
+    this.subTypeName = 'Subtipo';
+  }
+
+  clickType(val:TypeTicket){
+    this.typeFilter = '';
+    this.getSubtypes(val._id);
+    this.typeName = val.name;
+    this.subTypeName = 'Subtipo';
+  }
+
+  clickSubtype(val:SubTypeTicket){
+    this.subTypeFilter = '';
+    console.log(val._id)
+    this.subTypeName = val.name;
+  }
+
+
 
   getMessages(){
     this._ticketService.getMessages(this.token, this.identity['_id']).subscribe(
@@ -82,7 +208,6 @@ export class AppComponent implements OnInit {
           this.alertMessage = "El usuario no esta correctamente identificado";
 
         }else{
-          if(identity.role && identity.role != 'ROLE_REQUESTER'){
             this.identity = identity;
             // Crear elemento en el localstorage para tener el usuario en sesion
           //Como si fuera una session
@@ -113,11 +238,7 @@ export class AppComponent implements OnInit {
                 console.log(error);
               }
             }
-          )
-          }else{
-            this.alertMessage = 'No tiene los permisos para acceder al sistema de gestión de tickets, por favor ingrese al sistema de solicitud de tickets.'
-          }
-          
+          )          
         }   
       },
       error =>{

@@ -37,7 +37,9 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getCountTickets();
+    if(this.identity['role'] != 'ROLE_REQUESTER'){
+      this.getCountTickets();
+    }
   }
 
   getCountTickets(){
