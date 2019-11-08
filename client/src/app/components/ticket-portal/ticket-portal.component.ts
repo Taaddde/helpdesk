@@ -183,13 +183,14 @@ export class TicketPortalComponent implements OnInit {
     this.ticket.team = this.selectedSubtype.team['_id'];
     this.ticket.subTypeTicket = this.selectedSubtype._id;
     
-    let day = moment().add(this.selectedSubtype.resolveDays, "days").format("DD-MM-YYYY");
+    let day = moment().add(val.resolveDays, "days").format("DD-MM-YYYY");
     // 0 = DOM
     // 6 = SAB
     if(moment(day, "DD-MM-YYYY").weekday() == 6 || moment(day, "DD-MM-YYYY").weekday() == 0){ 
         day = moment(day, "DD-MM-YYYY").add(2, "days").format("DD-MM-YYYY");
     }
     this.ticket.resolveDate = day;
+
     this.subTypeName = val.name;
     this.selectedSubtype = val;
   }
@@ -214,6 +215,8 @@ export class TicketPortalComponent implements OnInit {
     this.typeFilter = '';
     this.subTypeFilter = '';
 
+    this.filesToUpload = new Array<File>();
+
     this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'');
     this.ticket = new Ticket('','',null,this.identity['_id'],null,null,'Abierto','','','',null,'PORTAL',[null],'Normal','','');
     this.tb = new TextBlock('','',this.identity['_id'],'','','REQUEST',[''],false);
@@ -225,7 +228,6 @@ export class TicketPortalComponent implements OnInit {
   }
 
   onSubmit(){
-    console.log(this.tb.text)
     if(this.selectedSubtype.requireAttach && this.filesToUpload == undefined){
       alert('La solicitud requiere de un adjunto obligatorio')
     }else{
