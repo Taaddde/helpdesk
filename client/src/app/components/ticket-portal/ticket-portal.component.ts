@@ -1,10 +1,8 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import {User} from '../../models/user';
 
 import {Router, ActivatedRoute, Params} from '@angular/router'
 import {GLOBAL} from '../../services/global';
 import { userService } from '../../services/user.service';
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/interval';
 import { companyService } from '../../services/company.service';
 import { typeTicketService } from '../../services/typeticket.service';
@@ -17,6 +15,7 @@ import { textblockService } from 'app/services/textblock.service';
 import { Ticket } from 'app/models/ticket';
 import { TextBlock } from 'app/models/textblock';
 import { uploadService } from 'app/services/upload.service';
+import * as moment from "moment"
 
 
 declare var $: any;
@@ -69,8 +68,10 @@ export class TicketPortalComponent implements OnInit {
     private _router: Router
   ){
     this.url=GLOBAL.url;
+    this.token = _userService.getToken();
+    this.identity = _userService.getIdentity();
 
-    this.companyName = 'Sector'
+    this.companyName = 'Sector';
     this.typeName = 'Tipo';
     this.subTypeName = 'Sub-tipo';
     this.companyFilter = '';
@@ -78,7 +79,7 @@ export class TicketPortalComponent implements OnInit {
     this.subTypeFilter = '';
 
     this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'');
-    this.ticket = new Ticket('','',null,this.identity['_id'],null,null,'','','','',null,'PORTAL',[null],'Normal','','');
+    this.ticket = new Ticket('','',null,this.identity['_id'],null,null,'Abierto','','','',null,'PORTAL',[null],'Normal','','');
     this.tb = new TextBlock('','',this.identity['_id'],'','','REQUEST',[''],false);
 
     this.allChecked = false;
@@ -159,6 +160,7 @@ export class TicketPortalComponent implements OnInit {
 
   clickCompany(val:Company){
     this.getTypes(val._id);
+    this.ticket.company = val._id;
     this.companyName = val.name;
     this.companyFilter = '';
     this.typeName = 'Tipo';
@@ -178,6 +180,16 @@ export class TicketPortalComponent implements OnInit {
 
   clickSubtype(val:SubTypeTicket){
     this.subTypeFilter = '';
+    this.ticket.team = this.selectedSubtype.team['_id'];
+    this.ticket.subTypeTicket = this.selectedSubtype._id;
+    
+    let day = moment().add(this.selectedSubtype.resolveDays, "days").format("DD-MM-YYYY");
+    // 0 = DOM
+    // 6 = SAB
+    if(moment(day, "DD-MM-YYYY").weekday() == 6 || moment(day, "DD-MM-YYYY").weekday() == 0){ 
+        day = moment(day, "DD-MM-YYYY").add(2, "days").format("DD-MM-YYYY");
+    }
+    this.ticket.resolveDate = day;
     this.subTypeName = val.name;
     this.selectedSubtype = val;
   }
@@ -194,7 +206,78 @@ export class TicketPortalComponent implements OnInit {
     }
   }
 
+  cancelTicket(){
+    this.companyName = 'Sector'
+    this.typeName = 'Tipo';
+    this.subTypeName = 'Sub-tipo';
+    this.companyFilter = '';
+    this.typeFilter = '';
+    this.subTypeFilter = '';
 
+    this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'');
+    this.ticket = new Ticket('','',null,this.identity['_id'],null,null,'Abierto','','','',null,'PORTAL',[null],'Normal','','');
+    this.tb = new TextBlock('','',this.identity['_id'],'','','REQUEST',[''],false);
+
+    this.allChecked = false;
+
+
+    $("#newticket").modal("hide");
+  }
+
+  onSubmit(){
+    console.log(this.tb.text)
+    if(this.selectedSubtype.requireAttach && this.filesToUpload == undefined){
+      alert('La solicitud requiere de un adjunto obligatorio')
+    }else{
+      delete this.ticket.agent;
+      delete this.ticket.createDate;
+      delete this.ticket.lastActivity;
+      delete this.ticket.rating;
+      delete this.ticket.tags;
+      delete this.ticket.numTicket;
+      if(!this.ticket.team){
+        delete this.ticket.team;
+      }
+
+      this.ticket.subTypeTicket = this.selectedSubtype._id;
+
+      delete this.tb.createDate;
+
+      var link;
+      this._ticketService.add(this.token, this.ticket).subscribe(
+        response =>{
+            if(!response.ticket){
+              alert('Generación de ticket: error en el servidor');
+            }else{
+              this.tb.ticket = response.ticket._id;
+              link = response.ticket._id;
+              console.log(this.tb.text)
+              this._textblockService.add(this.token, this.tb).subscribe(
+                response =>{
+                    if(!response.textblock){
+                      alert('Generación de chat: error en el servidor');
+                    }else{
+                      if(this.filesToUpload){
+                        this._uploadService.makeFileRequest(this.url+'textblock/file/'+response.textblock._id, [], this.filesToUpload, this.token, 'file')
+                      }
+                      alert('Ticket creado')
+                      this.cancelTicket();
+                      this._router.navigate(['/ticket-gestion',link]);
+                    }
+                },
+                error =>{
+                    console.log(error);
+                }
+              );        
+            }
+        },
+        error =>{
+            console.log(error);
+        }
+      );
+      
+    }
+  }
 
   public filesToUpload: Array<File>;
   public fileChangeEvent(fileInput:any){

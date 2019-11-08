@@ -70,9 +70,8 @@ export class TicketListComponent implements OnInit {
         this.status = params['status']
       }
       
-      
-
-      this._ticketService.getPaginatedList(this.token, this.page, this.limit,this.identity['company']['_id'], this.status, this.user).subscribe(
+      if(this.identity['role'] == 'ROLE_REQUESTER'){
+        this._ticketService.getPaginatedReqList(this.token, this.page, this.limit, this.identity['_id'], this.status).subscribe(
           response =>{
               if(!response.tickets){
                 this._router.navigate(['/']);
@@ -87,14 +86,30 @@ export class TicketListComponent implements OnInit {
               }
           },
           error =>{
-              var errorMessage = <any>error;
-              if(errorMessage != null){
-              var body = JSON.parse(error._body);
-              //this.alertMessage = body.message;
               console.log(error);
+          });
+      }else{
+        this._ticketService.getPaginatedList(this.token, this.page, this.limit,this.identity['company']['_id'], this.status, this.user).subscribe(
+          response =>{
+              if(!response.tickets){
+                this._router.navigate(['/']);
+              }else{
+                this.tickets = response.tickets.docs;
+                this.limit = response.tickets.limit;
+                this.nextPage = response.tickets.nextPage;
+                this.prevPage = response.tickets.prevPage;
+                this.totalDocs = response.tickets.totalDocs;
+                this.totalPages = response.tickets.totalPages;
+                this.pagingCounter = response.tickets.pagingCounter
               }
+          },
+          error =>{
+              console.log(error);
           }
       );
+      }
+
+      
     })
   }
 

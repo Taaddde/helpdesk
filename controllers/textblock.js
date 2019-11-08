@@ -94,12 +94,20 @@ function getTextBlockForText(req, res){
 
 function getTextBlockForTicket(req, res){
     var ticket = req.params.ticket;
+    var type = req.params.type
+    var query;
+
+    if(type == 'ROLE_REQUESTER'){
+        query = {ticket: ticket, type: { $ne: 'PRIVATE' }}
+    }else{
+        query = {ticket: ticket}
+    }
 
     var populateQuery = [
         {path:'user', select:['name','surname','image', 'sign']},
     ];
 
-    TextBlock.find({ticket: ticket}).populate(populateQuery).sort('createDate').exec(function(err, textblocks){
+    TextBlock.find(query).populate(populateQuery).sort('createDate').exec(function(err, textblocks){
         if(err){
             res.status(500).send({message: 'Error del servidor en la peticion'})
         }else{
@@ -132,12 +140,12 @@ function updateTextBlock(req, res){
     });
 }
 
-function readAll(req, res){
+function readAgent(req, res){
     var ticketId = req.params.id;
     var update =  req.body;
 
     //textblockId = textblock buscado, update = datos nuevos a actualizar
-    TextBlock.updateMany({ticket:ObjectId(ticketId)}, update, (err, textblockUpdated) =>{
+    TextBlock.updateMany({ticket:ObjectId(ticketId), type:'REQUEST'}, update, (err, textblockUpdated) =>{
         if(err){
             res.status(500).send({message: 'Error del servidor en la petición'});
         }else{
@@ -149,6 +157,25 @@ function readAll(req, res){
         }
     });
 }
+
+function readRequest(req, res){
+    var ticketId = req.params.id;
+    var update =  req.body;
+
+    //textblockId = textblock buscado, update = datos nuevos a actualizar
+    TextBlock.updateMany({ticket:ObjectId(ticketId), type:'PUBLIC'}, update, (err, textblockUpdated) =>{
+        if(err){
+            res.status(500).send({message: 'Error del servidor en la petición'});
+        }else{
+            if(!textblockUpdated){
+                res.status(404).send({message: 'No se ha encontrado El bloque de texto'});
+            }else{
+                res.status(200).send({textblock:textblockUpdated});
+            }
+        }
+    });
+}
+
 
 function deletetextblock(req, res){
     var textblockId = req.params.id;
@@ -222,7 +249,8 @@ module.exports = {
     saveTextBlock,
     updateTextBlock,
     deletetextblock,
-    readAll,
+    readAgent,
+    readRequest,
 
     uploadFile,
     getFile

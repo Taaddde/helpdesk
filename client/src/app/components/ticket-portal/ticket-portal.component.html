@@ -1,22 +1,23 @@
-<div role="dialog" tabindex="-1" class="modal fade" id="newticket">
+<div role="dialog" tabindex="-1" class="modal fade" id="newticket" *ngIf="identity">
   <div class="modal-dialog" role="document">
       <div class="modal-content">
           <div class="modal-header">
-              <h4 class="modal-title">Nueva solicitud</h4><button type="button" class="close" (click)="cancelTicket" aria-label="Close"><span aria-hidden="true">×</span></button></div>
-          <form>
+              <h4 class="modal-title">Nueva solicitud</h4>
+              <button type="button" class="close" (click)="cancelTicket()" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+          <form name="my-form" #form="ngForm" (ngSubmit)="onSubmit()">
               <div class="modal-body"><label style="font-size: 20px;">Clasificación de solicitud</label>
                   <div class="form-group">
-                      <div class="dropdown">
+                      <div class="dropdown" >
                           <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               {{companyName}}
                           </button>        
-                          <div class="dropdown-menu">
+                          <div class="dropdown-menu" >
                               <input type="text" class="form-control form-control dropdown-search-input" placeholder="Buscar.." (keyup)="filterCompany()" [(ngModel)]="companyFilter" name="companyFilter"/>
                               <a class="dropdown-item" *ngFor="let company of companies" (click)="clickCompany(company)">{{company.name}}</a>
                           </div>
                       </div>
                       <div class="dropdown">
-                              <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: 10px;">
+                              <button [disabled]="companyName == 'Sector'" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: 10px;">
                                   {{typeName}}
                               </button>
                               <div class="dropdown-menu">
@@ -25,7 +26,7 @@
                               </div>
                           </div>
                           <div class="dropdown">
-                          <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: 10px;">
+                          <button [disabled]="typeName == 'Tipo'" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: 10px;">
                               {{subTypeName}}
                           </button>
                           <div class="dropdown-menu">
@@ -59,26 +60,37 @@
                         <label>
                           {{selectedSubtype.desc}}
                         </label>
-                        <input type="text" class="form-control" placeholder="Asunto" />
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          placeholder="Asunto" 
+                          #sub="ngModel" 
+                          name="sub" 
+                          [(ngModel)]="ticket.sub"
+                        />
                         <textarea 
                           class="form-control" 
                           placeholder="Descripción" 
-                          style="margin-top: 11px;"></textarea>
+                          style="margin-top: 11px;"
+                          #text="ngModel" 
+                          name="text" 
+                          [(ngModel)]="tb.text"></textarea>
 
-                        <label class="d-inline" style="margin-left: 10px;margin-bottom: 0px;margin-top: 0;">
+                        <label class="d-inline attach" style="margin-bottom: 0px;">
                           <span>Adjuntar archivo </span>
                           <i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 5px;"></i>
-                          <input type="file" class="d-none" />
+                          <input type="file" class="d-none" (change)="fileChangeEvent($event)"/>
                         </label>
+                        <span *ngIf="filesToUpload">+{{getLenght(filesToUpload)}}</span>
                     </div>
                   </div>
                 </div>
               <div
           class="modal-footer">
-          <button class="btn btn-light" type="button" (click)="cancelTicket">
+          <button class="btn btn-light" type="button" (click)="cancelTicket()">
             Cancelar
           </button>
-          <button class="btn btn-success" type="submit" [disabled]="">
+          <button class="btn btn-success" type="submit" [disabled]="(getLenght(selectedSubtype.checks) != 0 && !allChecked) || ticket.sub == '' || tb.text == ''">
             Aceptar
           </button>
         </div>

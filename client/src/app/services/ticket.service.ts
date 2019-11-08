@@ -73,6 +73,17 @@ export class ticketService{
                             .map(res => res.json());
     }
 
+    getPaginatedReqList(token, page, perPage, userId, status){
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+        });
+  
+        let options = new RequestOptions({headers: headers});
+        return this._http.get(this.url+'ticket/reqTicketsPaged/'+page+'&'+perPage+'&'+userId+'&'+status, options)
+                            .map(res => res.json());
+    }
+
     getOne(token, id){
         let headers = new Headers({
             'Content-Type':'application/json',
@@ -117,6 +128,18 @@ export class ticketService{
                             .map(res => res.json());
     }
 
+    getReqCountsTickets(token, id:string){
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+          });
+
+          let options = new RequestOptions({headers: headers});
+          return this._http.get(this.url+'ticket/counts-requester/'+id, ({headers: headers}))
+                            .map(res => res.json());
+    }
+
+
     getReports(token, company:string){
         let headers = new Headers({
             'Content-Type':'application/json',
@@ -137,5 +160,17 @@ export class ticketService{
           return this._http.get(this.url+'ticket/unread/'+id, ({headers: headers}))
                             .map(res => res.json());
     }
+
+    getMessagesReq(token, id:string){
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+          });
+
+          let options = new RequestOptions({headers: headers});
+          return this._http.get(this.url+'ticket/req-unread/'+id, ({headers: headers}))
+                            .map(res => res.json());
+    }
+
 
 }

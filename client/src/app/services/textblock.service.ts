@@ -51,15 +51,26 @@ export class textblockService{
                             .map(res => res.json());
     }
 
-    readAll(token, id){
+    readAgent(token, id){
         let headers = new Headers({
             'Content-Type':'application/json',
             'Authorization':token
         });
 
-        return this._http.put(this.url+'textblock/read/'+id, {read:true}, {headers: headers})
+        return this._http.put(this.url+'textblock/read-agent/'+id, {read:true}, {headers: headers})
                             .map(res => res.json());
     }
+
+    readRequester(token, id){
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+        });
+
+        return this._http.put(this.url+'textblock/read-requester/'+id, {read:true}, {headers: headers})
+                            .map(res => res.json());
+    }
+
 
     getList(token){
       let headers = new Headers({
@@ -94,14 +105,14 @@ export class textblockService{
                             .map(res => res.json());
     }
 
-    getForTicket(token, id: string){
+    getForTicket(token, id: string, type: string){
         let headers = new Headers({
             'Content-Type':'application/json',
             'Authorization':token
           });
 
           let options = new RequestOptions({headers: headers});
-          return this._http.get(this.url+'textblock/for-ticket/'+id, ({headers: headers}))
+          return this._http.get(this.url+'textblock/for-ticket/'+id+'/'+type, ({headers: headers}))
                             .map(res => res.json());
     }
 

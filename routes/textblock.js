@@ -14,7 +14,7 @@ var api = express.Router();
 api.get('/textblock/:id', md_auth.ensureAuth, textblockController.getTextBlock);
 api.get('/textblocks', md_auth.ensureAuth, textblockController.getTextBlocks);
 api.get('/for-text/:text', md_auth.ensureAuth, textblockController.getTextBlockForText);
-api.get('/for-ticket/:ticket', md_auth.ensureAuth, textblockController.getTextBlockForTicket);
+api.get('/for-ticket/:ticket/:type', md_auth.ensureAuth, textblockController.getTextBlockForTicket);
 
 //Archivos
 api.post('/file/:id',[md_auth.ensureAuth, md_upload], textblockController.uploadFile);
@@ -22,7 +22,8 @@ api.get('/file/:fileName', textblockController.getFile);
 
 //ABM
 api.post('/add',md_auth.ensureAuth, textblockController.saveTextBlock);
-api.put('/read/:id', md_auth.ensureAuth, textblockController.readAll);
+api.put('/read-agent/:id', md_auth.ensureAuth, textblockController.readAgent);
+api.put('/read-requester/:id', md_auth.ensureAuth, textblockController.readRequest);
 api.put('/update/:id', md_auth.ensureAuth, textblockController.updateTextBlock);
 api.delete('/delete/:id', md_auth.ensureAuth, textblockController.deletetextblock);
 

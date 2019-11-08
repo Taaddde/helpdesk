@@ -37,39 +37,69 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(this.identity['role'] != 'ROLE_REQUESTER'){
-      this.getCountTickets();
-    }
+    this.getCountTickets();
   }
 
   getCountTickets(){
-    this._ticketService.getCountsTickets(this.token,this.identity['company']['_id'], this.identity['_id']).subscribe(
-      response =>{
-          if(!response.tickets){
-            this._router.navigate(['/']);
-          }else{
-            response.tickets.forEach(type => {
-              switch(type._id){
-                case 'Abierto':
-                  this.open = type.count;
-                  break;
-                case 'Pendiente':
-                  this.pending = type.count;
-                  break;
-                case 'Finalizado':
-                  this.finish = type.count;
-                  break;
-                case 'Cerrado':
-                  this.close = type.count;
-                  break;
-              }
-            });
-          }
-      },
-      error =>{
-          console.log(error);
-          }
-    );
+    if(this.identity['role'] != 'ROLE_REQUESTER'){
+      this._ticketService.getCountsTickets(this.token,this.identity['company']['_id'], this.identity['_id']).subscribe(
+        response =>{
+            if(!response.tickets){
+              this._router.navigate(['/']);
+            }else{
+              response.tickets.forEach(type => {
+                switch(type._id){
+                  case 'Abierto':
+                    this.open = type.count;
+                    break;
+                  case 'Pendiente':
+                    this.pending = type.count;
+                    break;
+                  case 'Finalizado':
+                    this.finish = type.count;
+                    break;
+                  case 'Cerrado':
+                    this.close = type.count;
+                    break;
+                }
+              });
+            }
+        },
+        error =>{
+            console.log(error);
+            }
+      );
+  
+    }else{
+      console.log('pase por aca')
+      this._ticketService.getReqCountsTickets(this.token, this.identity['_id']).subscribe(
+        response =>{
+            if(!response.tickets){
+              this._router.navigate(['/']);
+            }else{
+              response.tickets.forEach(type => {
+                switch(type._id){
+                  case 'Abierto':
+                    this.open = type.count;
+                    break;
+                  case 'Pendiente':
+                    this.pending = type.count;
+                    break;
+                  case 'Finalizado':
+                    this.finish = type.count;
+                    break;
+                  case 'Cerrado':
+                    this.close = type.count;
+                    break;
+                }
+              });
+            }
+        },
+        error =>{
+            console.log(error);
+            }
+      );
+  
+    }
   }
-
 }

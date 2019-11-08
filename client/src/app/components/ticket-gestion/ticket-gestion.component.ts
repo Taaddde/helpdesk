@@ -53,6 +53,7 @@ export class TicketGestionComponent implements OnInit {
     private _companyService: companyService
   ) {
     this.identity = this._userService.getIdentity();
+    console.log(this.identity)
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
 
@@ -67,7 +68,6 @@ export class TicketGestionComponent implements OnInit {
 
   ngOnInit() {
     this.getTicket();
-    this.getChat();  
     this.getHashtags(); 
     this.getCompanies();
   }
@@ -132,26 +132,93 @@ export class TicketGestionComponent implements OnInit {
   getChat(){
     this._route.params.forEach((params: Params) =>{
       let id = params['id'];
-      this._textblockService.getForTicket(this.token, id).subscribe(
+      console.log(this.identity['role'])
+      this._textblockService.getForTicket(this.token, id, this.identity['role']).subscribe(
         response =>{
-            if(!response.textblocks){
-            }else{
+
+            if(response.textblocks){
+
               this.chat = response.textblocks;
-              if(this.ticket.agent['_id']){
-                if(this.identity['role'] != 'ROLE_REQUESTER' && this.identity['_id'] == this.ticket.agent['_id']){
-                  this._textblockService.readAll(this.token, id)
-                }else{
-                  console.log('No realizado')
-                }  
+              console.log(this.chat)
+
+              if(this.identity['role'] != 'ROLE_REQUESTER'){
+                if(this.ticket.agent){
+                  if(this.identity['_id'] == this.ticket.agent['_id']){
+                    this._textblockService.readAgent(this.token, this.ticket._id).subscribe(
+                      response =>{
+                          if(!response.textblock){
+                            console.log('Error en textblock')
+                          }else{
+                            console.log(response.textblock)
+                            
+                          }
+                      },
+                      error =>{
+                          console.log(error);
+                      }
+                    );
+                  }
+                }
+              }else{
+                if(this.identity['_id'] == this.ticket.requester['_id']){
+                  this._textblockService.readRequester(this.token, this.ticket._id).subscribe(
+                    response =>{
+                        if(!response.textblock){
+                          console.log('Error en textblock')
+                        }else{
+                          console.log(response.textblock)
+                          
+                        }
+                    },
+                    error =>{
+                        console.log(error);
+                    }
+                  );
+                }
               }
+
+              if(this.ticket.agent){
+                if(this.ticket.agent['_id']){
+                  if(this.identity['role'] != 'ROLE_REQUESTER' && this.identity['_id'] == this.ticket.agent['_id']){
+                    this._textblockService.readAgent(this.token, this.ticket._id).subscribe(
+                      response =>{
+                          if(!response.textblock){
+                            console.log('Error en textblock')
+                          }else{
+                            console.log(response.textblock)
+                            
+                          }
+                      },
+                      error =>{
+                          console.log(error);
+                      }
+                    );
+                  }else{
+                    console.log('ELSE')
+                    if(this.identity['role'] == 'ROLE_REQUESTER' && this.identity['_id'] == this.ticket.requester['_id']){
+                      this._textblockService.readRequester(this.token, this.ticket._id).subscribe(
+                        response =>{
+                            if(!response.textblock){
+                              console.log('Error en textblock')
+                            }else{
+                              console.log(response.textblock)
+                            }
+                        },
+                        error =>{
+                            console.log(error);
+                        }
+                      );
+  
+                    }
+                  }  
+                }
+              }      
             }
         },
         error =>{
             console.log(error);
         }
       );
-      
-      
     });
   }
 
@@ -180,11 +247,14 @@ export class TicketGestionComponent implements OnInit {
             this._router.navigate(['/']);
           }else{
             this.ticket = response.ticket;
-            this.getTeams(response.ticket['company']['_id']);
+            console.log(this.ticket)
+            this.getChat();
+            this.getTeams(response.ticket.company._id);
             if(response.ticket.team){
               this.agents = response.ticket.team.users;
             }
             this.getReqTickets(response.ticket.requester);
+            console.log(this.ticket.resolveDate)
           }
       },
       error =>{

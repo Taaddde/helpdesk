@@ -17,6 +17,7 @@ function getTicket(req, res){
         {path:'agent',select:['name','surname','image']}, 
         {path:'team',select:['users','name','image'], populate:{path: 'users', model: 'User',select:['name','surname','image']}},
         {path:'company'},
+        {path:'subTypeTicket',select:['name','typeTicket'], populate:{path: 'typeTicket'}}
     ];
     var ticketId = req.params.id;
 
@@ -59,6 +60,38 @@ function getCountTickets(req, res){
         // First Stage
         {
           $match : { $or: [ { agent: ObjectId(userId) }, { company:ObjectId(company), status: 'Abierto' } ] }
+          
+        },
+        // Second Stage
+        {
+          $group : {
+             _id : '$status' ,
+             count: { $sum: 1 }
+            },
+        },
+       ]
+
+    Ticket.aggregate(query, (err, tickets) =>{
+        if(err){
+            res.status(500).send({message: 'Error del servidor en la peticion',err:err});
+        }else{
+            if(!tickets){
+                res.status(404).send({message: 'El ticket no existe'});
+            }else{
+                res.status(200).send({tickets});
+            }
+        }
+    });
+}
+
+function getCountReqTickets(req, res){
+
+    let userId = req.params.userId
+
+    let query =[
+        // First Stage
+        {
+          $match : { requester: ObjectId(userId) }
           
         },
         // Second Stage
@@ -176,6 +209,100 @@ function getUnreadTickets(req, res){
     })
 }
 
+function getUnreadTicketsReq(req, res){
+
+    let userId = req.params.userId;
+    
+    let query =[
+        {
+          $match : {read:false, type:'PUBLIC'}
+        },
+        {
+          $group : {
+             _id : '$ticket' ,
+             textblock: { $last: "$_id" },
+             count: { $sum: 1 }
+            },
+        },
+        { 
+            $lookup: {
+                from: 'textblocks', 
+                localField: 'textblock', 
+                foreignField: '_id', 
+                as: 'tbDesc'} 
+        },
+        {
+            $unwind:"$tbDesc"
+        },
+        {
+            $lookup: {
+                from: 'users', 
+                localField: 'tbDesc.user', 
+                foreignField: '_id', 
+                as: 'tbDesc.user'} 
+        },
+        {
+            $unwind:"$tbDesc.user"
+        },
+        {
+            $lookup: {
+                from: 'tickets', 
+                localField: 'tbDesc.ticket', 
+                foreignField: '_id', 
+                as: 'tbDesc.ticket'} 
+        },
+        {
+            $unwind:"$tbDesc.ticket"
+        },
+        {
+            $lookup: {
+                from: 'users', 
+                localField: 'tbDesc.ticket.requester', 
+                foreignField: '_id', 
+                as: 'tbDesc.ticket.requester'} 
+        },
+        {
+            $unwind:"$tbDesc.ticket.requester"
+        },
+        {
+            $match : {'tbDesc.ticket.requester._id':ObjectId(userId)}
+        },
+        {
+            $project : {
+                _id:1, 
+                count:1, 
+                tbDesc :{
+                    _id: 1,
+                    createDate:1,
+                    text: 1,
+                    user: {
+                        _id: 1,
+                        name: 1,
+                        surname: 1,
+                        image: 1,
+                    },
+                    ticket: {
+                        _id: 1,
+                        numTicket: 1,
+                        sub: 1,
+                }
+            }
+        }
+    }]
+    TextBlock.aggregate(query, (err, textblocks) =>{
+        if(err){
+            res.status(500).send({message: 'Error del servidor en la peticion',err:err});
+        }else{
+            if(!textblocks){
+                res.status(404).send({message: 'No se encontro el elemento'});
+            }else{
+                res.status(200).send({textblocks:textblocks});                            
+            }
+        }
+    })
+}
+
+
 function getTicketReports(req, res){
 
     let company = req.params.company;
@@ -268,6 +395,8 @@ function saveTicket(req, res){
         ticket.lastActivity = moment().format("DD-MM-YYYY HH:mm");
         ticket.priority = params.priority;
         ticket.company = params.company;
+        ticket.resolveDate = params.resolveDate;
+        ticket.subTypeTicket = params.subTypeTicket
     
         ticket.save((err, ticketStored) =>{
             if(err){
@@ -354,6 +483,48 @@ function getTicketsPaged(req, res){
         });
 }
 
+function getReqTicketsPaged(req, res){
+    var populateQuery = [
+        {path:'requester',select:['name','surname','image']},
+        {path:'agent',select:['name','surname','image']}, 
+    ];
+
+    if(req.params.page){
+        var page = req.params.page;
+    }else{
+        var page = 1;
+    }
+
+    var perPage = req.params.perPage;
+    var userId = req.params.userId;
+    var status = req.params.status;
+
+    var query = {requester:userId};
+
+    if(status){
+        if(status == 'Finalizado' || status == 'Cerrado'){
+            query = {requester:userId, $or: [ {status:'Finalizado'}, {status:'Cerrado'} ]};
+        }else{
+            query = {requester:userId, $or: [ {status:'Abierto'}, {status:'Pendiente'} ]};
+        }
+    }
+
+    Ticket.paginate(query,{page:page, limit:perPage, populate:populateQuery, sort:{numTicket:-1}}, function(err, tickets){
+        if(err){
+            res.status(500).send({message: 'Error en la peticion'})
+        }else{
+            if(!tickets){
+                res.status(404).send({message: 'No hay items'})
+            }else{
+                return res.status(200).send({
+                    tickets
+                });
+            }
+        }
+    });
+}
+
+
 function getTicketsForNumber(req, res){
     var num = req.params.num;
     Ticket.findOne({numTicket:num}).exec(function(err, ticket){
@@ -411,9 +582,12 @@ module.exports = {
     getTicketsForNumber,
     getTickets,
     getTicketsPaged,
+    getReqTicketsPaged,
     getTicketsForUser,
     getCountTickets,
+    getCountReqTickets,
     getUnreadTickets,
+    getUnreadTicketsReq,
     //getNotificationTickets,
     getTicketReports,
 
