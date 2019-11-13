@@ -57,7 +57,7 @@
                                     </div>
                                 </li>
                                 
-                                <li class="nav-item dropdown no-arrow mx-1" role="presentation" *ngIf="false">
+                                <!-- <li class="nav-item dropdown no-arrow mx-1" role="presentation">
                                     <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="badge badge-danger badge-counter">3+</span><i class="fas fa-bell fa-fw"></i></a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-list dropdown-menu-right animated--grow-in"
                                             role="menu">
@@ -74,7 +74,7 @@
 
                                             <a class="text-center dropdown-item small text-gray-500" href="#">Show All Alerts</a></div>
                                     </div>
-                                </li>
+                                </li> -->
 
                                 <li class="nav-item dropdown no-arrow mx-1" role="presentation">
                                     <div class="nav-item dropdown no-arrow">
@@ -97,7 +97,7 @@
                                                 </div>
                                                 <div class="font-weight-bold">
                                                     <div class="text-truncate">
-                                                        <span>{{notification.tbDesc.text}}</span>
+                                                        <span [innerHTML]="notification.tbDesc.text"></span>
                                                     </div>
                                                     <p class="small text-gray-500 mb-0">{{notification.tbDesc.user.name}} {{notification.tbDesc.user.surname}}</p>
                                                 </div>

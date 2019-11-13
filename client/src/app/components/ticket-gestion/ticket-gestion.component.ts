@@ -439,6 +439,7 @@ export class TicketGestionComponent implements OnInit {
   }
 
   onSubmit(){
+    console.log(this.textblock);
     if(this.identity['role'] == 'ROLE_REQUESTER'){
       this.textblock.type = 'REQUEST'
     }else{

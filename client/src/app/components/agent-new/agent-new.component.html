@@ -27,7 +27,43 @@
                 <div class="col card-profile">
                     <h5>Datos de agente</h5>
                     <div class="form-group"><label>E-mail</label><input type="text" class="form-control" inputmode="email" placeholder="Ingrese aqui el e-mail del agente" #email="ngModel" name="email" [(ngModel)]="user.email" /></div>
-                    <div class="form-group"><label>Firma</label><textarea class="form-control" placeholder="Ingrese una firma con la cual quiere ei enviar los mensajes" #sign="ngModel" name="sign" [(ngModel)]="user.sign"></textarea></div>
+                    <!-- <div class="form-group"><label>Firma</label><textarea class="form-control" placeholder="Ingrese una firma con la cual quiere ei enviar los mensajes" #sign="ngModel" name="sign" [(ngModel)]="user.sign"></textarea></div> -->
+                
+                    <div class="row" style="margin-left: 4px;">
+                            <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('bold');" style="margin-right: 4px;padding-right: 7px; padding-left: 7px"><i class="fa fa-bold"></i></button>
+  
+                            <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('italic');" style="margin-right: 4px; padding-right: 9px; padding-left: 9px"><i class="fa fa-italic"></i></button>
+                            
+                            <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('underline');" style="margin-right: 4px; padding-right: 8px; padding-left: 8px"><i class="fa fa-underline"></i></button>
+                            
+                            <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('createlink', false, prompt('Ingresa la URL:', 'http://'))" style="margin-right: 4px; padding-right: 7px; padding-left: 7px"><i class="fa fa-link"></i></button>
+                            
+                            <div style="min-height:30px;display:inline;border-left:1px solid gray; margin-right:9px;margin-left:5px"></div>
+                            
+                            <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('insertUnorderedList')" style="margin-right: 4px; padding-right: 7px; padding-left: 7px"><i class="fa fa-list-ul"></i></button>
+                            
+                            <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('insertOrderedList')" style="margin-right: 4px; padding-right: 7px; padding-left: 7px"><i class="fa fa-list-ol"></i></button>
+                            
+                            <div style="min-height:30px;display:inline;border-left:1px solid gray; margin-right:9px;margin-left:5px"></div>
+                            
+                            <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('justifyLeft')" style="margin-right: 4px; padding-right: 7px; padding-left: 7px"><i class="fa fa-align-left"></i></button>
+                            
+                            <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('justifyCenter')" style="margin-right: 4px; padding-right: 7px; padding-left: 7px"><i class="fa fa-align-center"></i></button>
+                            
+                            <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('justifyRight')" style="margin-right: 4px; padding-right: 7px; padding-left: 7px"><i class="fa fa-align-right"></i></button>
+                            
+                        </div>
+  
+                        <div class="row" style="margin-top: 8px;margin-left: 4px;">
+                            <div id="editable" contentEditable="true"
+                            (input)="user.sign = $event.target.innerHTML"
+                            >
+                              <span contentEditable="false"></span>
+                            </div>
+                        </div>
+                        <script src="../../../assets/scripts/chatbox.js"></script>
+  
+
                 </div>
             </div>
             <div class="form-row">
