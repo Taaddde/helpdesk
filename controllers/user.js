@@ -7,6 +7,13 @@ var jwt = require('../services/jwt');
 var fs = require('fs');
 var path = require('path');
 
+function prueba(req, res){
+    var ip = req.ip;
+     console.log(req.body, ip);
+
+    res.status(200).send({message:"Su solicitud fue realizada con éxito"})
+}
+
 function saveUser(req, res){
     var user = new User();
 
@@ -281,4 +288,7 @@ module.exports = {
     getUsers,
 
     loginUser,
+
+
+    prueba
 };
