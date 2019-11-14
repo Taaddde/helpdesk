@@ -60,6 +60,17 @@ export class companyService{
                           .map(res => res.json());
     }
 
+    getForName(token, name){
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+         });
+ 
+         let options = new RequestOptions({headers: headers});
+         return this._http.get(this.url+'company/for-name/'+name, options)
+                            .map(res => res.json());
+    }
+
     getOne(token, id){
         let headers = new Headers({
             'Content-Type':'application/json',

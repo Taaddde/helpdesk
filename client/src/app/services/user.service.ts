@@ -65,6 +65,18 @@ export class userService{
                             .map(res => res.json());
     }
 
+    getForName(token, company, name){
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+         });
+ 
+         let options = new RequestOptions({headers: headers});
+         return this._http.get(this.url+'user/for-name/'+company+'/'+name, options)
+                            .map(res => res.json());
+    }
+
+
     getListAgents(token, company:string){
         let headers = new Headers({
             'Content-Type':'application/json',

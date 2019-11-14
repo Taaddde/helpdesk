@@ -26,6 +26,7 @@ export class AppComponent implements OnInit {
   public sub;
   public notifications;
   public searched;
+  public valSearch:string;
   
 
   //Asigna un valor a una propiedad
@@ -42,6 +43,7 @@ export class AppComponent implements OnInit {
     this.url=GLOBAL.url;
     this.alertMessage = '';
     this.notifications = '';
+    this.valSearch = '';
   
   } 
 
@@ -173,6 +175,7 @@ export class AppComponent implements OnInit {
 
   globalSearch(val:string){
     if(val.length >= 3){
+      this.valSearch = val;
       this._globalService.getCountSearch(this.token, val, this.identity['company']['_id']).subscribe(
         response =>{
               this.searched = response;

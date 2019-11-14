@@ -7,7 +7,7 @@
             
           
           
-          <table class="table dataTable my-0" id="dataTable" *ngIf="stat == 'ticket'">
+        <table class="table dataTable my-0" id="dataTable" *ngIf="stat == 'ticket'">
                 <thead>
                     <tr>
                         <th>Numero</th>
@@ -52,6 +52,79 @@
                     </tr>
                 </tfoot>
         </table>
+
+        <table class="table dataTable my-0" id="dataTable" *ngIf="stat == 'user'">
+            <thead>
+                <tr>
+                    <th>Img</th>
+                    <th>Apellido</th>
+                    <th>Nombre</th>
+                    <th>E-mail</th>
+                    <th>Rol</th>
+                    <th>ID</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let user of users">
+                <tr class="select" [routerLink]="['/user/edit',user._id]">
+                    <td data-title="Img">
+                        <img *ngIf="user.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+user.image}}" />
+                        <img *ngIf="user.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="../../../assets/img/system/user-placeholder.png" />
+                    </td>
+                    <td data-title="Apellido">{{user.surname}}</td>
+                    <td data-title="Nombre">{{user.name}}</td>
+                    <td data-title="E-mail">{{user.email}}</td>
+                    <td data-title="Rol">
+                      <span *ngIf="user.role == 'ROLE_AGENT'">Agente</span>
+                      <span *ngIf="user.role == 'ROLE_ADMIN'">Administrador</span>
+                    </td>
+                    <td data-title="ID">{{user.userName}}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td><strong>Img</strong></td>
+                    <td><strong>Apellido</strong></td>
+                    <td><strong>Nombre</strong></td>
+                    <td><strong>E-mail</strong></td>
+                    <td><strong>Rol</strong></td>
+                    <td><strong>ID</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="table-responsive table mt-2" id="dataTable" *ngIf="stat == 'team'">
+            <table class="table dataTable my-0" id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Img</th>
+                        <th>Nombre</th>
+                        <th>Usuarios</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let team of teams">
+                    <tr class="select" [routerLink]="['/team/edit',team._id]">
+                        <td data-title="Img">
+                            <img *ngIf="team.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="../../../assets/img/system/team-placeholder.png" />
+                            <img *ngIf="team.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'team/image/'+team.image}}" />
+                        </td>
+                        <td data-title="Nombre">{{team.name}}</td>
+                        <td data-title="Usuarios" >
+                            <span *ngIf="team.users">{{cantUsers(team.users)}}</span>
+                            <span *ngIf="!team.users">0</span>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td><strong>Img</strong></td>
+                        <td><strong>Nombre</strong></td>
+                        <td><strong>Usuarios</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    
+
 
 
 

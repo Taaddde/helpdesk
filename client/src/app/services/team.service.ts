@@ -52,6 +52,18 @@ export class teamService{
                             .map(res => res.json());
     }
 
+    getForName(token, company, name){
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+         });
+ 
+         let options = new RequestOptions({headers: headers});
+         return this._http.get(this.url+'team/for-name/'+company+'/'+name, options)
+                            .map(res => res.json());
+    }
+
+
     getList(token, company){
       let headers = new Headers({
           'Content-Type':'application/json',
