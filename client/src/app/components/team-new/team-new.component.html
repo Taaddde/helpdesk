@@ -5,7 +5,11 @@
                 <div class="col-sm-5 col-md-5 col-lg-3 card-profile">
                     <img class="img-profile" *ngIf="team.image == 'null'" src="../../../assets/img/system/team-placeholder.png" />
                     <img class="img-profile" *ngIf="team.image != 'null'" src="{{url+'team/image/'+team.image}}" />
-                  <input type="file" accept="image/*" (change)="fileChangeEvent($event)"/></div>
+                    <label [className]="filesToUpload ? 'btn btn-success' : 'btn btn-dark'" style="margin-top: 7px; width:100%;">
+                            Seleccionar una foto
+                            <input type="file" accept="image/*" class="newimg" (change)="fileChangeEvent($event)"/>
+                        </label>
+                    </div>
                 <div class="col-sm-7 col-md-7 col-lg-9 card-profile">
                     <h5>Datos principales</h5>
                     <div class="form-group"><label>Nombre</label><input type="text" class="form-control" placeholder="Ingresa aqui el nombre del equipo" required #name="ngModel" name="name" [(ngModel)]="team.name" /></div>

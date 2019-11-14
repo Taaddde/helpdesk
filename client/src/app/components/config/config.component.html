@@ -3,11 +3,13 @@
       <ul class="nav nav-tabs card-header-tabs">
           <li class="nav-item"><a [className]="state == 'response' ? 'nav-link active' : 'nav-link'" (click)="changeTo('response')">Respuestas</a></li>
           <li class="nav-item"><a [className]="state == 'type-subtype' ? 'nav-link active' : 'nav-link'" (click)="changeTo('type-subtype')">Tipos de tickets</a></li>
-    </ul>
+          <li class="nav-item"><a [className]="state == 'company' ? 'nav-link active' : 'nav-link'" (click)="changeTo('company')">Departamento</a></li>
+      </ul>
   </div>
   <div class="card-body" *ngIf="state == ''">
       <h3 class="text-center">Utilice la barra superior para navegar en la configuración</h3>
   </div>
   <app-responses *ngIf="state == 'response'"></app-responses>
   <app-type-subtype *ngIf="state == 'type-subtype'"></app-type-subtype>
+  <app-company *ngIf="state == 'company'"></app-company>
 </div>

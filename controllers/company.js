@@ -21,6 +21,24 @@ function getCompanies(req, res){
     });
 }
 
+function getCompany(req, res){
+
+    Company.findById(req.params.id, (err, company) =>{
+        if(err){
+            res.status(500).send({message: 'Error del servidor en la peticion'});
+        }else{
+            if(!company){
+                res.status(404).send({message: 'La compañia no existe'});
+            }else{
+                res.status(200).send({company:company});
+            }
+        }
+    });
+}
+
+
+
+
 function getCompaniesForName(req, res){
     var name = req.params.name;
 
@@ -143,6 +161,7 @@ function getImageFile(req, res){
 }
 
 module.exports = {
+    getCompany,
     getCompanies,
     getCompaniesForName,
     saveCompany,

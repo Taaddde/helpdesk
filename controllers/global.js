@@ -68,7 +68,7 @@ function getCountSearch(req, res){
             res.status(500).send({message: 'Error del servidor en la peticion', err:err});
         }else{
             if(!companies){
-                res.status(404).send({message: 'El sector no existe'});
+                res.status(404).send({message: 'El departamento no existe'});
             }else{
                 User.aggregate(userQuery, (err, users) =>{
                     if(err){
@@ -82,14 +82,14 @@ function getCountSearch(req, res){
                                     res.status(500).send({message: 'Error del servidor en la peticion', err:err});
                                 }else{
                                     if(!tickets){
-                                        res.status(404).send({message: 'El sector no existe'});
+                                        res.status(404).send({message: 'El departamento no existe'});
                                     }else{
                                         Team.aggregate(teamQuery, (err, teams) =>{
                                             if(err){
                                                 res.status(500).send({message: 'Error del servidor en la peticion', err:err});
                                             }else{
                                                 if(!teams){
-                                                    res.status(404).send({message: 'El sector no existe'});
+                                                    res.status(404).send({message: 'El departamento no existe'});
                                                 }else{
                                                     res.status(200).send({companies:companies[0], users:users[0], tickets:tickets[0], teams:teams[0]});
                                                 }

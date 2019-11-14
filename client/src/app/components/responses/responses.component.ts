@@ -50,6 +50,21 @@ export class ResponsesComponent implements OnInit {
     );
   }
 
+  deleteResponse(val: Response){
+    this._responseService.delete(this.token, val._id).subscribe(
+      response =>{
+          if(!response.response){
+              alert('Error en el servidor');
+          }else{
+            this.responses.splice(this.responses.indexOf(val),1); 
+          }
+      },
+      error =>{
+          console.log(error);
+      }
+    );
+  }
+
   onSubmit(){
     this.response.hashtag = '#'+this.response.hashtag.replace(' ', '');
 

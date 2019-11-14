@@ -71,7 +71,7 @@ export class TicketPortalComponent implements OnInit {
     this.token = _userService.getToken();
     this.identity = _userService.getIdentity();
 
-    this.companyName = 'Sector';
+    this.companyName = 'Departamento';
     this.typeName = 'Tipo';
     this.subTypeName = 'Sub-tipo';
     this.companyFilter = '';
@@ -208,7 +208,7 @@ export class TicketPortalComponent implements OnInit {
   }
 
   cancelTicket(){
-    this.companyName = 'Sector'
+    this.companyName = 'Departamento'
     this.typeName = 'Tipo';
     this.subTypeName = 'Sub-tipo';
     this.companyFilter = '';

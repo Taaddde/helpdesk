@@ -14,8 +14,8 @@
                   <td>{{resp.hashtag}}</td>
                   <td>{{resp.resp}}</td>
                   <td class="text-center">
-                    <a class="btn btn-dark dark">
-                      <i class="fa fa-check"></i>
+                    <a class="btn btn-dark dark" (click)="deleteResponse(resp)">
+                      <i class="fa fa-trash"></i>
                     </a>
                   </td>
               </tr>

@@ -10,6 +10,7 @@ var md_upload = multipart({uploadDir: './uploads/companys'}); //Donde se van a s
 var api = express.Router(); 
 
 //CONSULTAS
+api.get('/company/:id', companyController.getCompany);
 api.get('/companies/', companyController.getCompanies);
 api.get('/for-name/:name', companyController.getCompaniesForName);
 

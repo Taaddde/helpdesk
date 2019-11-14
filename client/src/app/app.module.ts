@@ -28,6 +28,7 @@ import { ResponsesComponent } from './components/responses/responses.component';
 import { TypeSubtypeComponent } from './components/type-subtype/type-subtype.component';
 import { TicketPortalComponent } from './components/ticket-portal/ticket-portal.component';
 import { SearchListComponent } from './components/search-list/search-list.component';
+import { CompanyComponent } from './components/company/company.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { SearchListComponent } from './components/search-list/search-list.compon
     ResponsesComponent,
     TypeSubtypeComponent,
     TicketPortalComponent,
-    SearchListComponent
+    SearchListComponent,
+    CompanyComponent
   ],
   imports: [
     BrowserModule,

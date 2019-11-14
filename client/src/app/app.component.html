@@ -41,12 +41,6 @@
                                 <div class="input-group">
                                     <input (input)="globalSearch($event.target.value)" class="bg-light form-control border-0 small" type="text" placeholder="Buscar por ...">
                                     <div role="menu" *ngIf="searched" [className]="searched ? 'dropdown-menu show' : 'dropdown-menu'" class="dropdown-menu">
-                                        <a role="presentation" class="dropdown-item" *ngIf="searched['companies']" [routerLink]="['/search/company',valSearch]">
-                                            Sectores  
-                                            <span class="badge badge-danger badge-counter" style="float: right;font-size: 15px;">
-                                                {{searched['companies']['companyCount']}}+
-                                            </span>
-                                        </a>
                                         <a role="presentation" class="dropdown-item" *ngIf="searched['users']" [routerLink]="['/search/user',valSearch]">
                                             Usuarios  
                                             <span class="badge badge-danger badge-counter" style="float: right;font-size: 15px;">
