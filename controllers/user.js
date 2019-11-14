@@ -7,6 +7,12 @@ var jwt = require('../services/jwt');
 var fs = require('fs');
 var path = require('path');
 
+
+const mongoose =require('mongoose')
+
+const ObjectId = mongoose.Types.ObjectId;
+
+
 function prueba(req, res){
     var ip = req.ip;
      console.log(req.body, ip);
@@ -174,6 +180,26 @@ function getUsers(req, res){
     
 }
 
+function getUsersForName(req, res){
+    var name = req.params.name;
+    var company = req.params.company;
+
+    User.find({company:ObjectId(company),$or:[{name:{ "$regex": name, "$options": "i" }},{surname:{ "$regex": name, "$options": "i" }}]}).sort('name').exec(function(err, users){
+        if(err){
+            res.status(500).send({message: 'Error del servidor en la peticion'})
+        }else{
+            if(!users){
+                res.status(404).send({message: 'No hay usuarios'})
+            }else{
+                return res.status(200).send({
+                    users: users
+                });
+            }
+        }
+    });
+}
+
+
 function loginUser(req, res){
     var params = req.body;
 
@@ -286,6 +312,7 @@ module.exports = {
 
     getUser,
     getUsers,
+    getUsersForName,
 
     loginUser,
 

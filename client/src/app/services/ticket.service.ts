@@ -106,6 +106,18 @@ export class ticketService{
                             .map(res => res.json());
     }
 
+    getForName(token, company, name){
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+          });
+
+          let options = new RequestOptions({headers: headers});
+          return this._http.get(this.url+'ticket/for-name/'+company+'/'+name, ({headers: headers}))
+                            .map(res => res.json());
+    }
+
+
     getForUser(token, id: string){
         let headers = new Headers({
             'Content-Type':'application/json',

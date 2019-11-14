@@ -10,6 +10,7 @@ var api = express.Router();
 api.get('/ticket/:id', md_auth.ensureAuth, ticketController.getTicket);
 api.get('/tickets', md_auth.ensureAuth, ticketController.getTickets);
 api.get('/for-number/:num', md_auth.ensureAuth, ticketController.getTicketsForNumber);
+api.get('/for-name/:company/:sub', md_auth.ensureAuth, ticketController.getTicketsForName);
 api.get('/ticketsPaged/:page&:perPage&:company&:status?&:userId?', md_auth.ensureAuth, ticketController.getTicketsPaged);
 api.get('/reqTicketsPaged/:page&:perPage&:userId&:status?', md_auth.ensureAuth, ticketController.getReqTicketsPaged);
 api.get('/for-user/:id', md_auth.ensureAuth, ticketController.getTicketsForUser);

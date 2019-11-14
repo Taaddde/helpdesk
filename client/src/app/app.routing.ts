@@ -13,6 +13,7 @@ import { TicketNewComponent } from './components/ticket-new/ticket-new.component
 import { HomeComponent } from './components/home/home.component';
 import { ReportsComponent } from './components/reports/reports.component';
 import { ConfigComponent } from './components/config/config.component';
+import { SearchListComponent } from './components/search-list/search-list.component';
 
 
 const appRoutes: Routes = [
@@ -37,6 +38,8 @@ const appRoutes: Routes = [
 
     {path: 'report', component: ReportsComponent},
     {path: 'config', component: ConfigComponent},
+
+    {path: 'search/:stat/:q', component: SearchListComponent},
 
 ];
 

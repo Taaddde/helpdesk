@@ -60,16 +60,13 @@ $('#editable').on('keydown', function (event) {
 /************************************/
 
 document.getElementById('editable').addEventListener('paste', function(event){
-  console.log("pasted!", event);
 
   // get pasted data; Source: http://codingmiles.com/pasting-image-contenteditable-div/
   var pastedData = event.clipboardData.items[0];
 
-  console.log("pastedData",pastedData);
 
   // If the clipboard data is of type image, read the data
   if(pastedData.type.indexOf("image") === 0) {
-    console.log('calling thumbnail function'); // does not show up in the console! o.O
     composeThumbnail(pastedData.getAsFile()); // this still works!
   }
 });
@@ -77,7 +74,6 @@ document.getElementById('editable').addEventListener('paste', function(event){
 function composeThumbnail(file) { // source: https://developer.mozilla.org/en-US/docs/Using_files_from_web_applications
 
   if (!/^image\//.test(file.type)) { // if not an image; 0 since we take only 1 image, if multiple dragged at once, consider only the first one in the array
-    console.log('ERROR: Not an image file.');
     return false;
   }
 

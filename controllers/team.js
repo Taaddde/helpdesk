@@ -8,6 +8,10 @@ var Team = require('../models/team');
 var fs = require('fs');
 var path = require('path');
 
+const mongoose =require('mongoose')
+const ObjectId = mongoose.Types.ObjectId;
+
+
 function getAgentsInTeam(req, res){
     var teamId = req.params.id;
     var company = req.params.company;
@@ -102,6 +106,30 @@ function getTeams(req, res){
         }
     });
 }
+
+function getTeamsForName(req, res){
+    var populateQuery = [
+        {path:'users', model:'User', select:['name','surname','image']},
+    ];
+
+    let company = req.params.company
+    let name = req.params.name
+
+    Team.find({company:company, name:{ "$regex": name, "$options": "i" }}).sort('name').populate(populateQuery).exec(function(err, teams){
+        if(err){
+            res.status(500).send({message: 'Error del servidor en la peticion'})
+        }else{
+            if(!teams){
+                res.status(404).send({message: 'No hay equipos'})
+            }else{
+                return res.status(200).send({
+                    teams: teams
+                });
+            }
+        }
+    });
+}
+
 
 function updateTeam(req, res){
     var teamId = req.params.id;
@@ -255,6 +283,7 @@ function removeUser(req, res){
 module.exports = {
     getTeam,
     getTeams,
+    getTeamsForName,
     getAgentsInTeam,
 
     saveTeam,

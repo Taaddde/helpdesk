@@ -1,0 +1,60 @@
+<div class="card shadow">
+    <div class="card-header py-3">
+        <p class="text-primary m-0 font-weight-bold">Información buscada</p>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive table mt-2" id="dataTable">
+            
+          
+          
+          <table class="table dataTable my-0" id="dataTable" *ngIf="stat == 'ticket'">
+                <thead>
+                    <tr>
+                        <th>Numero</th>
+                        <th>Solicitante</th>
+                        <th>Asunto</th>
+                        <th>Agente</th>
+                        <th>Estado</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let ticket of tickets">
+                    <tr class="select" [routerLink]="['/ticket-gestion',ticket._id]">
+                        <td data-title="Numero">{{ticket.numTicket}}</td>
+                        <td data-title="Solicitante">
+                          <img *ngIf="ticket.requester && ticket.requester.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+ticket.requester.image}}" />
+                          <img *ngIf="!ticket.requester || ticket.requester.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="../../../assets/img/system/user-placeholder.png" />
+                          {{ticket.requester.name}}
+                          <span> </span>
+                          {{ticket.requester.surname}}
+                        </td>
+                        <td data-title="Asunto">{{ticket.sub}}</td>
+                        <td data-title="Agente" *ngIf="ticket.agent">
+                            <img *ngIf="ticket.agent.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+ticket.agent.image}}" />
+                            <img *ngIf="ticket.agent.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="../../../assets/img/system/user-placeholder.png" />
+                            {{ticket.agent.name}}
+                            <span> </span>
+                            {{ticket.agent.surname}}
+                        </td>
+                        <td data-title="Agente" *ngIf="!ticket.agent"></td>
+                        <td data-title="Estado">{{ticket.status}}</td>
+                        <td data-title="Fecha">{{ticket.createDate}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td><strong>Numero</strong></td>
+                        <td><strong>Solicitante</strong></td>
+                        <td><strong>Asunto</strong></td>
+                        <td><strong>Agente</strong></td>
+                        <td><strong>Estado</strong></td>
+                        <td><strong>Fecha</strong></td>
+                    </tr>
+                </tfoot>
+        </table>
+
+
+
+        </div>
+    </div>
+  </div>

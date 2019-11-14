@@ -207,7 +207,7 @@
             <input type="text" *ngIf="editSub" name="sub" [(ngModel)]="subMod" />
             <input type="button" class="btn btn-dark dark" *ngIf="editSub" value="Aplicar" (click)="editTicketSub()">
             <input type="button" class="btn btn-danger" *ngIf="editSub" value="Cancelar" (click)="editSub = false">
-            <h6 *ngIf="!editSub" class="d-inline" (click)="editSub = true; subMod = ticket.sub">
+            <h6 *ngIf="!editSub" class="d-inline" (click)="subToEdit(ticket.sub)">
               <strong>{{ticket.sub}}</strong>
             </h6>
         </div>
@@ -266,7 +266,9 @@
 
                       <div class="row" style="margin-top: 8px;">
                           <div id="editable" contentEditable="true"
+                          
                           (input)="textblock.text = $event.target.innerHTML"
+                          
                           >
                             <span contentEditable="false"></span>
                           </div>

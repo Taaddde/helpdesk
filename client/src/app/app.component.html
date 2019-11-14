@@ -38,7 +38,34 @@
                     <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
                         <div class="container-fluid" >
                             <form *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                                <div class="input-group"><input class="bg-light form-control border-0 small" type="text" placeholder="Buscar por ...">
+                                <div class="input-group">
+                                    <input (input)="globalSearch($event.target.value)" class="bg-light form-control border-0 small" type="text" placeholder="Buscar por ...">
+                                    <div role="menu" *ngIf="searched" [className]="searched ? 'dropdown-menu show' : 'dropdown-menu'" class="dropdown-menu">
+                                        <a role="presentation" class="dropdown-item" *ngIf="searched['companies']">
+                                            Sectores  
+                                            <span class="badge badge-danger badge-counter" style="float: right;font-size: 15px;">
+                                                {{searched['companies']['companyCount']}}+
+                                            </span>
+                                        </a>
+                                        <a role="presentation" class="dropdown-item" *ngIf="searched['users']">
+                                            Usuarios  
+                                            <span class="badge badge-danger badge-counter" style="float: right;font-size: 15px;">
+                                                {{searched['users']['userCount']}}+
+                                            </span>
+                                        </a>
+                                        <a role="presentation" class="dropdown-item" *ngIf="searched['tickets']">
+                                            Tickets  
+                                            <span class="badge badge-danger badge-counter" style="float: right;font-size: 15px;">
+                                                {{searched['tickets']['ticketCount']}}+
+                                            </span>
+                                        </a>
+                                        <a role="presentation" class="dropdown-item" *ngIf="searched['teams']">
+                                            Equipos  
+                                            <span class="badge badge-danger badge-counter" style="float: right;font-size: 15px;">
+                                                {{searched['teams']['teamCount']}}+
+                                            </span>
+                                            </a>
+                                        </div>
                                     <div class="input-group-append"><button class="btn btn-primary py-0" type="button" style="background-color: #1e2833;"><i class="fas fa-search"></i></button></div>
                                 </div>
                             </form>

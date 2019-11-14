@@ -7,18 +7,13 @@ import { userService } from './services/user.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/interval';
 import { ticketService } from './services/ticket.service';
-import { companyService } from './services/company.service';
-import { typeTicketService } from './services/typeticket.service';
-import { subTypeTicketService } from './services/subtypeticket.service';
-import { Company } from './models/company';
-import { TypeTicket } from './models/typeticket';
-import { SubTypeTicket } from './models/subtypeticket';
+import { globalService } from './services/global.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers:[userService, ticketService, companyService, typeTicketService, subTypeTicketService]
+  providers:[userService, ticketService, globalService]
 })
 export class AppComponent implements OnInit {
   public title = 'HelpDesk';
@@ -30,15 +25,14 @@ export class AppComponent implements OnInit {
   public url: string;
   public sub;
   public notifications;
+  public searched;
   
 
   //Asigna un valor a una propiedad
   constructor(
     private _userService: userService,
     private _ticketService: ticketService,
-    private _companyService: companyService,
-    private _typeTicketService: typeTicketService,
-    private _subTypeTicketService: subTypeTicketService,
+    private _globalService: globalService,
 
     private _route: ActivatedRoute,
     private _router: Router
@@ -175,6 +169,22 @@ export class AppComponent implements OnInit {
     location.reload();
 
     this._router.navigate(['/']);
+  }
+
+  globalSearch(val:string){
+    if(val.length >= 3){
+      this._globalService.getCountSearch(this.token, val, this.identity['company']['_id']).subscribe(
+        response =>{
+              this.searched = response;
+              
+        },
+        error =>{
+            console.log(error);
+        }
+      );
+    }else{
+      this.searched = undefined;
+    }
   }
 
 }

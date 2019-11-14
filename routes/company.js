@@ -11,6 +11,7 @@ var api = express.Router();
 
 //CONSULTAS
 api.get('/companies/', companyController.getCompanies);
+api.get('/for-name/:name', companyController.getCompaniesForName);
 
 //Imagenes
 api.post('/image/:id',[md_auth.ensureAuth, md_upload], companyController.uploadImage);

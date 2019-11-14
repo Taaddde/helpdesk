@@ -21,6 +21,23 @@ function getCompanies(req, res){
     });
 }
 
+function getCompaniesForName(req, res){
+    var name = req.params.name;
+
+    Company.find({name:{ "$regex": name, "$options": "i" }}, (err, companies) =>{
+        if(err){
+            res.status(500).send({message: 'Error del servidor en la peticion'});
+        }else{
+            if(!companies){
+                res.status(404).send({message: 'La compañia no existe'});
+            }else{
+                res.status(200).send({companies:companies});
+            }
+        }
+    });
+}
+
+
 function saveCompany(req, res){
     var company = new Company();
 
@@ -127,6 +144,7 @@ function getImageFile(req, res){
 
 module.exports = {
     getCompanies,
+    getCompaniesForName,
     saveCompany,
     updateCompany,
     deleteCompany,

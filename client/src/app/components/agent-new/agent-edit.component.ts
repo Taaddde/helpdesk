@@ -56,6 +56,7 @@ export class AgentEditComponent implements OnInit {
             this._router.navigate(['/']);
           }else{
             this.user = response.user;
+            document.getElementById('editable').innerHTML = this.user.sign;
             if(this.user.role == 'ROLE_AGENT'){
               this.isAdm = false;
             }else{
@@ -79,11 +80,14 @@ export class AgentEditComponent implements OnInit {
   }
 
   onSubmit(){
-    if(!this.isAdm){
-      this.user.role = 'ROLE_AGENT';
-    }else{
-      this.user.role = 'ROLE_ADMIN';
+    if(this.identity['role'] != 'ROLE_REQUESTER'){
+      if(!this.isAdm){
+        this.user.role = 'ROLE_AGENT';
+      }else{
+        this.user.role = 'ROLE_ADMIN';
+      }
     }
+    
 
     if(this.user.password == ''){
       delete this.user.password;
@@ -95,18 +99,13 @@ export class AgentEditComponent implements OnInit {
           if(!response.user){
               this.alertMessage = 'Error en el servidor';
           }else{
-              if(!this.filesToUpload){
-                  this._router.navigate(['/agent']);
-              }else{
+              if(this.filesToUpload){
                   this._uploadService.makeFileRequest(this.url+'user/image/'+response.user._id, [], this.filesToUpload, this.token, 'image')
-                  .then(
-                      result =>{
-                          this._router.navigate(['/agent']);
-                      }, 
-                      error =>{
-                          console.log('Error');
-                      }
-                  );
+              }
+              if(this.identity['role'] != 'ROLE_REQUESTER'){
+                this._router.navigate(['/agent']);
+              }else{
+                this._router.navigate(['/home']);
               }
           }
       },

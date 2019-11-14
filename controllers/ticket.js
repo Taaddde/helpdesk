@@ -4,8 +4,8 @@ var Ticket = require('../models/ticket');
 var TextBlock = require('../models/textblock');
 var User = require('../models/user');
 const moment = require('moment');
-const mongoose =require('mongoose')
 var mongoosePaginate = require('mongoose-pagination');
+const mongoose =require('mongoose')
 
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -542,6 +542,32 @@ function getTicketsForNumber(req, res){
     });
 }
 
+
+function getTicketsForName(req, res){
+    var populateQuery = [
+        {path:'requester',select:['name','surname','image']},
+        {path:'agent',select:['name','surname','image']}, 
+    ];
+
+    var sub = req.params.sub;
+    var company = req.params.company;
+
+    Ticket.find({sub:{ "$regex": sub, "$options": "i" }, company:ObjectId(company)}).populate(populateQuery).exec(function(err, tickets){
+        if(err){
+            res.status(500).send({message: 'Error del servidor en la peticion'})
+        }else{
+            if(!tickets){
+                res.status(404).send({message: 'No hay tickets'})
+            }else{
+                return res.status(200).send({
+                    tickets: tickets
+                });
+            }
+        }
+    });
+}
+
+
 function updateTicket(req, res){
     var ticketId = req.params.id;
     var update =  req.body;
@@ -580,6 +606,7 @@ function deleteTicket(req, res){
 module.exports = {
     getTicket,
     getTicketsForNumber,
+    getTicketsForName,
     getTickets,
     getTicketsPaged,
     getReqTicketsPaged,

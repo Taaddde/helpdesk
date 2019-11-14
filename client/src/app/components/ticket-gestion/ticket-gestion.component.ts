@@ -272,6 +272,7 @@ export class TicketGestionComponent implements OnInit {
 
   selectHashtag(val){
     this.textblock.text = this.textblock.text + val;
+    document.getElementById('editable').innerHTML = document.getElementById('editable').innerHTML + val;
   }
   selectAgent(val: string, name:string, surname:string){
     if(this.ticket.status != 'Pendiente'){
@@ -358,6 +359,20 @@ export class TicketGestionComponent implements OnInit {
         break;
     }
     return tmp;
+  }
+
+  subToEdit(val){
+    if(this.identity['company']){
+      if(this.identity['company']['_id'] == this.ticket.company['_id']){
+        this.editSub = true; 
+        this.subMod = val  
+      }
+    }else{
+      if(this.identity['_id'] == this.ticket.requester['_id']){
+        this.editSub = true; 
+        this.subMod = val  
+      }
+    }
   }
 
   editTicketSub(){
@@ -467,7 +482,8 @@ export class TicketGestionComponent implements OnInit {
           }
           this.editTicket()
           this.pushText(response.textblock._id) ;
-          this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false)
+          this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false);
+          document.getElementById('editable').innerHTML = ''
           this.filesToUpload = new Array<File>();
       },
       error =>{

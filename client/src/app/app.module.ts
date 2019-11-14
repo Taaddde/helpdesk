@@ -27,6 +27,7 @@ import { ConfigComponent } from './components/config/config.component';
 import { ResponsesComponent } from './components/responses/responses.component';
 import { TypeSubtypeComponent } from './components/type-subtype/type-subtype.component';
 import { TicketPortalComponent } from './components/ticket-portal/ticket-portal.component';
+import { SearchListComponent } from './components/search-list/search-list.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { TicketPortalComponent } from './components/ticket-portal/ticket-portal.
     ConfigComponent,
     ResponsesComponent,
     TypeSubtypeComponent,
-    TicketPortalComponent
+    TicketPortalComponent,
+    SearchListComponent
   ],
   imports: [
     BrowserModule,
