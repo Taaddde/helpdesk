@@ -8,5 +8,6 @@ var api = express.Router();
 
 //CONSULTAS
 api.get('/find-all/:name/:company', md_auth.ensureAuth, globalController.getCountSearch);
+api.post('/sendmail', md_auth.ensureAuth, globalController.sendMail);
 
 module.exports = api;

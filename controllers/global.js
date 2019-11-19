@@ -4,8 +4,9 @@ var Company = require('../models/company');
 var User = require('../models/user');
 var Ticket = require('../models/ticket');
 var Team = require('../models/team');
+var mail = require('../services/mail');
 
-const mongoose =require('mongoose')
+const mongoose =require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
 
@@ -106,6 +107,20 @@ function getCountSearch(req, res){
     });
 }
 
+function sendMail(req, res){
+    let to = req.body.to;
+    let sub = req.body.sub;
+    let txt = req.body.txt;
+    console.log(to, sub, txt)
+    if(mail.send(to, sub, txt)){
+        res.status(500).send({message: 'Error del servidor en la peticion'});
+    }else{
+        res.status(200).send({mail:true});
+    }
+    
+}
+
 module.exports = {
     getCountSearch,
+    sendMail
 };

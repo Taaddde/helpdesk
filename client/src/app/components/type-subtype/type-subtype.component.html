@@ -1,4 +1,4 @@
-<a class="btn btn-dark dark newtype" role="button" href="#newtype" data-toggle="modal">Nuevo tipo de solicitud</a>
+<a *ngIf="identity['role'] == 'ROLE_ADMIN'" class="btn btn-dark dark newtype" role="button" href="#newtype" data-toggle="modal">Nuevo tipo de solicitud</a>
 
 <ul class="list-group">
   <li class="list-group-item" *ngFor="let type of types">
@@ -22,7 +22,7 @@
                                       <th>Equipo responsable</th>
                                       <th>Tiempo de resolución</th>
                                       <th>Validaciones</th>
-                                      <th>Editar</th>
+                                      <th *ngIf="identity['role'] == 'ROLE_ADMIN'">Editar</th>
                                   </tr>
                               </thead>
                               <tbody>
@@ -89,7 +89,7 @@
                                           <i class="fa fa-info-circle"></i>
                                         </a>
                                       </td>
-                                      <td class="text-center">
+                                      <td class="text-center" *ngIf="identity['role'] == 'ROLE_ADMIN'">
                                         <button *ngIf="subtype._id != subtypeSelected._id" class="btn btn-dark dark" type="button" (click)="selectSubtype(subtype)">
                                           <i class="fa fa-pencil-alt"></i>
                                         </button>
@@ -105,7 +105,7 @@
                                       </td>
                                   </tr>
                               </tbody>
-                              <tfoot >
+                              <tfoot *ngIf="identity['role'] == 'ROLE_ADMIN'">
                                   <tr class="newSubType">
                                       <td>
                                         <input type="text" 
@@ -168,11 +168,16 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Nuevo tipo de solicitud</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                <h4 class="modal-title">Nuevo tipo de solicitud</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
             <form name="my-form" #form="ngForm" (ngSubmit)="typeSubmit()">
                 <div class="modal-body">
                     <div class="form-group">
                       <input 
+                        [readonly]="identity['role'] != 'ROLE_ADMIN'"
                         type="text" 
                         class="form-control form-control-lg" 
                         placeholder="Ingrese el nombre del tipo de solicitud" 
@@ -189,8 +194,9 @@
                     Cerrar
                   </button>
                   <button class="btn btn-success" type="submit">
-                    Guardar</button>
-                  </div>
+                    Guardar
+                  </button>
+                </div>
             </form>
         </div>
     </div>
@@ -202,12 +208,14 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Validaciones</h4><button type="button" class="close" (click)="cancelValidation()" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                <h4 class="modal-title">Validaciones</h4>
+                <button type="button" class="close" (click)="cancelValidation()" aria-label="Close"><span aria-hidden="true">×</span></button></div>
             <form name="my-form" #form="ngForm" (ngSubmit)="checkSubmit()">
                 <div class="modal-body">
                     <div class="form-group">
                       <label for="desc">Descripción</label>
                       <textarea 
+                        [readonly]="identity['role'] != 'ROLE_ADMIN'"
                         class="form-control" 
                         placeholder="Ingrese el texto que desee que el usuario visualice" 
                         required
@@ -219,6 +227,7 @@
                     <div class="form-group">
                         <div class="form-check">
                           <input type="checkbox" 
+                            [disabled]="identity['role'] != 'ROLE_ADMIN'"
                             class="form-check-input" 
                             id="formCheck-1" 
                             #requireAttach="ngModel" 
@@ -233,7 +242,7 @@
                                 <thead>
                                     <tr>
                                         <th>Descripción</th>
-                                        <th>Editar</th>
+                                        <th *ngIf="identity['role'] == 'ROLE_ADMIN'">Editar</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -241,14 +250,14 @@
                                         <td>
                                           {{c}}
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-center" *ngIf="identity['role'] == 'ROLE_ADMIN'">
                                           <button class="btn btn-danger" type="button" (click)="deleteCheck(c)">
                                             <i class="fa fa-trash"></i>
                                           </button>
                                         </td>
                                     </tr>
                                 </tbody>
-                                <tfoot>
+                                <tfoot *ngIf="identity['role'] == 'ROLE_ADMIN'">
                                     <tr>
                                         <td>
                                             <input 
@@ -275,7 +284,7 @@
                   <button class="btn btn-light" type="button" (click)="cancelValidation()">
                     Cerrar
                   </button>
-                  <button class="btn btn-success" type="button" (click)="saveSubtype()">
+                  <button class="btn btn-success" *ngIf="identity['role'] != 'ROLE_ADMIN'" type="button" (click)="saveSubtype()">
                     Guardar
                   </button>
                 </div>

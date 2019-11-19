@@ -7,29 +7,37 @@
                     <img class="img-profile" *ngIf="user.image != 'null'" src="{{url+'user/image/'+user.image}}" />
                     <label [className]="filesToUpload ? 'btn btn-success' : 'btn btn-dark'" style="margin-top: 7px; width:100%;">
                         Seleccionar una foto
-                        <input type="file" accept="image/*" class="newimg" (change)="fileChangeEvent($event)"/>
+                        <input *ngIf="identity['role'] == 'ROLE_ADMIN' || isUser" type="file" accept="image/*" class="newimg" (change)="fileChangeEvent($event)"/>
                     </label>
                 </div>
                 <div class="col-sm-7 col-md-7 col-lg-9 card-profile">
                     <h5>Datos personales</h5>
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" class="form-control" placeholder="Ingresa aqui el nombre de la persona" #name="ngModel" name="name" [(ngModel)]="user.name" required />
+                        <input type="text" [readonly]="identity['role'] != 'ROLE_ADMIN' && !isUser" class="form-control" placeholder="Ingresa aqui el nombre de la persona" #name="ngModel" name="name" [(ngModel)]="user.name" required />
                     </div>
-                    <div class="form-group"><label>Apellido</label><input type="text" class="form-control" placeholder="Ingresa aqui el apellido de la persona" #surname="ngModel" name="surname" [(ngModel)]="user.surname" required /></div>
+                    <div class="form-group">
+                        <label>Apellido</label>
+                        <input type="text" [readonly]="identity['role'] != 'ROLE_ADMIN' && !isUser" class="form-control" placeholder="Ingresa aqui el apellido de la persona" #surname="ngModel" name="surname" [(ngModel)]="user.surname" required />
+                    </div>
                 </div>
             </div>
             <hr/>
             <div class="form-row agent-system">
                 <div class="col card-profile">
                     <h5>Datos del sistema</h5>
-                    <div class="form-group"><label>ID de usuario</label><input type="text" [readonly]="identity['role'] != 'ROLE_ADMIN'" class="form-control" required placeholder="Ingresa aqui el ID del usuario" #userName="ngModel" name="userName" [(ngModel)]="user.userName" /></div>
-                    <div class="form-group"><label>Contraseña</label><input type="password" [readonly]="identity['role'] != 'ROLE_ADMIN' && !isUser" class="form-control" placeholder="Ingrese aqui una constraseña" #password="ngModel" name="password" [(ngModel)]="user.password" /></div>
-                    <div class="form-check" *ngIf="identity['role'] != 'ROLE_REQUESTER'"><input class="form-check-input" type="checkbox" [disabled]="identity['role'] != 'ROLE_ADMIN'" id="formCheck-1" name="isAdm" [(ngModel)]="isAdm" /><label class="form-check-label" for="formCheck-1">Es administrador</label></div>
+                    <div class="form-group">
+                        <label>ID de usuario</label>
+                        <input type="text" [readonly]="identity['role'] != 'ROLE_ADMIN'" class="form-control" required placeholder="Ingresa aqui el ID del usuario" #userName="ngModel" name="userName" [(ngModel)]="user.userName" /></div>
+                    <div class="form-group"><label>Contraseña</label>
+                        <input type="password" [readonly]="identity['role'] != 'ROLE_ADMIN' && !isUser" class="form-control" placeholder="Ingrese aqui una constraseña" #password="ngModel" name="password" [(ngModel)]="user.password" />
+                    </div>
+                    <div class="form-check" *ngIf="identity['role'] != 'ROLE_REQUESTER'"><input class="form-check-input" type="checkbox" [disabled]="identity['role'] != 'ROLE_ADMIN'" id="formCheck-1" name="isAdm" [(ngModel)]="isAdm" /><label class="form-check-label" for="formCheck-1">Es administrador</label>
+                    </div>
                 </div>
                 <div class="col card-profile">
                     <h5>Datos de agente</h5>
-                    <div class="form-group"><label>E-mail</label><input type="text" class="form-control" inputmode="email" placeholder="Ingrese aqui el e-mail del agente" #email="ngModel" name="email" [(ngModel)]="user.email" /></div>
+                    <div class="form-group"><label>E-mail</label><input type="text" [readonly]="identity['role'] != 'ROLE_ADMIN' && !isUser" class="form-control" inputmode="email" placeholder="Ingrese aqui el e-mail del agente" #email="ngModel" name="email" [(ngModel)]="user.email" /></div>
                     <!-- <div class="form-group"><label>Firma</label><textarea class="form-control" placeholder="Ingrese una firma con la cual quiere ei enviar los mensajes" #sign="ngModel" name="sign" [(ngModel)]="user.sign"></textarea></div> -->
                 
                     <div class="row" style="margin-left: 4px;">
@@ -58,7 +66,7 @@
                         </div>
   
                         <div class="row" style="margin-top: 8px;margin-left: 4px;">
-                            <div id="editable" contentEditable="true"
+                            <div id="editable" [contentEditable]="identity['role'] == 'ROLE_ADMIN' || isUser"
                             (input)="user.sign = $event.target.innerHTML"
                             >
                               <span contentEditable="false"></span>
@@ -69,7 +77,7 @@
 
                 </div>
             </div>
-            <div class="form-row">
+            <div class="form-row" *ngIf="identity['role'] == 'ROLE_ADMIN' || isUser">
                 <div class="col confirm"><button class="btn btn-danger btn-lg float-right" [routerLink]="['/agent']" type="button">Cancelar</button><button class="btn btn-success btn-lg float-right acept" type="submit">Aceptar</button></div>
             </div>
         </form>

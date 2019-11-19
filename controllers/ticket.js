@@ -2,9 +2,7 @@
 
 var Ticket = require('../models/ticket');
 var TextBlock = require('../models/textblock');
-var User = require('../models/user');
 const moment = require('moment');
-var mongoosePaginate = require('mongoose-pagination');
 const mongoose =require('mongoose')
 
 const ObjectId = mongoose.Types.ObjectId;
