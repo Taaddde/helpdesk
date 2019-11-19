@@ -8,8 +8,8 @@
     </div>
     <div [ngClass]="getCardBodyClass()">
         <p class="card-text" [innerHTML]="text"></p>
-        <hr *ngIf="sign != '' && type != 'INFO'" >
-        <p *ngIf="sign != '' && type != 'INFO'" class="card-text" [innerHTML]="sign"></p>
+        <hr *ngIf="sign != '' || type != 'INFO'" >
+        <p *ngIf="sign != '' || type != 'INFO'" class="card-text" [innerHTML]="sign"></p>
         <div class="text-right" *ngIf="files">
             <a target="blank" href="{{url+'textblock/file/'+files}}">
                 <i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 5px;"></i>
