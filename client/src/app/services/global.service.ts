@@ -26,4 +26,15 @@ export class globalService{
                             .map(res => res.json());
     }    
 
+    sendMail(token, mailOptions){
+        let params = JSON.stringify(mailOptions);
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+          });
+
+          return this._http.post(this.url+'global/sendmail', params, {headers:headers})
+                            .map(res => res.json());
+    }   
+
 }

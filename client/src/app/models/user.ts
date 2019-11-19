@@ -12,5 +12,6 @@ export class User{
         public sign: string,
         public image: string,
         public company: string,
+        public receiveMail: boolean
     ){}
 }

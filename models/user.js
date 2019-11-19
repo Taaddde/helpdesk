@@ -12,7 +12,8 @@ var UserSchema = Schema({
     role: {type: String, default:'ROLE_AGENT'},
     sign: {type: String, default:''},
     image:String,
-    company: {type: Schema.ObjectId, ref:'Company'}
+    company: {type: Schema.ObjectId, ref:'Company'},
+    receiveMail: {type: Boolean, default:false}
 });
 
 module.exports = mongoose.model('User', UserSchema);

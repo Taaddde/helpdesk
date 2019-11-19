@@ -33,6 +33,7 @@ function saveUser(req, res){
     user.role = params.role;
     user.image = 'null';
     user.company = params.company;
+    user.receiveMail = params.receiveMail;
 
     if(params.password){
         //encriptar y guardar
