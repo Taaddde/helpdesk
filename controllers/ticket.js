@@ -32,6 +32,7 @@ function getTicket(req, res){
     }).populate(populateQuery);
 }
 
+
 function getTicketsForUser(req, res){
     var userId = req.params.id;
 
@@ -81,6 +82,39 @@ function getCountTickets(req, res){
         }
     });
 }
+
+function getDateTickets(req, res){
+
+    let userId = req.params.userId
+
+    let query =[
+        // First Stage
+        {
+          $match : {  agent: ObjectId(userId), status:'Pendiente' }
+        },
+        // Second Stage
+        {
+          $project : {
+             _id : 1,
+             resolveDate:1,
+             sub:1
+            },
+        },
+       ]
+
+    Ticket.aggregate(query, (err, tickets) =>{
+        if(err){
+            res.status(500).send({message: 'Error del servidor en la peticion',err:err});
+        }else{
+            if(!tickets){
+                res.status(404).send({message: 'El ticket no existe'});
+            }else{
+                res.status(200).send({tickets});
+            }
+        }
+    });
+}
+
 
 function getCountReqTickets(req, res){
 
@@ -615,6 +649,7 @@ module.exports = {
     getUnreadTicketsReq,
     //getNotificationTickets,
     getTicketReports,
+    getDateTickets,
 
     saveTicket,
     updateTicket,

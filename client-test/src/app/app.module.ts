@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
+import {FullCalendarModule} from 'primeng/fullcalendar';
 
 import {routing, appRoutingProviders} from './app.routing';
 import { TicketListComponent } from './components/ticket-list/ticket-list.component';
@@ -29,6 +30,7 @@ import { TypeSubtypeComponent } from './components/type-subtype/type-subtype.com
 import { TicketPortalComponent } from './components/ticket-portal/ticket-portal.component';
 import { SearchListComponent } from './components/search-list/search-list.component';
 import { CompanyComponent } from './components/company/company.component';
+import { CalendarComponent } from './components/calendar/calendar.component';
 
 @NgModule({
   declarations: [
@@ -53,14 +55,16 @@ import { CompanyComponent } from './components/company/company.component';
     TypeSubtypeComponent,
     TicketPortalComponent,
     SearchListComponent,
-    CompanyComponent
+    CompanyComponent,
+    CalendarComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     routing,
-    ChartModule
+    ChartModule,
+    FullCalendarModule
   ],
   providers: [appRoutingProviders],
   bootstrap: [AppComponent],

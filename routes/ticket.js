@@ -19,6 +19,7 @@ api.get('/counts-requester/:userId', md_auth.ensureAuth, ticketController.getCou
 api.get('/unread/:userId', md_auth.ensureAuth, ticketController.getUnreadTickets);
 api.get('/req-unread/:userId', md_auth.ensureAuth, ticketController.getUnreadTicketsReq);
 api.get('/report/:company', md_auth.ensureAuth, ticketController.getTicketReports);
+api.get('/calendar/:userId', md_auth.ensureAuth, ticketController.getDateTickets);
 
 //ABM
 api.post('/add',md_auth.ensureAuth, ticketController.saveTicket);

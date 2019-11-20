@@ -4,6 +4,9 @@ import { GLOBAL } from '../../services/global';
 import { userService } from '../../services/user.service';
 import { ticketService } from '../../services/ticket.service';
 
+import * as moment from "moment"
+
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -20,6 +23,7 @@ export class HomeComponent implements OnInit {
     public pending:number;
     public finish:number;
     public close: number;
+    public status: string;
 
   constructor(
     private _route: ActivatedRoute,
@@ -34,10 +38,15 @@ export class HomeComponent implements OnInit {
     this.pending = 0;
     this.finish = 0;
     this.close = 0;
+    this.status = 'AL_DIA'
+
   }
 
   ngOnInit() {
     this.getCountTickets();
+    if(this.identity['role'] != 'ROLE_REQUESTER'){
+      this.getStatusCalendar();
+    }
   }
 
   getCountTickets(){
@@ -102,4 +111,49 @@ export class HomeComponent implements OnInit {
   
     }
   }
+
+  getStatusCalendar(){
+    this._ticketService.getCalendar(this.token, this.identity['_id']).subscribe(
+      response =>{
+          if(response.tickets){
+            response.tickets.forEach(e => {
+              var date = moment(e.resolveDate, "DD-MM-YYYY").format("YYYY-MM-DD");
+              if(e.resolveDate != 'null'){
+                if(moment(date).isSame(moment().format("YYYY-MM-DD"))){
+                  this.status = "PENDIENTE";
+                }else{
+                  if(moment(date).isBefore(moment().format("YYYY-MM-DD"))){
+                    this.status = "ATRASADO";
+                  }
+                }
+              }
+            });
+          }
+      },
+      error =>{
+          console.log(error);
+      }
+    );
+  }
+
+  getBorderClass(){
+    var tmp;
+    switch(this.status){
+      case 'AL_DIA':
+        tmp = {card:true, shadow:true, 'border-left-success':true, 'py-2':true};
+        break;
+      case 'PENDIENTE':
+        tmp = {card:true, shadow:true, 'border-left-warning':true, 'py-2':true};
+        break;
+      case 'ATRASADO':
+        tmp = {card:true, shadow:true, 'border-left-danger':true, 'py-2':true};
+        break;
+      default:
+        alert('Hubo un problema con la conversación del ticket, por favor reportarlo al administrador');
+        break;
+    }
+
+    return tmp;
+  }
+
 }

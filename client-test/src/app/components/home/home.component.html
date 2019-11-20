@@ -1,8 +1,28 @@
 
 <div class="card">
     <div class="card-body">
-        <h1 style="font-family: Nunito, sans-serif;" *ngIf="identity['company']">Panel principal - {{identity['company']['name']}}</h1>
-        <h1 style="font-family: Nunito, sans-serif;" *ngIf="!identity['company']">Panel principal</h1>
+        <div class="row">
+            <div class="col-md-8 col-lg-8 col-xl-8">
+                <h1 style="font-family: Nunito, sans-serif; text-align: center;" *ngIf="identity['company']">Panel principal - {{identity['company']['name']}}</h1>
+                <h1 style="font-family: Nunito, sans-serif; text-align: center;" *ngIf="!identity['company']">Panel principal</h1>            
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <a [routerLink]="['/calendar']">
+                    <div [ngClass]="getBorderClass()">
+                        <div class="card-body">
+                            <div class="row align-items-center no-gutters">
+                                <div class="col mr-2">
+                                    <div *ngIf="status == 'AL_DIA'" class="text-uppercase text-success font-weight-bold text-xs mb-1"><span>Estas al dia</span></div>
+                                    <div *ngIf="status == 'PENDIENTE'" class="text-uppercase text-warning font-weight-bold text-xs mb-1"><span>Tenes tareas para hoy</span></div>
+                                    <div *ngIf="status == 'ATRASADO'" class="text-uppercase text-danger font-weight-bold text-xs mb-1"><span>Tenes tareas atrasadas</span></div>
+                                </div>
+                                <div class="col-auto"><i class="far fa-calendar-alt fa-2x text-gray-300"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
         <hr />
         <div class="row">
             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 offset-lg-0 offset-xl-0">

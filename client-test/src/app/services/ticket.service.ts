@@ -62,6 +62,17 @@ export class ticketService{
                           .map(res => res.json());
     }
 
+    getCalendar(token, id){
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+        });
+  
+        let options = new RequestOptions({headers: headers});
+        return this._http.get(this.url+'ticket/calendar/'+id, options)
+                            .map(res => res.json());
+      }
+
     getPaginatedList(token, page, perPage, company, status, userId){
         let headers = new Headers({
             'Content-Type':'application/json',

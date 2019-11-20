@@ -14,6 +14,7 @@ import { HomeComponent } from './components/home/home.component';
 import { ReportsComponent } from './components/reports/reports.component';
 import { ConfigComponent } from './components/config/config.component';
 import { SearchListComponent } from './components/search-list/search-list.component';
+import { CalendarComponent } from './components/calendar/calendar.component';
 
 
 const appRoutes: Routes = [
@@ -40,6 +41,8 @@ const appRoutes: Routes = [
     {path: 'config', component: ConfigComponent},
 
     {path: 'search/:stat/:q', component: SearchListComponent},
+
+    {path: 'calendar', component: CalendarComponent},
 
 ];
 

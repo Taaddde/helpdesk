@@ -30,7 +30,10 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/moment/min/moment.min.js",
+              "node_modules/fullcalendar/dist/fullcalendar.min.js"
+            ]
           },
           "configurations": {
             "production": {
