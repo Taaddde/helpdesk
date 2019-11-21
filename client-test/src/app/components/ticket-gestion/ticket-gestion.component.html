@@ -359,12 +359,20 @@
                                   Cerrado
                               </a>
                           </div>
-                        </div>
+                      </div>
                     </span>
                     <span *ngIf="!identity['company']">
+    
                       <button class="btn btn-primary float-right" [disabled]="identity['_id'] != ticket.requester['_id']" type="submit">
                         <i class="fa fa-paper-plane"></i>
                       </button>
+
+                      <div class="dropdown d-inline float-right">
+                          <button class="btn btn-dark dropdown-toggle dark" disabled data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
+                            {{ticket.status}}
+                          </button>
+                        </div>
+
                     </span>
               </div>
             </form>

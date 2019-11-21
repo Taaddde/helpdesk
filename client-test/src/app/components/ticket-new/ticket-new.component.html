@@ -5,7 +5,7 @@
               <div class="col-sm-6 col-md-5 col-lg-5 col-xl-5 card-profile" *ngIf="!newRequester">
                   <h5>Datos del solicitante</h5>
                   <div class="form-group">
-                      <div class="dropdown d-inline">
+                      <!-- <div class="dropdown d-inline">
                         <button class="btn btn-dark dropdown-toggle d-inline dark" data-toggle="dropdown" aria-expanded="false" type="button" style="width: 118px;">
                           <span *ngIf="!requester">Solicitante</span>
                           <span *ngIf="requester">{{requester.name+' '+requester.surname}}</span>
@@ -15,7 +15,27 @@
                               {{r.name+' '+r.surname}}
                             </a>
                           </div>
+                      </div> -->
+
+
+                      <div class="dropdown d-inline" >
+                          <button class="btn btn-dark dark dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <span *ngIf="!requester">Solicitante</span>
+                              <span *ngIf="requester">{{requester.name+' '+requester.surname}}</span>
+                          </button>        
+                          <div class="dropdown-menu" >
+                              <input type="text" class="form-control form-control dropdown-search-input" placeholder="Buscar.." (keyup)="filterRequester()" [(ngModel)]="requesterFilter" name="requesterFilter"/>                         
+                              <span *ngIf="keyPress">
+                                  <a class="dropdown-item" *ngFor="let requester of requesters" (click)="setRequester(requester)">
+                                      {{requester.name+' '+requester.surname}}
+                                  </a>    
+                              </span>
+                          </div>
                       </div>
+
+
+
+
                       <a (click)="createRequester()">
                         <button class="btn btn-dark dark" type="button">
                           Nuevo solicitante

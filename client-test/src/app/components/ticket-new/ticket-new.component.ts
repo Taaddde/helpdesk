@@ -11,7 +11,6 @@ import { TextBlock } from '../../models/textblock';
 import { Team } from '../../models/team';
 import { User } from '../../models/user';
 import { uploadService } from '../../services/upload.service';
-import { IfObservable } from 'rxjs/observable/IfObservable';
 
 
 @Component({
@@ -25,16 +24,19 @@ export class TicketNewComponent implements OnInit {
   public ticket: Ticket;
   public textblock: TextBlock;
 
-  public teams: [Team];
+  public teams: Team[];
   public team: Team
 
-  public agents: [User];
+  public agents: User[];
   public agent: User;
-  public requesters: [User];
+  public requesters: User[];
+  public allRequesters: User[];
   public requester: User;
 
   public priority: string;
   public newRequester: boolean;
+  public keyPress: boolean;
+  public requesterFilter: string;
 
   public identity;
   public token;
@@ -56,6 +58,8 @@ export class TicketNewComponent implements OnInit {
 
     this.priority = '';
     this.newRequester = false;
+    this.keyPress = false;
+    this.requesterFilter = '';
 
     this.ticket = new Ticket('','',null,'',null,null,'','','',null,null,'',[null],'',this.identity['company']['_id'],'');
     this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false)
@@ -93,6 +97,7 @@ export class TicketNewComponent implements OnInit {
             console.log('Nada')
           }else{
             this.requesters = response.users;
+            this.allRequesters = response.users;
           }
       },
       error =>{
@@ -135,16 +140,29 @@ export class TicketNewComponent implements OnInit {
   }
 
   setRequester(requester){
+    this.requesterFilter = '';
     this.requester = requester;
     this.ticket.requester = requester._id;
     this.newRequester = false;
   }
+
   unSetRequester(){
     this.requester = undefined;
     this.ticket.requester = undefined;
     this.newRequester = false;
   }
 
+  filterRequester(){
+    if(this.requesterFilter.length >= 3){
+      this.keyPress = true;
+    } else{
+      this.keyPress = false;
+    }
+
+    this.requesters = this.allRequesters.filter(requester =>{
+      return (requester['name']+requester['surname']).toLowerCase().includes(this.requesterFilter.toString().toLowerCase());
+    })
+  }
 
   onSubmit(){
 

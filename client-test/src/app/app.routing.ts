@@ -15,6 +15,7 @@ import { ReportsComponent } from './components/reports/reports.component';
 import { ConfigComponent } from './components/config/config.component';
 import { SearchListComponent } from './components/search-list/search-list.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
+import { RequesterNewComponent } from './components/agent-new/requester-new.component';
 
 
 const appRoutes: Routes = [
@@ -33,6 +34,8 @@ const appRoutes: Routes = [
     {path: 'agent', component: AgentTeamComponent},
     {path: 'agent/new', component: AgentNewComponent},
     {path: 'user/edit/:id', component: AgentEditComponent},
+
+    {path: 'requester/new', component: RequesterNewComponent},
 
     {path: 'team/new', component: TeamNewComponent},
     {path: 'team/edit/:id', component: TeamEditComponent},

@@ -31,6 +31,7 @@ import { TicketPortalComponent } from './components/ticket-portal/ticket-portal.
 import { SearchListComponent } from './components/search-list/search-list.component';
 import { CompanyComponent } from './components/company/company.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
+import { RequesterNewComponent } from './components/agent-new/requester-new.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { CalendarComponent } from './components/calendar/calendar.component';
     SearchListComponent,
     CompanyComponent,
     CalendarComponent,
+    RequesterNewComponent
   ],
   imports: [
     BrowserModule,
