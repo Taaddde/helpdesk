@@ -121,7 +121,7 @@ export class TeamEditComponent implements OnInit {
                               this._router.navigate(['/agent']);
                             }, 
                             error =>{
-                                console.log('Error');
+                              console.log(error)
                             }
                         );
                     }

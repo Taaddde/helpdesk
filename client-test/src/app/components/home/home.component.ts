@@ -80,7 +80,6 @@ export class HomeComponent implements OnInit {
       );
   
     }else{
-      console.log('pase por aca')
       this._ticketService.getReqCountsTickets(this.token, this.identity['_id']).subscribe(
         response =>{
             if(!response.tickets){

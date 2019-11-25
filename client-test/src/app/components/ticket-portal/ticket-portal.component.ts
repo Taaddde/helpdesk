@@ -253,7 +253,6 @@ export class TicketPortalComponent implements OnInit {
             }else{
               this.tb.ticket = response.ticket._id;
               link = response.ticket._id;
-              console.log(this.tb.text)
               this._textblockService.add(this.token, this.tb).subscribe(
                 response =>{
                     if(!response.textblock){

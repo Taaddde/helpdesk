@@ -70,7 +70,6 @@ export class TypeSubtypeComponent implements OnInit {
               alert('Error en el servidor');
           }else{
             this.teams = response.teams;
-            console.log(this.teams);
           }
       },
       error =>{

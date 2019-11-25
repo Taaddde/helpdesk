@@ -41,7 +41,6 @@ export class ResponsesComponent implements OnInit {
               alert('Error en el servidor');
           }else{
             this.responses = response.responses;
-              console.log(this.responses)
           }
       },
       error =>{

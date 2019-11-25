@@ -93,9 +93,7 @@ export class TicketNewComponent implements OnInit {
   getRequesters(){
     this._userService.getListReq(this.token).subscribe(
       response =>{
-          if(!response.users){
-            console.log('Nada')
-          }else{
+          if(response.users){
             this.requesters = response.users;
             this.allRequesters = response.users;
           }
@@ -184,7 +182,6 @@ export class TicketNewComponent implements OnInit {
 
     if(this.ticket.priority == ''){
       this.ticket.priority = 'Normal';
-      console.log('Pase por aca')
     }
 
     if(this.ticket.agent == null){
@@ -272,7 +269,7 @@ export class TicketNewComponent implements OnInit {
                                 result =>{
                                 }, 
                                 error =>{
-                                    console.log('Error');
+                                    console.log(error);
                                 }
                             );
                         }

@@ -118,7 +118,6 @@ export class AppComponent implements OnInit {
 
         }else{
           this.identity = identity;
-          console.log(this.identity)
             // Crear elemento en el localstorage para tener el usuario en sesion
           //Como si fuera una session
           localStorage.setItem('identity', JSON.stringify(identity));

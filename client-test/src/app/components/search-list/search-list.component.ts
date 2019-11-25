@@ -104,7 +104,6 @@ export class SearchListComponent implements OnInit {
             this._router.navigate(['/home']);
           }else{
             this.teams = response.teams;
-            console.log(this.teams)
           }
       },
       error =>{

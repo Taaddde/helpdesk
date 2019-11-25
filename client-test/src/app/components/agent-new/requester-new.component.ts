@@ -43,17 +43,11 @@ export class RequesterNewComponent implements OnInit {
   }
 
   onSubmit(){
-
-    console.log(this.user)
-
       
     if(this.user.userName == ''){
       delete this.user.userName;
       delete this.user.password;
     }
-
-    console.log(this.user)
-
 
     this._userService.add(this.user).subscribe(
       response =>{
@@ -69,7 +63,6 @@ export class RequesterNewComponent implements OnInit {
                               this._router.navigate(['/agent']);
                           }, 
                           error =>{
-                              console.log('Error');
                           }
                       );
                   }

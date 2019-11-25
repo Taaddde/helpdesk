@@ -65,7 +65,6 @@ export class AgentNewComponent implements OnInit {
                               this._router.navigate(['/agent']);
                           }, 
                           error =>{
-                              console.log('Error');
                           }
                       );
                   }

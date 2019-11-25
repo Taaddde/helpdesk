@@ -66,7 +66,7 @@ export class TeamNewComponent implements OnInit {
                             this._router.navigate(['/team/edit',response.team._id]);
                           }, 
                           error =>{
-                              console.log('Error');
+                              console.log(error);
                           }
                       );
                   }
