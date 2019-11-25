@@ -11,10 +11,10 @@ var moment_tz = require('moment-timezone');
 
 function getTicket(req, res){
     var populateQuery = [
-        {path:'requester',select:['name','surname','image','email']},
-        {path:'agent',select:['name','surname','image']}, 
+        {path:'requester',select:['name','surname','image','email','receiveMail']},
+        {path:'agent',select:['name','surname','image','email','receiveMail']},
         {path:'team',select:['users','name','image'], populate:{path: 'users', model: 'User',select:['name','surname','image']}},
-        {path:'company'},
+        {path:'company',select:['name','email','image','mailSender']},
         {path:'subTypeTicket',select:['name','typeTicket'], populate:{path: 'typeTicket'}}
     ];
     var ticketId = req.params.id;
@@ -449,6 +449,7 @@ function getTickets(req, res){
     var populateQuery = [
         {path:'requester',select:['name','surname','image']},
         {path:'agent',select:['name','surname','image']}, 
+        {path:'company',select:['name','email','image','mailSender']}
     ];
 
     Ticket.find({}).sort('hashtag').populate(populateQuery).exec(function(err, tickets){
@@ -470,6 +471,7 @@ function getTicketsPaged(req, res){
     var populateQuery = [
         {path:'requester',select:['name','surname','image']},
         {path:'agent',select:['name','surname','image']}, 
+        {path:'company',select:['name','email','image','mailSender']}
     ];
 
     if(req.params.page){
@@ -519,6 +521,7 @@ function getReqTicketsPaged(req, res){
     var populateQuery = [
         {path:'requester',select:['name','surname','image']},
         {path:'agent',select:['name','surname','image']}, 
+        {path:'company',select:['name','email','image','mailSender']}
     ];
 
     if(req.params.page){
@@ -579,6 +582,7 @@ function getTicketsForName(req, res){
     var populateQuery = [
         {path:'requester',select:['name','surname','image']},
         {path:'agent',select:['name','surname','image']}, 
+        {path:'company',select:['name','email','image','mailSender']}
     ];
 
     var sub = req.params.sub;

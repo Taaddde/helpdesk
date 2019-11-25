@@ -208,7 +208,7 @@ function loginUser(req, res){
     var password = params.password;
     
     var populateQuery = [
-        {path:'company'},
+        {path:'company',select:['name','email','image','mailSender']}    
     ];
 
     User.findOne({userName: userName.toLowerCase()}, (err, user) => {

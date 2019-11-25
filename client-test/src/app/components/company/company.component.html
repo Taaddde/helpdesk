@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card-body">
-      <form name="my-form" #form="ngForm" (ngSubmit)="onSubmit()">
+      <form name="my-form-company" #form="ngForm" (ngSubmit)="onSubmit()">
           <div class="form-row">
               <div class="col-sm-5 col-md-5 col-lg-3 card-profile">
                 <img class="img-profile" *ngIf="company.image == 'null'" src="../../../assets/img/system/company-placeholder.png" />
@@ -17,6 +17,16 @@
                   </div>
                   <div class="form-group"><label>Email</label>
                     <input [readonly]="identity['role'] != 'ROLE_ADMIN'" type="text" #email="ngModel" name="email" [(ngModel)]="company.email" required class="form-control" placeholder="Ingresa aqui el email" required />
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" [disabled]="identity['role'] != 'ROLE_ADMIN'" type="checkbox" id="formCheck-1" #mailSender="ngModel" name="mailSender" [(ngModel)]="company.mailSender" />
+                    <label class="form-check-label" for="formCheck-1">
+                      Recibir notificaciones al correo electronico
+                    </label>
+                  </div>
+                  <hr />
+                  <div class="form-group" *ngIf="company.mailSender"><label>Contraseña</label>
+                    <input type="password" required [readonly]="identity['role'] != 'ROLE_ADMIN'" class="form-control" placeholder="Ingrese aqui la constraseña del correo electronico" #password="ngModel" name="password" [(ngModel)]="company.password" />
                   </div>
                   <hr />
               </div>

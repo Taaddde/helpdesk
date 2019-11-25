@@ -30,7 +30,7 @@ export class CompanyComponent implements OnInit {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
-    this.company = new Company('','','');
+    this.company = new Company('','','',false, '');
    }
 
   ngOnInit() {
@@ -54,6 +54,10 @@ export class CompanyComponent implements OnInit {
   }
 
   onSubmit(){
+
+    if(this.company.mailSender == false){
+      this.company.password = '';
+    }
 
     this._companyService.edit(this.token,this.identity['company']['_id'], this.company).subscribe(
       response =>{

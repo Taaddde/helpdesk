@@ -3,7 +3,7 @@
 var TypeTicket = require('../models/type_ticket');
 
 var populateQuery = [
-    {path:'company'},
+    {path:'company',select:['name','email','image','mailSender']}
 ]
 
 

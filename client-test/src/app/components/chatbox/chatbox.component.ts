@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
-import {Router, ActivatedRoute, Params} from '@angular/router'
 import {GLOBAL} from '../../services/global'
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-chatbox',
@@ -25,6 +25,7 @@ export class ChatboxComponent implements AfterViewInit {
    }
 
   ngOnInit(){
+    this.date = moment(this.date, "YYYY-MM-DD HH:mm").format("DD-MM-YYYY HH:mm")
   }
 
   ngAfterViewInit() {

@@ -29,6 +29,22 @@ export class ticketService{
                            .map(res => res.json());
     }
 
+    sendMail(token, name, ticket: Ticket, text, nameTo, mailTo, link:string){
+        var sub = 'Novedades en el ticket #'+ticket.numTicket+' - '+ticket.sub;
+        var txt = '<div style="position: relative;display: flex;flex-direction: column;min-width: 0;word-wrap: break-word;background-color: #fff;background-clip: border-box;border: 1px solid #e3e6f0;border-radius: .35rem;font-family: Nunito,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;"><div style="flex: 1 1 auto;padding: 1.25rem;"><h4 style="margin-bottom: .75rem;"><strong>¡Hola '+nameTo+'! Hay novedades en el ticket #'+ticket.numTicket+'</strong></h4><hr/><h6 style="color: #858796!important;margin-bottom: .5rem!important;margin-bottom: 0;margin-top: 9px;font-size: 1rem;margin-bottom: .5rem;font-weight: 400;line-height: 1.2;">'+name+'</h6><p class="card-text">'+text+'</p><hr /><a style="" href="'+link+'" role="button" >Ingresar al ticket</a></div></div>'
+    
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+        });
+
+        var params = {company:ticket.company['_id'], to:mailTo, sub:sub, txt:txt}
+ 
+        return this._http.post(this.url+'global/sendmail', params, {headers: headers})
+                            .map(res => res.json());
+ 
+    }
+
     edit(token, id:string, ticket: Ticket){
         let params = JSON.stringify(ticket);
         let headers = new Headers({

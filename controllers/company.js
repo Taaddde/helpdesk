@@ -1,6 +1,7 @@
 'use strict'
 
 var Company = require('../models/company');
+var bcrypt = require('bcrypt-nodejs');
 //Sistema de ficheros
 var fs = require('fs');
 var path = require('path');
@@ -36,9 +37,6 @@ function getCompany(req, res){
     });
 }
 
-
-
-
 function getCompaniesForName(req, res){
     var name = req.params.name;
 
@@ -54,7 +52,6 @@ function getCompaniesForName(req, res){
         }
     });
 }
-
 
 function saveCompany(req, res){
     var company = new Company();
@@ -76,7 +73,6 @@ function saveCompany(req, res){
         }
     });
 }
-
 
 function updateCompany(req, res){
     var companyId = req.params.id;

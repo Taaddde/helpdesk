@@ -18,6 +18,7 @@ function getAgentsInTeam(req, res){
 
     var populateQuery = [
         {path:'users', model:'User', select:['name','surname','image']},
+        {path:'company',select:['name','email','image','mailSender']}
     ];
 
     Team.findById(teamId, (err, team) =>{
@@ -87,6 +88,7 @@ function saveTeam(req, res){
 function getTeams(req, res){
     var populateQuery = [
         {path:'users', model:'User', select:['name','surname','image']},
+        {path:'company',select:['name','email','image','mailSender']}
     ];
 
     let company = req.params.company
@@ -110,6 +112,7 @@ function getTeams(req, res){
 function getTeamsForName(req, res){
     var populateQuery = [
         {path:'users', model:'User', select:['name','surname','image']},
+        {path:'company',select:['name','email','image','mailSender']}
     ];
 
     let company = req.params.company

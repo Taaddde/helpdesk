@@ -50,10 +50,9 @@ export class TicketGestionComponent implements OnInit {
     private _textblockService: textblockService,
     private _uploadService: uploadService,
     private _responseService: responseService,
-    private _companyService: companyService
+    private _companyService: companyService,
   ) {
     this.identity = this._userService.getIdentity();
-    console.log(this.identity)
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
 
@@ -269,11 +268,11 @@ export class TicketGestionComponent implements OnInit {
     });
   }
 
-
   selectHashtag(val){
     this.textblock.text = this.textblock.text + val;
     document.getElementById('editable').innerHTML = document.getElementById('editable').innerHTML + val;
   }
+
   selectAgent(val: string, name:string, surname:string){
     if(this.ticket.status != 'Pendiente'){
       this.ticket.agent = val;
@@ -446,7 +445,7 @@ export class TicketGestionComponent implements OnInit {
   }
 
   onSubmit(){
-    console.log(this.textblock);
+
     if(this.identity['role'] == 'ROLE_REQUESTER'){
       this.textblock.type = 'REQUEST'
     }else{
@@ -467,11 +466,43 @@ export class TicketGestionComponent implements OnInit {
           if(!response.textblock){
             console.log('Error en el chat');
           }else{
-              if(!this.filesToUpload){
-              }else{
-                  this._uploadService.makeFileRequest(this.url+'textblock/file/'+response.textblock._id, [], this.filesToUpload, this.token, 'file');
-              }
+            if(this.filesToUpload){
+                this._uploadService.makeFileRequest(this.url+'textblock/file/'+response.textblock._id, [], this.filesToUpload, this.token, 'file');
+            }
           }
+
+          let nameTo:string;
+          let mailTo:string;
+
+          if(this.ticket.company['mailSender'] == true){
+            if(this.identity['role'] != 'REQUESTER'){
+              if(this.ticket.requester['receiveMail'] == true){
+                nameTo = this.ticket.requester['name']+' '+this.ticket.requester['surname'];
+                mailTo = this.ticket.requester['email'];  
+              }
+            }else{
+              if(this.ticket.agent['receiveMail'] == true){
+                nameTo = this.ticket.agent['name']+' '+this.ticket.agent['surname'];
+                mailTo = this.ticket.agent['email'];
+              }
+            }
+  
+            if(nameTo){
+              let link:string = window.location.href;
+              let nameFrom:string = this.identity['name']+' '+this.identity['surname'];
+    
+              this._ticketService.sendMail(this.token, nameFrom, this.ticket, response.textblock.text, nameTo, mailTo, link).subscribe(
+                response =>{
+                },
+                error =>{
+                    console.log(error);
+                }
+              );
+            }
+  
+          }
+
+          
           this.editTicket()
           this.pushText(response.textblock._id) ;
           this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false);

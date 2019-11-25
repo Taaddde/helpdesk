@@ -1,9 +1,6 @@
 var nodemailer = require('nodemailer');
-var user = 'tr-soluciones@hotmail.com';
-var pass = 'tadeo20896';
-var from = 'TR HelpDesk <tr-soluciones@hotmail.com>';
 
-exports.send = function(to, sub, txt){
+exports.send = function(email, pass, to, sub, txt){
     var transporter = nodemailer.createTransport({
         host: "smtp-mail.outlook.com", // hostname
         secureConnection: false, // TLS requires secureConnection to be false
@@ -12,7 +9,7 @@ exports.send = function(to, sub, txt){
            ciphers:'SSLv3'
         },
         auth: {
-            user: user,
+            user: email,
             pass: pass,
         },
         tls: {
@@ -22,12 +19,11 @@ exports.send = function(to, sub, txt){
     
     // setup e-mail data, even with unicode symbols
     var mailOptions = {
-        from: from, // sender address (who sends)
+        from: email, // sender address (who sends)
         to: to, // list of receivers (who receives)
         subject: sub, // Subject line
         html: txt
     };
-    console.log(mailOptions)
     
     // send mail with defined transport object
     transporter.sendMail(mailOptions, function(error, info){

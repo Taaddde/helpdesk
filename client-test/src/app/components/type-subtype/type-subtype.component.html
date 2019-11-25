@@ -284,7 +284,7 @@
                   <button class="btn btn-light" type="button" (click)="cancelValidation()">
                     Cerrar
                   </button>
-                  <button class="btn btn-success" *ngIf="identity['role'] != 'ROLE_ADMIN'" type="button" (click)="saveSubtype()">
+                  <button class="btn btn-success" *ngIf="identity['role'] == 'ROLE_ADMIN'" type="button" (click)="saveSubtype()">
                     Guardar
                   </button>
                 </div>

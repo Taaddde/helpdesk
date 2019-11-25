@@ -60,7 +60,7 @@ function saveTextBlock(req, res){
     textblock.ticket = params.ticket;
     textblock.type = params.type;
     textblock.read = textblock.read;
-    textblock.createDate = moment().format("DD-MM-YYYY HH:mm");
+    textblock.createDate = moment().format("YYYY-MM-DD HH:mm");
 
     textblock.save((err, textblockStored) =>{
         if(err){

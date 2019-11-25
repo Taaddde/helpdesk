@@ -33,7 +33,7 @@
                         <input type="password" [readonly]="identity['role'] != 'ROLE_ADMIN' && !isUser" class="form-control" placeholder="Ingrese aqui una constraseña" #password="ngModel" name="password" [(ngModel)]="user.password" />
                     </div>
                     <div class="form-check" *ngIf="identity['role'] != 'ROLE_REQUESTER'"><input class="form-check-input" type="checkbox" [disabled]="identity['role'] != 'ROLE_ADMIN'" id="formCheck-1" name="isAdm" [(ngModel)]="isAdm" /><label class="form-check-label" for="formCheck-1">Es administrador</label></div>
-                    <div class="form-check"><input class="form-check-input" [disabled]="identity['role'] != 'ROLE_ADMIN' || !isUser" type="checkbox" id="formCheck-1" #receiveMail="ngModel" name="receiveMail" [(ngModel)]="user.receiveMail" /><label class="form-check-label" for="formCheck-1">Recibir notificaciones al correo electronico</label></div>
+                    <div class="form-check"><input class="form-check-input" [disabled]="identity['role'] != 'ROLE_ADMIN' && !isUser" type="checkbox" id="formCheck-1" #receiveMail="ngModel" name="receiveMail" [(ngModel)]="user.receiveMail" /><label class="form-check-label" for="formCheck-1">Recibir notificaciones al correo electronico</label></div>
                     
                 </div>
                 <div class="col card-profile">

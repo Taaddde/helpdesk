@@ -111,13 +111,20 @@ function sendMail(req, res){
     let to = req.body.to;
     let sub = req.body.sub;
     let txt = req.body.txt;
-    console.log(to, sub, txt)
-    if(mail.send(to, sub, txt)){
-        res.status(500).send({message: 'Error del servidor en la peticion'});
-    }else{
-        res.status(200).send({mail:true});
-    }
-    
+    let c = req.body.company;
+
+    Company.findById(c, (err, company) =>{
+        if(err){
+            res.status(500).send({message: 'Error del servidor en la peticion'});
+        }else{
+            if(!company){
+                res.status(404).send({message: 'La compañia no existe'});
+            }else{
+                mail.send(company.email, company.password, to, sub, txt)
+                res.status(200).send({mail:true});
+            }
+        }
+    });    
 }
 
 module.exports = {
