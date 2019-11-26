@@ -15,8 +15,5 @@ module.exports = createLogger({
             maxFiles: 5,
             filename: '${__dirname}/../logs/log',
         }),
-        new transports.Console({
-            level: 'debug',
-        })
     ]
 })

@@ -13,7 +13,7 @@ var path = require('path');
 
 
 function getTicket(req, res){
-    var functionName = 'controller';
+    var functionName = 'getTicket';
     var populateQuery = [
         {path:'requester',select:['name','surname','image','email','receiveMail']},
         {path:'agent',select:['name','surname','image','email','receiveMail']},
@@ -41,7 +41,7 @@ function getTicket(req, res){
 
 
 function getTicketsForUser(req, res){
-    var functionName = 'controller';
+    var functionName = 'getTicketsForUser';
     var userId = req.params.id;
 
     Ticket.find({$or: [{agent: userId}, {requester: userId}]}, (err, tickets) =>{
@@ -62,7 +62,7 @@ function getTicketsForUser(req, res){
 
 
 function getCountTickets(req, res){
-    var functionName = 'controller';
+    var functionName = 'getCountTickets';
 
     let userId = req.params.userId
     let company = req.params.company
@@ -99,7 +99,7 @@ function getCountTickets(req, res){
 }
 
 function getDateTickets(req, res){
-    var functionName = 'controller';
+    var functionName = 'getDateTickets';
     let userId = req.params.userId
 
     let query =[
@@ -135,7 +135,7 @@ function getDateTickets(req, res){
 
 
 function getCountReqTickets(req, res){
-    var functionName = 'controller';
+    var functionName = 'getCountReqTickets';
     let userId = req.params.userId
 
     let query =[
@@ -170,7 +170,7 @@ function getCountReqTickets(req, res){
 }
 
 function getUnreadTickets(req, res){
-    var functionName = 'controller';
+    var functionName = 'getUnreadTickets';
     let userId = req.params.userId;
     
     let query =[
@@ -258,7 +258,6 @@ function getUnreadTickets(req, res){
                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se encontro el elemento'});
             }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({textblocks:textblocks});                            
             }
         }
@@ -266,7 +265,7 @@ function getUnreadTickets(req, res){
 }
 
 function getUnreadTicketsReq(req, res){
-    var functionName = 'controller';
+    var functionName = 'getUnreadTicketsReq';
     let userId = req.params.userId;
     
     let query =[
@@ -354,7 +353,6 @@ function getUnreadTicketsReq(req, res){
                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se encontro el elemento'});
             }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({textblocks:textblocks});                            
             }
         }
@@ -363,7 +361,7 @@ function getUnreadTicketsReq(req, res){
 
 
 function getTicketReports(req, res){
-    var functionName = 'controller';
+    var functionName = 'getTicketReports';
     let company = req.params.company;
 
     let query =[
@@ -440,7 +438,7 @@ function getTicketReports(req, res){
 }
 
 function saveTicket(req, res){
-    var functionName = 'controller';
+    var functionName = 'saveTicket';
     var ticket = new Ticket();
     var c;
     var params = req.body;
@@ -480,7 +478,7 @@ function saveTicket(req, res){
 
 
 function getTickets(req, res){
-    var functionName = 'controller';
+    var functionName = 'getTickets';
     var populateQuery = [
         {path:'requester',select:['name','surname','image']},
         {path:'agent',select:['name','surname','image']}, 
@@ -506,7 +504,7 @@ function getTickets(req, res){
 }
 
 function getTicketsPaged(req, res){
-    var functionName = 'controller';
+    var functionName = 'getTicketsPaged';
     var populateQuery = [
         {path:'requester',select:['name','surname','image']},
         {path:'agent',select:['name','surname','image']}, 
@@ -560,7 +558,7 @@ function getTicketsPaged(req, res){
 }
 
 function getReqTicketsPaged(req, res){
-    var functionName = 'controller';
+    var functionName = 'getReqTicketsPaged';
     var populateQuery = [
         {path:'requester',select:['name','surname','image']},
         {path:'agent',select:['name','surname','image']}, 
@@ -607,7 +605,7 @@ function getReqTicketsPaged(req, res){
 
 
 function getTicketsForNumber(req, res){
-    var functionName = 'controller';
+    var functionName = 'getTicketsForNumber';
     var num = req.params.num;
     Ticket.findOne({numTicket:num}).exec(function(err, ticket){
         if(err){
@@ -629,7 +627,7 @@ function getTicketsForNumber(req, res){
 
 
 function getTicketsForName(req, res){
-    var functionName = 'controller';
+    var functionName = 'getTicketsForName';
     var populateQuery = [
         {path:'requester',select:['name','surname','image']},
         {path:'agent',select:['name','surname','image']}, 
@@ -659,7 +657,7 @@ function getTicketsForName(req, res){
 
 
 function updateTicket(req, res){
-    var functionName = 'controller';
+    var functionName = 'updateTicket';
     var ticketId = req.params.id;
     var update =  req.body;
 
@@ -682,7 +680,7 @@ function updateTicket(req, res){
 }
 
 function deleteTicket(req, res){
-    var functionName = 'controller';
+    var functionName = 'deleteTicket';
     var ticketId = req.params.id;
 
     Ticket.findByIdAndDelete(ticketId, (err, ticketRemoved) =>{

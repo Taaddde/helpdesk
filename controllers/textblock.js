@@ -13,7 +13,7 @@ var logger = require('../services/logger');
 
 
 function getTextBlock(req, res){
-    var functionName = 'controller';
+    var functionName = 'getTextBlock';
     var populateQuery = [
         {path:'user', select:['name','surname','image']},
     ];
@@ -37,7 +37,7 @@ function getTextBlock(req, res){
 }
 
 function getTextBlocks(req, res){
-    var functionName = 'controller';
+    var functionName = 'getTextBlocks';
     TextBlock.find({}, (err, textblocks) =>{
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
@@ -55,7 +55,7 @@ function getTextBlocks(req, res){
 }
 
 function saveTextBlock(req, res){
-    var functionName = 'controller';
+    var functionName = 'saveTextBlock';
     
 
     var textblock = new TextBlock();
@@ -86,7 +86,7 @@ function saveTextBlock(req, res){
 }
 
 function getTextBlockForText(req, res){
-    var functionName = 'controller';
+    var functionName = 'getTextBlockForText';
     var text = req.params.text;
     TextBlock.find({text: { "$regex": text, "$options": "i" }}).sort('createDate').exec(function(err, textblocks){
         if(err){
@@ -107,7 +107,7 @@ function getTextBlockForText(req, res){
 }
 
 function getTextBlockForTicket(req, res){
-    var functionName = 'controller';
+    var functionName = 'getTextBlockForTicket';
     var ticket = req.params.ticket;
     var type = req.params.type
     var query;
@@ -141,7 +141,7 @@ function getTextBlockForTicket(req, res){
 }
 
 function updateTextBlock(req, res){
-    var functionName = 'controller';
+    var functionName = 'updateTextBlock';
     var textblockId = req.params.id;
     var update =  req.body;
 
@@ -163,7 +163,7 @@ function updateTextBlock(req, res){
 }
 
 function readAgent(req, res){
-    var functionName = 'controller';
+    var functionName = 'readAgent';
     var ticketId = req.params.id;
     var update =  req.body;
 
@@ -185,7 +185,7 @@ function readAgent(req, res){
 }
 
 function readRequest(req, res){
-    var functionName = 'controller';
+    var functionName = 'readRequest';
     var ticketId = req.params.id;
     var update =  req.body;
 
@@ -208,7 +208,7 @@ function readRequest(req, res){
 
 
 function deletetextblock(req, res){
-    var functionName = 'controller';
+    var functionName = 'deletetextblock';
     var textblockId = req.params.id;
 
     TextBlock.findByIdAndDelete(textblockId, (err, textblockRemoved) =>{
@@ -228,7 +228,7 @@ function deletetextblock(req, res){
 }
 
 function uploadFile(req, res){
-    var functionName = 'controller';
+    var functionName = 'uploadFile';
     var tbId = req.params.id;
     var file_name = 'No subido';
 
@@ -268,7 +268,7 @@ function uploadFile(req, res){
 }
 
 function getFile(req, res){
-    var functionName = 'controller';
+    var functionName = 'getFile';
     var file = req.params.fileName;
     var pathFile = './uploads/attachs/'+file;
 

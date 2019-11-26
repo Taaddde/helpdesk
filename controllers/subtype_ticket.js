@@ -13,7 +13,7 @@ var populateQuery = [
 
 
 function getSubTypeTicket(req, res){
-    var functionName = 'controller';
+    var functionName = 'getSubTypeTicket';
     var subTypeTicketId = req.params.id;
 
     SubTypeTicket.findById(subTypeTicketId, (err, subTypeTicket) =>{
@@ -33,7 +33,7 @@ function getSubTypeTicket(req, res){
 }
 
 function saveSubTypeTicket(req, res){
-    var functionName = 'controller';
+    var functionName = 'saveSubTypeTicket';
     var subTypeTicket = new SubTypeTicket();
 
     var params = req.body;
@@ -76,7 +76,7 @@ function saveSubTypeTicket(req, res){
 
 
 function getSubTypeTickets(req, res){
-    var functionName = 'controller';
+    var functionName = 'getSubTypeTickets';
     var typeId = req.params.typeId;
 
     SubTypeTicket.find({typeTicket:typeId}).populate(populateQuery).sort('name').exec(function(err, subTypeTickets){
@@ -98,7 +98,7 @@ function getSubTypeTickets(req, res){
 }
 
 function getSubTypeTicketsForName(req, res){
-    var functionName = 'controller';
+    var functionName = 'getSubTypeTicketsForName';
     var name = req.params.name;
     var typeId = req.params.typeId;
     SubTypeTicket.find({name: { "$regex": name, "$options": "i" }, typeTicket:typeId}).populate(populateQuery).sort('name').exec(function(err, subTypeTickets){
@@ -120,7 +120,7 @@ function getSubTypeTicketsForName(req, res){
 }
 
 function addGoodCheck(req, res){
-    var functionName = 'controller';
+    var functionName = 'addGoodCheck';
     var subTypeTicketId = req.params.id;
     var update = {$inc: {goodChecks: 1}};
 
@@ -142,7 +142,7 @@ function addGoodCheck(req, res){
 }
 
 function addCheck(req, res){
-    var functionName = 'controller';
+    var functionName = 'addCheck';
     var subTypeTicketId = req.params.id;
     var update = {$push:{checks:req.body.check}}
 
@@ -164,7 +164,7 @@ function addCheck(req, res){
 }
 
 function updateSubTypeTicket(req, res){
-    var functionName = 'controller';
+    var functionName = 'updateSubTypeTicket';
     var subTypeTicketId = req.params.id;
     var update =  req.body;
 
@@ -186,7 +186,7 @@ function updateSubTypeTicket(req, res){
 }
 
 function deleteSubTypeTicket(req, res){
-    var functionName = 'controller';
+    var functionName = 'deleteSubTypeTicket';
     var subTypeTicketId = req.params.id;
 
     SubTypeTicket.findByIdAndDelete(subTypeTicketId, (err, subTypeTicketRemoved) =>{
@@ -206,7 +206,7 @@ function deleteSubTypeTicket(req, res){
 }
 
 function deleteCheck(req, res){
-    var functionName = 'controller';
+    var functionName = 'deleteCheck';
 
     var subTypeTicketId = req.params.id;
     var check = req.body.check;

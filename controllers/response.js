@@ -7,7 +7,7 @@ var path = require('path');
 
 function getResponse(req, res){
     var responseId = req.params.id;
-    var functionName = 'controller';
+    var functionName = 'getResponse';
 
     Response.findById(responseId, (err, response) =>{
         if(err){
@@ -26,7 +26,7 @@ function getResponse(req, res){
 }
 
 function saveResponse(req, res){
-    var functionName = 'controller';
+    var functionName = 'saveResponse';
     var response = new Response();
 
     var params = req.body;
@@ -53,7 +53,7 @@ function saveResponse(req, res){
 
 
 function getResponses(req, res){
-    var functionName = 'controller';
+    var functionName = 'getResponses';
     var userId = req.params.userId;
 
     Response.find({user:userId}).sort('hashtag').exec(function(err, responses){
@@ -75,7 +75,7 @@ function getResponses(req, res){
 }
 
 function getResponsesForName(req, res){
-    var functionName = 'controller';
+    var functionName = 'getResponsesForName';
     var hashtag = req.params.hashtag;
     Response.find({hashtag: { "$regex": hashtag, "$options": "i" }}).sort('hashtag').exec(function(err, responses){
         if(err){
@@ -96,7 +96,7 @@ function getResponsesForName(req, res){
 }
 
 function updateResponse(req, res){
-    var functionName = 'controller';
+    var functionName = 'updateResponse';
     var responseId = req.params.id;
     var update =  req.body;
 
@@ -118,7 +118,7 @@ function updateResponse(req, res){
 }
 
 function deleteResponse(req, res){
-    var functionName = 'controller';
+    var functionName = 'deleteResponse';
     var responseId = req.params.id;
 
     Response.findByIdAndDelete(responseId, (err, responseRemoved) =>{

@@ -11,7 +11,7 @@ var path = require('path');
 var logger = require('../services/logger');
 
 function getAgentsInTeam(req, res){
-    var functionName = 'controller';
+    var functionName = 'getAgentsInTeam';
     var teamId = req.params.id;
     var company = req.params.company;
 
@@ -49,7 +49,7 @@ function getAgentsInTeam(req, res){
 }
 
 function getTeam(req, res){
-    var functionName = 'controller';
+    var functionName = 'getTeam';
     var teamId = req.params.id;
 
     Team.findById(teamId, (err, team) =>{
@@ -69,7 +69,7 @@ function getTeam(req, res){
 }
 
 function saveTeam(req, res){
-    var functionName = 'controller';
+    var functionName = 'saveTeam';
     var team = new Team();
 
     var params = req.body;
@@ -98,7 +98,7 @@ function saveTeam(req, res){
 
 
 function getTeams(req, res){
-    var functionName = 'controller';
+    var functionName = 'getTeams';
     var populateQuery = [
         {path:'users', model:'User', select:['name','surname','image']},
         {path:'company',select:['name','email','image','mailSender']}
@@ -126,7 +126,7 @@ function getTeams(req, res){
 }
 
 function getTeamsForName(req, res){
-    var functionName = 'controller';
+    var functionName = 'getTeamsForName';
     var populateQuery = [
         {path:'users', model:'User', select:['name','surname','image']},
         {path:'company',select:['name','email','image','mailSender']}
@@ -155,7 +155,7 @@ function getTeamsForName(req, res){
 
 
 function updateTeam(req, res){
-    var functionName = 'controller';
+    var functionName = 'updateTeam';
     var teamId = req.params.id;
     var update =  req.body;
 
@@ -177,7 +177,7 @@ function updateTeam(req, res){
 }
 
 function deleteTeam(req, res){
-    var functionName = 'controller';
+    var functionName = 'deleteTeam';
     var teamId = req.params.id;
 
     Team.findByIdAndDelete(teamId, (err, teamRemoved) =>{
@@ -197,7 +197,7 @@ function deleteTeam(req, res){
 }
 
 function uploadImage(req, res){
-    var functionName = 'controller';
+    var functionName = 'uploadImage';
     var teamId = req.params.id;
     var file_name = 'No subido';
 
@@ -238,7 +238,7 @@ function uploadImage(req, res){
 }
 
 function getImageFile(req, res){
-    var functionName = 'controller';
+    var functionName = 'getImageFile';
     var imageFile = req.params.imageFile;
     var pathFile = './uploads/teams/'+imageFile;
 
@@ -254,7 +254,7 @@ function getImageFile(req, res){
 
 
 function addUser(req, res){
-    var functionName = 'controller';
+    var functionName = 'addUser';
     var teamId = req.params.id;
     var user = req.body.user;
 
@@ -308,7 +308,7 @@ function addUser(req, res){
 }
 
 function removeUser(req, res){
-    var functionName = 'controller';
+    var functionName = 'removeUser';
     var teamId = req.params.id;
     var user = req.body.user;
      

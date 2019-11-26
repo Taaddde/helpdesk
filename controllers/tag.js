@@ -7,7 +7,7 @@ var path = require('path');
 
 
 function getTag(req, res){
-    var functionName = 'controller';
+    var functionName = 'getTag';
     var tagId = req.params.id;
 
     Tag.findById(tagId, (err, tag) =>{
@@ -27,7 +27,7 @@ function getTag(req, res){
 }
 
 function saveTag(req, res){
-    var functionName = 'controller';
+    var functionName = 'consaveTagtroller';
     var tag = new Tag();
 
     var params = req.body;
@@ -52,7 +52,7 @@ function saveTag(req, res){
 
 
 function getTags(req, res){
-    var functionName = 'controller';
+    var functionName = 'getTags';
     Tag.find({}).sort('name').exec(function(err, tags){
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
@@ -72,7 +72,7 @@ function getTags(req, res){
 }
 
 function getTagsForName(req, res){
-    var functionName = 'controller';
+    var functionName = 'getTagsForName';
     var name = req.params.name;
     Tag.find({name: { "$regex": name, "$options": "i" }}).sort('name').exec(function(err, tags){
         if(err){
@@ -93,7 +93,7 @@ function getTagsForName(req, res){
 }
 
 function updateTag(req, res){
-    var functionName = 'controller';
+    var functionName = 'updateTag';
     var tagId = req.params.id;
     var update =  req.body;
 
@@ -115,7 +115,7 @@ function updateTag(req, res){
 }
 
 function deleteTag(req, res){
-    var functionName = 'controller';
+    var functionName = 'deleteTag';
     var tagId = req.params.id;
 
     Tag.findByIdAndDelete(tagId, (err, tagRemoved) =>{

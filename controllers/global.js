@@ -19,7 +19,7 @@ var path = require('path');
 
 
 function getCountSearch(req, res){
-    var functionName = 'controller';
+    var functionName = 'getCountSearch';
     var name = req.params.name;
     var company = req.params.company
 
@@ -120,7 +120,7 @@ function getCountSearch(req, res){
 }
 
 function sendMail(req, res){
-    var functionName = 'controller';
+    var functionName = 'sendMail';
     let to = req.body.to;
     let sub = req.body.sub;
     let txt = req.body.txt;

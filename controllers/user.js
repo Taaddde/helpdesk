@@ -25,7 +25,7 @@ function prueba(req, res){
 
 function saveUser(req, res){
     var user = new User();
-    var functionName = 'controller';
+    var functionName = 'saveUser';
 
 
     var params = req.body;
@@ -85,7 +85,7 @@ function saveUser(req, res){
 
 function updateUser(req, res){
     var userId = req.params.id;
-    var functionName = 'controller';
+    var functionName = 'updateUser';
 
 
     var update = req.body;
@@ -130,7 +130,7 @@ function updateUser(req, res){
 
 function getUser(req, res){
     var userId = req.params.id;
-    var functionName = 'controller';
+    var functionName = 'getUser';
 
 
     var populateQuery = [
@@ -155,7 +155,7 @@ function getUser(req, res){
 function getUsers(req, res){
     var role = req.params.role;
     var company = req.params.company;
-    var functionName = 'controller';
+    var functionName = 'getUsers';
 
 
     if(!role){
@@ -219,7 +219,7 @@ function getUsers(req, res){
 function getUsersForName(req, res){
     var name = req.params.name;
     var company = req.params.company;
-    var functionName = 'controller';
+    var functionName = 'getUsersForName';
 
     User.find({company:ObjectId(company),$or:[{name:{ "$regex": name, "$options": "i" }},{surname:{ "$regex": name, "$options": "i" }}]}).sort('name').exec(function(err, users){
         if(err){
@@ -242,7 +242,7 @@ function getUsersForName(req, res){
 
 function loginUser(req, res){
     var params = req.body;
-    var functionName = 'controller';
+    var functionName = 'loginUser';
 
     var userName = params.userName;
     var password = params.password;
@@ -287,7 +287,7 @@ function loginUser(req, res){
 function uploadImage(req, res){
     var userId = req.params.id;
     var file_name = 'No subido';
-    var functionName = 'controller';
+    var functionName = 'uploadImage';
 
 
     if(req.files){
@@ -329,7 +329,7 @@ function uploadImage(req, res){
 function getImageFile(req, res){
     var imageFile = req.params.imageFile;
     var pathFile = './uploads/users/'+imageFile;
-    var functionName = 'controller';
+    var functionName = 'getImageFile';
 
 
     fs.exists(pathFile, function(exists){
@@ -344,7 +344,7 @@ function getImageFile(req, res){
 
 function deleteUser(req, res){
     var userId = req.params.id;
-    var functionName = 'controller';
+    var functionName = 'deleteUser';
 
 
     User.findByIdAndDelete(userId, (err, userRemoved) =>{

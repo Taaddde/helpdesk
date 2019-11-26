@@ -11,7 +11,9 @@ var logger = require('../services/logger');
 
 function getCompanies(req, res){
 
-    var functionName = 'controller';
+    console.log()
+
+    var functionName = 'getCompanies';
 
     Company.find({}, (err, companies) =>{
         if(err){
@@ -31,7 +33,7 @@ function getCompanies(req, res){
 
 function getCompany(req, res){
 
-    var functionName = 'controller';
+    var functionName = 'getCompany';
 
     Company.findById(req.params.id, (err, company) =>{
         if(err){
@@ -51,7 +53,7 @@ function getCompany(req, res){
 
 function getCompaniesForName(req, res){
     var name = req.params.name;
-    var functionName = 'controller';
+    var functionName = 'getCompaniesForName';
 
     Company.find({name:{ "$regex": name, "$options": "i" }}, (err, companies) =>{
         if(err){
@@ -71,7 +73,7 @@ function getCompaniesForName(req, res){
 
 function saveCompany(req, res){
     var company = new Company();
-    var functionName = 'controller';
+    var functionName = 'saveCompany';
 
     var params = req.body;
 
@@ -97,7 +99,7 @@ function saveCompany(req, res){
 function updateCompany(req, res){
     var companyId = req.params.id;
     var update =  req.body;
-    var functionName = 'controller';
+    var functionName = 'updateCompany';
 
     //companyId = company buscado, update = datos nuevos a actualizar
     Company.findByIdAndUpdate(companyId, update, (err, companyUpdated) =>{
@@ -118,7 +120,7 @@ function updateCompany(req, res){
 
 function deleteCompany(req, res){
     var companyId = req.params.id;
-    var functionName = 'controller';
+    var functionName = 'deleteCompany';
 
     Company.findByIdAndDelete(companyId, (err, companyRemoved) =>{
         if(err){
@@ -139,7 +141,7 @@ function deleteCompany(req, res){
 function uploadImage(req, res){
     var companyId = req.params.id;
     var file_name = 'No subido';
-    var functionName = 'controller';
+    var functionName = 'uploadImage';
 
     if(req.files){
         var file_path = req.files.image.path;
@@ -180,7 +182,7 @@ function uploadImage(req, res){
 function getImageFile(req, res){
     var imageFile = req.params.imageFile;
     var pathFile = './uploads/companys/'+imageFile;
-    var functionName = 'controller';
+    var functionName = 'getImageFile';
 
     fs.exists(pathFile, function(exists){
         if(exists){

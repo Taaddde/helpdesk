@@ -12,7 +12,7 @@ var populateQuery = [
 
 function getTypeTicket(req, res){
     var typeTicketId = req.params.id;
-    var functionName = 'controller';
+    var functionName = 'getTypeTicket';
 
 
     TypeTicket.findById(typeTicketId, (err, typeTicket) =>{
@@ -32,7 +32,7 @@ function getTypeTicket(req, res){
 }
 
 function saveTypeTicket(req, res){
-    var functionName = 'controller';
+    var functionName = 'saveTypeTicket';
 
     var typeTicket = new TypeTicket();
 
@@ -60,7 +60,7 @@ function saveTypeTicket(req, res){
 
 function getTypeTickets(req, res){
     var company = req.params.company;
-    var functionName = 'controller';
+    var functionName = 'getTypeTickets';
 
 
     TypeTicket.find({company:company}).populate(populateQuery).sort('name').exec(function(err, typeTickets){
@@ -84,7 +84,7 @@ function getTypeTickets(req, res){
 function getTypeTicketsForName(req, res){
     var name = req.params.name;
     var company = req.params.company;
-    var functionName = 'controller';
+    var functionName = 'getTypeTicketsForName';
 
     TypeTicket.find({name: { "$regex": name, "$options": "i" }, company:company}).populate(populateQuery).sort('name').exec(function(err, typeTickets){
         if(err){
@@ -107,7 +107,7 @@ function getTypeTicketsForName(req, res){
 function updateTypeTicket(req, res){
     var typeTicketId = req.params.id;
     var update =  req.body;
-    var functionName = 'controller';
+    var functionName = 'updateTypeTicket';
 
 
     //typeTicketId = typeTicket buscado, update = datos nuevos a actualizar
@@ -129,7 +129,7 @@ function updateTypeTicket(req, res){
 
 function deletetypeTicket(req, res){
     var typeTicketId = req.params.id;
-    var functionName = 'controller';
+    var functionName = 'deletetypeTicket';
 
 
     TypeTicket.findByIdAndDelete(typeTicketId, (err, typeTicketRemoved) =>{
