@@ -1,5 +1,4 @@
 'use strict'
-
 var bcrypt = require('bcrypt-nodejs');
 var User = require('../models/user');
 var jwt = require('../services/jwt');
@@ -20,11 +19,14 @@ function prueba(req, res){
     var ip = req.ip;
      console.log(req.body, ip);
 
-    res.status(200).send({message:"Su solicitud fue realizada con éxito"})
+    logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud de '+req.params.id}});
+                res.status(200).send({message:"Su solicitud fue realizada con éxito"})
 }
 
 function saveUser(req, res){
     var user = new User();
+    var functionName = 'controller';
+
 
     var params = req.body;
 
@@ -47,12 +49,15 @@ function saveUser(req, res){
                 //Guardar user
                 user.save((err, userStore) => {
                     if(err){
-                        res.status(500).send({message:'Error en el servidor al guardar el usuario'});
+                        logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message:'Error en el servidor al guardar el usuario'});
                     }else{
                        if(!userStore){
-                        res.status(404).send({message:'No se ha encontrado el usuario'});
+                        logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                res.status(404).send({message:'No se ha encontrado el usuario'});
                        }else{
-                        res.status(200).send({user:userStore});
+                      logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({user:userStore});
                        }
                     }
                 });
@@ -63,11 +68,14 @@ function saveUser(req, res){
     }else{
         user.save((err, userStore) => {
             if(err){
+                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
                 res.status(500).send({message:'Error en el servidor al guardar el usuario'});
             }else{
                if(!userStore){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message:'No se ha encontrado el usuario'});
                }else{
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({user:userStore});
                }
             }
@@ -77,6 +85,8 @@ function saveUser(req, res){
 
 function updateUser(req, res){
     var userId = req.params.id;
+    var functionName = 'controller';
+
 
     var update = req.body;
 
@@ -87,12 +97,15 @@ function updateUser(req, res){
                 //Guardar user
                 User.findByIdAndUpdate(userId, update, (err, userUpdated) =>{
                     if(err){
-                        res.status(500).send({message: 'Error en el servidor al actualizar el usuario'});
+                        logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error en el servidor al actualizar el usuario'});
                     }else{
                         if(!userUpdated){
-                            res.status(404).send({message: 'No se ha podido encontrado el usuario'});
+                            logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                res.status(404).send({message: 'No se ha podido encontrado el usuario'});
                         }else{
-                            res.status(200).send({user: userUpdated});
+                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({user: userUpdated});
                         }
                     }
                 });
@@ -100,12 +113,15 @@ function updateUser(req, res){
     }else{
         User.findByIdAndUpdate(userId, update, (err, userUpdated) =>{
             if(err){
+                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
                 res.status(500).send({message: 'Error en el servidor al actualizar el usuario'});
             }else{
                 if(!userUpdated){
-                    res.status(404).send({message: 'No se ha podido encontrar el usuario'});
+                    logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                res.status(404).send({message: 'No se ha podido encontrar el usuario'});
                 }else{
-                    res.status(200).send({user: userUpdated,message: 'actualizado sin pasar por bcrypt'});
+                  logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({user: userUpdated,message: 'actualizado sin pasar por bcrypt'});
                 }
             }
         });
@@ -114,17 +130,22 @@ function updateUser(req, res){
 
 function getUser(req, res){
     var userId = req.params.id;
+    var functionName = 'controller';
+
 
     var populateQuery = [
         {path:'company'},
     ];
     User.findById(userId, (err, user) =>{
         if(err){
-            res.status(500).send({message: 'Error del servidor en la petición'});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la petición'});
         }else{
             if(!user){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado el usuario'});
             }else{
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({user:user});
             }
         }
@@ -134,16 +155,21 @@ function getUser(req, res){
 function getUsers(req, res){
     var role = req.params.role;
     var company = req.params.company;
+    var functionName = 'controller';
+
 
     if(!role){
         User.find({}).sort('name').exec(function(err, users){
             if(err){
+                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+getUsers.name, msg: req.ip+': '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
             }else{
                 if(!users){
-                    res.status(404).send({message: 'No hay usuarios'})
+                    logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+getUsers.name, msg: req.ip+': Objeto no encontrado'}});
+                res.status(404).send({message: 'No hay usuarios'})
                 }else{
-                    return res.status(200).send({
+                     logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+getUsers.name, msg: req.ip+': Solicitud de '+req.params.id}});
+                     return res.status(200).send({
                         users: users
                     });
                 }
@@ -153,12 +179,15 @@ function getUsers(req, res){
         if(role == 'ROLE_AGENT'){
             User.find({$or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}],company:company}).sort('name').exec(function(err, users){
                 if(err){
-                    res.status(500).send({message: 'Error del servidor en la peticion'})
+                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la peticion'})
                 }else{
                     if(!users){
-                        res.status(404).send({message: 'No hay usuarios'})
+                        logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                res.status(404).send({message: 'No hay usuarios'})
                     }else{
-                        return res.status(200).send({
+                                  logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({
                             users: users
                         });
                     }
@@ -167,12 +196,15 @@ function getUsers(req, res){
         }else{
             User.find({role:role}).sort('name').exec(function(err, users){
                 if(err){
-                    res.status(500).send({message: 'Error del servidor en la peticion'})
+                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la peticion'})
                 }else{
                     if(!users){
-                        res.status(404).send({message: 'No hay usuarios'})
+                        logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                res.status(404).send({message: 'No hay usuarios'})
                     }else{
-                        return res.status(200).send({
+                                  logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({
                             users: users
                         });
                     }
@@ -187,15 +219,19 @@ function getUsers(req, res){
 function getUsersForName(req, res){
     var name = req.params.name;
     var company = req.params.company;
+    var functionName = 'controller';
 
     User.find({company:ObjectId(company),$or:[{name:{ "$regex": name, "$options": "i" }},{surname:{ "$regex": name, "$options": "i" }}]}).sort('name').exec(function(err, users){
         if(err){
-            res.status(500).send({message: 'Error del servidor en la peticion'})
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la peticion'})
         }else{
             if(!users){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No hay usuarios'})
             }else{
-                return res.status(200).send({
+                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({
                     users: users
                 });
             }
@@ -206,6 +242,7 @@ function getUsersForName(req, res){
 
 function loginUser(req, res){
     var params = req.body;
+    var functionName = 'controller';
 
     var userName = params.userName;
     var password = params.password;
@@ -216,9 +253,11 @@ function loginUser(req, res){
 
     User.findOne({userName: userName.toLowerCase()}, (err, user) => {
         if(err){
-            res.status(500).send({message:'Error del servidor en la petición'});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message:'Error del servidor en la petición'});
         }else{
             if(!user){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message:'El usuario no existe'});
             }else{
                 //comprobar la pass
@@ -227,14 +266,17 @@ function loginUser(req, res){
                         //Devolver los datos del usuario logueado
                         if(params.gethash){
                             // devolver un token de jwt
-                            res.status(200).send({
+                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({
                                 token: jwt.createToken(user)
                             });
                         }else{
-                            res.status(200).send({user})
+                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({user})
                         }
                     }else{
-                        res.status(404).send({message:'Usuario/contraseña incorrecta'});
+                        logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                res.status(404).send({message:'Usuario/contraseña incorrecta'});
                     }
                 });
             }
@@ -245,6 +287,8 @@ function loginUser(req, res){
 function uploadImage(req, res){
     var userId = req.params.id;
     var file_name = 'No subido';
+    var functionName = 'controller';
+
 
     if(req.files){
         var file_path = req.files.image.path;
@@ -258,48 +302,61 @@ function uploadImage(req, res){
 
             User.findByIdAndUpdate(userId, {image: file_name}, (err, userUpdated) =>{
                 if(err){
-                    res.status(500).send({message: 'Error al actualizar el usuario'});
+                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error al actualizar el usuario'});
                 }else{
                     if(!userUpdated){
-                        res.status(404).send({message: 'No se ha podido actualizar el usuario'});
+                        logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                res.status(404).send({message: 'No se ha podido actualizar el usuario'});
                     }else{
-                        res.status(200).send({image: file_name, user: userUpdated});
+                      logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({image: file_name, user: userUpdated});
                     }
                 }
             });
         }else{
-            res.status(200).send({message: 'Extension de archivo no valido'});
+                      logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({message: 'Extension de archivo no valido'});
         }
 
         console.log(ext_split);
     }else{
-        res.status(200).send({message: 'No ha subido ninguna imagen'});
+        logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud de '+req.params.id}});
+                res.status(200).send({message: 'No ha subido ninguna imagen'});
     }
 }
 
 function getImageFile(req, res){
     var imageFile = req.params.imageFile;
     var pathFile = './uploads/users/'+imageFile;
+    var functionName = 'controller';
+
 
     fs.exists(pathFile, function(exists){
         if(exists){
             res.sendFile(path.resolve(pathFile));
         }else{
-            res.status(200).send({message: 'No existe la imagen...'});
+                      logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({message: 'No existe la imagen...'});
         }
     });
 }
 
 function deleteUser(req, res){
     var userId = req.params.id;
+    var functionName = 'controller';
+
 
     User.findByIdAndDelete(userId, (err, userRemoved) =>{
         if(err){
-            res.status(500).send({message: 'Error del servidor en la petición'});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la petición'});
         }else{
             if(!userRemoved){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado el usuario'});
             }else{
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({user:userRemoved})
             }
         }

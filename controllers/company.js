@@ -1,4 +1,3 @@
-'use strict'
 
 var Company = require('../models/company');
 var bcrypt = require('bcrypt-nodejs');
@@ -12,14 +11,18 @@ var logger = require('../services/logger');
 
 function getCompanies(req, res){
 
+    var functionName = 'controller';
+
     Company.find({}, (err, companies) =>{
         if(err){
-            logger.error({message:{module:'getCompanies', msg: req.ips+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
             res.status(500).send({message: 'Error del servidor en la peticion'});
         }else{
             if(!companies){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'La compañia no existe'});
             }else{
+                logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({companies:companies});
             }
         }
@@ -28,16 +31,18 @@ function getCompanies(req, res){
 
 function getCompany(req, res){
 
+    var functionName = 'controller';
+
     Company.findById(req.params.id, (err, company) =>{
         if(err){
-            logger.error({message:{module:'getCompany', msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
             res.status(500).send({message: 'Error del servidor en la peticion'});
         }else{
             if(!company){
-                logger.warn({message:{module:'getCompany', msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'La compañia no existe'});
             }else{
-                logger.info({message:{module:'getCompany', msg: req.ip+': Solicitud de '+req.params.id}});
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({company:company});
             }
         }
@@ -46,15 +51,18 @@ function getCompany(req, res){
 
 function getCompaniesForName(req, res){
     var name = req.params.name;
+    var functionName = 'controller';
 
     Company.find({name:{ "$regex": name, "$options": "i" }}, (err, companies) =>{
         if(err){
-            logger.error({message:{module:'getCompany', msg: req.ip+': '+err}});
-            res.status(500).send({message: 'Error del servidor en la peticion'});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la peticion'});
         }else{
             if(!companies){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'La compañia no existe'});
             }else{
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({companies:companies});
             }
         }
@@ -63,6 +71,7 @@ function getCompaniesForName(req, res){
 
 function saveCompany(req, res){
     var company = new Company();
+    var functionName = 'controller';
 
     var params = req.body;
 
@@ -71,12 +80,14 @@ function saveCompany(req, res){
 
     company.save((err, companyStored) =>{
         if(err){
-            logger.error({message:{module:'getCompany', msg: req.ip+': '+err}});
-            res.status(500).send({message: 'Error del servidor en la petición'})
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la petición'})
         }else{
             if(!companyStored){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'La compañia no ha sido guardado'})
             }else{
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({company:companyStored})
             }
         }
@@ -86,17 +97,19 @@ function saveCompany(req, res){
 function updateCompany(req, res){
     var companyId = req.params.id;
     var update =  req.body;
+    var functionName = 'controller';
 
     //companyId = company buscado, update = datos nuevos a actualizar
     Company.findByIdAndUpdate(companyId, update, (err, companyUpdated) =>{
         if(err){
-            logger.error({message:{module:'getCompany', msg: req.ip+': '+err}});
-            res.status(500).send({message: 'Error del servidor en la petición'});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la petición'});
         }else{
             if(!companyUpdated){
-                logger.error({message:{module:'getCompany', msg: req.ip+': '+err}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado La compañia'});
             }else{
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({company:companyUpdated});
             }
         }
@@ -105,16 +118,18 @@ function updateCompany(req, res){
 
 function deleteCompany(req, res){
     var companyId = req.params.id;
+    var functionName = 'controller';
 
     Company.findByIdAndDelete(companyId, (err, companyRemoved) =>{
         if(err){
-            logger.error({message:{module:'getCompany', msg: req.ip+': '+err}});
-            res.status(500).send({message: 'Error en la petición'});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error en la petición'});
         }else{
             if(!companyRemoved){
-                logger.error({message:{module:'getCompany', msg: req.ip+': '+err}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado La compañia'});
             }else{
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({company: companyRemoved});
             }
         }
@@ -124,6 +139,7 @@ function deleteCompany(req, res){
 function uploadImage(req, res){
     var companyId = req.params.id;
     var file_name = 'No subido';
+    var functionName = 'controller';
 
     if(req.files){
         var file_path = req.files.image.path;
@@ -137,34 +153,40 @@ function uploadImage(req, res){
 
             Company.findByIdAndUpdate(companyId, {image: file_name}, (err, companyUpdated) =>{
                 if(err){
-                    logger.error({message:{module:'getCompany', msg: req.ip+': '+err}});
-                    res.status(500).send({message: 'Error al actualizar el usuario'});
+                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error al actualizar el usuario'});
                 }else{
                     if(!companyUpdated){
-                        res.status(404).send({message: 'No se ha podido actualizar el usuario'});
+                        logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                res.status(404).send({message: 'No se ha podido actualizar el usuario'});
                     }else{
-                        res.status(200).send({image: file_name, company: companyUpdated});
+                      logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({image: file_name, company: companyUpdated});
                     }
                 }
             });
         }else{
-            res.status(200).send({message: 'Extension de archivo no valido'});
+                      logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({message: 'Extension de archivo no valido'});
         }
 
         console.log(ext_split);
     }else{
-        res.status(200).send({message: 'No ha subido ninguna imagen'});
+        logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud de '+req.params.id}});
+                res.status(200).send({message: 'No ha subido ninguna imagen'});
     }
 }
 
 function getImageFile(req, res){
     var imageFile = req.params.imageFile;
     var pathFile = './uploads/companys/'+imageFile;
+    var functionName = 'controller';
 
     fs.exists(pathFile, function(exists){
         if(exists){
             res.sendFile(path.resolve(pathFile));
         }else{
+                      logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
             res.status(200).send({message: 'No existe la imagen...'});
         }
     });

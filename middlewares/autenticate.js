@@ -19,7 +19,8 @@ exports.ensureAuth = function(req, res, next){
         }
     }catch(ex){
         console.log(ex);
-        return res.status(404).send({message: 'Token no valido'});
+        return logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                res.status(404).send({message: 'Token no valido'});
     }
 
     req.user = payload;

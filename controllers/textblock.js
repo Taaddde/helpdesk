@@ -1,5 +1,4 @@
 'use strict'
-
 var TextBlock = require('../models/textblock');
 var moment = require('moment');
 //Sistema de ficheros
@@ -14,7 +13,7 @@ var logger = require('../services/logger');
 
 
 function getTextBlock(req, res){
-
+    var functionName = 'controller';
     var populateQuery = [
         {path:'user', select:['name','surname','image']},
     ];
@@ -23,11 +22,14 @@ function getTextBlock(req, res){
 
     TextBlock.findById(textblockId, (err, textblock) =>{
         if(err){
-            res.status(500).send({message: 'Error del servidor en la peticion'});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la peticion'});
         }else{
             if(!textblock){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'El bloque de texto no existe'});
             }else{
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({textblock});
             }
         }
@@ -35,14 +37,17 @@ function getTextBlock(req, res){
 }
 
 function getTextBlocks(req, res){
-
+    var functionName = 'controller';
     TextBlock.find({}, (err, textblocks) =>{
         if(err){
-            res.status(500).send({message: 'Error del servidor en la peticion'});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la peticion'});
         }else{
             if(!textblocks){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'El bloque de texto no existe'});
             }else{
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({textblocks});
             }
         }
@@ -50,7 +55,7 @@ function getTextBlocks(req, res){
 }
 
 function saveTextBlock(req, res){
-
+    var functionName = 'controller';
     
 
     var textblock = new TextBlock();
@@ -66,11 +71,14 @@ function saveTextBlock(req, res){
 
     textblock.save((err, textblockStored) =>{
         if(err){
-            res.status(500).send({message: 'Error del servidor en la petición'})
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la petición'})
         }else{
             if(!textblockStored){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'El bloque de texto no ha sido guardado'})
             }else{
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({textblock:textblockStored})
             }
         }
@@ -78,15 +86,19 @@ function saveTextBlock(req, res){
 }
 
 function getTextBlockForText(req, res){
+    var functionName = 'controller';
     var text = req.params.text;
     TextBlock.find({text: { "$regex": text, "$options": "i" }}).sort('createDate').exec(function(err, textblocks){
         if(err){
-            res.status(500).send({message: 'Error del servidor en la peticion'})
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la peticion'})
         }else{
             if(!textblocks){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No hay bloque de textos'})
             }else{
-                return res.status(200).send({
+                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({
                     textblocks: textblocks
                 });
             }
@@ -95,6 +107,7 @@ function getTextBlockForText(req, res){
 }
 
 function getTextBlockForTicket(req, res){
+    var functionName = 'controller';
     var ticket = req.params.ticket;
     var type = req.params.type
     var query;
@@ -111,12 +124,15 @@ function getTextBlockForTicket(req, res){
 
     TextBlock.find(query).populate(populateQuery).sort('createDate').exec(function(err, textblocks){
         if(err){
-            res.status(500).send({message: 'Error del servidor en la peticion'})
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la peticion'})
         }else{
             if(!textblocks){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No hay bloque de textos'})
             }else{
-                return res.status(200).send({
+                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({
                     textblocks: textblocks
                 });
             }
@@ -125,17 +141,21 @@ function getTextBlockForTicket(req, res){
 }
 
 function updateTextBlock(req, res){
+    var functionName = 'controller';
     var textblockId = req.params.id;
     var update =  req.body;
 
     //textblockId = textblock buscado, update = datos nuevos a actualizar
     TextBlock.findByIdAndUpdate(textblockId, update, (err, textblockUpdated) =>{
         if(err){
-            res.status(500).send({message: 'Error del servidor en la petición'});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la petición'});
         }else{
             if(!textblockUpdated){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado El bloque de texto'});
             }else{
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({textblock:textblockUpdated});
             }
         }
@@ -143,17 +163,21 @@ function updateTextBlock(req, res){
 }
 
 function readAgent(req, res){
+    var functionName = 'controller';
     var ticketId = req.params.id;
     var update =  req.body;
 
     //textblockId = textblock buscado, update = datos nuevos a actualizar
     TextBlock.updateMany({ticket:ObjectId(ticketId), type:'REQUEST'}, update, (err, textblockUpdated) =>{
         if(err){
-            res.status(500).send({message: 'Error del servidor en la petición'});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la petición'});
         }else{
             if(!textblockUpdated){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado El bloque de texto'});
             }else{
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({textblock:textblockUpdated});
             }
         }
@@ -161,17 +185,21 @@ function readAgent(req, res){
 }
 
 function readRequest(req, res){
+    var functionName = 'controller';
     var ticketId = req.params.id;
     var update =  req.body;
 
     //textblockId = textblock buscado, update = datos nuevos a actualizar
     TextBlock.updateMany({ticket:ObjectId(ticketId), type:'PUBLIC'}, update, (err, textblockUpdated) =>{
         if(err){
-            res.status(500).send({message: 'Error del servidor en la petición'});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la petición'});
         }else{
             if(!textblockUpdated){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado El bloque de texto'});
             }else{
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({textblock:textblockUpdated});
             }
         }
@@ -180,15 +208,19 @@ function readRequest(req, res){
 
 
 function deletetextblock(req, res){
+    var functionName = 'controller';
     var textblockId = req.params.id;
 
     TextBlock.findByIdAndDelete(textblockId, (err, textblockRemoved) =>{
         if(err){
-            res.status(500).send({message: 'Error en la petición'});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error en la petición'});
         }else{
             if(!textblockRemoved){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado El bloque de texto'});
             }else{
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({textblock: textblockRemoved});
             }
         }
@@ -196,6 +228,7 @@ function deletetextblock(req, res){
 }
 
 function uploadFile(req, res){
+    var functionName = 'controller';
     var tbId = req.params.id;
     var file_name = 'No subido';
 
@@ -210,26 +243,32 @@ function uploadFile(req, res){
 
             TextBlock.findByIdAndUpdate(tbId, {$push: {files: file_name}}, (err, textblockUpdated) =>{
                 if(err){
-                    res.status(500).send({message: 'Error al actualizar el usuario'});
+                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error al actualizar el usuario'});
                 }else{
                     if(!textblockUpdated){
-                        res.status(404).send({message: 'No se ha podido actualizar el usuario'});
+                        logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                res.status(404).send({message: 'No se ha podido actualizar el usuario'});
                     }else{
-                        res.status(200).send({order: textblockUpdated});
+                      logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({order: textblockUpdated});
                     }
                 }
             });
         }else{
-            res.status(200).send({message: 'Extension de archivo no valido'});
+                      logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({message: 'Extension de archivo no valido'});
         }
 
         console.log(ext_split);
     }else{
-        res.status(200).send({message: 'No ha subido ninguna imagen'});
+        logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud de '+req.params.id}});
+                res.status(200).send({message: 'No ha subido ninguna imagen'});
     }
 }
 
 function getFile(req, res){
+    var functionName = 'controller';
     var file = req.params.fileName;
     var pathFile = './uploads/attachs/'+file;
 
@@ -237,7 +276,8 @@ function getFile(req, res){
         if(exists){
             res.sendFile(path.resolve(pathFile));
         }else{
-            res.status(200).send({message: 'No existe el archivo...'});
+                      logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({message: 'No existe el archivo...'});
         }
     });
 }

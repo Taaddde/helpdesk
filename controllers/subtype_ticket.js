@@ -1,9 +1,10 @@
-'use strict'
 
 var SubTypeTicket = require('../models/subtype_ticket');
 
 //Sistema de log
 var logger = require('../services/logger');
+var path = require('path');
+
 
 var populateQuery = [
     {path:'team', select:['_id','name', 'image']},
@@ -12,15 +13,19 @@ var populateQuery = [
 
 
 function getSubTypeTicket(req, res){
+    var functionName = 'controller';
     var subTypeTicketId = req.params.id;
 
     SubTypeTicket.findById(subTypeTicketId, (err, subTypeTicket) =>{
         if(err){
-            res.status(500).send({message: 'Error del servidor en la peticion'});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la peticion'});
         }else{
             if(!subTypeTicket){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'El sub tipo de solicitud no existe'});
             }else{
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({subTypeTicket});
             }
         }
@@ -28,6 +33,7 @@ function getSubTypeTicket(req, res){
 }
 
 function saveSubTypeTicket(req, res){
+    var functionName = 'controller';
     var subTypeTicket = new SubTypeTicket();
 
     var params = req.body;
@@ -54,11 +60,14 @@ function saveSubTypeTicket(req, res){
 
     subTypeTicket.save((err, subTypeTicketStored) =>{
         if(err){
-            res.status(500).send({message: 'Error del servidor en la petición'})
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la petición'})
         }else{
             if(!subTypeTicketStored){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'el subtipo no ha sido guardado'})
             }else{
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({subTypeTicket:subTypeTicketStored})
             }
         }
@@ -67,16 +76,20 @@ function saveSubTypeTicket(req, res){
 
 
 function getSubTypeTickets(req, res){
+    var functionName = 'controller';
     var typeId = req.params.typeId;
 
     SubTypeTicket.find({typeTicket:typeId}).populate(populateQuery).sort('name').exec(function(err, subTypeTickets){
         if(err){
-            res.status(500).send({message: 'Error del servidor en la peticion'})
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la peticion'})
         }else{
             if(!subTypeTickets){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No hay respuestas'})
             }else{
-                return res.status(200).send({
+                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({
                     subTypeTickets: subTypeTickets
                 });
             }
@@ -85,16 +98,20 @@ function getSubTypeTickets(req, res){
 }
 
 function getSubTypeTicketsForName(req, res){
+    var functionName = 'controller';
     var name = req.params.name;
     var typeId = req.params.typeId;
     SubTypeTicket.find({name: { "$regex": name, "$options": "i" }, typeTicket:typeId}).populate(populateQuery).sort('name').exec(function(err, subTypeTickets){
         if(err){
-            res.status(500).send({message: 'Error del servidor en la peticion'})
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la peticion'})
         }else{
             if(!subTypeTickets){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No hay respuestas'})
             }else{
-                return res.status(200).send({
+                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({
                     subTypeTickets: subTypeTickets
                 });
             }
@@ -103,17 +120,21 @@ function getSubTypeTicketsForName(req, res){
 }
 
 function addGoodCheck(req, res){
+    var functionName = 'controller';
     var subTypeTicketId = req.params.id;
     var update = {$inc: {goodChecks: 1}};
 
     //subTypeTicketId = subTypeTicket buscado, update = datos nuevos a actualizar
     SubTypeTicket.findByIdAndUpdate(subTypeTicketId, update, (err, subTypeTicketUpdated) =>{
         if(err){
-            res.status(500).send({message: 'Error del servidor en la petición'});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la petición'});
         }else{
             if(!subTypeTicketUpdated){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado el subtipo'});
             }else{
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({subTypeTicket:subTypeTicketUpdated});
             }
         }
@@ -121,16 +142,20 @@ function addGoodCheck(req, res){
 }
 
 function addCheck(req, res){
+    var functionName = 'controller';
     var subTypeTicketId = req.params.id;
     var update = {$push:{checks:req.body.check}}
 
     SubTypeTicket.findByIdAndUpdate(subTypeTicketId, update, (err, subTypeTicketUpdated) =>{
         if(err){
-            res.status(500).send({message: 'Error del servidor en la petición'});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la petición'});
         }else{
             if(!subTypeTicketUpdated){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado el subtipo'});
             }else{
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({subTypeTicket:subTypeTicketUpdated});
             }
         }
@@ -139,17 +164,21 @@ function addCheck(req, res){
 }
 
 function updateSubTypeTicket(req, res){
+    var functionName = 'controller';
     var subTypeTicketId = req.params.id;
     var update =  req.body;
 
     //subTypeTicketId = subTypeTicket buscado, update = datos nuevos a actualizar
     SubTypeTicket.findByIdAndUpdate(subTypeTicketId, update, (err, subTypeTicketUpdated) =>{
         if(err){
-            res.status(500).send({message: 'Error del servidor en la petición'});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la petición'});
         }else{
             if(!subTypeTicketUpdated){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado el subtipo'});
             }else{
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({subTypeTicket:subTypeTicketUpdated});
             }
         }
@@ -157,15 +186,19 @@ function updateSubTypeTicket(req, res){
 }
 
 function deleteSubTypeTicket(req, res){
+    var functionName = 'controller';
     var subTypeTicketId = req.params.id;
 
     SubTypeTicket.findByIdAndDelete(subTypeTicketId, (err, subTypeTicketRemoved) =>{
         if(err){
-            res.status(500).send({message: 'Error en la petición'});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error en la petición'});
         }else{
             if(!subTypeTicketRemoved){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado el subtipo'});
             }else{
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({subTypeTicket: subTypeTicketRemoved});
             }
         }
@@ -173,17 +206,21 @@ function deleteSubTypeTicket(req, res){
 }
 
 function deleteCheck(req, res){
+    var functionName = 'controller';
 
     var subTypeTicketId = req.params.id;
     var check = req.body.check;
 
     SubTypeTicket.findByIdAndUpdate(subTypeTicketId,{$pull: {checks:check}}, (err, checkRemoved) =>{
         if(err){
-            res.status(500).send({message: 'Error en la petición'});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error en la petición'});
         }else{
             if(!checkRemoved){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado el subtipo'});
             }else{
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({check: checkRemoved});
             }
         }

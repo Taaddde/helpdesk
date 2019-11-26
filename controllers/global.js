@@ -19,7 +19,7 @@ var path = require('path');
 
 
 function getCountSearch(req, res){
-
+    var functionName = 'controller';
     var name = req.params.name;
     var company = req.params.company
 
@@ -69,33 +69,42 @@ function getCountSearch(req, res){
 
     Company.aggregate(companyQuery, (err, companies) =>{
         if(err){
-            res.status(500).send({message: 'Error del servidor en la peticion', err:err});
+                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la peticion', err:err});
         }else{
             if(!companies){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'El departamento no existe'});
             }else{
                 User.aggregate(userQuery, (err, users) =>{
                     if(err){
-                        res.status(500).send({message: 'Error del servidor en la peticion', err:err});
+                        logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la peticion', err:err});
                     }else{
                         if(!users){
-                            res.status(404).send({message: 'El usuario no existe'});
+                            logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                res.status(404).send({message: 'El usuario no existe'});
                         }else{
                             Ticket.aggregate(ticketQuery, (err, tickets) =>{
                                 if(err){
-                                    res.status(500).send({message: 'Error del servidor en la peticion', err:err});
+                                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la peticion', err:err});
                                 }else{
                                     if(!tickets){
-                                        res.status(404).send({message: 'El departamento no existe'});
+                                        logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                res.status(404).send({message: 'El departamento no existe'});
                                     }else{
                                         Team.aggregate(teamQuery, (err, teams) =>{
                                             if(err){
-                                                res.status(500).send({message: 'Error del servidor en la peticion', err:err});
+                                                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la peticion', err:err});
                                             }else{
                                                 if(!teams){
-                                                    res.status(404).send({message: 'El departamento no existe'});
+                                                    logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                res.status(404).send({message: 'El departamento no existe'});
                                                 }else{
-                                                    res.status(200).send({companies:companies[0], users:users[0], tickets:tickets[0], teams:teams[0]});
+                                                  logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({companies:companies[0], users:users[0], tickets:tickets[0], teams:teams[0]});
                                                 }
                                             }
                                         });
@@ -111,6 +120,7 @@ function getCountSearch(req, res){
 }
 
 function sendMail(req, res){
+    var functionName = 'controller';
     let to = req.body.to;
     let sub = req.body.sub;
     let txt = req.body.txt;
@@ -118,9 +128,11 @@ function sendMail(req, res){
 
     Company.findById(c, (err, company) =>{
         if(err){
-            res.status(500).send({message: 'Error del servidor en la peticion'});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                res.status(500).send({message: 'Error del servidor en la peticion'});
         }else{
             if(!company){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'La compañia no existe'});
             }else{
                 mail.send(company.email, company.password, to, sub, txt)
