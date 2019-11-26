@@ -42,93 +42,163 @@ function saveUser(req, res){
     user.company = params.company;
     user.receiveMail = params.receiveMail;
 
-    if(params.password){
-        //encriptar y guardar
-        bcrypt.hash(params.password, null, null, function(err, hash){
-            
-            if(user.name != null && user.surname != null && user.userName != null && user.email != null){
-                user.password = hash;
-                //Guardar user
-                user.save((err, userStore) => {
-                    if(err){
-                        logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
-                res.status(500).send({message:'Error en el servidor al guardar el usuario'});
-                    }else{
-                       if(!userStore){
-                        logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
-                res.status(404).send({message:'No se ha encontrado el usuario'});
-                       }else{
-                      logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
-                res.status(200).send({user:userStore});
-                       }
-                    }
-                });
+    User.findOne({userName:user.userName}, (err, userCheck) =>{
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
+            res.status(500).send({message: 'Error en el servidor al actualizar el usuario'});
+        }else{
+            if(!userCheck){
+                if(params.password){
+                    //encriptar y guardar
+                    bcrypt.hash(params.password, null, null, function(err, hash){
+                        
+                        if(user.name != null && user.surname != null && user.userName != null && user.email != null){
+                            user.password = hash;
+                            //Guardar user
+                            user.save((err, userStore) => {
+                                if(err){
+                                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
+                                    res.status(500).send({message:'Error en el servidor al guardar el usuario'});
+                                }else{
+                                   if(!userStore){
+                                    logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
+                                    res.status(404).send({message:'No se ha encontrado el usuario'});
+                                   }else{
+                                  logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                                    res.status(200).send({user:userStore});
+                                   }
+                                }
+                            });
+                        }else{
+                            res.status(400).send({message:'Rellena los campos'});
+                        }
+                    });
+                }else{
+                    user.save((err, userStore) => {
+                        if(err){
+                            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
+                            res.status(500).send({message:'Error en el servidor al guardar el usuario'});
+                        }else{
+                           if(!userStore){
+                            logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
+                            res.status(404).send({message:'No se ha encontrado el usuario'});
+                           }else{
+                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                            res.status(200).send({user:userStore});
+                           }
+                        }
+                    });
+                }            
             }else{
-                res.status(400).send({message:'Rellena los campos'});
+                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Nombre de usuario no disponible'}});
+                res.status(400).send({message: 'Nombre de usuario no disponible'});
             }
-        });
-    }else{
-        user.save((err, userStore) => {
-            if(err){
-                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
-                res.status(500).send({message:'Error en el servidor al guardar el usuario'});
-            }else{
-               if(!userStore){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
-                res.status(404).send({message:'No se ha encontrado el usuario'});
-               }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
-                res.status(200).send({user:userStore});
-               }
-            }
-        });
-    }
+        }
+    });
 }
 
 function updateUser(req, res){
 var decoded = jwt_decode(req.headers.authorization);
     var userId = req.params.id;
     var functionName = 'updateUser';
-
-
     var update = req.body;
 
-    if(update.password && update.password != ''){
-        //encriptar y guardar
-        bcrypt.hash(update.password, null, null, function(err, hash){
-               req.body.password = hash;
-                //Guardar user
-                User.findByIdAndUpdate(userId, update, (err, userUpdated) =>{
+    User.findOne({_id: ObjectId(userId),userName:update.userName}, (err, userCheck) =>{
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
+            res.status(500).send({message: 'Error en el servidor al actualizar el usuario'});
+        }else{
+            if(userCheck){
+                if(update.password && update.password != ''){
+                    //encriptar y guardar
+                    bcrypt.hash(update.password, null, null, function(err, hash){
+                           req.body.password = hash;
+                            //Guardar user
+                            User.findByIdAndUpdate(userId, update, (err, userUpdated) =>{
+                                if(err){
+                                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
+                            res.status(500).send({message: 'Error en el servidor al actualizar el usuario'});
+                                }else{
+                                    if(!userUpdated){
+                                        logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
+                            res.status(404).send({message: 'No se ha podido encontrado el usuario'});
+                                    }else{
+                                      logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                            res.status(200).send({user: userUpdated});
+                                    }
+                                }
+                            });
+                    });
+                }else{
+                    User.findByIdAndUpdate(userId, update, (err, userUpdated) =>{
+                        if(err){
+                            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
+                            res.status(500).send({message: 'Error en el servidor al actualizar el usuario'});
+                        }else{
+                            if(!userUpdated){
+                                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
+                            res.status(404).send({message: 'No se ha podido encontrar el usuario'});
+                            }else{
+                              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                            res.status(200).send({user: userUpdated,message: 'actualizado sin pasar por bcrypt'});
+                            }
+                        }
+                    });
+                }            
+            }else{
+                User.findOne({userName:update.userName}, (err, userNameCheck) =>{
                     if(err){
                         logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
-                res.status(500).send({message: 'Error en el servidor al actualizar el usuario'});
+                        res.status(500).send({message: 'Error en el servidor al actualizar el usuario'});
                     }else{
-                        if(!userUpdated){
-                            logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
-                res.status(404).send({message: 'No se ha podido encontrado el usuario'});
-                        }else{
-                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
-                res.status(200).send({user: userUpdated});
+                        if(!userNameCheck){
+                            if(update.password && update.password != ''){
+                                //encriptar y guardar
+                                bcrypt.hash(update.password, null, null, function(err, hash){
+                                       req.body.password = hash;
+                                        //Guardar user
+                                        User.findByIdAndUpdate(userId, update, (err, userUpdated) =>{
+                                            if(err){
+                                                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
+                                                res.status(500).send({message: 'Error en el servidor al actualizar el usuario'});
+                                            }else{ 
+                                                if(!userUpdated){
+                                                    logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
+                                                    res.status(404).send({message: 'No se ha podido encontrado el usuario'});
+                                                }else{
+                                                    logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                                                    res.status(200).send({user: userUpdated});
+                                                }
+                                            }
+                                        });
+                                });
+                            }else{
+                                User.findByIdAndUpdate(userId, update, (err, userUpdated) =>{
+                                    if(err){
+                                        logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
+                                        res.status(500).send({message: 'Error en el servidor al actualizar el usuario'});
+                                    }else{
+                                        if(!userUpdated){
+                                            logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
+                                            res.status(404).send({message: 'No se ha podido encontrar el usuario'});
+                                        }else{
+                                            logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                                            res.status(200).send({user: userUpdated,message: 'actualizado sin pasar por bcrypt'});
+                                        }
+                                    }
+                                });
+                            }            
+                            }else{
+                            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Nombre de usuario no disponible'}});
+                            res.status(400).send({message: 'Nombre de usuario no disponible'});
                         }
                     }
                 });
-        });
-    }else{
-        User.findByIdAndUpdate(userId, update, (err, userUpdated) =>{
-            if(err){
-                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
-                res.status(500).send({message: 'Error en el servidor al actualizar el usuario'});
-            }else{
-                if(!userUpdated){
-                    logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
-                res.status(404).send({message: 'No se ha podido encontrar el usuario'});
-                }else{
-                  logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
-                res.status(200).send({user: userUpdated,message: 'actualizado sin pasar por bcrypt'});
-                }
             }
-        });
-    }
+        }
+    });
+
+
 }
 
 function getUser(req, res){

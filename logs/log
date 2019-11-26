@@ -398,3 +398,74 @@
 [26-11-2019 15:22] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
 [26-11-2019 15:22] [info] [team/getTeam] dperez - ::1: Solicitud realizada | params:{"id":"5ddd6efacfb00f28c82e92b9"} body:{}
 [26-11-2019 15:22] [info] [team/getAgentsInTeam] dperez - ::1: Solicitud realizada | params:{"id":"5ddd6efacfb00f28c82e92b9","company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 15:22] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:22] [info] [team/getTeam] dperez - ::1: Solicitud realizada | params:{"id":"5ddd6efacfb00f28c82e92b9"} body:{}
+[26-11-2019 15:22] [info] [team/getAgentsInTeam] dperez - ::1: Solicitud realizada | params:{"id":"5ddd6efacfb00f28c82e92b9","company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 15:22] [info] [ticket/getCountTickets] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 15:22] [info] [ticket/getDateTickets] dperez - ::1: Solicitud realizada | params:{"userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 15:55] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 15:55] [info] [user/getUsers] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}
+[26-11-2019 15:55] [error] [user/saveUser] dperez - ::1: Nombre de usuario no disponible
+[26-11-2019 15:55] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:55] [error] [user/saveUser] dperez - ::1: Nombre de usuario no disponible
+[26-11-2019 15:55] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:55] [error] [user/saveUser] dperez - ::1: Nombre de usuario no disponible
+[26-11-2019 15:55] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:55] [error] [user/saveUser] dperez - ::1: Nombre de usuario no disponible
+[26-11-2019 15:55] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:55] [error] [user/saveUser] dperez - ::1: Nombre de usuario no disponible
+[26-11-2019 15:55] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:55] [error] [user/saveUser] dperez - ::1: Nombre de usuario no disponible
+[26-11-2019 15:55] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:55] [error] [user/saveUser] dperez - ::1: Nombre de usuario no disponible
+[26-11-2019 15:55] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:55] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:55] [error] [user/saveUser] dperez - ::1: Nombre de usuario no disponible
+[26-11-2019 15:55] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:55] [error] [user/saveUser] dperez - ::1: Nombre de usuario no disponible
+[26-11-2019 15:55] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:55] [error] [user/saveUser] dperez - ::1: Nombre de usuario no disponible
+[26-11-2019 15:55] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:55] [error] [user/saveUser] dperez - ::1: Nombre de usuario no disponible
+[26-11-2019 15:55] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:55] [error] [user/saveUser] dperez - ::1: Nombre de usuario no disponible
+[26-11-2019 15:55] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:55] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:55] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 16:09] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 16:09] [info] [user/getUsers] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}
+[26-11-2019 16:09] [info] [user/getUser] dperez - ::1: Solicitud realizada | params:{"id":"5ddd6ea3cfb00f28c82e92b8"} body:{}
+[26-11-2019 16:09] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 16:09] [info] [user/getUser] dperez - ::1: Solicitud realizada | params:{"id":"5ddd6ea3cfb00f28c82e92b8"} body:{}
+[26-11-2019 16:09] [info] [user/getUsers] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}
+[26-11-2019 16:09] [info] [user/getUser] dperez - ::1: Solicitud realizada | params:{"id":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 16:09] [info] [user/getUsers] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}
+[26-11-2019 16:09] [info] [user/getUser] dperez - ::1: Solicitud realizada | params:{"id":"5ddd6ea3cfb00f28c82e92b8"} body:{}
+[26-11-2019 16:09] [info] [user/getUsers] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}
+[26-11-2019 16:09] [info] [user/getUser] dperez - ::1: Solicitud realizada | params:{"id":"5daf5213c4d0392fc00bd225"} body:{}
+[26-11-2019 16:09] [info] [user/updateUser] dperez - ::1: Solicitud realizada | params:{"id":"5daf5213c4d0392fc00bd225"} body:{"role":"ROLE_AGENT","sign":"Diego Aredes\nDepartamento de sistemas","receiveMail":false,"_id":"5daf5213c4d0392fc00bd225","name":"Diego","surname":"Aredes","userName":"daredes","email":"daredes@hotmail.com","image":"1l_faaFeSjMrsXvebUWDjdb5.jpg","password":"$2a$10$jkMV9IGQIGgvRvlUBQU5VeNjU.xT0nrJiJKqwNcO1j7p6X6dYpa4q","__v":0,"company":{"image":"FvcIpYIhsw4sH4gCPoT42sEf.png","mailSender":true,"_id":"5d9cd3cb6df6cc40ccce7490","name":"Sistemas","email":"req.sistemas@sanjuandedios.org.ar","__v":0,"password":"Hospital"}}
+[26-11-2019 16:09] [info] [user/getUsers] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}
+[26-11-2019 16:09] [info] [user/getUser] dperez - ::1: Solicitud realizada | params:{"id":"5ddd6ea3cfb00f28c82e92b8"} body:{}
+[26-11-2019 16:14] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 16:15] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 16:15] [error] [user/updateUser] dperez - ::1: Nombre de usuario no disponible
+[26-11-2019 16:15] [info] [user/updateUser] dperez - ::1: Solicitud realizada | params:{"id":"5ddd6ea3cfb00f28c82e92b8"} body:{"role":"ROLE_AGENT","sign":"","receiveMail":false,"_id":"5ddd6ea3cfb00f28c82e92b8","name":"Guido","surname":"Gonzalez","userName":"ggonzalez","email":"prueba@hotmail.com","image":"null","company":{"image":"FvcIpYIhsw4sH4gCPoT42sEf.png","mailSender":true,"_id":"5d9cd3cb6df6cc40ccce7490","name":"Sistemas","email":"req.sistemas@sanjuandedios.org.ar","__v":0,"password":"Hospital"},"password":"$2a$10$T.WjDzpJncqslYdZNBqhN.k7/zbaB182OWY9dpgg3D6p40MoF9CCm","__v":0}
+[26-11-2019 16:15] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 16:15] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 16:15] [info] [ticket/getTicketsPaged] dperez - ::1: Solicitud realizada | params:{"page":"1","perPage":"10","company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 16:15] [info] [user/getUsers] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}
+[26-11-2019 16:15] [info] [user/getUser] dperez - ::1: Solicitud realizada | params:{"id":"5ddd6ea3cfb00f28c82e92b8"} body:{}
+[26-11-2019 16:15] [error] [user/updateUser] dperez - ::1: Nombre de usuario no disponible
+[26-11-2019 16:15] [error] [user/updateUser] dperez - ::1: Nombre de usuario no disponible
+[26-11-2019 16:18] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 16:18] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 16:18] [info] [user/getUser] dperez - ::1: Solicitud realizada | params:{"id":"5ddd6ea3cfb00f28c82e92b8"} body:{}
+[26-11-2019 16:18] [info] [user/updateUser] dperez - ::1: Solicitud realizada | params:{"id":"5ddd6ea3cfb00f28c82e92b8"} body:{"role":"ROLE_AGENT","sign":"","receiveMail":false,"_id":"5ddd6ea3cfb00f28c82e92b8","name":"Guido","surname":"Gonzalez","userName":"ggonzalez","email":"prueba@hotmail.com","image":"null","company":{"image":"FvcIpYIhsw4sH4gCPoT42sEf.png","mailSender":true,"_id":"5d9cd3cb6df6cc40ccce7490","name":"Sistemas","email":"req.sistemas@sanjuandedios.org.ar","__v":0,"password":"Hospital"},"password":"$2a$10$Yde/ZC5CZevy6ykm2rUrl.Z.LG4Brmieqe41MeU1.qMqXPY0BGb4i","__v":0}
+[26-11-2019 16:18] [info] [user/getUsers] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}
+[26-11-2019 16:18] [info] [user/getUser] dperez - ::1: Solicitud realizada | params:{"id":"5ddd6ea3cfb00f28c82e92b8"} body:{}
+[26-11-2019 16:18] [error] [user/updateUser] dperez - ::1: Nombre de usuario no disponible
+[26-11-2019 16:18] [error] [user/updateUser] dperez - ::1: Nombre de usuario no disponible
+[26-11-2019 16:22] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 16:22] [error] [user/updateUser] dperez - ::1: Nombre de usuario no disponible
+[26-11-2019 16:22] [info] [user/updateUser] dperez - ::1: Solicitud realizada | params:{"id":"5ddd6ea3cfb00f28c82e92b8"} body:{"role":"ROLE_AGENT","sign":"","receiveMail":false,"_id":"5ddd6ea3cfb00f28c82e92b8","name":"Guido","surname":"Gonzalez","userName":"ggonzalez","email":"prueba@hotmail.com","image":"null","company":{"image":"FvcIpYIhsw4sH4gCPoT42sEf.png","mailSender":true,"_id":"5d9cd3cb6df6cc40ccce7490","name":"Sistemas","email":"req.sistemas@sanjuandedios.org.ar","__v":0,"password":"Hospital"},"__v":0}
+[26-11-2019 16:22] [info] [user/getUsers] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}

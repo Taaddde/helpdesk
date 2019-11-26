@@ -74,8 +74,7 @@ export class AgentNewComponent implements OnInit {
         var errorMessage = <any>error;
         if(errorMessage != null){
           var body = JSON.parse(error._body);
-          this.alertMessage = body.message;
-          console.log(error);
+          alert(body.message);
         }
       }
     );
