@@ -21,9 +21,12 @@
     "node-excel-export": "^1.4.4",
     "nodemailer": "^6.3.1",
     "nodemon": "^1.19.3",
-    "timeago": "^1.6.7"
+    "timeago": "^1.6.7",
+    "winston": "^3.2.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/node": "^12.12.12"
+  },
   "scripts": {
     "start": "nodemon index.js"
   },

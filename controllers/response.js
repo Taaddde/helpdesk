@@ -1,6 +1,8 @@
 'use strict'
 
 var Response = require('../models/response');
+//Sistema de log
+var logger = require('../services/logger');
 
 function getResponse(req, res){
     var responseId = req.params.id;

@@ -7,6 +7,9 @@ var jwt = require('../services/jwt');
 var fs = require('fs');
 var path = require('path');
 
+//Sistema de log
+var logger = require('../services/logger')
+
 
 const mongoose =require('mongoose')
 

@@ -6,6 +6,9 @@ var Ticket = require('../models/ticket');
 var Team = require('../models/team');
 var mail = require('../services/mail');
 
+//Sistema de log
+var logger = require('../services/logger');
+
 const mongoose =require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 

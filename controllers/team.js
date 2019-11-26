@@ -8,9 +8,8 @@ var Team = require('../models/team');
 var fs = require('fs');
 var path = require('path');
 
-const mongoose =require('mongoose')
-const ObjectId = mongoose.Types.ObjectId;
-
+//Sistema de log
+var logger = require('../services/logger');
 
 function getAgentsInTeam(req, res){
     var teamId = req.params.id;

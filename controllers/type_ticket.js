@@ -1,6 +1,8 @@
 'use strict'
 
 var TypeTicket = require('../models/type_ticket');
+//Sistema de log
+var logger = require('../services/logger')
 
 var populateQuery = [
     {path:'company',select:['name','email','image','mailSender']}

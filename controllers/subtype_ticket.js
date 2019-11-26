@@ -1,7 +1,9 @@
 'use strict'
 
 var SubTypeTicket = require('../models/subtype_ticket');
-var moment = require('moment');
+
+//Sistema de log
+var logger = require('../services/logger');
 
 var populateQuery = [
     {path:'team', select:['_id','name', 'image']},

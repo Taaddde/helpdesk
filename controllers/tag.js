@@ -2,6 +2,9 @@
 
 var Tag = require('../models/tag');
 
+//Sistema de log
+var logger = require('../services/logger');
+
 function getTag(req, res){
     var tagId = req.params.id;
 

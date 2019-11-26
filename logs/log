@@ -1,0 +1,42 @@
+[26-11-2019 10:09] [warn] Server running
+[26-11-2019 10:11] [warn] Servidor iniciado
+[26-11-2019 10:11] [warn] [undefined] undefined
+[26-11-2019 10:12] [warn] [undefined] undefined
+[26-11-2019 10:12] [warn] [S] undefined
+[26-11-2019 10:13] [warn] Servidor iniciado
+[26-11-2019 10:16] [warn] undefined
+[26-11-2019 10:16] [warn] undefined
+[26-11-2019 10:16] [warn] Servidor iniciado
+[26-11-2019 10:16] [warn] [object Object]
+[26-11-2019 10:16] [warn] Index
+[26-11-2019 10:17] [warn] Index
+[26-11-2019 10:17] [warn] [Index] Servidor iniciado
+[26-11-2019 10:18] [warn] [index] Servidor iniciado
+[26-11-2019 10:20] [warn] [index] Servidor iniciado en 3977
+[26-11-2019 10:22] [warn] [index] Servidor iniciado
+[26-11-2019 10:23] [info] [index] Servidor iniciado
+[26-11-2019 10:23] [info|index] Servidor iniciado
+[26-11-2019 10:23] [info | index] Servidor iniciado
+[26-11-2019 10:24] [info] [index] Servidor iniciado
+[26-11-2019 10:26] [info] [index] Servidor iniciado, puerto3977
+[26-11-2019 10:26] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 10:28] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 10:30] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 10:34] [info] [index] undefined: Servidor iniciado en puerto 3977
+[26-11-2019 10:34] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 10:36] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 10:40] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 10:41] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 10:42] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 10:42] [error] [getCompany] ::1: CastError: Cast to ObjectId failed for value "4545" at path "_id" for model "Company"
+[26-11-2019 10:45] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 10:45] [error] [getCompany] ::1: CastError: Cast to ObjectId failed for value "4545" at path "_id" for model "Company"
+[26-11-2019 10:45] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 10:45] [error] [getCompany] ::1: CastError: Cast to ObjectId failed for value "4545" at path "_id" for model "Company"
+[26-11-2019 10:45] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 10:45] [error] [getCompany] : CastError: Cast to ObjectId failed for value "4545" at path "_id" for model "Company"
+[26-11-2019 10:46] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 10:46] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 10:46] [error] [getCompany] ::1: CastError: Cast to ObjectId failed for value "4545" at path "_id" for model "Company"
+[26-11-2019 10:46] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 11:07] [info] [index] Servidor iniciado en puerto 3977

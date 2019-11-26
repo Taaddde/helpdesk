@@ -6,11 +6,15 @@ var bcrypt = require('bcrypt-nodejs');
 var fs = require('fs');
 var path = require('path');
 
+//Sistema de log
+var logger = require('../services/logger');
+
 
 function getCompanies(req, res){
 
     Company.find({}, (err, companies) =>{
         if(err){
+            logger.error({message:{module:'getCompanies', msg: req.ips+': '+err}});
             res.status(500).send({message: 'Error del servidor en la peticion'});
         }else{
             if(!companies){
@@ -26,11 +30,14 @@ function getCompany(req, res){
 
     Company.findById(req.params.id, (err, company) =>{
         if(err){
+            logger.error({message:{module:'getCompany', msg: req.ip+': '+err}});
             res.status(500).send({message: 'Error del servidor en la peticion'});
         }else{
             if(!company){
+                logger.warn({message:{module:'getCompany', msg: req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'La compañia no existe'});
             }else{
+                logger.info({message:{module:'getCompany', msg: req.ip+': Solicitud de '+req.params.id}});
                 res.status(200).send({company:company});
             }
         }
@@ -42,6 +49,7 @@ function getCompaniesForName(req, res){
 
     Company.find({name:{ "$regex": name, "$options": "i" }}, (err, companies) =>{
         if(err){
+            logger.error({message:{module:'getCompany', msg: req.ip+': '+err}});
             res.status(500).send({message: 'Error del servidor en la peticion'});
         }else{
             if(!companies){
@@ -63,6 +71,7 @@ function saveCompany(req, res){
 
     company.save((err, companyStored) =>{
         if(err){
+            logger.error({message:{module:'getCompany', msg: req.ip+': '+err}});
             res.status(500).send({message: 'Error del servidor en la petición'})
         }else{
             if(!companyStored){
@@ -81,9 +90,11 @@ function updateCompany(req, res){
     //companyId = company buscado, update = datos nuevos a actualizar
     Company.findByIdAndUpdate(companyId, update, (err, companyUpdated) =>{
         if(err){
+            logger.error({message:{module:'getCompany', msg: req.ip+': '+err}});
             res.status(500).send({message: 'Error del servidor en la petición'});
         }else{
             if(!companyUpdated){
+                logger.error({message:{module:'getCompany', msg: req.ip+': '+err}});
                 res.status(404).send({message: 'No se ha encontrado La compañia'});
             }else{
                 res.status(200).send({company:companyUpdated});
@@ -97,9 +108,11 @@ function deleteCompany(req, res){
 
     Company.findByIdAndDelete(companyId, (err, companyRemoved) =>{
         if(err){
+            logger.error({message:{module:'getCompany', msg: req.ip+': '+err}});
             res.status(500).send({message: 'Error en la petición'});
         }else{
             if(!companyRemoved){
+                logger.error({message:{module:'getCompany', msg: req.ip+': '+err}});
                 res.status(404).send({message: 'No se ha encontrado La compañia'});
             }else{
                 res.status(200).send({company: companyRemoved});
@@ -124,6 +137,7 @@ function uploadImage(req, res){
 
             Company.findByIdAndUpdate(companyId, {image: file_name}, (err, companyUpdated) =>{
                 if(err){
+                    logger.error({message:{module:'getCompany', msg: req.ip+': '+err}});
                     res.status(500).send({message: 'Error al actualizar el usuario'});
                 }else{
                     if(!companyUpdated){

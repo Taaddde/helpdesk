@@ -9,6 +9,8 @@ var path = require('path');
 const mongoose =require('mongoose')
 const ObjectId = mongoose.Types.ObjectId;
 
+//Sistema de log
+var logger = require('../services/logger');
 
 
 function getTextBlock(req, res){

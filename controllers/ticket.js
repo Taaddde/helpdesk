@@ -7,7 +7,9 @@ const mongoose =require('mongoose')
 
 const ObjectId = mongoose.Types.ObjectId;
 
-var moment_tz = require('moment-timezone');
+//Sistema de log
+var logger = require('../services/logger');
+
 
 function getTicket(req, res){
     var populateQuery = [
