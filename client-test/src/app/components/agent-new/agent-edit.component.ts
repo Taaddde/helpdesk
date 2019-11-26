@@ -94,7 +94,7 @@ export class AgentEditComponent implements OnInit {
     }
 
 
-    this._userService.edit(this.user).subscribe(
+    this._userService.edit(this.token, this.user).subscribe(
       response =>{
           if(!response.user){
               this.alertMessage = 'Error en el servidor';

@@ -31,23 +31,26 @@ export class userService{
                         .map(res=>res.json());
     }
     
-    add(user){
-        let json = JSON.stringify(user);
-        let params = json;
-
-        let headers = new Headers({'Content-Type': 'application/json'});
-
-        return this._http.post(this.url+'user/add', params, {headers: headers})
-                        .map(res=>res.json());
-    }
-
-    edit(user){
+    add(token, user){
         let json = JSON.stringify(user);
         let params = json;
 
         let headers = new Headers({
             'Content-Type': 'application/json',
-            'Authorization': this.getToken()
+            'Authorization': token
+        });
+
+        return this._http.post(this.url+'user/add', params, {headers: headers})
+                        .map(res=>res.json());
+    }
+
+    edit(token, user){
+        let json = JSON.stringify(user);
+        let params = json;
+
+        let headers = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': token
         });
 
         return this._http.put(this.url+'user/update/'+user._id, params, {headers: headers})

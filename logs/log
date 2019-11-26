@@ -293,3 +293,108 @@
 [26-11-2019 14:05] [info] [ticket/getUnreadTickets] ::1: Solicitud realizada | params:{"userId":"5da7503ace4c9d22ac62e297"} body:{}
 [26-11-2019 14:05] [info] [ticket/getUnreadTickets] ::1: Solicitud realizada | params:{"userId":"5da7503ace4c9d22ac62e297"} body:{}
 [26-11-2019 14:25] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 14:44] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 14:44] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 14:46] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 14:47] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 14:47] [info] [company/getCompanies] ::1: Solicitud realizada | params:{} body:{"name":"hola"}
+[26-11-2019 14:47] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 14:47] [info] [company/getCompanies] ::1: Solicitud realizada | params:{} body:{"name":"hola"}
+[26-11-2019 14:47] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 14:47] [info] [company/getCompanies] ::1: Solicitud realizada | params:{} body:{"name":"hola"}
+[26-11-2019 14:48] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 14:48] [info] [company/getCompanies] ::1: Solicitud realizada | params:{} body:{"name":"hola"}
+[26-11-2019 14:48] [info] [company/getCompanies] ::1: Solicitud realizada | params:{} body:{"name":"hola"}
+[26-11-2019 14:49] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 14:49] [info] [company/getCompanies] ::1: Solicitud realizada | params:{} body:{"name":"hola"}
+[26-11-2019 14:49] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 14:49] [info] [company/getCompanies] ::1: Solicitud realizada | params:{} body:{"name":"hola"}
+[26-11-2019 14:54] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 14:58] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 15:01] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 15:01] [info] [company/getCompanies] dperez-::1: Solicitud realizada | params:{} body:{"name":"hola"}
+[26-11-2019 15:02] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 15:04] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 15:04] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 15:04] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:04] [info] [user/getUsers] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}
+[26-11-2019 15:04] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 15:04] [info] [team/getTeams] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 15:04] [info] [ticket/getCountTickets] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 15:04] [info] [ticket/getDateTickets] dperez - ::1: Solicitud realizada | params:{"userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 15:04] [info] [ticket/getTicketsPaged] dperez - ::1: Solicitud realizada | params:{"page":"1","perPage":"10","company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 15:04] [info] [user/getUsers] dperez - ::1: Solicitud de undefined
+[26-11-2019 15:04] [info] [team/getTeams] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 15:04] [info] [response/getResponses] dperez - ::1: Solicitud realizada | params:{"userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 15:04] [info] [team/getTeams] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 15:04] [info] [type_ticket/getTypeTickets] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 15:07] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 15:08] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 15:08] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 15:08] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 15:08] [info] [ticket/getTicketsPaged] dperez - undefined: Solicitud realizada | params:{"page":"1","perPage":"10","company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 15:08] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:08] [info] [ticket/getTicketsPaged] dperez - ::1: Solicitud realizada | params:{"page":"1","perPage":"10","company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 15:08] [info] [user/getUser] dperez - ::1: Solicitud realizada | params:{"id":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 15:08] [info] [ticket/getTicketsPaged] dperez - ::1: Solicitud realizada | params:{"page":"1","perPage":"10","company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 15:08] [info] [ticket/getCountTickets] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 15:08] [info] [ticket/getDateTickets] dperez - ::1: Solicitud realizada | params:{"userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 15:08] [info] [ticket/getDateTickets] dperez - ::1: Solicitud realizada | params:{"userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 15:08] [info] [ticket/getTicketReports] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 15:08] [info] [ticket/getDateTickets] dperez - ::1: Solicitud realizada | params:{"userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 15:08] [info] [user/getUsers] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}
+[26-11-2019 15:08] [info] [ticket/getTicketsPaged] dperez - ::1: Solicitud realizada | params:{"page":"1","perPage":"10","company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 15:08] [info] [ticket/getDateTickets] dperez - ::1: Solicitud realizada | params:{"userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 15:08] [info] [ticket/getCountTickets] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 15:08] [info] [ticket/getTicketsPaged] dperez - ::1: Solicitud realizada | params:{"page":"1","perPage":"10","company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 15:08] [info] [response/getResponses] dperez - ::1: Solicitud realizada | params:{"userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 15:08] [info] [ticket/getTicket] dperez - ::1: Solicitud realizada | params:{"id":"5dd8300ae28d7927e037e11f"} body:{}
+[26-11-2019 15:08] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:08] [info] [TextBlock/getTextBlockForTicket] dperez - ::1: Solicitud realizada | params:{"ticket":"5dd8300ae28d7927e037e11f","type":"ROLE_ADMIN"} body:{}
+[26-11-2019 15:08] [info] [ticket/getTicketsForUser] dperez - ::1: Solicitud realizada | params:{"id":"5daefc7e3c999c22544d601d"} body:{}
+[26-11-2019 15:08] [info] [team/getTeams] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 15:13] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 15:13] [error] [user/loginUser] dperez - ::1: Usuario/contraseña incorrecta
+[26-11-2019 15:13] [info] [user/loginUser] dperez - ::1: Solicitud realizada | params:{} body:{"_id":"","name":"","surname":"","userName":"dperez","password":"admin","email":"","role":"ROLE_REQUESTER","sign":"","image":"","company":"","receiveMail":false}
+[26-11-2019 15:13] [info] [user/loginUser] dperez - ::1: Solicitud realizada | params:{} body:{"_id":"","name":"","surname":"","userName":"dperez","password":"admin","email":"","role":"ROLE_REQUESTER","sign":"","image":"","company":"","receiveMail":false,"gethash":"true"}
+[26-11-2019 15:13] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:13] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:13] [info] [response/getResponses] dperez - ::1: Solicitud realizada | params:{"userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 15:13] [info] [ticket/getTicket] dperez - ::1: Solicitud realizada | params:{"id":"5dd8300ae28d7927e037e11f"} body:{}
+[26-11-2019 15:13] [info] [TextBlock/getTextBlockForTicket] dperez - ::1: Solicitud realizada | params:{"ticket":"5dd8300ae28d7927e037e11f","type":"ROLE_ADMIN"} body:{}
+[26-11-2019 15:13] [info] [ticket/getTicketsForUser] dperez - ::1: Solicitud realizada | params:{"id":"5daefc7e3c999c22544d601d"} body:{}
+[26-11-2019 15:13] [info] [team/getTeams] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 15:15] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 15:15] [info] [user/loginUser] dperez - ::1: Usuario conectado
+[26-11-2019 15:15] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:15] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:15] [info] [response/getResponses] dperez - ::1: Solicitud realizada | params:{"userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 15:15] [info] [ticket/getTicket] dperez - ::1: Solicitud realizada | params:{"id":"5dd8300ae28d7927e037e11f"} body:{}
+[26-11-2019 15:15] [info] [TextBlock/getTextBlockForTicket] dperez - ::1: Solicitud realizada | params:{"ticket":"5dd8300ae28d7927e037e11f","type":"ROLE_ADMIN"} body:{}
+[26-11-2019 15:15] [info] [ticket/getTicketsForUser] dperez - ::1: Solicitud realizada | params:{"id":"5daefc7e3c999c22544d601d"} body:{}
+[26-11-2019 15:15] [info] [team/getTeams] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 15:15] [info] [ticket/getTicketsPaged] dperez - ::1: Solicitud realizada | params:{"page":"1","perPage":"10","company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 15:15] [info] [ticket/getCountTickets] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 15:15] [info] [ticket/getDateTickets] dperez - ::1: Solicitud realizada | params:{"userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 15:15] [info] [ticket/getDateTickets] dperez - ::1: Solicitud realizada | params:{"userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 15:15] [info] [user/getUsers] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}
+[26-11-2019 15:15] [info] [team/getTeams] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 15:15] [info] [user/getUsers] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}
+[26-11-2019 15:21] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 15:22] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 15:22] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:22] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:22] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:22] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:22] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:22] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:22] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:22] [info] [user/saveUser] dperez - ::1: Solicitud realizada | params:{} body:{"_id":"","name":"Guido","surname":"Gonzalez","userName":"","password":"admin","email":"prueba@hotmail.com","role":"ROLE_AGENT","sign":"","image":"null","company":"5d9cd3cb6df6cc40ccce7490","receiveMail":false}
+[26-11-2019 15:22] [info] [user/getUsers] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}
+[26-11-2019 15:22] [info] [team/getTeams] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 15:22] [info] [team/saveTeam] dperez - ::1: Solicitud realizada | params:{} body:{"_id":"","name":"Implementador","users":[""],"image":"null","createDate":"","company":"5d9cd3cb6df6cc40ccce7490"}
+[26-11-2019 15:22] [info] [team/getTeam] dperez - ::1: Solicitud realizada | params:{"id":"5ddd6efacfb00f28c82e92b9"} body:{}
+[26-11-2019 15:22] [info] [team/getAgentsInTeam] dperez - ::1: Solicitud realizada | params:{"id":"5ddd6efacfb00f28c82e92b9","company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 15:22] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 15:22] [info] [team/getTeam] dperez - ::1: Solicitud realizada | params:{"id":"5ddd6efacfb00f28c82e92b9"} body:{}
+[26-11-2019 15:22] [info] [team/getAgentsInTeam] dperez - ::1: Solicitud realizada | params:{"id":"5ddd6efacfb00f28c82e92b9","company":"5d9cd3cb6df6cc40ccce7490"} body:{}

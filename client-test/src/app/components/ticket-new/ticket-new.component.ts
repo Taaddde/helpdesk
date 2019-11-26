@@ -202,7 +202,7 @@ export class TicketNewComponent implements OnInit {
       }
 
       //Se crea un ticket con un nuevo solicitante
-      this._userService.add(this.requester).subscribe(
+      this._userService.add(this.token, this.requester).subscribe(
         response =>{
             if(!response.user){
               alert('Error al crear el solicitante')

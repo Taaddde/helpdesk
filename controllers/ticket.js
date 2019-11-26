@@ -8,11 +8,12 @@ const ObjectId = mongoose.Types.ObjectId;
 
 //Sistema de log
 var logger = require('../services/logger');
-var path = require('path');
+var jwt_decode = require('jwt-decode');var path = require('path');
 
 
 
 function getTicket(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getTicket';
     var populateQuery = [
         {path:'requester',select:['name','surname','image','email','receiveMail']},
@@ -25,14 +26,14 @@ function getTicket(req, res){
 
     Ticket.findById(ticketId, (err, ticket) =>{
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'});
         }else{
             if(!ticket){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'El ticket no existe'});
             }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({ticket});
             }
         }
@@ -41,19 +42,20 @@ function getTicket(req, res){
 
 
 function getTicketsForUser(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getTicketsForUser';
     var userId = req.params.id;
 
     Ticket.find({$or: [{agent: userId}, {requester: userId}]}, (err, tickets) =>{
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'});
         }else{
             if(!tickets){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'El ticket no existe'});
             }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({tickets});
             }
         }
@@ -62,6 +64,7 @@ function getTicketsForUser(req, res){
 
 
 function getCountTickets(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getCountTickets';
 
     let userId = req.params.userId
@@ -84,14 +87,14 @@ function getCountTickets(req, res){
 
     Ticket.aggregate(query, (err, tickets) =>{
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion',err:err});
         }else{
             if(!tickets){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'El ticket no existe'});
             }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({tickets});
             }
         }
@@ -99,6 +102,7 @@ function getCountTickets(req, res){
 }
 
 function getDateTickets(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getDateTickets';
     let userId = req.params.userId
 
@@ -119,14 +123,14 @@ function getDateTickets(req, res){
 
     Ticket.aggregate(query, (err, tickets) =>{
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion',err:err});
         }else{
             if(!tickets){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'El ticket no existe'});
             }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({tickets});
             }
         }
@@ -135,6 +139,7 @@ function getDateTickets(req, res){
 
 
 function getCountReqTickets(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getCountReqTickets';
     let userId = req.params.userId
 
@@ -155,14 +160,14 @@ function getCountReqTickets(req, res){
 
     Ticket.aggregate(query, (err, tickets) =>{
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion',err:err});
         }else{
             if(!tickets){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'El ticket no existe'});
             }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({tickets});
             }
         }
@@ -170,6 +175,7 @@ function getCountReqTickets(req, res){
 }
 
 function getUnreadTickets(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getUnreadTickets';
     let userId = req.params.userId;
     
@@ -251,11 +257,11 @@ function getUnreadTickets(req, res){
     }]
     TextBlock.aggregate(query, (err, textblocks) =>{
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion',err:err});
         }else{
             if(!textblocks){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se encontro el elemento'});
             }else{
                 res.status(200).send({textblocks:textblocks});                            
@@ -265,6 +271,7 @@ function getUnreadTickets(req, res){
 }
 
 function getUnreadTicketsReq(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getUnreadTicketsReq';
     let userId = req.params.userId;
     
@@ -346,11 +353,11 @@ function getUnreadTicketsReq(req, res){
     }]
     TextBlock.aggregate(query, (err, textblocks) =>{
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion',err:err});
         }else{
             if(!textblocks){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se encontro el elemento'});
             }else{
                 res.status(200).send({textblocks:textblocks});                            
@@ -361,6 +368,7 @@ function getUnreadTicketsReq(req, res){
 
 
 function getTicketReports(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getTicketReports';
     let company = req.params.company;
 
@@ -423,14 +431,14 @@ function getTicketReports(req, res){
     ]
     Ticket.aggregate(query, (err, tickets) =>{
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion',err:err});
         }else{
             if(!tickets){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se encontro el elemento'});
             }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({tickets:tickets});                            
             }
         }
@@ -438,6 +446,7 @@ function getTicketReports(req, res){
 }
 
 function saveTicket(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'saveTicket';
     var ticket = new Ticket();
     var c;
@@ -461,14 +470,14 @@ function saveTicket(req, res){
     
         ticket.save((err, ticketStored) =>{
             if(err){
-                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error del servidor en la petición'})
             }else{
                 if(!ticketStored){
-                    logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                    logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'El ticket no ha sido guardado'})
                 }else{
-                  logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                  logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({ticket:ticketStored})
                 }
             }
@@ -478,6 +487,7 @@ function saveTicket(req, res){
 
 
 function getTickets(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getTickets';
     var populateQuery = [
         {path:'requester',select:['name','surname','image']},
@@ -487,14 +497,14 @@ function getTickets(req, res){
 
     Ticket.find({}).sort('hashtag').populate(populateQuery).exec(function(err, tickets){
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
         }else{
             if(!tickets){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No hay tickets'})
             }else{
-                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({
                     tickets: tickets
                 });
@@ -504,6 +514,7 @@ function getTickets(req, res){
 }
 
 function getTicketsPaged(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getTicketsPaged';
     var populateQuery = [
         {path:'requester',select:['name','surname','image']},
@@ -541,14 +552,14 @@ function getTicketsPaged(req, res){
     
         Ticket.paginate(query,{page:page, limit:perPage, populate:populateQuery, sort:{numTicket:-1}}, function(err, tickets){
             if(err){
-                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error en la peticion'})
             }else{
                 if(!tickets){
-                    logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                    logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No hay items'})
                 }else{
-                              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({
                         tickets
                     });
@@ -558,6 +569,7 @@ function getTicketsPaged(req, res){
 }
 
 function getReqTicketsPaged(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getReqTicketsPaged';
     var populateQuery = [
         {path:'requester',select:['name','surname','image']},
@@ -587,14 +599,14 @@ function getReqTicketsPaged(req, res){
 
     Ticket.paginate(query,{page:page, limit:perPage, populate:populateQuery, sort:{numTicket:-1}}, function(err, tickets){
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error en la peticion'})
         }else{
             if(!tickets){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No hay items'})
             }else{
-                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({
                     tickets
                 });
@@ -605,18 +617,19 @@ function getReqTicketsPaged(req, res){
 
 
 function getTicketsForNumber(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getTicketsForNumber';
     var num = req.params.num;
     Ticket.findOne({numTicket:num}).exec(function(err, ticket){
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
         }else{
             if(!ticket){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No hay tickets'})
             }else{
-                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({
                     ticket: ticket
                 });
@@ -627,6 +640,7 @@ function getTicketsForNumber(req, res){
 
 
 function getTicketsForName(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getTicketsForName';
     var populateQuery = [
         {path:'requester',select:['name','surname','image']},
@@ -639,14 +653,14 @@ function getTicketsForName(req, res){
 
     Ticket.find({sub:{ "$regex": sub, "$options": "i" }, company:ObjectId(company)}).populate(populateQuery).exec(function(err, tickets){
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
         }else{
             if(!tickets){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No hay tickets'})
             }else{
-                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({
                     tickets: tickets
                 });
@@ -657,6 +671,7 @@ function getTicketsForName(req, res){
 
 
 function updateTicket(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'updateTicket';
     var ticketId = req.params.id;
     var update =  req.body;
@@ -665,14 +680,14 @@ function updateTicket(req, res){
     //ticketId = ticket buscado, update = datos nuevos a actualizar
     Ticket.findByIdAndUpdate(ticketId, update, (err, ticketUpdated) =>{
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error del servidor en la petición',err:err});
         }else{
             if(!ticketUpdated){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado el ticket'});
             }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({ticket:ticketUpdated});
             }
         }
@@ -680,19 +695,20 @@ function updateTicket(req, res){
 }
 
 function deleteTicket(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'deleteTicket';
     var ticketId = req.params.id;
 
     Ticket.findByIdAndDelete(ticketId, (err, ticketRemoved) =>{
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error en la petición'});
         }else{
             if(!ticketRemoved){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado el ticket'});
             }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({ticket: ticketRemoved});
             }
         }

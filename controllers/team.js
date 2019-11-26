@@ -9,8 +9,9 @@ var path = require('path');
 
 //Sistema de log
 var logger = require('../services/logger');
-
+var jwt_decode = require('jwt-decode');
 function getAgentsInTeam(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getAgentsInTeam';
     var teamId = req.params.id;
     var company = req.params.company;
@@ -22,23 +23,23 @@ function getAgentsInTeam(req, res){
 
     Team.findById(teamId, (err, team) =>{
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'});
         }else{
             if(!team){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'El equipo no existe'});
             }else{
                 User.find({_id:{$nin:team.users}, company:company, $or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}]},(err, users) =>{
                     if(err){
-                        logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                        logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion', err:err});
                     }else{
                         if(!users){
-                            logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                            logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'Los usuarios no existen'});
                         }else{
-                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({usersIn:team.users, usersOut:users});
                         }
                     }
@@ -49,19 +50,20 @@ function getAgentsInTeam(req, res){
 }
 
 function getTeam(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getTeam';
     var teamId = req.params.id;
 
     Team.findById(teamId, (err, team) =>{
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'});
         }else{
             if(!team){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'El equipo no existe'});
             }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({team});
             }
         }
@@ -69,6 +71,7 @@ function getTeam(req, res){
 }
 
 function saveTeam(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'saveTeam';
     var team = new Team();
 
@@ -82,14 +85,14 @@ function saveTeam(req, res){
 
     team.save((err, teamStored) =>{
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error del servidor en la petición'})
         }else{
             if(!teamStored){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'El equipo no ha sido guardado'})
             }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({team:teamStored})
             }
         }
@@ -98,6 +101,7 @@ function saveTeam(req, res){
 
 
 function getTeams(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getTeams';
     var populateQuery = [
         {path:'users', model:'User', select:['name','surname','image']},
@@ -109,14 +113,14 @@ function getTeams(req, res){
 
     Team.find({company:company}).sort('name').populate(populateQuery).exec(function(err, teams){
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
         }else{
             if(!teams){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No hay equipos'})
             }else{
-                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({
                     teams: teams
                 });
@@ -126,6 +130,7 @@ function getTeams(req, res){
 }
 
 function getTeamsForName(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getTeamsForName';
     var populateQuery = [
         {path:'users', model:'User', select:['name','surname','image']},
@@ -137,14 +142,14 @@ function getTeamsForName(req, res){
 
     Team.find({company:company, name:{ "$regex": name, "$options": "i" }}).sort('name').populate(populateQuery).exec(function(err, teams){
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
         }else{
             if(!teams){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No hay equipos'})
             }else{
-                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({
                     teams: teams
                 });
@@ -155,6 +160,7 @@ function getTeamsForName(req, res){
 
 
 function updateTeam(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'updateTeam';
     var teamId = req.params.id;
     var update =  req.body;
@@ -162,14 +168,14 @@ function updateTeam(req, res){
     //teamId = Team buscado, update = datos nuevos a actualizar
     Team.findByIdAndUpdate(teamId, update, (err, teamUpdated) =>{
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error del servidor en la petición'});
         }else{
             if(!teamUpdated){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado el equipo'});
             }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({team:teamUpdated});
             }
         }
@@ -177,19 +183,20 @@ function updateTeam(req, res){
 }
 
 function deleteTeam(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'deleteTeam';
     var teamId = req.params.id;
 
     Team.findByIdAndDelete(teamId, (err, teamRemoved) =>{
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error en la petición'});
         }else{
             if(!teamRemoved){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado el equipo'});
             }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({team: teamRemoved});
             }
         }
@@ -197,6 +204,7 @@ function deleteTeam(req, res){
 }
 
 function uploadImage(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'uploadImage';
     var teamId = req.params.id;
     var file_name = 'No subido';
@@ -213,32 +221,31 @@ function uploadImage(req, res){
 
             Team.findByIdAndUpdate(teamId, {image: file_name}, (err, teamUpdated) =>{
                 if(err){
-                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message: 'Error al actualizar el usuario'});
                 }else{
                     if(!teamUpdated){
-                        logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                        logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha podido actualizar el usuario'});
                     }else{
-                      logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                      logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({image: file_name, team: teamUpdated});
                     }
                 }
             });
         }else{
-                      logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                      logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({message: 'Extension de archivo no valido'});
         }
 
         console.log(ext_split);
     }else{
-        logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud de '+req.params.id}});
+        logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud de '+req.params.id}});
                 res.status(200).send({message: 'No ha subido ninguna imagen'});
     }
 }
 
 function getImageFile(req, res){
-    var functionName = 'getImageFile';
     var imageFile = req.params.imageFile;
     var pathFile = './uploads/teams/'+imageFile;
 
@@ -246,25 +253,25 @@ function getImageFile(req, res){
         if(exists){
             res.sendFile(path.resolve(pathFile));
         }else{
-                      logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
-                res.status(200).send({message: 'No existe la imagen...'});
+            res.status(200).send({message: 'No existe la imagen...'});
         }
     });
 }
 
 
 function addUser(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'addUser';
     var teamId = req.params.id;
     var user = req.body.user;
 
     Team.find({users:user}, (err, userCheck)=>{
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message:err})
         }else{
             if(!userCheck){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message:'El usuario no existe'})
             }else{
                 if(userCheck.length != 0){
@@ -279,7 +286,7 @@ function addUser(req, res){
                                console.log(err);
                                return res.send(err);
                             }
-                                       logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                                       logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({team:team});
                          });
                 }
@@ -293,14 +300,14 @@ function addUser(req, res){
 
     User.findByIdAndUpdate(userId, {'$push': {'teams':  mongoose.Types.ObjectId(team._id)}}, { new: true, upsert: true }, (err, userUpdated) =>{
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': '+err}});
                 res.status(500).send({message:'Error en la petición', team, userId});
         }else{
             if(!userUpdated){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Objeto no encontrado'}});
                 res.status(404).send({message:'El usuario no existe'});
             }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({user:userUpdated});
             }
         }
@@ -308,6 +315,7 @@ function addUser(req, res){
 }
 
 function removeUser(req, res){
+var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'removeUser';
     var teamId = req.params.id;
     var user = req.body.user;
@@ -321,7 +329,7 @@ function removeUser(req, res){
            console.log(err);
            return res.send(err);
         }
-         logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: req.ip+': Solicitud de '+req.params.id}});
+         logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' - '+req.ip+': Solicitud de '+req.params.id}});
                 res.status(200).send({team:team});
      });
 }

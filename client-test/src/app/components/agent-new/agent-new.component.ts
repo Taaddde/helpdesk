@@ -51,7 +51,7 @@ export class AgentNewComponent implements OnInit {
     }
 
 
-    this._userService.add(this.user).subscribe(
+    this._userService.add(this.token,this.user).subscribe(
       response =>{
           if(!response.user){
               this.alertMessage = 'Error en el servidor';
