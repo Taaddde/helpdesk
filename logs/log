@@ -469,3 +469,35 @@
 [26-11-2019 16:22] [error] [user/updateUser] dperez - ::1: Nombre de usuario no disponible
 [26-11-2019 16:22] [info] [user/updateUser] dperez - ::1: Solicitud realizada | params:{"id":"5ddd6ea3cfb00f28c82e92b8"} body:{"role":"ROLE_AGENT","sign":"","receiveMail":false,"_id":"5ddd6ea3cfb00f28c82e92b8","name":"Guido","surname":"Gonzalez","userName":"ggonzalez","email":"prueba@hotmail.com","image":"null","company":{"image":"FvcIpYIhsw4sH4gCPoT42sEf.png","mailSender":true,"_id":"5d9cd3cb6df6cc40ccce7490","name":"Sistemas","email":"req.sistemas@sanjuandedios.org.ar","__v":0,"password":"Hospital"},"__v":0}
 [26-11-2019 16:22] [info] [user/getUsers] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}
+[26-11-2019 16:22] [info] [ticket/getDateTickets] dperez - ::1: Solicitud realizada | params:{"userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 16:22] [info] [ticket/getDateTickets] dperez - ::1: Solicitud realizada | params:{"userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 16:22] [info] [ticket/getCountTickets] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 16:22] [info] [ticket/getDateTickets] dperez - ::1: Solicitud realizada | params:{"userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 16:22] [info] [ticket/getCountTickets] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 16:22] [info] [ticket/getTicketsPaged] dperez - ::1: Solicitud realizada | params:{"page":"1","perPage":"10","company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 16:22] [info] [ticket/getTicketsPaged] dperez - ::1: Solicitud realizada | params:{"page":"1","perPage":"10","company":"5d9cd3cb6df6cc40ccce7490","status":"Pendiente","userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 16:22] [info] [response/getResponses] dperez - ::1: Solicitud realizada | params:{"userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 16:22] [info] [company/getCompanies] dperez - ::1: Solicitud realizada | params:{} body:{}
+[26-11-2019 16:22] [info] [ticket/getTicket] dperez - ::1: Solicitud realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{}
+[26-11-2019 16:22] [info] [ticket/getTicketsForUser] dperez - ::1: Solicitud realizada | params:{"id":"5daefc7e3c999c22544d601d"} body:{}
+[26-11-2019 16:22] [info] [TextBlock/getTextBlockForTicket] dperez - ::1: Solicitud realizada | params:{"ticket":"5db9a3c854030041d4bfcd0e","type":"ROLE_ADMIN"} body:{}
+[26-11-2019 16:22] [info] [team/getTeams] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 16:22] [info] [TextBlock/readAgent] dperez - ::1: Solicitud realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
+[26-11-2019 16:22] [info] [TextBlock/readAgent] dperez - ::1: Solicitud realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
+[26-11-2019 16:22] [info] [ticket/updateTicket] dperez - ::1: Solicitud realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"status":"Pendiente","resolveDate":"27-11-2019","rating":0,"source":"MANUAL","priority":"Normal","_id":"5db9a3c854030041d4bfcd0e","tags":[],"numTicket":33,"sub":"Prueba","requester":{"receiveMail":true,"_id":"5daefc7e3c999c22544d601d","name":"Agustin","surname":"Alegre","email":"tadeo.rosochacki@sanjuandedios.org.ar","image":"null"},"createDate":"30-10-2019 11:52","lastActivity":"26-11-2019 16:26","__v":0,"agent":{"receiveMail":false,"_id":"5da7503ace4c9d22ac62e297","name":"Daniel","surname":"Perez","email":"dperez@hotmail.com","image":"oqxS_xjHLTWfG6it6KJb_8dS.jpg"},"team":{"image":"8gV17NokOsUUvqSUogKC4NPf.jpg","_id":"5da74984670a450ed882e238","name":"Software","users":[{"_id":"5da7503ace4c9d22ac62e297","name":"Daniel","surname":"Perez","image":"oqxS_xjHLTWfG6it6KJb_8dS.jpg"},{"_id":"5dbada6b534da9227cfbce1b","name":"Guillermo","surname":"Luparia","image":"null"},{"_id":"5da61747e3fdc1044cd078e2","name":"Maria Jose","surname":"Pereyra","image":"xVcRFTtVfv56KEaQBwn0gHUI.jpg"}]},"company":{"image":"FvcIpYIhsw4sH4gCPoT42sEf.png","mailSender":true,"_id":"5d9cd3cb6df6cc40ccce7490","name":"Sistemas","email":"req.sistemas@sanjuandedios.org.ar"}}
+[26-11-2019 16:22] [info] [TextBlock/saveTextBlock] dperez - ::1: Solicitud realizada | params:{} body:{"_id":"","text":"Daniel Perez ha actualizado la fecha estimada de solución a 27-11-2019","user":"5da7503ace4c9d22ac62e297","createDate":"","ticket":"5db9a3c854030041d4bfcd0e","type":"INFO","files":[""],"read":false}
+[26-11-2019 16:22] [info] [ticket/getTicket] dperez - ::1: Solicitud realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{}
+[26-11-2019 16:22] [info] [TextBlock/getTextBlock] dperez - ::1: Solicitud realizada | params:{"id":"5ddd7c5bad1c223a5c0df36f"} body:{}
+[26-11-2019 16:22] [info] [TextBlock/getTextBlockForTicket] dperez - ::1: Solicitud realizada | params:{"ticket":"5db9a3c854030041d4bfcd0e","type":"ROLE_ADMIN"} body:{}
+[26-11-2019 16:22] [info] [ticket/getTicketsForUser] dperez - ::1: Solicitud realizada | params:{"id":"5daefc7e3c999c22544d601d"} body:{}
+[26-11-2019 16:22] [info] [team/getTeams] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490"} body:{}
+[26-11-2019 16:22] [info] [TextBlock/readAgent] dperez - ::1: Solicitud realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
+[26-11-2019 16:22] [info] [TextBlock/readAgent] dperez - ::1: Solicitud realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
+[26-11-2019 16:22] [info] [ticket/getDateTickets] dperez - ::1: Solicitud realizada | params:{"userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 16:22] [info] [ticket/getCountTickets] dperez - ::1: Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 16:22] [info] [ticket/getDateTickets] dperez - ::1: Solicitud realizada | params:{"userId":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 16:34] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 16:34] [info] [user/getUsers] dperez (::1) Solicitud realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}
+[26-11-2019 16:35] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 16:35] [info] [user/getUser] dperez (::ffff:127.0.0.1) Petición realizada | params:{"id":"5da7503ace4c9d22ac62e297"} body:{}
+[26-11-2019 16:35] [info] [ticket/getCountTickets] dperez (::1) Petición realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","userId":"5da7503ace4c9d22ac62e297"} body:{}
