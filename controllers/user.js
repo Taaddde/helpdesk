@@ -16,14 +16,6 @@ const mongoose =require('mongoose')
 const ObjectId = mongoose.Types.ObjectId;
 
 
-function prueba(req, res){
-    var ip = req.ip;
-     console.log(req.body, ip);
-
-    logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Solicitud de '+req.params.id}});
-                res.status(200).send({message:"Su solicitud fue realizada con éxito"})
-}
-
 function saveUser(req, res){
     var decoded = jwt_decode(req.headers.authorization);
     var user = new User();
@@ -219,7 +211,6 @@ var decoded = jwt_decode(req.headers.authorization);
                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado el usuario'});
             }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({user:user});
             }
         }
@@ -243,7 +234,6 @@ function getUsers(req, res){
                     logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+getUsers.name, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 res.status(404).send({message: 'No hay usuarios'})
                 }else{
-                     logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+getUsers.name, msg: decoded.userName+' ('+req.ip+') Solicitud de '+req.params.id}});
                      return res.status(200).send({
                         users: users
                     });
@@ -292,7 +282,7 @@ function getUsers(req, res){
 }
 
 function getUsersForName(req, res){
-var decoded = jwt_decode(req.headers.authorization);
+    var decoded = jwt_decode(req.headers.authorization);
     var name = req.params.name;
     var company = req.params.company;
     var functionName = 'getUsersForName';
@@ -306,7 +296,6 @@ var decoded = jwt_decode(req.headers.authorization);
                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 res.status(404).send({message: 'No hay usuarios'})
             }else{
-                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({
                     users: users
                 });
@@ -451,7 +440,4 @@ module.exports = {
     getUsersForName,
 
     loginUser,
-
-
-    prueba
 };

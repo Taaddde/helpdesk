@@ -25,6 +25,4 @@ api.post('/add', md_auth.ensureAuth, userController.saveUser);
 api.put('/update/:id', md_auth.ensureAuth, userController.updateUser);
 api.delete('/delete/:id', md_auth.ensureAuth, userController.deleteUser);
 
-api.post('/test', userController.prueba);
-
 module.exports = api;
