@@ -62,7 +62,7 @@ export class userService{
             'Content-Type': 'application/json',
         });
 
-        return this._http.put(this.url+'user/update/'+userName, {}, {headers: headers})
+        return this._http.put(this.url+'user/forgot/'+userName, {}, {headers: headers})
                         .map(res=>res.json());
     }
 
@@ -74,6 +74,16 @@ export class userService{
          let options = new RequestOptions({headers: headers});
          return this._http.get(this.url+'user/valid-passToken/'+id+'/'+passToken, options)
                             .map(res => res.json());
+    }
+
+    resetPass(id, passToken, password){
+
+        let headers = new Headers({
+            'Content-Type': 'application/json'
+        });
+
+        return this._http.put(this.url+'user/reset-password/'+id+'/'+passToken, {password:password}, {headers: headers})
+                        .map(res=>res.json());
     }
 
     getList(token){

@@ -18,7 +18,7 @@ export class PassResetComponent implements OnInit {
   public user: User;
   public confirmPass: string;
 
-  public title = 'HelpDesk';
+  public title = 'Recuperación de contraseña';
   public alertMessage;
   public url: string;
 
@@ -32,11 +32,16 @@ export class PassResetComponent implements OnInit {
     this.alertMessage = '';
     this.confirmPass = '';
     this.url = GLOBAL.url;
-    this.user = new User('','','','','','','','','','', false);
+    this.user = new User('','','','','','','','','','', false,'');
+    
    }
 
   ngOnInit() {
     this.validateUrl();
+    if(localStorage.getItem('identity') || localStorage.getItem('token')){
+      localStorage.clear();
+      location.reload()
+    }
   }
 
   validateUrl(){
@@ -46,13 +51,15 @@ export class PassResetComponent implements OnInit {
       this._userService.validUser(id, passToken).subscribe(
         response =>{
             if(!response.user){
-              //this._router.navigate(['/reset-error']);
+              this.validUrl = false;
             }else{
               this.user = response.user;
-              console.log(this.user)
+              this.title = '¡Hola '+this.user.name+'! recuperemos tu contraseña';
+              this.validUrl = true;
             }
         },
         error =>{
+          this.validUrl = false;
             var errorMessage = <any>error;
             if(errorMessage != null){
               var body = JSON.parse(error._body);
@@ -63,4 +70,28 @@ export class PassResetComponent implements OnInit {
     })
   }
 
+  onSubmit(){
+    if(this.user.password != this.confirmPass){
+      this.alertMessage = 'La contraseña ingresada no coincide con la contraseña de confirmación'
+    }else{
+      this._userService.resetPass(this.user._id, this.user.passToken, this.confirmPass).subscribe(
+        response =>{
+            if(!response.user){
+              this.alertMessage = 'Hubo un problema en el servidor, contacte con el administrador'
+            }else{
+              alert('Contraseña modificada');
+              window.location.href = '/home';
+            }
+        },
+        error =>{
+          this.validUrl = false;
+            var errorMessage = <any>error;
+            if(errorMessage != null){
+              var body = JSON.parse(error._body);
+              this.alertMessage = body.message;
+            }
+        }
+      );
+    }
+  }
 }

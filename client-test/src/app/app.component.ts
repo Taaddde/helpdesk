@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
   public notifications;
   public searched;
   public valSearch:string;
-  
+  public reset:boolean;
 
   //Asigna un valor a una propiedad
   constructor(
@@ -38,12 +38,13 @@ export class AppComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router
   ){
-    this.user = new User('','','','','','','ROLE_REQUESTER','','','', false);
-    this.user_register = new User('','','','','','','ROLE_REQUESTER','','','', false);
+    this.user = new User('','','','','','','ROLE_REQUESTER','','','', false,'');
+    this.user_register = new User('','','','','','','ROLE_REQUESTER','','','', false,'');
     this.url=GLOBAL.url;
     this.alertMessage = '';
     this.notifications = '';
     this.valSearch = '';
+    this.reset = false;
   
   } 
 
@@ -58,7 +59,9 @@ export class AppComponent implements OnInit {
         this.getMessagesReq();
         this.sub = Observable.interval(15000).subscribe((val) => { this.getMessagesReq(); });
       }
-  
+    }
+    if(window.location.pathname.split('/')[1] == 'reset-password'){
+      this.reset = true;
     }
   }
 
@@ -135,7 +138,7 @@ export class AppComponent implements OnInit {
               }else{
                 // Crear elemento en el localstorage para tener el token en sesion
                 localStorage.setItem('token', token);
-                this.user = new User('','','','','','','ROLE_REQUESTER','','','', false);
+                this.user = new User('','','','','','','ROLE_REQUESTER','','','', false,'');
                 location.reload();
               }
             },

@@ -690,3 +690,92 @@
 [28-11-2019 12:05] [info] [index] Servidor iniciado en puerto 3977
 [28-11-2019 12:05] [info] [index] Servidor iniciado en puerto 3977
 [28-11-2019 12:05] [info] [user/validUser] 5daefc7e3c999c22544d601d (::1) Petición realizada | params:{"id":"5daefc7e3c999c22544d601d","passToken":"2a100f8dUYlJhXATr35n4BRYPPicdcHiIVsWCnRGmSILKDKEEj4Gtky"} body:{}
+[28-11-2019 13:29] [info] [index] Servidor iniciado en puerto 3977
+[28-11-2019 13:29] [info] [user/validUser] 5daefc7e3c999c22544d601d (::1) Petición realizada | params:{"id":"5daefc7e3c999c22544d601d","passToken":"2a10pyJpoeIPSAKY22hNifHSODfcB8LCNA07ByKCPHJxYiAxHMtsQS"} body:{}
+[28-11-2019 13:30] [info] [index] Servidor iniciado en puerto 3977
+[28-11-2019 13:31] [info] [index] Servidor iniciado en puerto 3977
+[28-11-2019 13:31] [info] [user/validUser] 5daefc7e3c999c22544d601d (::1) Petición realizada | params:{"id":"5daefc7e3c999c22544d601d","passToken":"2a10pyJpoeIPSAKY22hNifHSODfcB8LCNA07ByKCPHJxYiAxHMtsQS"} body:{}
+[28-11-2019 13:31] [error] [user/resetPass] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:31] [info] [user/forgotPassword] aalegre (::1) Petición realizada | params:{"userName":"aalegre"} body:{}
+[28-11-2019 13:31] [error] [user/resetPass] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:34] [info] [index] Servidor iniciado en puerto 3977
+[28-11-2019 13:34] [error] [user/resetPass] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:34] [error] [user/resetPass] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:34] [info] [index] Servidor iniciado en puerto 3977
+[28-11-2019 13:35] [info] [index] Servidor iniciado en puerto 3977
+[28-11-2019 13:35] [info] [index] Servidor iniciado en puerto 3977
+[28-11-2019 13:35] [info] [user/resetPass] undefined (::1) Petición realizada | params:{"id":"5daefc7e3c999c22544d601d","passToken":"2a10EnHXsm84skQS2e09KfSuj9tvTIVZ1v5LHzuWwk21fS2R7CRR2"} body:{"password":"admin2"}
+[28-11-2019 13:35] [error] [user/loginUser] aalegre (::1) Usuario/contraseña incorrecta
+[28-11-2019 13:35] [info] [user/loginUser] aalegre (::1) Usuario conectado
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [info] [user/loginUser] aalegre (::1) Usuario conectado
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/loginUser] aalegre (::1) Usuario/contraseña incorrecta
+[28-11-2019 13:35] [info] [user/loginUser] aalegre (::1) Usuario conectado
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:35] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:46] [info] [index] Servidor iniciado en puerto 3977
+[28-11-2019 13:46] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:46] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:46] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:46] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:46] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:46] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:46] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:46] [info] [user/validUser] 5daefc7e3c999c22544d601d (::1) Petición realizada | params:{"id":"5daefc7e3c999c22544d601d","passToken":"2a10EnHXsm84skQS2e09KfSuj9tvTIVZ1v5LHzuWwk21fS2R7CRR2"} body:{}
+[28-11-2019 13:46] [info] [user/validUser] 5daefc7e3c999c22544d601d (::1) Petición realizada | params:{"id":"5daefc7e3c999c22544d601d","passToken":"2a10EnHXsm84skQS2e09KfSuj9tvTIVZ1v5LHzuWwk21fS2R7CRR2"} body:{}
+[28-11-2019 13:46] [info] [user/validUser] 5daefc7e3c999c22544d601d (::1) Petición realizada | params:{"id":"5daefc7e3c999c22544d601d","passToken":"2a10EnHXsm84skQS2e09KfSuj9tvTIVZ1v5LHzuWwk21fS2R7CRR2"} body:{}
+[28-11-2019 13:46] [info] [user/resetPass] undefined (::1) Petición realizada | params:{"id":"5daefc7e3c999c22544d601d","passToken":"2a10EnHXsm84skQS2e09KfSuj9tvTIVZ1v5LHzuWwk21fS2R7CRR2"} body:{"password":"admin"}
+[28-11-2019 13:46] [info] [user/loginUser] aalegre (::1) Usuario conectado
+[28-11-2019 13:46] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 13:46] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) La URL ha expirado
+[28-11-2019 13:46] [info] [user/forgotPassword] aalegre (::1) Petición realizada | params:{"userName":"aalegre"} body:{}
+[28-11-2019 13:46] [info] [user/validUser] 5daefc7e3c999c22544d601d (::1) Petición realizada | params:{"id":"5daefc7e3c999c22544d601d","passToken":"2a10OBMwxYd3725akCDwlRCjSuG5d3ByzfLZ9sY93eemNCHABfakB6"} body:{}
+[28-11-2019 13:46] [info] [user/resetPass] undefined (::1) Petición realizada | params:{"id":"5daefc7e3c999c22544d601d","passToken":"2a10OBMwxYd3725akCDwlRCjSuG5d3ByzfLZ9sY93eemNCHABfakB6"} body:{"password":"admin"}
+[28-11-2019 13:46] [info] [user/resetPass] undefined (::1) Petición realizada | params:{"id":"5daefc7e3c999c22544d601d","passToken":"2a10OBMwxYd3725akCDwlRCjSuG5d3ByzfLZ9sY93eemNCHABfakB6"} body:{"password":"admin"}
+[28-11-2019 13:46] [info] [user/loginUser] aalegre (::1) Usuario conectado
+[28-11-2019 13:46] [info] [user/forgotPassword] aalegre (::1) Petición realizada | params:{"userName":"aalegre"} body:{}
+[28-11-2019 14:26] [info] [index] Servidor iniciado en puerto 3977
+[28-11-2019 14:26] [warn] [user/forgotPassword] asdas (::1) Objeto no encontrado
+[28-11-2019 14:26] [info] [user/forgotPassword] aalegre (::1) Petición realizada | params:{"userName":"aalegre"} body:{}
+[28-11-2019 14:26] [warn] [user/forgotPassword] asdas (::1) Objeto no encontrado
+[28-11-2019 14:26] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 14:26] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 14:26] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 14:33] [info] [index] Servidor iniciado en puerto 3977

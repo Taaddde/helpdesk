@@ -110,7 +110,7 @@ export class TicketNewComponent implements OnInit {
   }
 
   createRequester(){
-    this.requester = new User('','','','','','','ROLE_REQUESTER','','','',false);
+    this.requester = new User('','','','','','','ROLE_REQUESTER','','','',false,'');
     this.newRequester = true;
   }
 

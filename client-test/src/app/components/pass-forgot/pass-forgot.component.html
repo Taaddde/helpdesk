@@ -2,7 +2,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Nueva solicitud</h4>
+                    <h4 class="modal-title">Recuperar contraseña</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -10,13 +10,17 @@
                 
                 <form name="my-form" #form="ngForm" (ngSubmit)="onSubmit()">
                     <div class="modal-body">
-                        <label style="font-size: 20px;">Recuperar contraseña</label>
+                        <label>Se le enviará un correo para recuperar su contraseña</label>
+                        <div *ngIf="alertMessage != ''" class="alert alert-danger" role="alert">
+                            {{alertMessage}}
+                        </div>
                         <div class="form-group">
+                            <input type="text" (keydown)="this.alertMessage = ''" class="form-control" required placeholder="Nombre de usuario" [(ngModel)]="forgotUserName" name="forgotUserName"/>
                         </div>
                     </div>
                 <div class="modal-footer">
-                    <button class="btn btn-success" type="submit">
-                        Aceptar
+                    <button class="btn btn-dark" type="submit">
+                        Enviar
                     </button>
               </div>
             </form>

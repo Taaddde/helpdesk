@@ -1,4 +1,4 @@
-<div class="login-dark form-login" *ngIf="!identity">
+<div class="login-dark form-login" *ngIf="!identity && !reset">
     <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
         <div class="illustration">
             <img class="img-fluid logo" src="../assets/img/system/helpdesk-logo.png">
@@ -16,7 +16,7 @@
     </form>
 </div>
 
-
+<router-outlet *ngIf="!identity && reset"></router-outlet>
 
 
 <div *ngIf="identity">

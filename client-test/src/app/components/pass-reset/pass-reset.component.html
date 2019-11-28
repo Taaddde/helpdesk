@@ -9,14 +9,17 @@
         <div class="alert alert-danger" *ngIf="alertMessage != ''">
             <span>{{alertMessage}}</span>
         </div>
-        <div class="form-group">
-            <input class="form-control" type="text" name="text" placeholder="Nombre" #userName="ngModel" name="userName" [(ngModel)]="user.userName" required>
-        </div>
-        <div class="form-group">
+        <div class="form-group" *ngIf="validUrl">
             <input class="form-control" type="password" name="password" placeholder="Contraseña" #password="ngModel" name="password" [(ngModel)]="user.password" required>
         </div>
-        <div class="form-group">
+        <div class="form-group" *ngIf="validUrl">
+            <input class="form-control" type="password" name="confirmPass" placeholder="Confirme contraseña" #password="ngModel" name="confirmPass" [(ngModel)]="confirmPass" required>
+        </div>
+        <div class="form-group" *ngIf="validUrl">
             <button class="btn btn-primary btn-block" type="submit">Cambiar contraseña</button>
         </div>
+        <a class="forgot" role="button" href="/">
+            Volver a inicio de usuario
+        </a>
     </form>
 </div>

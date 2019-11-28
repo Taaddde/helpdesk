@@ -459,7 +459,7 @@ function forgotPassword(req, res){
                                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: userName+' ('+req.ip+') Objeto no encontrado'}});
                                 res.status(404).send({message: 'El nombre de usuario no existe'});
                             }else{
-                                let txt = '<div style="position: relative;display: flex;flex-direction: column;min-width: 0;word-wrap: break-word;background-color: #fff;background-clip: border-box;border: 1px solid #e3e6f0;border-radius: .35rem;font-family: Nunito,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;"><div style="flex: 1 1 auto;padding: 1.25rem;"><h4 style="margin-bottom: .75rem;"><strong>¡Hola '+user.name+'!</strong></h4><hr/><p class="card-text">Se ha solicitado un cambio de contraseña para el usuario '+userUpdated.userName+'</p><hr /><a style="" href="http://localhost:4200/forgot/'+userUpdated._id+'/'+userUpdated.passToken+'" role="button" >Cambiar contraseña</a></div></div>'
+                                let txt = '<div style="position: relative;display: flex;flex-direction: column;min-width: 0;word-wrap: break-word;background-color: #fff;background-clip: border-box;border: 1px solid #e3e6f0;border-radius: .35rem;font-family: Nunito,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;"><div style="flex: 1 1 auto;padding: 1.25rem;"><h4 style="margin-bottom: .75rem;"><strong>¡Hola '+user.name+'!</strong></h4><hr/><p class="card-text">Se ha solicitado un cambio de contraseña para el usuario '+userUpdated.userName+'</p><hr /><a style="" href="http://localhost:4200/reset-password/'+userUpdated._id+'/'+update.passToken+'" role="button" >Cambiar contraseña</a></div></div>'
                                 let title = 'Recuperación de contraseña';
                                 mail.forgot(userUpdated.email, title, txt);
                                 logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
@@ -507,6 +507,55 @@ function validUser(req, res){
 
 }
 
+function resetPass(req, res){
+    let id = req.params.id;
+    let passToken = req.params.passToken;
+    var functionName = 'resetPass';
+
+    User.findById(id, (err, user) =>{
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: id+' ('+req.ip+') '+err}});
+            res.status(500).send({message: 'Error del servidor en la petición'});
+        }else{
+            if(!user){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: id+' ('+req.ip+') Objeto no encontrado'}});
+                res.status(404).send({message: 'URL no válida'});
+            }else{
+                if(user.passToken == passToken){
+                    if(user.passTokenExp > moment().unix()){
+                        let password = req.body.password;
+                        //encriptar y guardar
+                        bcrypt.hash(password, null, null, function(err, hash){
+                            //Guardar user
+                            User.findByIdAndUpdate(id, {password:hash}, (err, userUpdated) =>{
+                                if(err){
+                                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: user.userName+' ('+req.ip+') '+err}});
+                                    res.status(500).send({message: 'Error en el servidor al actualizar el usuario'});
+                                }else{
+                                    if(!userUpdated){
+                                        logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: user.userName+' ('+req.ip+') Objeto no encontrado'}});
+                                        res.status(404).send({message: 'No se ha podido encontrado el usuario'});
+                                    }else{
+                                        logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: user.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                                        res.status(200).send({user: userUpdated});
+                                    }
+                                }
+                            });
+                        });
+                    }else{
+                        logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: id+' ('+req.ip+') '+'La URL ha expirado'}});
+                        res.status(404).send({message: 'La URL ha expirado'});            
+                    }
+                }else{
+                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: id+' ('+req.ip+') '+'URL no válida'}});
+                    res.status(404).send({message: 'URL no válida'});        
+                }
+                
+            }
+        }
+    }).select({_id:1, name:1, surname:1, passToken:1, passTokenExp:1})
+}
+
 module.exports = {
     saveUser,
     updateUser,
@@ -522,4 +571,5 @@ module.exports = {
 
     loginUser,
     forgotPassword,
+    resetPass
 };
