@@ -130,12 +130,13 @@ var decoded = jwt_decode(req.headers.authorization);
     SubTypeTicket.findByIdAndUpdate(subTypeTicketId, update, (err, subTypeTicketUpdated) =>{
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
-                res.status(500).send({message: 'Error del servidor en la petición'});
+            res.status(500).send({message: 'Error del servidor en la petición'});
         }else{
             if(!subTypeTicketUpdated){
                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado el subtipo'});
             }else{
+                logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({subTypeTicket:subTypeTicketUpdated});
             }
         }

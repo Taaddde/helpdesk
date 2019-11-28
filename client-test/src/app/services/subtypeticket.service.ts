@@ -40,6 +40,17 @@ export class subTypeTicketService{
                             .map(res => res.json());
     }
 
+    goodCheck(token, id:string){
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+        });
+
+        return this._http.put(this.url+'subtype-ticket/goodcheck/'+id,{}, {headers: headers})
+                            .map(res => res.json());
+    }
+
+
     addCheck(token, id:string, check:string){
         let params = {check:check};
         let headers = new Headers({

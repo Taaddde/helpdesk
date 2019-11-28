@@ -12,9 +12,11 @@ var api = express.Router();
 api.get('/user/:id', md_auth.ensureAuth, userController.getUser);
 api.get('/users/:company/:role?', md_auth.ensureAuth, userController.getUsers);
 api.get('/for-name/:company/:name', md_auth.ensureAuth, userController.getUsersForName);
+api.get('/valid-passtoken/:id/:passToken', userController.validUser);
 
 //LOGIN
 api.post('/login', userController.loginUser);
+api.put('/forgot/:userName', userController.forgotPassword);
 
 //Imagenes
 api.post('/image/:id',[md_auth.ensureAuth, md_upload], userController.uploadImage);

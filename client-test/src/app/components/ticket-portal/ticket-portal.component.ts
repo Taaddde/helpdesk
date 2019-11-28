@@ -207,6 +207,21 @@ export class TicketPortalComponent implements OnInit {
     }
   }
 
+  goodCheck(){
+    this._subTypeTicketService.goodCheck(this.token, this.selectedSubtype._id).subscribe(
+      response =>{
+          if(!response.subTypeTicket){
+            alert('Error en el servidor, actualice la pagina');
+          }else{
+            this.cancelTicket();
+          }
+      },
+      error =>{
+          console.log(error);
+      }
+    );        
+  }
+
   cancelTicket(){
     this.companyName = 'Departamento'
     this.typeName = 'Tipo';

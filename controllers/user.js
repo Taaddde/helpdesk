@@ -10,6 +10,12 @@ var path = require('path');
 var logger = require('../services/logger');
 var jwt_decode = require('jwt-decode');
 
+//Sistema de expiración
+const moment = require('moment');
+
+//Sistema de mails
+const mail = require('../services/mail')
+
 
 const mongoose =require('mongoose')
 
@@ -276,7 +282,6 @@ function getUsers(req, res){
                 }
             });
         }
-        
     }
     
 }
@@ -303,7 +308,6 @@ function getUsersForName(req, res){
         }
     });
 }
-
 
 function loginUser(req, res){
     var params = req.body;
@@ -406,7 +410,7 @@ function getImageFile(req, res){
 }
 
 function deleteUser(req, res){
-var decoded = jwt_decode(req.headers.authorization);
+    var decoded = jwt_decode(req.headers.authorization);
     var userId = req.params.id;
     var functionName = 'deleteUser';
 
@@ -427,6 +431,82 @@ var decoded = jwt_decode(req.headers.authorization);
     })
 }
 
+function forgotPassword(req, res){
+    var userName = req.params.userName;
+    var functionName = 'forgotPassword';
+
+    User.findOne({userName:userName}, (err, user) =>{
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: userName+' ('+req.ip+') '+err}});
+            res.status(500).send({message: 'Error del servidor en la petición'});
+        }else{
+            if(!user){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: userName+' ('+req.ip+') Objeto no encontrado'}});
+                res.status(404).send({message: 'El nombre de usuario no existe'});
+            }else{
+                bcrypt.hash(moment()+user.surname,null, null, function(err, hash){
+                    let update = {
+                        passToken:hash.split('/').join('').split('.').join('').split('$').join(''),
+                        passTokenExp:moment().add(30,'minutes').unix()
+                    }
+
+                    User.findByIdAndUpdate(user._id, update, (err, userUpdated) =>{
+                        if(err){
+                            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: userName+' ('+req.ip+') '+err}});
+                            res.status(500).send({message: 'Error del servidor en la petición'});
+                        }else{
+                            if(!userUpdated){
+                                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: userName+' ('+req.ip+') Objeto no encontrado'}});
+                                res.status(404).send({message: 'El nombre de usuario no existe'});
+                            }else{
+                                let txt = '<div style="position: relative;display: flex;flex-direction: column;min-width: 0;word-wrap: break-word;background-color: #fff;background-clip: border-box;border: 1px solid #e3e6f0;border-radius: .35rem;font-family: Nunito,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;"><div style="flex: 1 1 auto;padding: 1.25rem;"><h4 style="margin-bottom: .75rem;"><strong>¡Hola '+user.name+'!</strong></h4><hr/><p class="card-text">Se ha solicitado un cambio de contraseña para el usuario '+userUpdated.userName+'</p><hr /><a style="" href="http://localhost:4200/forgot/'+userUpdated._id+'/'+userUpdated.passToken+'" role="button" >Cambiar contraseña</a></div></div>'
+                                let title = 'Recuperación de contraseña';
+                                mail.forgot(userUpdated.email, title, txt);
+                                logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                                res.status(200).send({mail:true});
+                            }
+                        }
+                    });
+                })
+            }
+        }
+    });
+
+}
+
+function validUser(req, res){
+    let id = req.params.id;
+    let passToken = req.params.passToken;
+    var functionName = 'validUser';
+
+    User.findById(id, (err, user) =>{
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: id+' ('+req.ip+') '+err}});
+            res.status(500).send({message: 'Error del servidor en la petición'});
+        }else{
+            if(!user){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: id+' ('+req.ip+') Objeto no encontrado'}});
+                res.status(404).send({message: 'URL no válida'});
+            }else{
+                if(user.passToken == passToken){
+                    if(user.passTokenExp > moment().unix()){
+                        logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: id+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                        res.status(200).send({user:user})
+                    }else{
+                        logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: id+' ('+req.ip+') '+'La URL ha expirado'}});
+                        res.status(500).send({message: 'La URL ha expirado'});            
+                    }
+                }else{
+                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: id+' ('+req.ip+') '+'URL no válida'}});
+                    res.status(500).send({message: 'URL no válida'});        
+                }
+                
+            }
+        }
+    }).select({_id:1, name:1, surname:1, passToken:1, passTokenExp:1})
+
+}
+
 module.exports = {
     saveUser,
     updateUser,
@@ -438,6 +518,8 @@ module.exports = {
     getUser,
     getUsers,
     getUsersForName,
+    validUser,
 
     loginUser,
+    forgotPassword,
 };

@@ -32,6 +32,8 @@ import { SearchListComponent } from './components/search-list/search-list.compon
 import { CompanyComponent } from './components/company/company.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { RequesterNewComponent } from './components/agent-new/requester-new.component';
+import { PassForgotComponent } from './components/pass-forgot/pass-forgot.component';
+import { PassResetComponent } from './components/pass-reset/pass-reset.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +60,9 @@ import { RequesterNewComponent } from './components/agent-new/requester-new.comp
     SearchListComponent,
     CompanyComponent,
     CalendarComponent,
-    RequesterNewComponent
+    RequesterNewComponent,
+    PassForgotComponent,
+    PassResetComponent
   ],
   imports: [
     BrowserModule,

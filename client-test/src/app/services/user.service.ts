@@ -57,6 +57,25 @@ export class userService{
                         .map(res=>res.json());
     }
 
+    forgotPassword(userName){
+        let headers = new Headers({
+            'Content-Type': 'application/json',
+        });
+
+        return this._http.put(this.url+'user/update/'+userName, {}, {headers: headers})
+                        .map(res=>res.json());
+    }
+
+    validUser(id, passToken){
+        let headers = new Headers({
+            'Content-Type':'application/json',
+         });
+ 
+         let options = new RequestOptions({headers: headers});
+         return this._http.get(this.url+'user/valid-passToken/'+id+'/'+passToken, options)
+                            .map(res => res.json());
+    }
+
     getList(token){
         let headers = new Headers({
             'Content-Type':'application/json',

@@ -562,3 +562,131 @@
 [26-11-2019 17:54] [info] [index] Servidor iniciado en puerto 3977
 [26-11-2019 17:55] [info] [index] Servidor iniciado en puerto 3977
 [26-11-2019 17:55] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 17:56] [info] [index] Servidor iniciado en puerto 3977
+[26-11-2019 17:56] [info] [user/loginUser] dperez (::1) Usuario conectado
+[26-11-2019 17:56] [info] [user/getUsers] dperez (::1) Petición realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}
+[26-11-2019 17:56] [info] [user/getUsers] dperez (::1) Petición realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}
+[26-11-2019 19:21] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 10:06] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 10:24] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 10:24] [info] [user/loginUser] aalegre (::1) Usuario conectado
+[27-11-2019 10:30] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 10:36] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 10:36] [info] [subtype_ticket/addGoodCheck] aalegre (::1) Petición realizada | params:{"id":"5dc054064fa9ef3ecc017823"} body:{}
+[27-11-2019 10:36] [error] [user/loginUser] trosochacki (::1) Usuario/contraseña incorrecta
+[27-11-2019 10:36] [info] [user/loginUser] dperez (::1) Usuario conectado
+[27-11-2019 10:36] [info] [user/loginUser] aalegre (::1) Usuario conectado
+[27-11-2019 13:00] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 13:10] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 13:10] [info] [user/loginUser] dperez (::1) Usuario conectado
+[27-11-2019 13:10] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
+[27-11-2019 13:10] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
+[27-11-2019 13:10] [info] [TextBlock/saveTextBlock] dperez (::1) Petición realizada | params:{} body:{"_id":"","text":"Hola<span _ngcontent-dbb-c4=\"\" contenteditable=\"false\"></span>","user":"5da7503ace4c9d22ac62e297","createDate":"","ticket":"5db9a3c854030041d4bfcd0e","type":"PUBLIC","files":[""],"read":true}
+[27-11-2019 13:10] [info] [ticket/updateTicket] dperez (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"status":"Pendiente","resolveDate":"27-11-2019","rating":0,"source":"MANUAL","priority":"Normal","_id":"5db9a3c854030041d4bfcd0e","tags":[],"numTicket":33,"sub":"Prueba","requester":{"receiveMail":true,"_id":"5daefc7e3c999c22544d601d","name":"Agustin","surname":"Alegre","email":"tadeo.rosochacki@sanjuandedios.org.ar","image":"null"},"createDate":"30-10-2019 11:52","lastActivity":"27-11-2019 13:11","__v":0,"agent":{"receiveMail":false,"_id":"5da7503ace4c9d22ac62e297","name":"Daniel","surname":"Perez","email":"dperez@hotmail.com","image":"oqxS_xjHLTWfG6it6KJb_8dS.jpg"},"team":{"image":"8gV17NokOsUUvqSUogKC4NPf.jpg","_id":"5da74984670a450ed882e238","name":"Software","users":[{"_id":"5da7503ace4c9d22ac62e297","name":"Daniel","surname":"Perez","image":"oqxS_xjHLTWfG6it6KJb_8dS.jpg"},{"_id":"5dbada6b534da9227cfbce1b","name":"Guillermo","surname":"Luparia","image":"null"},{"_id":"5da61747e3fdc1044cd078e2","name":"Maria Jose","surname":"Pereyra","image":"xVcRFTtVfv56KEaQBwn0gHUI.jpg"}]},"company":{"image":"FvcIpYIhsw4sH4gCPoT42sEf.png","mailSender":true,"_id":"5d9cd3cb6df6cc40ccce7490","name":"Sistemas","email":"req.sistemas@sanjuandedios.org.ar"}}
+[27-11-2019 13:10] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
+[27-11-2019 13:10] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
+[27-11-2019 13:10] [info] [company/updateCompany] dperez (::1) Petición realizada | params:{"id":"5d9cd3cb6df6cc40ccce7490"} body:{"image":"FvcIpYIhsw4sH4gCPoT42sEf.png","mailSender":true,"_id":"5d9cd3cb6df6cc40ccce7490","name":"Sistemas","email":"req.sistemas@sanjuandedios.org.ar","__v":0,"password":"Hospital2"}
+[27-11-2019 13:10] [info] [user/getUsers] dperez (::1) Petición realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}
+[27-11-2019 13:10] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
+[27-11-2019 13:10] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
+[27-11-2019 13:15] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 13:15] [info] [user/loginUser] aalegre (::1) Usuario conectado
+[27-11-2019 13:15] [info] [user/loginUser] aalegre (::1) Usuario conectado
+[27-11-2019 13:15] [info] [user/loginUser] dperez (::1) Usuario conectado
+[27-11-2019 13:15] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
+[27-11-2019 13:15] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
+[27-11-2019 13:17] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 13:17] [info] [TextBlock/saveTextBlock] dperez (::1) Petición realizada | params:{} body:{"_id":"","text":"sdfsdf<span _ngcontent-woy-c5=\"\" contenteditable=\"false\"></span>","user":"5da7503ace4c9d22ac62e297","createDate":"","ticket":"5db9a3c854030041d4bfcd0e","type":"PUBLIC","files":[""],"read":true}
+[27-11-2019 13:17] [info] [ticket/updateTicket] dperez (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"status":"Pendiente","resolveDate":"27-11-2019","rating":0,"source":"MANUAL","priority":"Normal","_id":"5db9a3c854030041d4bfcd0e","tags":[],"numTicket":33,"sub":"Prueba","requester":{"receiveMail":true,"_id":"5daefc7e3c999c22544d601d","name":"Agustin","surname":"Alegre","email":"tadeo.rosochacki@sanjuandedios.org.ar","image":"null"},"createDate":"30-10-2019 11:52","lastActivity":"27-11-2019 13:17","__v":0,"agent":{"receiveMail":false,"_id":"5da7503ace4c9d22ac62e297","name":"Daniel","surname":"Perez","email":"dperez@hotmail.com","image":"oqxS_xjHLTWfG6it6KJb_8dS.jpg"},"team":{"image":"8gV17NokOsUUvqSUogKC4NPf.jpg","_id":"5da74984670a450ed882e238","name":"Software","users":[{"_id":"5da7503ace4c9d22ac62e297","name":"Daniel","surname":"Perez","image":"oqxS_xjHLTWfG6it6KJb_8dS.jpg"},{"_id":"5dbada6b534da9227cfbce1b","name":"Guillermo","surname":"Luparia","image":"null"},{"_id":"5da61747e3fdc1044cd078e2","name":"Maria Jose","surname":"Pereyra","image":"xVcRFTtVfv56KEaQBwn0gHUI.jpg"}]},"company":{"image":"FvcIpYIhsw4sH4gCPoT42sEf.png","mailSender":true,"_id":"5d9cd3cb6df6cc40ccce7490","name":"Sistemas","email":"req.sistemas@sanjuandedios.org.ar"}}
+[27-11-2019 13:17] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
+[27-11-2019 13:17] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
+[27-11-2019 13:18] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 13:18] [info] [TextBlock/saveTextBlock] dperez (::1) Petición realizada | params:{} body:{"_id":"","text":"asdasda","user":"5da7503ace4c9d22ac62e297","createDate":"","ticket":"5db9a3c854030041d4bfcd0e","type":"PUBLIC","files":[""],"read":true}
+[27-11-2019 13:18] [info] [ticket/updateTicket] dperez (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"status":"Pendiente","resolveDate":"27-11-2019","rating":0,"source":"MANUAL","priority":"Normal","_id":"5db9a3c854030041d4bfcd0e","tags":[],"numTicket":33,"sub":"Prueba","requester":{"receiveMail":true,"_id":"5daefc7e3c999c22544d601d","name":"Agustin","surname":"Alegre","email":"tadeo.rosochacki@sanjuandedios.org.ar","image":"null"},"createDate":"30-10-2019 11:52","lastActivity":"27-11-2019 13:18","__v":0,"agent":{"receiveMail":false,"_id":"5da7503ace4c9d22ac62e297","name":"Daniel","surname":"Perez","email":"dperez@hotmail.com","image":"oqxS_xjHLTWfG6it6KJb_8dS.jpg"},"team":{"image":"8gV17NokOsUUvqSUogKC4NPf.jpg","_id":"5da74984670a450ed882e238","name":"Software","users":[{"_id":"5da7503ace4c9d22ac62e297","name":"Daniel","surname":"Perez","image":"oqxS_xjHLTWfG6it6KJb_8dS.jpg"},{"_id":"5dbada6b534da9227cfbce1b","name":"Guillermo","surname":"Luparia","image":"null"},{"_id":"5da61747e3fdc1044cd078e2","name":"Maria Jose","surname":"Pereyra","image":"xVcRFTtVfv56KEaQBwn0gHUI.jpg"}]},"company":{"image":"FvcIpYIhsw4sH4gCPoT42sEf.png","mailSender":true,"_id":"5d9cd3cb6df6cc40ccce7490","name":"Sistemas","email":"req.sistemas@sanjuandedios.org.ar"}}
+[27-11-2019 13:18] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
+[27-11-2019 13:18] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
+[27-11-2019 13:20] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 14:28] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:05] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:25] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:25] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:26] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:27] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:28] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:29] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:29] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:30] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:31] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:31] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:31] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:32] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:33] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:34] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:35] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:35] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:35] [info] [user/forgotPassword] aalegre (::1) Petición realizada | params:{"userName":"aalegre"} body:{}
+[27-11-2019 15:35] [info] [user/loginUser] aalegre (::1) Usuario conectado
+[27-11-2019 15:35] [info] [TextBlock/readRequest] aalegre (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
+[27-11-2019 15:35] [info] [TextBlock/readRequest] aalegre (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
+[27-11-2019 15:38] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:38] [info] [user/forgotPassword] aalegre (::1) Petición realizada | params:{"userName":"aalegre"} body:{}
+[27-11-2019 15:47] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:47] [info] [user/forgotPassword] aalegre (::1) Petición realizada | params:{"userName":"aalegre"} body:{}
+[27-11-2019 15:51] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:51] [info] [user/forgotPassword] aalegre (::1) Petición realizada | params:{"userName":"aalegre"} body:{}
+[27-11-2019 15:52] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:52] [info] [user/forgotPassword] aalegre (::1) Petición realizada | params:{"userName":"aalegre"} body:{}
+[27-11-2019 15:53] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:53] [info] [user/forgotPassword] aalegre (::1) Petición realizada | params:{"userName":"aalegre"} body:{}
+[27-11-2019 15:54] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:54] [info] [user/forgotPassword] aalegre (::1) Petición realizada | params:{"userName":"aalegre"} body:{}
+[27-11-2019 15:55] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:55] [info] [user/forgotPassword] aalegre (::1) Petición realizada | params:{"userName":"aalegre"} body:{}
+[27-11-2019 15:57] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 15:57] [info] [user/forgotPassword] aalegre (::1) Petición realizada | params:{"userName":"aalegre"} body:{}
+[27-11-2019 16:01] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 16:01] [error] [user/forgotPassword] aalegre (::1) No se ha podido enviar el mail
+[27-11-2019 16:02] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 16:02] [info] [user/forgotPassword] aalegre (::1) Petición realizada | params:{"userName":"aalegre"} body:{}
+[27-11-2019 16:03] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 16:18] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 16:19] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 16:39] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 16:40] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 16:42] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 16:44] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 16:44] [info] [user/forgotPassword] 5daefc7e3c999c22544d601d (::1) Petición realizada | params:{"id":"5daefc7e3c999c22544d601d","passToken":"2a10T9GxBwdEHRc3N75NMNnvVeNpSPyMq5EZhiOGcOEQlJejaXa3omKbK"} body:{}
+[27-11-2019 16:45] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 16:45] [info] [user/validUser] 5daefc7e3c999c22544d601d (::1) Petición realizada | params:{"id":"5daefc7e3c999c22544d601d","passToken":"2a10T9GxBwdEHRc3N75NMNnvVeNpSPyMq5EZhiOGcOEQlJejaXa3omKbK"} body:{}
+[27-11-2019 16:45] [info] [user/validUser] 5daefc7e3c999c22544d601d (::1) Petición realizada | params:{"id":"5daefc7e3c999c22544d601d","passToken":"2a10T9GxBwdEHRc3N75NMNnvVeNpSPyMq5EZhiOGcOEQlJejaXa3omKbK"} body:{}
+[27-11-2019 16:45] [info] [user/validUser] 5daefc7e3c999c22544d601d (::1) Petición realizada | params:{"id":"5daefc7e3c999c22544d601d","passToken":"2a10T9GxBwdEHRc3N75NMNnvVeNpSPyMq5EZhiOGcOEQlJejaXa3omKbK"} body:{}
+[27-11-2019 17:22] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 17:22] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) La URL ha expirado
+[27-11-2019 17:22] [info] [user/forgotPassword] aalegre (::1) Petición realizada | params:{"userName":"aalegre"} body:{}
+[27-11-2019 17:22] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) La URL ha expirado
+[27-11-2019 17:22] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) La URL ha expirado
+[27-11-2019 17:22] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) La URL ha expirado
+[27-11-2019 17:22] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) La URL ha expirado
+[27-11-2019 17:30] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 17:30] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) La URL ha expirado
+[27-11-2019 17:30] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 17:30] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) La URL ha expirado
+[27-11-2019 17:31] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 17:31] [info] [user/forgotPassword] aalegre (::1) Petición realizada | params:{"userName":"aalegre"} body:{}
+[27-11-2019 17:31] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[27-11-2019 17:31] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) La URL ha expirado
+[27-11-2019 17:31] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) La URL ha expirado
+[27-11-2019 17:33] [info] [index] Servidor iniciado en puerto 3977
+[27-11-2019 17:33] [info] [user/validUser] 5daefc7e3c999c22544d601d (::1) Petición realizada | params:{"id":"5daefc7e3c999c22544d601d","passToken":"2a10wMi7ua42CtmPJ8FSDsdnBus2Q3NkfiQWuXVh7OnwCcQ430KhPS"} body:{}
+[27-11-2019 17:33] [info] [index] Servidor iniciado en puerto 3977
+[28-11-2019 12:01] [info] [index] Servidor iniciado en puerto 3977
+[28-11-2019 12:01] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 12:01] [info] [user/forgotPassword] aalegre (::1) Petición realizada | params:{"userName":"aalegre"} body:{}
+[28-11-2019 12:01] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 12:03] [info] [index] Servidor iniciado en puerto 3977
+[28-11-2019 12:03] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 12:04] [info] [index] Servidor iniciado en puerto 3977
+[28-11-2019 12:04] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
+[28-11-2019 12:05] [info] [index] Servidor iniciado en puerto 3977
+[28-11-2019 12:05] [info] [index] Servidor iniciado en puerto 3977
+[28-11-2019 12:05] [info] [user/validUser] 5daefc7e3c999c22544d601d (::1) Petición realizada | params:{"id":"5daefc7e3c999c22544d601d","passToken":"2a100f8dUYlJhXATr35n4BRYPPicdcHiIVsWCnRGmSILKDKEEj4Gtky"} body:{}

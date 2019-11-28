@@ -13,7 +13,9 @@ var UserSchema = Schema({
     sign: {type: String, default:''},
     image:String,
     company: {type: Schema.ObjectId, ref:'Company'},
-    receiveMail: {type: Boolean, default:false}
+    receiveMail: {type: Boolean, default:false},
+    passToken: {type: String, default:null},
+    passTokenExp: {type: String, default:'2000-01-01'}
 });
 
 module.exports = mongoose.model('User', UserSchema);

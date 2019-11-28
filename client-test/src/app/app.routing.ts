@@ -16,12 +16,14 @@ import { ConfigComponent } from './components/config/config.component';
 import { SearchListComponent } from './components/search-list/search-list.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { RequesterNewComponent } from './components/agent-new/requester-new.component';
+import { PassResetComponent } from './components/pass-reset/pass-reset.component';
 
 
 const appRoutes: Routes = [
     //Redireccion
     {path: 'home', component: HomeComponent},
     {path: '', redirectTo: 'home', pathMatch: 'full'},
+    {path: 'reset-password/:id/:passToken', component: PassResetComponent},
 
     {path: 'ticket/:page/:perPage', component: TicketListComponent},
     {path: 'ticket/:page/:perPage/:status', component: TicketListComponent},

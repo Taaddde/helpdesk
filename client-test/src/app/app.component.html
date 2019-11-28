@@ -9,9 +9,15 @@
         <div class="alert alert-danger" *ngIf="alertMessage != ''"><span>{{alertMessage}}</span></div>
         <div class="form-group"><input class="form-control" type="text" name="text" placeholder="Nombre" #userName="ngModel" name="userName" [(ngModel)]="user.userName" required></div>
         <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Contraseña" #password="ngModel" name="password" [(ngModel)]="user.password" required></div>
-        <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Ingresar</button></div><a class="forgot" href="#">¿Olvidaste la contraseña?</a>
+        <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Ingresar</button></div>
+        <a class="forgot" role="button" data-toggle="modal" data-target="#passforgot">
+            ¿Olvidaste la contraseña?
+        </a>
     </form>
 </div>
+
+
+
 
 <div *ngIf="identity">
     <div id="page-top">
@@ -78,25 +84,6 @@
                                     </div>
                                 </li>
                                 
-                                <!-- <li class="nav-item dropdown no-arrow mx-1" role="presentation">
-                                    <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="badge badge-danger badge-counter">3+</span><i class="fas fa-bell fa-fw"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-list dropdown-menu-right animated--grow-in"
-                                            role="menu">
-                                            <h6 class="dropdown-header">Centro de alertas</h6>
-
-                                            <a class="d-flex align-items-center dropdown-item" href="#">
-                                                <div class="mr-3">
-                                                    <div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i></div>
-                                                </div>
-                                                <div><span class="small text-gray-500">December 12, 2019</span>
-                                                    <p>A new monthly report is ready to download!</p>
-                                                </div>
-                                            </a>
-
-                                            <a class="text-center dropdown-item small text-gray-500" href="#">Show All Alerts</a></div>
-                                    </div>
-                                </li> -->
-
                                 <li class="nav-item dropdown no-arrow mx-1" role="presentation">
                                     <div class="nav-item dropdown no-arrow">
                                         <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#">
@@ -171,3 +158,5 @@
 </div>
 
 <app-ticket-portal *ngIf="identity"></app-ticket-portal>
+<app-ticket-portal *ngIf="identity"></app-ticket-portal>
+<app-pass-forgot></app-pass-forgot>

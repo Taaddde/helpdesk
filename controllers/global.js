@@ -120,7 +120,7 @@ var decoded = jwt_decode(req.headers.authorization);
 }
 
 function sendMail(req, res){
-var decoded = jwt_decode(req.headers.authorization);
+    var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'sendMail';
     let to = req.body.to;
     let sub = req.body.sub;
