@@ -779,3 +779,8 @@
 [28-11-2019 14:26] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
 [28-11-2019 14:26] [error] [user/validUser] 5daefc7e3c999c22544d601d (::1) URL no válida
 [28-11-2019 14:33] [info] [index] Servidor iniciado en puerto 3977
+[28-11-2019 14:35] [info] [index] Servidor iniciado en puerto 3977
+[28-11-2019 14:35] [info] [user/forgotPassword] aalegre (::1) Petición realizada | params:{"userName":"aalegre"} body:{}
+[28-11-2019 14:35] [info] [user/validUser] 5daefc7e3c999c22544d601d (::1) Petición realizada | params:{"id":"5daefc7e3c999c22544d601d","passToken":"2a109ZTOzTaqKYSOEOCkCiC65OcqW64K4OZFSkRDOU5V1ZslXJ6z0e"} body:{}
+[28-11-2019 14:35] [info] [user/resetPass] undefined (::1) Petición realizada | params:{"id":"5daefc7e3c999c22544d601d","passToken":"2a109ZTOzTaqKYSOEOCkCiC65OcqW64K4OZFSkRDOU5V1ZslXJ6z0e"} body:{"password":"admin"}
+[28-11-2019 14:39] [info] [index] Servidor iniciado en puerto 3977
