@@ -792,3 +792,7 @@
 [28-11-2019 14:44] [info] [user/forgotPassword] aalegre (::1) Petición realizada | params:{"userName":"aalegre"} body:{}
 [28-11-2019 14:44] [info] [user/validUser] 5daefc7e3c999c22544d601d (::1) Petición realizada | params:{"id":"5daefc7e3c999c22544d601d","passToken":"2a10AJBu8J4z8GBnJbA47nvTme1cpngNIJc0rpse2QDc7CybuBwwyMnC2"} body:{}
 [28-11-2019 14:44] [info] [user/resetPass] aalegre (::1) Petición realizada | params:{"id":"5daefc7e3c999c22544d601d","passToken":"2a10AJBu8J4z8GBnJbA47nvTme1cpngNIJc0rpse2QDc7CybuBwwyMnC2"} body:{"password":"admin"}
+[28-11-2019 14:44] [info] [user/loginUser] AALEGRE (::1) Usuario conectado
+[28-11-2019 14:44] [info] [user/loginUser] aalegre (::1) Usuario conectado
+[28-11-2019 14:44] [info] [TextBlock/readRequest] aalegre (::1) Petición realizada | params:{"id":"5dd8300ae28d7927e037e11f"} body:{"read":true}
+[28-11-2019 14:44] [info] [TextBlock/readRequest] aalegre (::1) Petición realizada | params:{"id":"5dd8300ae28d7927e037e11f"} body:{"read":true}

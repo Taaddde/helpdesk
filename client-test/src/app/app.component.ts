@@ -9,6 +9,8 @@ import 'rxjs/add/observable/interval';
 import { ticketService } from './services/ticket.service';
 import { globalService } from './services/global.service';
 
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -29,6 +31,8 @@ export class AppComponent implements OnInit {
   public valSearch:string;
   public reset:boolean;
 
+  public count = 0;
+
   //Asigna un valor a una propiedad
   constructor(
     private _userService: userService,
@@ -45,7 +49,6 @@ export class AppComponent implements OnInit {
     this.notifications = '';
     this.valSearch = '';
     this.reset = false;
-  
   } 
 
   ngOnInit(){
@@ -64,8 +67,6 @@ export class AppComponent implements OnInit {
       this.reset = true;
     }
   }
-
-
 
   getMessages(){
     this._ticketService.getMessages(this.token, this.identity['_id']).subscribe(

@@ -2,6 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { NgxSpinnerModule } from "ngx-spinner";
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import {FullCalendarModule} from 'primeng/fullcalendar';
@@ -34,6 +36,7 @@ import { CalendarComponent } from './components/calendar/calendar.component';
 import { RequesterNewComponent } from './components/agent-new/requester-new.component';
 import { PassForgotComponent } from './components/pass-forgot/pass-forgot.component';
 import { PassResetComponent } from './components/pass-reset/pass-reset.component';
+import { MyHttpInterceptor } from './services/myhttpinterceptor';
 
 @NgModule({
   declarations: [
@@ -70,9 +73,17 @@ import { PassResetComponent } from './components/pass-reset/pass-reset.component
     HttpModule,
     routing,
     ChartModule,
-    FullCalendarModule
+    FullCalendarModule,
+    NgxSpinnerModule
   ],
-  providers: [appRoutingProviders],
+  providers: [
+    appRoutingProviders,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MyHttpInterceptor,
+      multi: true,
+    }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
