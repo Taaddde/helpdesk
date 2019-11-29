@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/observable';
 import {GLOBAL} from './global'; // Hecho a mano
 import {map} from 'rxjs/operators';
 import {Tag} from '../models/tag';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 
 //Inyeccion de dependencias
 @Injectable()
@@ -13,8 +15,14 @@ export class tagService{
     public url: string; //url del api
     public identity;
     public token;
+    public httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+          'Authorization': 'null'
+        })
+    }
 
-    constructor(private _http:Http){
+    constructor(private _http:Http, private _httpClient: HttpClient){
         this.url = GLOBAL.url;
     }
 
@@ -52,36 +60,24 @@ export class tagService{
     }
 
     getList(token){
-      let headers = new Headers({
-          'Content-Type':'application/json',
-          'Authorization':token
-      });
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
 
-      let options = new RequestOptions({headers: headers});
-      return this._http.get(this.url+'tag/tags', options)
-                          .map(res => res.json());
+        return this._httpClient.get<any>(this.url+'tag/tags', this.httpOptions);
     }
 
     getOne(token, id){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-          });
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
 
-          let options = new RequestOptions({headers: headers});
-          return this._http.get(this.url+'tag/tag/'+id, options)
-                            .map(res => res.json());
+        return this._httpClient.get<any>(this.url+'tag/tag/'+id, this.httpOptions);
     }
 
     getForName(token, i: string){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-          });
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
 
-          let options = new RequestOptions({headers: headers});
-          return this._http.get(this.url+'tag/for-name/'+i, ({headers: headers}))
-                            .map(res => res.json());
+        return this._httpClient.get<any>(this.url+'tag/for-name/'+i, this.httpOptions);
     }
 
     

@@ -3,6 +3,7 @@ import {Http, Headers, RequestOptions} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {GLOBAL} from './global'; // Hecho a mano
 import {Company} from '../models/company';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 //Inyeccion de dependencias
 @Injectable()
@@ -12,7 +13,14 @@ export class companyService{
     public identity;
     public token;
 
-    constructor(private _http:Http){
+    public httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+          'Authorization': 'null'
+        })
+    }
+
+    constructor(private _http:Http, private _httpClient: HttpClient){
         this.url = GLOBAL.url;
     }
 
@@ -50,36 +58,27 @@ export class companyService{
     }
 
     getList(token){
-      let headers = new Headers({
-          'Content-Type':'application/json',
-          'Authorization':token
-      });
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
 
-      let options = new RequestOptions({headers: headers});
-      return this._http.get(this.url+'company/companies', options)
-                          .map(res => res.json());
+        return this._httpClient.get<any>(this.url+'company/companies', this.httpOptions);
+
     }
 
     getForName(token, name){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-         });
- 
-         let options = new RequestOptions({headers: headers});
-         return this._http.get(this.url+'company/for-name/'+name, options)
-                            .map(res => res.json());
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'company/for-name/'+name, this.httpOptions);
+
     }
 
     getOne(token, id){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-          });
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
 
-          let options = new RequestOptions({headers: headers});
-          return this._http.get(this.url+'company/company/'+id, options)
-                            .map(res => res.json());
+        return this._httpClient.get<any>(this.url+'company/company/'+id, this.httpOptions);
+
     }    
 
 }

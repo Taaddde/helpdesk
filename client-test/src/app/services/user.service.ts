@@ -5,6 +5,8 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/observable';
 import {GLOBAL} from './global'; // Hecho a mano
 import {map} from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 
 //Inyeccion de dependencias
 @Injectable()
@@ -13,8 +15,14 @@ export class userService{
     public url: string; //url del api
     public identity;
     public token;
+    public httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+          'Authorization': 'null'
+        })
+    }
 
-    constructor(private _http:Http){
+    constructor(private _http:Http, private _httpClient: HttpClient){
         this.url = GLOBAL.url;
     }
 
@@ -67,13 +75,7 @@ export class userService{
     }
 
     validUser(id, passToken){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-         });
- 
-         let options = new RequestOptions({headers: headers});
-         return this._http.get(this.url+'user/valid-passToken/'+id+'/'+passToken, options)
-                            .map(res => res.json());
+        return this._httpClient.get<any>(this.url+'user/valid-passToken/'+id+'/'+passToken, this.httpOptions);
     }
 
     resetPass(id, passToken, password){
@@ -87,59 +89,39 @@ export class userService{
     }
 
     getList(token){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-         });
- 
-         let options = new RequestOptions({headers: headers});
-         return this._http.get(this.url+'user/users', options)
-                            .map(res => res.json());
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'user/users', this.httpOptions);
     }
 
     getForName(token, company, name){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-         });
- 
-         let options = new RequestOptions({headers: headers});
-         return this._http.get(this.url+'user/for-name/'+company+'/'+name, options)
-                            .map(res => res.json());
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'user/for-name/'+company+'/'+name, this.httpOptions);
     }
 
 
     getListAgents(token, company:string){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-         });
- 
-         let options = new RequestOptions({headers: headers});
-         return this._http.get(this.url+'user/users/'+company+'/ROLE_AGENT', options)
-                            .map(res => res.json());
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'user/users/'+company+'/ROLE_AGENT', this.httpOptions);
     }
 
     getListReq(token){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-         });
- 
-         let options = new RequestOptions({headers: headers});
-         return this._http.get(this.url+'user/users/ROLE_REQUESTER', options)
-                            .map(res => res.json());
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'user/users/ROLE_REQUESTER', this.httpOptions);
     }
 
     getOne(token, id){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-         });
- 
-         let options = new RequestOptions({headers: headers});
-         return this._http.get(this.url+'user/user/'+id, options)
-                            .map(res => res.json());
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'user/user/'+id, this.httpOptions);
     }
 
     delete(token, id){

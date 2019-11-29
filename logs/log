@@ -831,3 +831,11 @@
 [28-11-2019 20:16] [info] [user/getUsers] dperez (::1) Petición realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}
 [29-11-2019 08:46] [info] [index] Servidor iniciado en puerto 3977
 [29-11-2019 08:46] [info] [user/loginUser] dperez (::1) Usuario conectado
+[29-11-2019 08:46] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5dc5bc91fdb29129cc8659c4"} body:{"read":true}
+[29-11-2019 08:46] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5dc5bc91fdb29129cc8659c4"} body:{"read":true}
+[29-11-2019 08:46] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5dc5bc91fdb29129cc8659c4"} body:{"read":true}
+[29-11-2019 08:46] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5dc5bc91fdb29129cc8659c4"} body:{"read":true}
+[29-11-2019 08:46] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5dc5bc91fdb29129cc8659c4"} body:{"read":true}
+[29-11-2019 08:46] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5dc5bc91fdb29129cc8659c4"} body:{"read":true}
+[29-11-2019 08:46] [warn] [ticket/getTicket] dperez (::1) Objeto no encontrado
+[29-11-2019 08:46] [warn] [ticket/getTicket] dperez (::1) Objeto no encontrado

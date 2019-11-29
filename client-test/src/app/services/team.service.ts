@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/observable';
 import {GLOBAL} from './global'; // Hecho a mano
 import {map} from 'rxjs/operators';
 import {Team} from '../models/team';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 
 //Inyeccion de dependencias
 @Injectable()
@@ -13,8 +15,14 @@ export class teamService{
     public url: string; //url del api
     public identity;
     public token;
+    public httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+          'Authorization': 'null'
+        })
+    }
 
-    constructor(private _http:Http){
+    constructor(private _http:Http, private _httpClient: HttpClient){
         this.url = GLOBAL.url;
     }
 
@@ -52,48 +60,32 @@ export class teamService{
     }
 
     getForName(token, company, name){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-         });
- 
-         let options = new RequestOptions({headers: headers});
-         return this._http.get(this.url+'team/for-name/'+company+'/'+name, options)
-                            .map(res => res.json());
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'team/for-name/'+company+'/'+name, this.httpOptions);
     }
 
 
     getList(token, company){
-      let headers = new Headers({
-          'Content-Type':'application/json',
-          'Authorization':token
-      });
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
 
-      let options = new RequestOptions({headers: headers});
-      return this._http.get(this.url+'team/teams/'+company, options)
-                          .map(res => res.json());
+        return this._httpClient.get<any>(this.url+'team/teams/'+company, this.httpOptions);
     }
 
     getAgentsList(token, id, company:string){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-        });
-  
-        let options = new RequestOptions({headers: headers});
-        return this._http.get(this.url+'team/agents/'+id+'/'+company, options)
-                            .map(res => res.json());
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'team/agents/'+id+'/'+company, this.httpOptions);
       }
 
     getOne(token, id){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-          });
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
 
-          let options = new RequestOptions({headers: headers});
-          return this._http.get(this.url+'team/team/'+id, options)
-                            .map(res => res.json());
+        return this._httpClient.get<any>(this.url+'team/team/'+id, this.httpOptions);
     }
 
     addUser(token, id:string, userId: string){

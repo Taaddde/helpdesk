@@ -76,47 +76,31 @@ export class ticketService{
     }
 
     getList(token){
-      let headers = new Headers({
-          'Content-Type':'application/json',
-          'Authorization':token
-      });
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
 
-      let options = new RequestOptions({headers: headers});
-      return this._http.get(this.url+'ticket/tickets', options)
-                          .map(res => res.json());
+        return this._httpClient.get<any>(this.url+'ticket/tickets', this.httpOptions);
     }
 
     getCalendar(token, id){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-        });
-  
-        let options = new RequestOptions({headers: headers});
-        return this._http.get(this.url+'ticket/calendar/'+id, options)
-                            .map(res => res.json());
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'ticket/calendar/'+id, this.httpOptions);
     }
 
     getPaginatedList(token, page, perPage, company, status, userId){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-        });
-  
-        let options = new RequestOptions({headers: headers});
-        return this._http.get(this.url+'ticket/ticketsPaged/'+page+'&'+perPage+'&'+company+'&'+status+'&'+userId, options)
-                            .map(res => res.json());
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'ticket/ticketsPaged/'+page+'&'+perPage+'&'+company+'&'+status+'&'+userId, this.httpOptions);
     }
 
     getPaginatedReqList(token, page, perPage, userId, status){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-        });
-  
-        let options = new RequestOptions({headers: headers});
-        return this._http.get(this.url+'ticket/reqTicketsPaged/'+page+'&'+perPage+'&'+userId+'&'+status, options)
-                            .map(res => res.json());
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'ticket/reqTicketsPaged/'+page+'&'+perPage+'&'+userId+'&'+status, this.httpOptions);
     }
 
     getOne(token, id){
@@ -127,70 +111,51 @@ export class ticketService{
     }
 
     getForNumber(token, i: number){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-          });
 
-          let options = new RequestOptions({headers: headers});
-          return this._http.get(this.url+'ticket/for-number/'+i, ({headers: headers}))
-                            .map(res => res.json());
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'ticket/for-number/'+i, this.httpOptions);
     }
 
     getForName(token, company, name){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-          });
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
 
-          let options = new RequestOptions({headers: headers});
-          return this._http.get(this.url+'ticket/for-name/'+company+'/'+name, ({headers: headers}))
-                            .map(res => res.json());
+        return this._httpClient.get<any>(this.url+'ticket/for-name/'+company+'/'+name, this.httpOptions);
     }
 
 
     getForUser(token, id: string){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-          });
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
 
-          let options = new RequestOptions({headers: headers});
-          return this._http.get(this.url+'ticket/for-user/'+id, ({headers: headers}))
-                            .map(res => res.json());
+        return this._httpClient.get<any>(this.url+'ticket/for-user/'+id, this.httpOptions);
+
     }
 
     getCountsTickets(token,company:string, id:string){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-          });
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
 
-          let options = new RequestOptions({headers: headers});
-          return this._http.get(this.url+'ticket/counts-agent/'+company+'/'+id, ({headers: headers}))
-                            .map(res => res.json());
+        return this._httpClient.get<any>(this.url+'ticket/counts-agent/'+company+'/'+id, this.httpOptions);
+
     }
 
     getReqCountsTickets(token, id:string){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-          });
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
 
-          let options = new RequestOptions({headers: headers});
-          return this._http.get(this.url+'ticket/counts-requester/'+id, ({headers: headers}))
-                            .map(res => res.json());
+        return this._httpClient.get<any>(this.url+'ticket/counts-requester/'+id, this.httpOptions);
+
     }
 
 
     getReports(token, company:string){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-          });
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
 
-          return this._http.get(this.url+'ticket/report/'+company, ({headers: headers}))
-                            .map(res => res.json());
+        return this._httpClient.get<any>(this.url+'ticket/report/'+company, this.httpOptions);
     }
 
     getMessages(token, id:string){
@@ -205,15 +170,11 @@ export class ticketService{
     }
 
     getMessagesReq(token, id:string){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-          });
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
 
-          let options = new RequestOptions({headers: headers});
-          return this._http.get(this.url+'ticket/req-unread/'+id, ({headers: headers}))
-                            .map(res => res.json());
+        return this._httpClient.get<any>(this.url+'ticket/req-unread/'+id, this.httpOptions);
+
     }
-
 
 }

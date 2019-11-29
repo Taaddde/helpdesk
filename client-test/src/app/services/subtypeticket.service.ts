@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/observable';
 import {GLOBAL} from './global'; // Hecho a mano
 import {map} from 'rxjs/operators';
 import {SubTypeTicket} from '../models/subtypeticket';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 
 //Inyeccion de dependencias
 @Injectable()
@@ -13,8 +15,14 @@ export class subTypeTicketService{
     public url: string; //url del api
     public identity;
     public token;
+    public httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+          'Authorization': 'null'
+        })
+    }
 
-    constructor(private _http:Http){
+    constructor(private _http:Http, private _httpClient: HttpClient){
         this.url = GLOBAL.url;
     }
 
@@ -81,46 +89,34 @@ export class subTypeTicketService{
           });
 
         let options = {
-        headers: headers,
-        body: {
-            check:check
-        },
+            headers: headers,
+            body: {
+                check:check
+            },
         };
               return this._http.delete(this.url+'subtype-ticket/delete-check/'+id, options)
                                 .map(res => res.json());
     }
 
     getList(token, ticketId:string){
-      let headers = new Headers({
-          'Content-Type':'application/json',
-          'Authorization':token
-      });
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
 
-      let options = new RequestOptions({headers: headers});
-      return this._http.get(this.url+'subtype-ticket/subtype-tickets/'+ticketId, options)
-                          .map(res => res.json());
+        return this._httpClient.get<any>(this.url+'subtype-ticket/subtype-tickets/'+ticketId, this.httpOptions);
     }
 
     getOne(token, id){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-          });
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
 
-          let options = new RequestOptions({headers: headers});
-          return this._http.get(this.url+'subtype-ticket/subtype-ticket/'+id, options)
-                            .map(res => res.json());
+        return this._httpClient.get<any>(this.url+'subtype-ticket/subtype-ticket/'+id, this.httpOptions);
     }
 
     getForName(token, i: string, typeId:string){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-          });
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
 
-          let options = new RequestOptions({headers: headers});
-          return this._http.get(this.url+'subtype-ticket/for-name/'+i+'/'+typeId, ({headers: headers}))
-                            .map(res => res.json());
+        return this._httpClient.get<any>(this.url+'subtype-ticket/for-name/'+i+'/'+typeId, this.httpOptions);
     }
 
     
