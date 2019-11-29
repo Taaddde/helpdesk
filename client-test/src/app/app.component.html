@@ -17,7 +17,7 @@
 </div>
 
 <router-outlet *ngIf="!identity && reset"></router-outlet>
-<ngx-spinner></ngx-spinner>
+
 
 <div *ngIf="identity">
     <div id="page-top">
@@ -160,3 +160,14 @@
 <app-ticket-portal *ngIf="identity"></app-ticket-portal>
 <app-ticket-portal *ngIf="identity"></app-ticket-portal>
 <app-pass-forgot></app-pass-forgot>
+
+<ngx-spinner
+    bdOpacity = 0.2
+    bdColor = "rgba(30,40,51,0.56)"
+    size = "medium"
+    color = "#0079ff"
+    type = "ball-atom"
+    [fullScreen] = "true"
+    >
+    <p style="color: white" > Cargando </p>
+</ngx-spinner>

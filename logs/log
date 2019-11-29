@@ -858,3 +858,19 @@
 [29-11-2019 08:46] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
 [29-11-2019 08:46] [info] [user/getUsers] dperez (::1) Petición realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}
 [29-11-2019 08:46] [error] [ticket/saveTicket] dperez (::1) ValidationError: subTypeTicket: Cast to ObjectID failed for value "" at path "subTypeTicket"
+[29-11-2019 11:52] [info] [index] Servidor iniciado en puerto 3977
+[29-11-2019 11:52] [error] [ticket/saveTicket] dperez (::1) ValidationError: subTypeTicket: Cast to ObjectID failed for value "" at path "subTypeTicket"
+[29-11-2019 11:52] [error] [ticket/saveTicket] dperez (::1) ValidationError: subTypeTicket: Cast to ObjectID failed for value "" at path "subTypeTicket"
+[29-11-2019 11:52] [info] [user/loginUser] AALEGRE (::1) Usuario conectado
+[29-11-2019 11:52] [info] [ticket/saveTicket] aalegre (::1) Petición realizada | params:{} body:{"_id":"","sub":"Hola","requester":"5daefc7e3c999c22544d601d","status":"Abierto","resolveDate":"03-12-2019","source":"PORTAL","priority":"Normal","company":"5d9cd3cb6df6cc40ccce7490","subTypeTicket":"5dc054064fa9ef3ecc017823"}
+[29-11-2019 11:52] [info] [TextBlock/saveTextBlock] aalegre (::1) Petición realizada | params:{} body:{"_id":"","text":"HOLA<span _ngcontent-dgo-c2=\"\" contenteditable=\"false\"></span>","user":"5daefc7e3c999c22544d601d","ticket":"5de13166c925112f7cf38f82","type":"REQUEST","files":[""],"read":false}
+[29-11-2019 11:52] [info] [TextBlock/uploadFile] aalegre (::1) Petición realizada | params:{"id":"5de13166c925112f7cf38f83"} body:{}
+[29-11-2019 11:52] [info] [TextBlock/readRequest] aalegre (::1) Petición realizada | params:{"id":"5de13166c925112f7cf38f82"} body:{"read":true}
+[29-11-2019 11:52] [info] [TextBlock/readRequest] aalegre (::1) Petición realizada | params:{"id":"5dcc643ecc78c506104975bd"} body:{"read":true}
+[29-11-2019 11:52] [info] [TextBlock/readRequest] aalegre (::1) Petición realizada | params:{"id":"5dcc643ecc78c506104975bd"} body:{"read":true}
+[29-11-2019 11:52] [info] [user/loginUser] dperez (::1) Usuario conectado
+[29-11-2019 11:52] [info] [company/updateCompany] dperez (::1) Petición realizada | params:{"id":"5d9cd3cb6df6cc40ccce7490"} body:{"image":"FvcIpYIhsw4sH4gCPoT42sEf.png","mailSender":true,"_id":"5d9cd3cb6df6cc40ccce7490","name":"Sistemas","email":"req.sistemas@sanjuandedios.org.ar","__v":0,"password":"Hospital2"}
+[29-11-2019 11:52] [info] [user/loginUser] dperez (::1) Usuario conectado
+[29-11-2019 11:52] [info] [user/getUsers] dperez (::1) Petición realizada | params:{"company":"5d9cd3cb6df6cc40ccce7490","role":"ROLE_AGENT"} body:{}
+[29-11-2019 11:52] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
+[29-11-2019 11:52] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}

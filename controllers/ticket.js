@@ -60,7 +60,6 @@ var decoded = jwt_decode(req.headers.authorization);
     });
 }
 
-
 function getCountTickets(req, res){
     var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getCountTickets';
@@ -132,7 +131,6 @@ var decoded = jwt_decode(req.headers.authorization);
         }
     });
 }
-
 
 function getCountReqTickets(req, res){
 var decoded = jwt_decode(req.headers.authorization);
@@ -361,7 +359,6 @@ var decoded = jwt_decode(req.headers.authorization);
     })
 }
 
-
 function getTicketReports(req, res){
 var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getTicketReports';
@@ -440,10 +437,9 @@ var decoded = jwt_decode(req.headers.authorization);
 }
 
 function saveTicket(req, res){
-var decoded = jwt_decode(req.headers.authorization);
+    var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'saveTicket';
     var ticket = new Ticket();
-    var c;
     var params = req.body;
 
     Ticket.countDocuments({}, function(err, count) {
@@ -465,7 +461,7 @@ var decoded = jwt_decode(req.headers.authorization);
         ticket.save((err, ticketStored) =>{
             if(err){
                 logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
-                res.status(500).send({message: 'Error del servidor en la petición'})
+                res.status(500).send({message: err})
             }else{
                 if(!ticketStored){
                     logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
@@ -478,7 +474,6 @@ var decoded = jwt_decode(req.headers.authorization);
         });    
     });
 }
-
 
 function getTickets(req, res){
 var decoded = jwt_decode(req.headers.authorization);
