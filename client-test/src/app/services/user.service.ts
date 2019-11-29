@@ -1,10 +1,6 @@
 import { Injectable, Pipe } from '@angular/core';
-import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import 'rxjs/add/operator/map';
-
-import { Observable } from 'rxjs/observable';
 import {GLOBAL} from './global'; // Hecho a mano
-import {map} from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
@@ -22,7 +18,7 @@ export class userService{
         })
     }
 
-    constructor(private _http:Http, private _httpClient: HttpClient){
+    constructor(private _httpClient: HttpClient){
         this.url = GLOBAL.url;
     }
 
@@ -33,45 +29,40 @@ export class userService{
         let json = JSON.stringify(user_to_login);
         let params = json;
 
-        let headers = new Headers({'Content-Type': 'application/json'});
+        return this._httpClient.post<any>(this.url+'user/login', params, this.httpOptions);
 
-        return this._http.post(this.url+'user/login', params, {headers: headers})
-                        .map(res=>res.json());
     }
     
     add(token, user){
         let json = JSON.stringify(user);
         let params = json;
 
-        let headers = new Headers({
-            'Content-Type': 'application/json',
-            'Authorization': token
-        });
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
 
-        return this._http.post(this.url+'user/add', params, {headers: headers})
-                        .map(res=>res.json());
+        return this._httpClient.post<any>(this.url+'user/add', params, this.httpOptions);
     }
 
     edit(token, user){
         let json = JSON.stringify(user);
         let params = json;
 
-        let headers = new Headers({
-            'Content-Type': 'application/json',
-            'Authorization': token
-        });
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
 
-        return this._http.put(this.url+'user/update/'+user._id, params, {headers: headers})
-                        .map(res=>res.json());
+        return this._httpClient.post<any>(this.url+'user/update/'+user._id, params, this.httpOptions);
+
+    }
+
+    delete(token, id){
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.delete<any>(this.url+'user/delete/'+id, this.httpOptions);
     }
 
     forgotPassword(userName){
-        let headers = new Headers({
-            'Content-Type': 'application/json',
-        });
-
-        return this._http.put(this.url+'user/forgot/'+userName, {}, {headers: headers})
-                        .map(res=>res.json());
+        return this._httpClient.put<any>(this.url+'user/forgot/'+userName, {}, this.httpOptions);
     }
 
     validUser(id, passToken){
@@ -79,13 +70,7 @@ export class userService{
     }
 
     resetPass(id, passToken, password){
-
-        let headers = new Headers({
-            'Content-Type': 'application/json'
-        });
-
-        return this._http.put(this.url+'user/reset-password/'+id+'/'+passToken, {password:password}, {headers: headers})
-                        .map(res=>res.json());
+        return this._httpClient.put<any>(this.url+'user/reset-password/'+id+'/'+passToken, {password:password}, this.httpOptions);
     }
 
     getList(token){
@@ -122,17 +107,6 @@ export class userService{
             this.httpOptions.headers.set('Authorization', token);
 
         return this._httpClient.get<any>(this.url+'user/user/'+id, this.httpOptions);
-    }
-
-    delete(token, id){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-         });
-     
-             let options = new RequestOptions({headers: headers});
-             return this._http.delete(this.url+'user/delete/'+id,{headers: headers})
-                                .map(res => res.json());
     }
 
     getIdentity(){

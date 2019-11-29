@@ -24,22 +24,22 @@ export class globalService{
     }
 
     getCountSearch(token, name, company){
-        this.httpOptions.headers =
-        this.httpOptions.headers.set('Authorization', token);
-
-        return this._httpClient.get<any>(this.url+'global/find-all/'+name+'/'+company, this.httpOptions);
-
-    }    
-
-    sendMail(token, mailOptions){
-        let params = JSON.stringify(mailOptions);
         let headers = new Headers({
             'Content-Type':'application/json',
             'Authorization':token
           });
 
-          return this._http.post(this.url+'global/sendmail', params, {headers:headers})
-                            .map(res => res.json());
+          let options = new RequestOptions({headers: headers});
+          return this._http.get(this.url+'global/find-all/'+name+'/'+company, options)
+                            .map(res => res.json())
+    }
+
+    sendMail(token, mailOptions){
+        let params = JSON.stringify(mailOptions);
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.post<any>(this.url+'global/sendmail', params, this.httpOptions);
     }   
 
 }

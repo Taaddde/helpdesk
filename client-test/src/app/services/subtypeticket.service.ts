@@ -1,9 +1,6 @@
 import { Injectable, Pipe } from '@angular/core';
-import {Http, Headers, RequestOptions} from '@angular/http';
 import 'rxjs/add/operator/map';
-import { Observable } from 'rxjs/observable';
 import {GLOBAL} from './global'; // Hecho a mano
-import {map} from 'rxjs/operators';
 import {SubTypeTicket} from '../models/subtypeticket';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
@@ -19,83 +16,68 @@ export class subTypeTicketService{
         headers: new HttpHeaders({
           'Content-Type':  'application/json',
           'Authorization': 'null'
-        })
+        }),
     }
 
-    constructor(private _http:Http, private _httpClient: HttpClient){
+    constructor(private _httpClient: HttpClient){
         this.url = GLOBAL.url;
     }
 
     add(token, subTypeTicket: SubTypeTicket){
         let params = JSON.stringify(subTypeTicket);
-        let headers = new Headers({
-           'Content-Type':'application/json',
-           'Authorization':token
-        });
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
 
-        return this._http.post(this.url+'subtype-ticket/add', params, {headers: headers})
-                           .map(res => res.json());
+        return this._httpClient.post<any>(this.url+'subtype-ticket/add', params, this.httpOptions);
+
     }
 
     edit(token, id:string, subTypeTicket: SubTypeTicket){
         let params = JSON.stringify(subTypeTicket);
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-        });
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
 
-        return this._http.put(this.url+'subtype-ticket/update/'+id, params, {headers: headers})
-                            .map(res => res.json());
+        return this._httpClient.put<any>(this.url+'subtype-ticket/update/'+id, params, this.httpOptions);
+
     }
 
     goodCheck(token, id:string){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-        });
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
 
-        return this._http.put(this.url+'subtype-ticket/goodcheck/'+id,{}, {headers: headers})
-                            .map(res => res.json());
+        return this._httpClient.put<any>(this.url+'subtype-ticket/goodcheck/'+id,{}, this.httpOptions);
     }
 
 
     addCheck(token, id:string, check:string){
         let params = {check:check};
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-        });
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
 
-        return this._http.put(this.url+'subtype-ticket/add-check/'+id, params, {headers: headers})
-                            .map(res => res.json());
+        return this._httpClient.put<any>(this.url+'subtype-ticket/add-check/'+id, params, this.httpOptions);
     }
     
     delete(token, id){
-      let headers = new Headers({
-        'Content-Type':'application/json',
-        'Authorization':token
-      });
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
 
-          let options = new RequestOptions({headers: headers});
-          return this._http.delete(this.url+'subtype-ticket/delete/'+id, options)
-                            .map(res => res.json());
+        return this._httpClient.delete<any>(this.url+'subtype-ticket/delete/'+id, this.httpOptions);
+
     }
 
     deleteCheck(token, id, check){
         let params = {check:check};
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-          });
-
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
         let options = {
-            headers: headers,
+            headers: this.httpOptions.headers,
             body: {
                 check:check
             },
         };
-              return this._http.delete(this.url+'subtype-ticket/delete-check/'+id, options)
-                                .map(res => res.json());
+
+
+        return this._httpClient.put<any>(this.url+'subtype-ticket/add', params, options);
     }
 
     getList(token, ticketId:string){
