@@ -3,8 +3,9 @@ import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/observable';
 import {GLOBAL} from './global'; // Hecho a mano
-import {map} from 'rxjs/operators';
+import {map, catchError} from 'rxjs/operators';
 import {Ticket} from '../models/ticket';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 //Inyeccion de dependencias
 @Injectable()
@@ -14,7 +15,14 @@ export class ticketService{
     public identity;
     public token;
 
-    constructor(private _http:Http){
+    public httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+          'Authorization': 'null'
+        })
+    }
+
+    constructor(private _http:Http, private _httpClient: HttpClient){
         this.url = GLOBAL.url;
     }
 
@@ -87,7 +95,7 @@ export class ticketService{
         let options = new RequestOptions({headers: headers});
         return this._http.get(this.url+'ticket/calendar/'+id, options)
                             .map(res => res.json());
-      }
+    }
 
     getPaginatedList(token, page, perPage, company, status, userId){
         let headers = new Headers({
@@ -112,14 +120,10 @@ export class ticketService{
     }
 
     getOne(token, id){
-        let headers = new Headers({
-            'Content-Type':'application/json',
-            'Authorization':token
-          });
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
 
-          let options = new RequestOptions({headers: headers});
-          return this._http.get(this.url+'ticket/ticket/'+id, options)
-                            .map(res => res.json());
+        return this._httpClient.get<any>(this.url+'ticket/ticket/'+id, this.httpOptions);
     }
 
     getForNumber(token, i: number){

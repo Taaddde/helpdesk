@@ -240,32 +240,27 @@ export class TicketGestionComponent implements OnInit {
     this._route.params.forEach((params: Params) =>{
       let id = params['id'];
 
-    this._ticketService.getOne(this.token, id).subscribe(
-      response =>{
-          if(!response.ticket){
-            this._router.navigate(['/']);
-          }else{
-            this.ticket = response.ticket;
-            console.log(this.ticket)
-            this.getChat();
-            this.getTeams(response.ticket.company._id);
-            if(response.ticket.team){
-              this.agents = response.ticket.team.users;
-            }
-            this.getReqTickets(response.ticket.requester);
-            console.log(this.ticket.resolveDate)
+      this._ticketService.getOne(this.token, id).subscribe(
+        response => {
+          this.ticket = response.ticket;
+          this.getChat();
+          this.getTeams(response.ticket.company['_id']);
+          if(response.ticket.team){
+            this.agents = response.ticket.team.users;
           }
+          this.getReqTickets(response.ticket.requester);
       },
-      error =>{
+        error => {
           var errorMessage = <any>error;
           if(errorMessage != null){
           var body = JSON.parse(error._body);
           //this.alertMessage = body.message;
           console.log(error);
           }
-      }
-    );
-    });
+        }
+      )
+    })
+      
   }
 
   selectHashtag(val){

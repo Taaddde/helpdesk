@@ -13,7 +13,7 @@ export class MyHttpInterceptor implements HttpInterceptor{
     constructor(private spinner: NgxSpinnerService) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
+        console.log('Hola')
         this.spinner.show()
 
         this.count++;

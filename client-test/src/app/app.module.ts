@@ -71,6 +71,7 @@ import { MyHttpInterceptor } from './services/myhttpinterceptor';
     BrowserModule,
     FormsModule,
     HttpModule,
+    HttpClientModule,
     routing,
     ChartModule,
     FullCalendarModule,
