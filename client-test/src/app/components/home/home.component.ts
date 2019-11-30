@@ -5,12 +5,13 @@ import { userService } from '../../services/user.service';
 import { ticketService } from '../../services/ticket.service';
 
 import * as moment from "moment"
+import { Ticket } from 'src/app/models/ticket';
 
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  styleUrls: ['../../styles/list.scss'],
   providers: [userService, ticketService]
 })
 export class HomeComponent implements OnInit {
@@ -24,6 +25,19 @@ export class HomeComponent implements OnInit {
     public finish:number;
     public close: number;
     public status: string;
+
+
+
+    public tickets: Ticket[];
+    public limit: number;
+    public page: number;
+    public nextPage: boolean;
+    public prevPage: boolean;
+    public totalDocs: number;
+    public totalPages: number;
+    public pagingCounter: number;
+  
+
 
   constructor(
     private _route: ActivatedRoute,
@@ -40,13 +54,25 @@ export class HomeComponent implements OnInit {
     this.close = 0;
     this.status = 'AL_DIA'
 
+
+    this.limit= 5;
+    this.page= 1;
+    this.nextPage = true;
+    this.prevPage= false;
+    this.totalDocs= null;
+    this.totalPages= 1;
+    this.pagingCounter = 1;
+
+
   }
 
   ngOnInit() {
     this.getCountTickets();
     if(this.identity['role'] != 'ROLE_REQUESTER'){
       this.getStatusCalendar();
+      this.getTeamTickets();
     }
+    
   }
 
   getCountTickets(){
@@ -75,7 +101,7 @@ export class HomeComponent implements OnInit {
             }
         },
         error =>{
-            console.log(error);
+            console.error(error);
             }
       );
   
@@ -104,7 +130,7 @@ export class HomeComponent implements OnInit {
             }
         },
         error =>{
-            console.log(error);
+            console.error(error);
             }
       );
   
@@ -130,9 +156,35 @@ export class HomeComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       }
     );
+  }
+
+  getTeamTickets(){
+    this._ticketService.getPaginatedTeamList(this.token, this.page, this.limit, this.identity['_id']).subscribe(
+      response =>{
+          if(!response.tickets){
+            this._router.navigate(['/']);
+          }else{
+            this.tickets = response.tickets.docs;
+            this.limit = response.tickets.limit;
+            this.nextPage = response.tickets.nextPage;
+            this.prevPage = response.tickets.prevPage;
+            this.totalDocs = response.tickets.totalDocs;
+            this.totalPages = response.tickets.totalPages;
+            this.pagingCounter = response.tickets.pagingCounter
+          }
+      },
+      error =>{
+          console.error(error);
+      }
+    );
+  }
+
+  paginate(page){
+    this.page = page;
+    this.getTeamTickets();
   }
 
   getBorderClass(){

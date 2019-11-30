@@ -73,3 +73,65 @@
         </div>
     </div>
 </div>
+
+<hr/>
+<div class="card" style="border: 1px solid #A5A5A5;padding-top: 10px;" *ngIf="identity['role'] != 'ROLE_REQUESTER'">
+    <div class="text-center" style="margin-top: 5px;">
+        <h4>Tickets de tu equipo sin asignar</h4>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive table mt-2" id="dataTable">
+            <table class="table dataTable my-0" id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Numero</th>
+                        <th>Solicitante</th>
+                        <th>Asunto</th>
+                        <th>Estado</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let ticket of tickets">
+                    <tr class="select" [routerLink]="['/ticket-gestion',ticket._id]">
+                        <td data-title="Numero">{{ticket.numTicket}}</td>
+                        <td data-title="Solicitante">
+                        <img *ngIf="ticket.requester && ticket.requester.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+ticket.requester.image}}" />
+                        <img *ngIf="!ticket.requester || ticket.requester.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="../../../assets/img/system/user-placeholder.png" />
+                        {{ticket.requester.name}}
+                        <span> </span>
+                        {{ticket.requester.surname}}
+                        </td>
+                        <td data-title="Asunto">{{ticket.sub}}</td>
+                        <td data-title="Estado">{{ticket.status}}</td>
+                        <td data-title="Fecha">{{ticket.createDate}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td><strong>Numero</strong></td>
+                        <td><strong>Solicitante</strong></td>
+                        <td><strong>Asunto</strong></td>
+                        <td><strong>Estado</strong></td>
+                        <td><strong>Fecha</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="row">
+            <div class="col-md-6 align-self-center">
+                <p id="dataTable_info" class="dataTables_info">Mostrando {{pagingCounter}} a {{pagingCounter+limit}} de {{totalDocs}}</p>
+            </div>
+            <div class="col-md-6">
+                <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                    <ul class="pagination">
+                        <li class="page-item"><a class="page-link" *ngIf="prevPage != null" (click)="paginate(1)"><span>«</span></a></li>
+                        <li class="page-item"><a class="page-link" *ngIf="prevPage != null" (click)="paginate(prevPage)">{{prevPage}}</a></li>
+                        <li class="page-item active"><a class="page-link">{{page}}</a></li>
+                        <li class="page-item"><a class="page-link" *ngIf="nextPage != null" (click)="paginate(nextPage)">{{nextPage}}</a></li>
+                        <li class="page-item"><a class="page-link" *ngIf="nextPage != null" (click)="paginate(totalPages)"><span>»</span></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>

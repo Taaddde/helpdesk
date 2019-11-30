@@ -84,14 +84,14 @@ export class TicketNewComponent implements OnInit {
           if(errorMessage != null){
           var body = JSON.parse(error._body);
           //this.alertMessage = body.message;
-          console.log(error);
+          console.error(error);
           }
       }
     );
   }
 
   getRequesters(){
-    this._userService.getListReq(this.token).subscribe(
+    this._userService.getListReq(this.token, this.identity['company']['_id']).subscribe(
       response =>{
           if(response.users){
             this.requesters = response.users;
@@ -103,7 +103,7 @@ export class TicketNewComponent implements OnInit {
           if(errorMessage != null){
           var body = JSON.parse(error._body);
           //this.alertMessage = body.message;
-          console.log(error);
+          console.error(error);
           }
       }
     );
@@ -174,7 +174,7 @@ export class TicketNewComponent implements OnInit {
       this.textblock.type = 'PUBLIC'
     }
 
-    if(this.agent){
+    if(this.team){
       this.ticket.status = 'Pendiente';
     }else{
       this.ticket.status = 'Abierto';
@@ -191,6 +191,8 @@ export class TicketNewComponent implements OnInit {
     if(this.ticket.team == null){
       delete this.ticket.team;
     }
+
+    delete this.ticket.subTypeTicket;
 
     delete this.ticket.rating;
 
@@ -228,13 +230,13 @@ export class TicketNewComponent implements OnInit {
                             }
                           },
                           error =>{
-                              console.log(error);
+                              console.error(error);
                           }
                         );
                     }
                 },
                 error =>{
-                    console.log(error);
+                    console.error(error);
                 }
               );
             }
@@ -242,7 +244,7 @@ export class TicketNewComponent implements OnInit {
         error =>{
             var errorMessage = <any>error;
             if(errorMessage != null){
-              console.log(errorMessage);
+              console.error(errorMessage);
             }
         });
 
@@ -269,7 +271,7 @@ export class TicketNewComponent implements OnInit {
                                 result =>{
                                 }, 
                                 error =>{
-                                    console.log(error);
+                                    console.error(error);
                                 }
                             );
                         }
@@ -277,13 +279,13 @@ export class TicketNewComponent implements OnInit {
                       }
                     },
                     error =>{
-                        console.log(error);
+                        console.error(error);
                     }
                   );
               }
           },
           error =>{
-              console.log(error);
+              console.error(error);
           }
         );
       }else{

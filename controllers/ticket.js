@@ -1,6 +1,7 @@
 'use strict'
 var Ticket = require('../models/ticket');
 var TextBlock = require('../models/textblock');
+var Team = require('../models/team');
 const moment = require('moment');
 const mongoose =require('mongoose')
 
@@ -699,6 +700,63 @@ var decoded = jwt_decode(req.headers.authorization);
     });
 }
 
+function getTeamTickets(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+    var functionName = 'getTeamTickets';
+
+    var userId = req.params.userId;
+
+
+    Team.find({users:userId}).exec(function(err, teams){
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            res.status(500).send({message: 'Error del servidor en la peticion'})
+        }else{
+            if(!teams){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                res.status(404).send({message: 'No hay tickets'})
+            }else{
+                var populateQuery = [
+                    {path:'requester',select:['name','surname','image']},
+                    {path:'agent',select:['name','surname','image']}, 
+                    {path:'company',select:['name','email','image','mailSender']}
+                ];
+                
+                if(req.params.page){
+                    var page = req.params.page;
+                }else{
+                    var page = 1;
+                }
+            
+                var perPage = req.params.perPage;
+                var status = 'Pendiente';
+            
+                var query = {team:teams,status:status,$or:[{agent:null}, {agent:undefined}]};
+                Ticket.paginate(query,{page:page, limit:perPage, populate:populateQuery, sort:{numTicket:-1}}, function(err, tickets){
+                    if(err){
+                        logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                        res.status(500).send({message: 'Error en la peticion'})
+                    }else{
+                        if(!tickets){
+                            logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                        res.status(404).send({message: 'No hay items'})
+                        }else{
+                        res.status(200).send({
+                                tickets
+                            });
+                        }
+                    }
+                });
+            
+            }
+        }
+    });
+
+
+
+}
+    
+
 module.exports = {
     getTicket,
     getTicketsForNumber,
@@ -714,6 +772,7 @@ module.exports = {
     //getNotificationTickets,
     getTicketReports,
     getDateTickets,
+    getTeamTickets,
 
     saveTicket,
     updateTicket,

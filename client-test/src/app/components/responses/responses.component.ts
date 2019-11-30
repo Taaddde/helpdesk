@@ -44,7 +44,7 @@ export class ResponsesComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       }
     );
   }
@@ -59,7 +59,7 @@ export class ResponsesComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       }
     );
   }
@@ -77,7 +77,7 @@ export class ResponsesComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       }
     );
   }

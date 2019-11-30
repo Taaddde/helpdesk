@@ -20,6 +20,7 @@ api.get('/unread/:userId', md_auth.ensureAuth, ticketController.getUnreadTickets
 api.get('/req-unread/:userId', md_auth.ensureAuth, ticketController.getUnreadTicketsReq);
 api.get('/report/:company', md_auth.ensureAuth, ticketController.getTicketReports);
 api.get('/calendar/:userId', md_auth.ensureAuth, ticketController.getDateTickets);
+api.get('/teamPaged/:page/:perPage/:userId', md_auth.ensureAuth, ticketController.getTeamTickets);
 
 //ABM
 api.post('/add',md_auth.ensureAuth, ticketController.saveTicket);

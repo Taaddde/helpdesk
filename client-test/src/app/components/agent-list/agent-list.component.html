@@ -1,7 +1,8 @@
 <div class="card-body">
     <div class="row">
         <div class="col-lg-10">
-            <input *ngIf="identity['role'] == 'ROLE_ADMIN'" type="button" class="btn btn-dark" value="Nuevo agente" [routerLink]="['/agent/new']">
+            <input *ngIf="identity['role'] == 'ROLE_ADMIN' && !requester" type="button" class="btn btn-dark" value="Nuevo agente" [routerLink]="['/agent/new']">
+            <input *ngIf="identity['role'] == 'ROLE_ADMIN' && requester" type="button" class="btn btn-dark" value="Nuevo solicitante" [routerLink]="['/requester/new']">
         </div>
     </div>
     <div class="table-responsive table mt-2" id="dataTable">
@@ -12,7 +13,7 @@
                     <th>Apellido</th>
                     <th>Nombre</th>
                     <th>E-mail</th>
-                    <th>Rol</th>
+                    <th *ngIf="!requester">Rol</th>
                     <th>ID</th>
                 </tr>
             </thead>
@@ -25,7 +26,7 @@
                     <td data-title="Apellido">{{user.surname}}</td>
                     <td data-title="Nombre">{{user.name}}</td>
                     <td data-title="E-mail">{{user.email}}</td>
-                    <td data-title="Rol">
+                    <td data-title="Rol" *ngIf="!requester">
                       <span *ngIf="user.role == 'ROLE_AGENT'">Agente</span>
                       <span *ngIf="user.role == 'ROLE_ADMIN'">Administrador</span>
                     </td>
@@ -38,7 +39,7 @@
                     <td><strong>Apellido</strong></td>
                     <td><strong>Nombre</strong></td>
                     <td><strong>E-mail</strong></td>
-                    <td><strong>Rol</strong></td>
+                    <td *ngIf="!requester"><strong>Rol</strong></td>
                     <td><strong>ID</strong></td>
                 </tr>
             </tfoot>

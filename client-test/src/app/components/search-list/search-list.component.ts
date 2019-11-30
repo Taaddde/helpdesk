@@ -62,7 +62,11 @@ export class SearchListComponent implements OnInit {
           if(this.stat == 'company'){
             this.getCompanies();
           }else{
-            this._router.navigate(['/home']);
+            if(this.stat == 'requester'){
+              this.getRequesters();
+            }else{
+              this._router.navigate(['/home']);
+            }
           }
         }
       }
@@ -79,7 +83,7 @@ export class SearchListComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       });
   }
 
@@ -93,9 +97,24 @@ export class SearchListComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       });
   }
+
+  getRequesters(){
+    this._userService.getReqForName(this.token, this.search).subscribe(
+      response =>{
+          if(!response.users){
+            this._router.navigate(['/home']);
+          }else{
+            this.users = response.users;
+          }
+      },
+      error =>{
+          console.error(error);
+      });
+  }
+
 
   getTeams(){
     this._teamService.getForName(this.token, this.identity['company']['_id'], this.search).subscribe(
@@ -107,7 +126,7 @@ export class SearchListComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       });
   }
 
@@ -121,7 +140,7 @@ export class SearchListComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       });
   }
 

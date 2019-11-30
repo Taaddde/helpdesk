@@ -9,7 +9,7 @@ var TicketSchema = Schema({
     numTicket: Number,
     sub: String,
     requester: {type: Schema.ObjectId, ref:'User'},
-    agent: {type: Schema.ObjectId, ref:'User'},
+    agent: {type: Schema.ObjectId, ref:'User', default:null},
     team: {type: Schema.ObjectId, ref:'Team'},
     status: {type: String, default:"Pendiente"},
     lastActivity: {type: String},

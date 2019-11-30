@@ -73,7 +73,7 @@ export class TeamEditComponent implements OnInit {
             if(errorMessage != null){
             var body = JSON.parse(error._body);
             //this.alertMessage = body.message;
-            console.log(error);
+            console.error(error);
             }
         }
       );
@@ -97,7 +97,7 @@ export class TeamEditComponent implements OnInit {
             if(errorMessage != null){
             var body = JSON.parse(error._body);
             //this.alertMessage = body.message;
-            console.log(error);
+            console.error(error);
             }
         }
       );
@@ -121,7 +121,7 @@ export class TeamEditComponent implements OnInit {
                               this._router.navigate(['/agent']);
                             }, 
                             error =>{
-                              console.log(error)
+                              console.error(error)
                             }
                         );
                     }
@@ -132,7 +132,7 @@ export class TeamEditComponent implements OnInit {
           if(errorMessage != null){
             var body = JSON.parse(error._body);
             this.alertMessage = body.message;
-            console.log(error);
+            console.error(error);
           }
         }
       );
@@ -172,7 +172,7 @@ export class TeamEditComponent implements OnInit {
             if(errorMessage != null){
               var body = JSON.parse(error._body);
               this.alertMessage = body.message;
-              console.log(error);
+              console.error(error);
             }
           }
         );
@@ -198,7 +198,7 @@ export class TeamEditComponent implements OnInit {
             if(errorMessage != null){
               var body = JSON.parse(error._body);
               this.alertMessage = body.message;
-              console.log(error);
+              console.error(error);
             }
           }
         );

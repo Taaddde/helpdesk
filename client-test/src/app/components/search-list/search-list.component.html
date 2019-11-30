@@ -124,7 +124,39 @@
             </table>
         </div>
     
-
+        <table class="table dataTable my-0" id="dataTable" *ngIf="stat == 'requester'">
+                <thead>
+                    <tr>
+                        <th>Img</th>
+                        <th>Apellido</th>
+                        <th>Nombre</th>
+                        <th>E-mail</th>
+                        <th>ID</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let user of users">
+                    <tr class="select" [routerLink]="['/user/edit',user._id]">
+                        <td data-title="Img">
+                            <img *ngIf="user.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+user.image}}" />
+                            <img *ngIf="user.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="../../../assets/img/system/user-placeholder.png" />
+                        </td>
+                        <td data-title="Apellido">{{user.surname}}</td>
+                        <td data-title="Nombre">{{user.name}}</td>
+                        <td data-title="E-mail">{{user.email}}</td>
+                        <td data-title="ID">{{user.userName}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td><strong>Img</strong></td>
+                        <td><strong>Apellido</strong></td>
+                        <td><strong>Nombre</strong></td>
+                        <td><strong>E-mail</strong></td>
+                        <td><strong>ID</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+    
 
 
 

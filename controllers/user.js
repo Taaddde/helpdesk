@@ -231,7 +231,7 @@ function getUsers(req, res){
 
 
     if(!role){
-        User.find({}).sort('name').exec(function(err, users){
+        User.find({company:company}).sort('name').exec(function(err, users){
             if(err){
                 logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+getUsers.name, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -247,7 +247,7 @@ function getUsers(req, res){
             }
         });
     }else{
-        if(role == 'ROLE_AGENT'){
+        if(role == 'ROLE_AGENT' || role == 'ROLE_ADMIN'){
             User.find({$or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}],company:company}).sort('name').exec(function(err, users){
                 if(err){
                     logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
@@ -265,7 +265,7 @@ function getUsers(req, res){
                 }
             });
         }else{
-            User.find({role:role}).sort('name').exec(function(err, users){
+            User.find({role:'ROLE_REQUESTER'}).sort('name').exec(function(err, users){
                 if(err){
                     logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -308,6 +308,29 @@ function getUsersForName(req, res){
         }
     });
 }
+
+function getReqForName(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+    var name = req.params.name;
+    var functionName = 'getReqForName';
+
+    User.find({role:'ROLE_REQUESTER',$or:[{name:{ "$regex": name, "$options": "i" }},{surname:{ "$regex": name, "$options": "i" }}]}).sort('name').exec(function(err, users){
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                res.status(500).send({message: 'Error del servidor en la peticion'})
+        }else{
+            if(!users){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                res.status(404).send({message: 'No hay usuarios'})
+            }else{
+                res.status(200).send({
+                    users: users
+                });
+            }
+        }
+    });
+}
+
 
 function loginUser(req, res){
     var params = req.body;
@@ -567,6 +590,7 @@ module.exports = {
     getUser,
     getUsers,
     getUsersForName,
+    getReqForName,
     validUser,
 
     loginUser,

@@ -103,7 +103,7 @@ export class TicketPortalComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       }
     );
   }
@@ -119,7 +119,7 @@ export class TicketPortalComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       }
     );
   }
@@ -135,7 +135,7 @@ export class TicketPortalComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       }
     );
   }
@@ -180,6 +180,7 @@ export class TicketPortalComponent implements OnInit {
 
   clickSubtype(val:SubTypeTicket){
     this.subTypeFilter = '';
+    this.selectedSubtype = val;
     this.ticket.team = this.selectedSubtype.team['_id'];
     this.ticket.subTypeTicket = this.selectedSubtype._id;
     
@@ -217,7 +218,7 @@ export class TicketPortalComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       }
     );        
   }
@@ -246,7 +247,6 @@ export class TicketPortalComponent implements OnInit {
     if(this.selectedSubtype.requireAttach && this.filesToUpload == undefined){
       alert('La solicitud requiere de un adjunto obligatorio')
     }else{
-      delete this.ticket.agent;
       delete this.ticket.createDate;
       delete this.ticket.lastActivity;
       delete this.ticket.rating;
@@ -254,6 +254,9 @@ export class TicketPortalComponent implements OnInit {
       delete this.ticket.numTicket;
       if(!this.ticket.team){
         delete this.ticket.team;
+        this.ticket.status = 'Abierto'
+      }else{
+        this.ticket.status = 'Pendiente'
       }
 
       this.ticket.subTypeTicket = this.selectedSubtype._id;
@@ -276,19 +279,18 @@ export class TicketPortalComponent implements OnInit {
                       if(this.filesToUpload){
                         this._uploadService.makeFileRequest(this.url+'textblock/file/'+response.textblock._id, [], this.filesToUpload, this.token, 'file')
                       }
-                      alert('Ticket creado')
                       this.cancelTicket();
                       this._router.navigate(['/ticket-gestion',link]);
                     }
                 },
                 error =>{
-                    console.log(error);
+                    console.error(error);
                 }
               );        
             }
         },
         error =>{
-            console.log(error);
+            console.error(error);
         }
       );
       

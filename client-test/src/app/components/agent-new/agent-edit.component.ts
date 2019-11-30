@@ -72,7 +72,7 @@ export class AgentEditComponent implements OnInit {
           if(errorMessage != null){
           var body = JSON.parse(error._body);
           //this.alertMessage = body.message;
-          console.log(error);
+          console.error(error);
           }
       }
     );
@@ -88,6 +88,9 @@ export class AgentEditComponent implements OnInit {
       }
     }
     
+    if(this.user.sign = ''){
+      this.user.sign = null
+    }
 
     if(this.user.password == ''){
       delete this.user.password;

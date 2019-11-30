@@ -50,7 +50,7 @@ export class userService{
         this.httpOptions.headers =
         this.httpOptions.headers.set('Authorization', token);
 
-        return this._httpClient.post<any>(this.url+'user/update/'+user._id, params, this.httpOptions);
+        return this._httpClient.put<any>(this.url+'user/update/'+user._id, params, this.httpOptions);
 
     }
 
@@ -87,6 +87,12 @@ export class userService{
         return this._httpClient.get<any>(this.url+'user/for-name/'+company+'/'+name, this.httpOptions);
     }
 
+    getReqForName(token, name){
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'user/req-for-name/'+name, this.httpOptions);
+    }
 
     getListAgents(token, company:string){
         this.httpOptions.headers =
@@ -95,11 +101,11 @@ export class userService{
         return this._httpClient.get<any>(this.url+'user/users/'+company+'/ROLE_AGENT', this.httpOptions);
     }
 
-    getListReq(token){
+    getListReq(token, company){
         this.httpOptions.headers =
             this.httpOptions.headers.set('Authorization', token);
 
-        return this._httpClient.get<any>(this.url+'user/users/ROLE_REQUESTER', this.httpOptions);
+        return this._httpClient.get<any>(this.url+'user/users/'+company+'/ROLE_REQUESTER', this.httpOptions);
     }
 
     getOne(token, id){

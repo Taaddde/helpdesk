@@ -20,6 +20,8 @@ export class AgentListComponent implements OnInit {
   public nextPage;
   public prevPage;
   public confirmado: String;
+  public requester: boolean;
+
 
   constructor(
     private _route: ActivatedRoute,
@@ -31,6 +33,7 @@ export class AgentListComponent implements OnInit {
     this.url = GLOBAL.url;
     this.nextPage = 1;
     this.prevPage = 1;
+    this.requester = false;
   }
 
   ngOnInit() {
@@ -51,7 +54,7 @@ export class AgentListComponent implements OnInit {
           if(errorMessage != null){
           var body = JSON.parse(error._body);
           //this.alertMessage = body.message;
-          console.log(error);
+          console.error(error);
           }
       }
     );

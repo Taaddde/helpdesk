@@ -85,7 +85,7 @@ export class TicketGestionComponent implements OnInit {
           if(errorMessage != null){
           var body = JSON.parse(error._body);
           //this.alertMessage = body.message;
-          console.log(error);
+          console.error(error);
           }
       }
     );
@@ -101,7 +101,7 @@ export class TicketGestionComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       }
     );
   }
@@ -121,7 +121,7 @@ export class TicketGestionComponent implements OnInit {
             if(errorMessage != null){
             var body = JSON.parse(error._body);
             //this.alertMessage = body.message;
-            console.log(error);
+            console.error(error);
             }
         }
       );
@@ -131,14 +131,12 @@ export class TicketGestionComponent implements OnInit {
   getChat(){
     this._route.params.forEach((params: Params) =>{
       let id = params['id'];
-      console.log(this.identity['role'])
       this._textblockService.getForTicket(this.token, id, this.identity['role']).subscribe(
         response =>{
 
             if(response.textblocks){
 
               this.chat = response.textblocks;
-              console.log(this.chat)
 
               if(this.identity['role'] != 'ROLE_REQUESTER'){
                 if(this.ticket.agent){
@@ -146,14 +144,11 @@ export class TicketGestionComponent implements OnInit {
                     this._textblockService.readAgent(this.token, this.ticket._id).subscribe(
                       response =>{
                           if(!response.textblock){
-                            console.log('Error en textblock')
-                          }else{
-                            console.log(response.textblock)
-                            
+                            console.error('Error en textblock')
                           }
                       },
                       error =>{
-                          console.log(error);
+                          console.error(error);
                       }
                     );
                   }
@@ -163,14 +158,12 @@ export class TicketGestionComponent implements OnInit {
                   this._textblockService.readRequester(this.token, this.ticket._id).subscribe(
                     response =>{
                         if(!response.textblock){
-                          console.log('Error en textblock')
+                          console.error('Error en textblock')
                         }else{
-                          console.log(response.textblock)
-                          
                         }
                     },
                     error =>{
-                        console.log(error);
+                        console.error(error);
                     }
                   );
                 }
@@ -184,27 +177,22 @@ export class TicketGestionComponent implements OnInit {
                           if(!response.textblock){
                             console.log('Error en textblock')
                           }else{
-                            console.log(response.textblock)
-                            
                           }
                       },
                       error =>{
-                          console.log(error);
+                          console.error(error);
                       }
                     );
                   }else{
-                    console.log('ELSE')
                     if(this.identity['role'] == 'ROLE_REQUESTER' && this.identity['_id'] == this.ticket.requester['_id']){
                       this._textblockService.readRequester(this.token, this.ticket._id).subscribe(
                         response =>{
                             if(!response.textblock){
                               console.log('Error en textblock')
-                            }else{
-                              console.log(response.textblock)
                             }
                         },
                         error =>{
-                            console.log(error);
+                            console.error(error);
                         }
                       );
   
@@ -215,7 +203,7 @@ export class TicketGestionComponent implements OnInit {
             }
         },
         error =>{
-            console.log(error);
+            console.error(error);
         }
       );
     });
@@ -231,7 +219,7 @@ export class TicketGestionComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       }
     );
   }
@@ -255,7 +243,7 @@ export class TicketGestionComponent implements OnInit {
           if(errorMessage != null){
           var body = JSON.parse(error._body);
           //this.alertMessage = body.message;
-          console.log(error);
+          console.error(error);
           }
         }
       )
@@ -406,7 +394,7 @@ export class TicketGestionComponent implements OnInit {
           if(errorMessage != null){
           var body = JSON.parse(error._body);
           //this.alertMessage = body.message;
-          console.log(error);
+          console.error(error);
           }
       }
     );
@@ -432,7 +420,7 @@ export class TicketGestionComponent implements OnInit {
         var errorMessage = <any>error;
         if(errorMessage != null){
           var body = JSON.parse(error._body);
-          console.log(error);
+          console.error(error);
         }
       }
     );
@@ -490,7 +478,7 @@ export class TicketGestionComponent implements OnInit {
                 response =>{
                 },
                 error =>{
-                    console.log(error);
+                    console.error(error);
                 }
               );
             }
@@ -508,7 +496,7 @@ export class TicketGestionComponent implements OnInit {
         var errorMessage = <any>error;
         if(errorMessage != null){
           var body = JSON.parse(error._body);
-          console.log(error);
+          console.error(error);
         }
       }
     );
@@ -527,7 +515,7 @@ export class TicketGestionComponent implements OnInit {
           if(errorMessage != null){
           var body = JSON.parse(error._body);
           //this.alertMessage = body.message;
-          console.log(error);
+          console.error(error);
           }
       }
     );

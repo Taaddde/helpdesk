@@ -66,7 +66,7 @@ export class TeamNewComponent implements OnInit {
                             this._router.navigate(['/team/edit',response.team._id]);
                           }, 
                           error =>{
-                              console.log(error);
+                              console.error(error);
                           }
                       );
                   }
@@ -77,7 +77,7 @@ export class TeamNewComponent implements OnInit {
         if(errorMessage != null){
           var body = JSON.parse(error._body);
           this.alertMessage = body.message;
-          console.log(error);
+          console.error(error);
         }
       }
     );

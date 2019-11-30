@@ -1,45 +1,53 @@
 import { Component, OnInit } from '@angular/core';
-import { Team } from '../../models/team';
 import { userService } from '../../services/user.service';
-import { teamService } from '../../services/team.service';
+import { User } from '../../models/user';
 import {Router, ActivatedRoute, Params} from '@angular/router'
 import {GLOBAL} from '../../services/global'
 
 @Component({
-  selector: 'app-team-list',
-  templateUrl: './team-list.component.html',
+  selector: 'app-requester-list',
+  templateUrl: './agent-list.component.html',
   styleUrls: ['../../styles/list.scss'],
-  providers:[userService, teamService]
+  providers:[userService]
 })
-export class TeamListComponent implements OnInit {
+export class RequesterListComponent implements OnInit {
 
-  public teams: Team[];
+  public users: User[];
+  public filtro: String;
   public identity;
   public token;
   public url: string;
+  public nextPage;
+  public prevPage;
+  public confirmado: String;
+  public requester: boolean;
+  
 
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
-    private _userService: userService,
-    private _teamService: teamService
-  ) {
+    private _userService: userService
+  ) { 
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
-   }
+    this.nextPage = 1;
+    this.prevPage = 1;
+    this.requester = true;
 
-  ngOnInit() {
-    this.getTeams();
   }
 
-  getTeams(){
-    this._teamService.getList(this.token, this.identity['company']['_id']).subscribe(
+  ngOnInit() {
+    this.getUsers();
+  }
+
+  getUsers(){
+    this._userService.getListReq(this.token, this.identity['_id']).subscribe(
       response =>{
-          if(!response.teams){
+          if(!response.users){
             this._router.navigate(['/']);
           }else{
-            this.teams = response.teams;
+            this.users = response.users;
           }
       },
       error =>{
@@ -51,10 +59,6 @@ export class TeamListComponent implements OnInit {
           }
       }
     );
-  }
-
-  cantUsers(val: [String]){
-    return val.length;
   }
 
 }

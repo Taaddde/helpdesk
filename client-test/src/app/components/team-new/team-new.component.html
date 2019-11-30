@@ -69,7 +69,7 @@
                             </table>
                 </div>
             </div>
-        <div *ngIf="identity['role'] == 'ROLE_ADMIN'" class="col confirm"><button class="btn btn-danger btn-lg float-right" type="button">Cancelar</button><button class="btn btn-success btn-lg float-right acept" type="submit">Aceptar</button></div>
+        <div *ngIf="identity['role'] == 'ROLE_ADMIN'" class="col confirm"><button class="btn btn-danger btn-lg float-right" [routerLink]="['/agent']" type="button">Cancelar</button><button class="btn btn-success btn-lg float-right acept" type="submit">Aceptar</button></div>
     </form>
     </div>
 </div>

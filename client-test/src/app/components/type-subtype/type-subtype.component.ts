@@ -73,7 +73,7 @@ export class TypeSubtypeComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       }
     );
   }
@@ -88,7 +88,7 @@ export class TypeSubtypeComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       }
     );
   }
@@ -124,7 +124,7 @@ export class TypeSubtypeComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       }
     );
 
@@ -143,7 +143,7 @@ export class TypeSubtypeComponent implements OnInit {
             }
         },
         error =>{
-            console.log(error);
+            console.error(error);
         }
       );
   
@@ -162,7 +162,7 @@ export class TypeSubtypeComponent implements OnInit {
             }
         },
         error =>{
-            console.log(error);
+            console.error(error);
         }
       );
   
@@ -192,7 +192,7 @@ export class TypeSubtypeComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       }
     );
   }
@@ -221,7 +221,7 @@ export class TypeSubtypeComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       }
     );
 
@@ -240,7 +240,7 @@ export class TypeSubtypeComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       }
     );
   }
@@ -256,7 +256,7 @@ export class TypeSubtypeComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       }
     );
   }
@@ -272,7 +272,7 @@ export class TypeSubtypeComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       }
     );
   }
@@ -287,7 +287,7 @@ export class TypeSubtypeComponent implements OnInit {
           }
       },
       error =>{
-          console.log(error);
+          console.error(error);
       }
     );
   }

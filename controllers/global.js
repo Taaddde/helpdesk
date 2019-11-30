@@ -68,6 +68,20 @@ var decoded = jwt_decode(req.headers.authorization);
         },
     ]
 
+    var reqQuery =
+    [
+        {
+            $match: {$or: [
+                {name: { "$regex": name, "$options": "i" }, role:'ROLE_REQUESTER'}, 
+                {surname: { "$regex": name, "$options": "i" },  role:'ROLE_REQUESTER'}
+            ]}
+        }
+        ,
+        {
+            $count: "requesterCount"
+        }
+    ];
+
     Company.aggregate(companyQuery, (err, companies) =>{
         if(err){
                 logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
@@ -80,31 +94,43 @@ var decoded = jwt_decode(req.headers.authorization);
                 User.aggregate(userQuery, (err, users) =>{
                     if(err){
                         logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
-                res.status(500).send({message: 'Error del servidor en la peticion', err:err});
+                        res.status(500).send({message: 'Error del servidor en la peticion', err:err});
                     }else{
                         if(!users){
                             logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
-                res.status(404).send({message: 'El usuario no existe'});
+                            res.status(404).send({message: 'El usuario no existe'});
                         }else{
                             Ticket.aggregate(ticketQuery, (err, tickets) =>{
                                 if(err){
                                     logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
-                res.status(500).send({message: 'Error del servidor en la peticion', err:err});
+                                    res.status(500).send({message: 'Error del servidor en la peticion', err:err});
                                 }else{
                                     if(!tickets){
                                         logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
-                res.status(404).send({message: 'El departamento no existe'});
+                                        res.status(404).send({message: 'El departamento no existe'});
                                     }else{
                                         Team.aggregate(teamQuery, (err, teams) =>{
                                             if(err){
                                                 logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
-                res.status(500).send({message: 'Error del servidor en la peticion', err:err});
+                                                res.status(500).send({message: 'Error del servidor en la peticion', err:err});
                                             }else{
                                                 if(!teams){
                                                     logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
-                res.status(404).send({message: 'El departamento no existe'});
+                                                    res.status(404).send({message: 'El departamento no existe'});
                                                 }else{
-                res.status(200).send({companies:companies[0], users:users[0], tickets:tickets[0], teams:teams[0]});
+                                                    User.aggregate(reqQuery, (err, requesters) =>{
+                                                        if(err){
+                                                            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                                                            res.status(500).send({message: 'Error del servidor en la peticion', err:err});
+                                                        }else{
+                                                            if(!requesters){
+                                                                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                                                                res.status(404).send({message: 'El departamento no existe'});
+                                                            }else{
+                                                                res.status(200).send({companies:companies[0], users:users[0], tickets:tickets[0], teams:teams[0], requesters:requesters[0]});
+                                                            }
+                                                        }
+                                                    });
                                                 }
                                             }
                                         });

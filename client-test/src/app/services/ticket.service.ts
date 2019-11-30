@@ -82,6 +82,14 @@ export class ticketService{
         return this._httpClient.get<any>(this.url+'ticket/ticketsPaged/'+page+'&'+perPage+'&'+company+'&'+status+'&'+userId, this.httpOptions);
     }
 
+    getPaginatedTeamList(token, page, perPage, userId){
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'ticket/teamPaged/'+page+'/'+perPage+'/'+userId, this.httpOptions);
+    }
+
+
     getPaginatedReqList(token, page, perPage, userId, status){
         this.httpOptions.headers =
         this.httpOptions.headers.set('Authorization', token);

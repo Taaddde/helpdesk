@@ -262,34 +262,21 @@ var decoded = jwt_decode(req.headers.authorization);
     var teamId = req.params.id;
     var user = req.body.user;
 
-    Team.find({users:user}, (err, userCheck)=>{
-        if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
-                res.status(500).send({message:err})
-        }else{
-            if(!userCheck){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
-                res.status(404).send({message:'El usuario no existe'})
+   
+    Team.findByIdAndUpdate(
+        teamId,
+        { $push: {"users": {_id:user}}},
+        {  safe: true, upsert: true},
+            function(err, team) {
+            if(err){
+                console.log(err);
+                return res.send(err);
             }else{
-                if(userCheck.length != 0){
-                    res.status(400).send({message:'El usuario ya esta dentro del equipo'})
-                }else{
-                    Team.findByIdAndUpdate(
-                        teamId,
-                        { $push: {"users": {_id:user}}},
-                        {  safe: true, upsert: true},
-                          function(err, team) {
-                            if(err){
-                               console.log(err);
-                               return res.send(err);
-                            }
-                                       logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({team:team});
-                         });
-                }
             }
-        }
-    })
+            });
+                
      
      
 /*

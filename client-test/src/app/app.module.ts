@@ -37,6 +37,7 @@ import { RequesterNewComponent } from './components/agent-new/requester-new.comp
 import { PassForgotComponent } from './components/pass-forgot/pass-forgot.component';
 import { PassResetComponent } from './components/pass-reset/pass-reset.component';
 import { MyHttpInterceptor } from './services/myhttpinterceptor';
+import { RequesterListComponent } from './components/agent-list/request-list.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { MyHttpInterceptor } from './services/myhttpinterceptor';
     CalendarComponent,
     RequesterNewComponent,
     PassForgotComponent,
-    PassResetComponent
+    PassResetComponent,
+    RequesterListComponent
   ],
   imports: [
     BrowserModule,

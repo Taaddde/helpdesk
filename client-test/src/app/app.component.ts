@@ -81,7 +81,7 @@ export class AppComponent implements OnInit {
           if(errorMessage != null){
           var body = JSON.parse(error._body);
           //this.alertMessage = body.message;
-          console.log(error);
+          console.error(error);
           }
       }
     );
@@ -100,7 +100,7 @@ export class AppComponent implements OnInit {
           if(errorMessage != null){
           var body = JSON.parse(error._body);
           //this.alertMessage = body.message;
-          console.log(error);
+          console.error(error);
           }
       }
     );
@@ -148,7 +148,7 @@ export class AppComponent implements OnInit {
               if(errorMessage != null){
                 var body = JSON.parse(error._body);
                 this.alertMessage = body.message;
-                console.log(error);
+                console.error(error);
               }
             }
           )          
@@ -159,7 +159,7 @@ export class AppComponent implements OnInit {
         if(errorMessage != null){
           var body = JSON.parse(error._body);
           this.alertMessage = body.message;
-          console.log(error);
+          console.error(error);
         }
       }
     )
@@ -175,7 +175,6 @@ export class AppComponent implements OnInit {
 
     this._router.navigate(['/']);
   }
-
   globalSearch(val:string){
     if(val.length >= 3){
       this.valSearch = val;
@@ -185,12 +184,14 @@ export class AppComponent implements OnInit {
               
         },
         error =>{
-            console.log(error);
+            console.error(error);
         }
       );
     }else{
       this.searched = undefined;
     }
   }
+
+  
 
 }

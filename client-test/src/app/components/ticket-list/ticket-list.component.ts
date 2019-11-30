@@ -86,7 +86,7 @@ export class TicketListComponent implements OnInit {
               }
           },
           error =>{
-              console.log(error);
+              console.error(error);
           });
       }else{
         this._ticketService.getPaginatedList(this.token, this.page, this.limit,this.identity['company']['_id'], this.status, this.user).subscribe(
@@ -104,7 +104,7 @@ export class TicketListComponent implements OnInit {
               }
           },
           error =>{
-              console.log(error);
+              console.error(error);
           }
       );
       }

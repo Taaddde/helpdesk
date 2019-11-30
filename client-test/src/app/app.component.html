@@ -34,7 +34,7 @@
                     <ul class="nav navbar-nav text-light" id="accordionSidebar">
                         <li class="nav-item" role="presentation"><a class="nav-link" [routerLink]="['/home']"><i class="fas fa-home"></i><span>Principal</span></a></li>
                         <li class="nav-item" role="presentation"><a class="nav-link" [routerLink]="['/ticket']"><i class="fas fa-ticket-alt"></i><span *ngIf="identity['role'] != 'ROLE_REQUESTER'">Tickets</span><span *ngIf="identity['role'] == 'ROLE_REQUESTER'">Mis tickets</span></a></li>
-                        <li *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="nav-item" role="presentation"><a class="nav-link" [routerLink]="['/agent']"><i class="fas fa-user-friends"></i><span>Agentes</span></a></li>
+                        <li *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="nav-item" role="presentation"><a class="nav-link" [routerLink]="['/agent']"><i class="fas fa-user-friends"></i><span>Usuarios</span></a></li>
                         <li *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="nav-item" role="presentation"><a class="nav-link" [routerLink]="['/calendar']"><i class="fas fa-calendar-check"></i><span>Calendario</span></a></li>
                         <li *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="nav-item" role="presentation"><a class="nav-link" [routerLink]="['/report']"><i class="far fa-chart-bar"></i><span>Reportes</span></a></li>
                     </ul>
@@ -46,10 +46,10 @@
                         <div class="container-fluid" >
                             <form *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                                 <div class="input-group">
-                                    <input (input)="globalSearch($event.target.value)" class="bg-light form-control border-0 small" type="text" placeholder="Buscar por ...">
+                                    <input ng-blur="valSearch = ''" (input)="globalSearch($event.target.value)" class="bg-light form-control border-0 small" type="text" placeholder="Buscador global...">
                                     <div role="menu" *ngIf="searched" [className]="searched ? 'dropdown-menu show' : 'dropdown-menu'" class="dropdown-menu">
                                         <a role="presentation" class="dropdown-item" *ngIf="searched['users']" [routerLink]="['/search/user',valSearch]">
-                                            Usuarios  
+                                            Agentes  
                                             <span class="badge badge-danger badge-counter" style="float: right;font-size: 15px;">
                                                 {{searched['users']['userCount']}}+
                                             </span>
@@ -65,7 +65,13 @@
                                             <span class="badge badge-danger badge-counter" style="float: right;font-size: 15px;">
                                                 {{searched['teams']['teamCount']}}+
                                             </span>
-                                            </a>
+                                        </a>
+                                        <a role="presentation" class="dropdown-item" *ngIf="searched['requesters']" [routerLink]="['/search/requester',valSearch]">
+                                            Solicitantes  
+                                            <span class="badge badge-danger badge-counter" style="float: right;font-size: 15px;">
+                                                {{searched['requesters']['requesterCount']}}+
+                                            </span>
+                                        </a>
                                         </div>
                                 </div>
                             </form>
@@ -165,9 +171,10 @@
     bdOpacity = 0.2
     bdColor = "rgba(30,40,51,0.56)"
     size = "medium"
-    color = "#0079ff"
+    color = "#1e2833"
     type = "ball-atom"
     [fullScreen] = "true"
     >
     <p style="color: white" > Cargando </p>
 </ngx-spinner>
+
