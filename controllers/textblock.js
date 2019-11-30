@@ -240,7 +240,7 @@ var decoded = jwt_decode(req.headers.authorization);
 
     if(req.files){
         var file_path = req.files.file.path;
-        var file_split = file_path.split('\\'); //eliminar y recortar las barras del path
+        var file_split = file_path.split('/'); //eliminar y recortar las barras del path
         var file_name = file_split[2]; // [ 'uploads', 'users', 'pWgu0s-hHBgJl-5w1RSPS5G7.jpg' ]
 
         var ext_split = file_name.split('\.');
