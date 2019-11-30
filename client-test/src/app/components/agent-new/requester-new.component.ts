@@ -18,6 +18,8 @@ export class RequesterNewComponent implements OnInit {
   public token;
   public url: string;
   public isAdm: boolean;
+  public isUser: boolean;
+
 
   public alertMessage: string;
 
@@ -36,6 +38,8 @@ export class RequesterNewComponent implements OnInit {
     this.isAdm = false;
     this.alertMessage = '';
     this.isReq = true;
+    this.isUser = false;
+
    }
 
   ngOnInit() {

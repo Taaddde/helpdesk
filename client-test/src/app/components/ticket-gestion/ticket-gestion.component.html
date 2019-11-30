@@ -40,7 +40,7 @@
                         </span>
                         <span>
                           <strong *ngIf="ticket.subTypeTicket">
-                            {{ticket.subTypeTicket.typeTicket.name}}
+                            {{ticket.subTypeTicket['typeTicket']['name']}}
                           </strong>
                         </span>
                       </li>
@@ -50,7 +50,7 @@
                         </span>
                         <span>
                           <strong *ngIf="ticket.subTypeTicket">
-                            {{ticket.subTypeTicket.name}}
+                            {{ticket.subTypeTicket['name']}}
                           </strong>
                         </span>
                       </li>
@@ -74,15 +74,15 @@
                       <li class="list-group-item">
                           <div class="row">
                               <div class="col-xl-3">
-                                <img *ngIf="ticket.requester.image == 'null'" class="img-requester" src="../../../assets/img/system/user-placeholder.png" />
-                                <img *ngIf="ticket.requester.image != 'null'" class="img-requester" src="{{url+'user/image/'+ticket.requester.image}}" />
+                                <img *ngIf="ticket.requester['image'] == 'null'" class="img-requester" src="../../../assets/img/system/user-placeholder.png" />
+                                <img *ngIf="ticket.requester['image'] != 'null'" class="img-requester" src="{{url+'user/image/'+ticket.requester['image']}}" />
                               </div>
                               <div class="col-xl-8 align-self-center" *ngIf="ticket.requester">
                                   <div class="row">
-                                      <div class="col"><span><strong>{{ticket.requester.name+' '+ticket.requester.surname}}</strong></span></div>
+                                      <div class="col"><span><strong>{{ticket.requester['name']+' '+ticket.requester['surname']}}</strong></span></div>
                                   </div>
                                   <div class="row">
-                                      <div class="col"><span><em>{{ticket.requester.email}}</em></span></div>
+                                      <div class="col"><span><em>{{ticket.requester['email']}}</em></span></div>
                                   </div>
                               </div>
                           </div>
@@ -114,11 +114,11 @@
 
                         </span>
                       <div style="margin-bottom: 25px;"></div>
-                      <img *ngIf="!ticket.company || ticket.company.image == 'null'" class="rounded-circle img-agent-team" src="../../../assets/img/system/company-placeholder.png" />
-                      <img *ngIf="ticket.company && ticket.company.image != 'null'" class="rounded-circle img-agent-team" src="{{url+'company/image/'+ticket.company.image}}" />
+                      <img *ngIf="!ticket.company || ticket.company['image'] == 'null'" class="rounded-circle img-agent-team" src="../../../assets/img/system/company-placeholder.png" />
+                      <img *ngIf="ticket.company && ticket.company['image'] != 'null'" class="rounded-circle img-agent-team" src="{{url+'company/image/'+ticket.company['image']}}" />
 
                       <p *ngIf="!ticket.company" class="d-inline" style="margin-left: 10px;"><strong>Sin departamento</strong></p>
-                      <p *ngIf="ticket.company" class="d-inline" style="margin-left: 10px;"><strong>{{ticket.company.name}}</strong></p>
+                      <p *ngIf="ticket.company" class="d-inline" style="margin-left: 10px;"><strong>{{ticket.company['name']}}</strong></p>
                       <hr />
                         
                       <span style="font-size: 18px;"><strong>Equipo</strong></span>
@@ -138,11 +138,11 @@
                       </span>
 
                           <div style="margin-bottom: 25px;"></div>
-                          <img *ngIf="!ticket.team || ticket.team.image == 'null'" class="rounded-circle img-agent-team" src="../../../assets/img/system/team-placeholder.png" />
-                          <img *ngIf="ticket.team && ticket.team.image != 'null'" class="rounded-circle img-agent-team" src="{{url+'team/image/'+ticket.team.image}}" />
+                          <img *ngIf="!ticket.team || ticket.team['image'] == 'null'" class="rounded-circle img-agent-team" src="../../../assets/img/system/team-placeholder.png" />
+                          <img *ngIf="ticket.team && ticket.team['image'] != 'null'" class="rounded-circle img-agent-team" src="{{url+'team/image/'+ticket.team['image']}}" />
 
                           <p *ngIf="!ticket.team" class="d-inline" style="margin-left: 10px;"><strong>Sin equipo</strong></p>
-                          <p *ngIf="ticket.team" class="d-inline" style="margin-left: 10px;"><strong>{{ticket.team.name}}</strong></p>
+                          <p *ngIf="ticket.team" class="d-inline" style="margin-left: 10px;"><strong>{{ticket.team['name']}}</strong></p>
                           <hr />
                           <span style="font-size: 18px;"><strong>Agente</strong></span>
                           <span *ngIf="identity['company']">
@@ -159,10 +159,10 @@
   
                           </span>
                           <div style="margin-bottom: 25px;"></div>
-                          <img *ngIf="!ticket.agent || ticket.agent.image == 'null'" class="rounded-circle img-agent-team" src="../../../assets/img/system/user-placeholder.png" />
-                          <img *ngIf="ticket.agent && ticket.agent.image != 'null'" class="rounded-circle img-agent-team" src="{{url+'user/image/'+ticket.agent.image}}" />
+                          <img *ngIf="!ticket.agent || ticket.agent['image'] == 'null'" class="rounded-circle img-agent-team" src="../../../assets/img/system/user-placeholder.png" />
+                          <img *ngIf="ticket.agent && ticket.agent['image'] != 'null'" class="rounded-circle img-agent-team" src="{{url+'user/image/'+ticket.agent['image']}}" />
                           
-                          <p *ngIf="ticket.agent" class="d-inline" style="margin-left: 10px;"><strong>{{ticket.agent.name+' '+ticket.agent.surname}}</strong></p>
+                          <p *ngIf="ticket.agent" class="d-inline" style="margin-left: 10px;"><strong>{{ticket.agent['name']+' '+ticket.agent['surname']}}</strong></p>
                           <p *ngIf="!ticket.agent" class="d-inline" style="margin-left: 10px;"><strong>Sin agente</strong></p>
                           
                           <span *ngIf="identity['company']">

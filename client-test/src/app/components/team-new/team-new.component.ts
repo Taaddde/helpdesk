@@ -26,6 +26,10 @@ export class TeamNewComponent implements OnInit {
   public usersInTeam: User[];
   public usersOutTeam: User[];
 
+  public selectedOut: string;
+  public selectedIn: string;
+
+
 
   constructor(
     private _route: ActivatedRoute,
@@ -44,6 +48,10 @@ export class TeamNewComponent implements OnInit {
 
     this.usersInTeam = [];
     this.usersOutTeam = [];
+
+    this.selectedOut = '';
+    this.selectedIn = '';
+
 
    }
 
@@ -82,6 +90,18 @@ export class TeamNewComponent implements OnInit {
       }
     );
   }
+
+  include(){}
+
+  exclude(){}
+
+  selectOut(val: string){
+  }
+
+  selectIn(val: string){
+  }
+
+
 
   public filesToUpload: Array<File>;
   public fileChangeEvent(fileInput:any){

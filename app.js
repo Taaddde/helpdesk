@@ -33,7 +33,7 @@ app.use((req, res, next)=>{
 });
 
 //rutas base
-//app.use('/', express.static('client', {redirect:false}));
+app.use('/', express.static('client', {redirect:false}));
 app.use('/api/user', user_routes);
 app.use('/api/team', team_routes);
 app.use('/api/response', response_routes);
@@ -45,9 +45,9 @@ app.use('/api/type-ticket', typeticket_routes);
 app.use('/api/subtype-ticket', subtypeticket_routes);
 app.use('/api/global', global_routes);
 
-/*
+
 app.get('*', function(req, res, next){
 	res.sendFile(path.resolve('client/index.html'));
-});*/
+});
 
 module.exports = app;

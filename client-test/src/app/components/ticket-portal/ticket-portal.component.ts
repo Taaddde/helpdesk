@@ -196,7 +196,7 @@ export class TicketPortalComponent implements OnInit {
     this.selectedSubtype = val;
   }
 
-  getLenght(val: Array<String>){
+  getLenght(val: any[]){
     return val.length;
   }
 
@@ -277,8 +277,8 @@ export class TicketPortalComponent implements OnInit {
                       alert('Generación de chat: error en el servidor');
                     }else{
                       if(this.filesToUpload){
-                        this._uploadService.makeFileRequest(this.url+'textblock/file/'+response.textblock._id, [], this.filesToUpload, this.token, 'file')
-                      }
+                        this._uploadService.makeFileRequest(this.url+'textblock/file/'+response.textblock._id, [], this.filesToUpload, this.token, 'file');
+                    }
                       this.cancelTicket();
                       this._router.navigate(['/ticket-gestion',link]);
                     }

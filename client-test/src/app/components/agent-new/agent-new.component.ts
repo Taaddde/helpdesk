@@ -19,6 +19,9 @@ export class AgentNewComponent implements OnInit {
   public url: string;
   public isAdm: boolean;
 
+  public isUser: boolean;
+
+
   public alertMessage: string;
 
   constructor(
@@ -32,6 +35,7 @@ export class AgentNewComponent implements OnInit {
     this.url = GLOBAL.url;
     this.user = new User('','','','','','','','','null',this.identity['company']['_id'],false,'');
     this.isAdm = false;
+    this.isUser = true;
     this.alertMessage = '';
    }
 

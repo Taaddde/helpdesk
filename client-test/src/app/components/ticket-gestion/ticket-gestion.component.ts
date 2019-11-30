@@ -29,13 +29,13 @@ export class TicketGestionComponent implements OnInit {
   public reqTickets: [Ticket];
   public textblock: TextBlock;
   public responses: Response[];
-  public chat: [TextBlock];
-  public companies: [Company];
+  public chat: TextBlock[];
+  public companies: Company[];
   public identity;
   public token;
   public url: string;
-  public agents: [User];
-  public teams: [Team];
+  public agents: User[];
+  public teams: Team[];
   public editSub: boolean;
   public subMod:string;
   public isPrivate: boolean;
@@ -71,7 +71,7 @@ export class TicketGestionComponent implements OnInit {
     this.getCompanies();
   }
 
-  getTeams(company){
+  getTeams(company: any){
     this._teamService.getList(this.token, company).subscribe(
       response =>{
           if(!response.teams){
@@ -106,7 +106,7 @@ export class TicketGestionComponent implements OnInit {
     );
   }
 
-  getReqTickets(req){
+  getReqTickets(req:any){
     if(req){
       this._ticketService.getForUser(this.token, req['_id']).subscribe(
         response =>{
@@ -251,7 +251,7 @@ export class TicketGestionComponent implements OnInit {
       
   }
 
-  selectHashtag(val){
+  selectHashtag(val:string){
     this.textblock.text = this.textblock.text + val;
     document.getElementById('editable').innerHTML = document.getElementById('editable').innerHTML + val;
   }
@@ -335,7 +335,7 @@ export class TicketGestionComponent implements OnInit {
     return tmp;
   }
 
-  subToEdit(val){
+  subToEdit(val:string){
     if(this.identity['company']){
       if(this.identity['company']['_id'] == this.ticket.company['_id']){
         this.editSub = true; 

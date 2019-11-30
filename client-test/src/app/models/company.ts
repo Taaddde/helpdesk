@@ -6,5 +6,6 @@ export class Company{
         public email: string,
         public mailSender: boolean,
         public password: string,
+        public image: string,
     ){}
 }
