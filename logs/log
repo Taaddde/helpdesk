@@ -106,3 +106,25 @@
 [03-12-2019 15:53] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
 [03-12-2019 15:53] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5de6a7df937a3729087878ce"} body:{"read":true}
 [03-12-2019 15:53] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5de6a7df937a3729087878ce"} body:{"read":true}
+[03-12-2019 15:54] [info] [index] Servidor iniciado en puerto 3977
+[03-12-2019 15:56] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[03-12-2019 16:09] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[03-12-2019 16:10] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[03-12-2019 16:10] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[03-12-2019 16:10] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[03-12-2019 16:11] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[03-12-2019 16:12] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[03-12-2019 16:13] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[03-12-2019 16:14] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[03-12-2019 16:15] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[03-12-2019 16:16] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[03-12-2019 16:17] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[03-12-2019 16:17] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[03-12-2019 16:23] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[03-12-2019 16:36] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[03-12-2019 16:37] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[03-12-2019 16:37] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[03-12-2019 16:38] [error] [user/saveUser] dperez (::1) ValidationError: company: Cast to ObjectID failed for value "" at path "company"
+[03-12-2019 16:39] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[03-12-2019 16:41] [info] [index] Servidor iniciado en puerto 3977
+[03-12-2019 16:41] [error] [user/saveUser] dperez (::1) ValidationError: company: Cast to ObjectID failed for value "" at path "company"

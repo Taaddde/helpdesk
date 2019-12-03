@@ -43,7 +43,7 @@ function saveUser(req, res){
     User.findOne({userName:user.userName}, (err, userCheck) =>{
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
-            res.status(500).send({message: 'Error en el servidor al actualizar el usuario'});
+            res.status(500).send({message: err});
         }else{
             if(!userCheck){
                 if(params.password){
@@ -56,7 +56,7 @@ function saveUser(req, res){
                             user.save((err, userStore) => {
                                 if(err){
                                     logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
-                                    res.status(500).send({message:'Error en el servidor al guardar el usuario'});
+                                    res.status(500).send({message:err});
                                 }else{
                                    if(!userStore){
                                     logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});

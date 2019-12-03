@@ -12,6 +12,9 @@ import { Team } from '../../models/team';
 import { User } from '../../models/user';
 import { uploadService } from '../../services/upload.service';
 
+declare var $: any;
+
+
 
 @Component({
   selector: 'app-ticket-new',
@@ -32,9 +35,9 @@ export class TicketNewComponent implements OnInit {
   public requesters: User[];
   public allRequesters: User[];
   public requester: User;
+  public nreq: User;
 
   public priority: string;
-  public newRequester: boolean;
   public keyPress: boolean;
   public requesterFilter: string;
 
@@ -57,12 +60,12 @@ export class TicketNewComponent implements OnInit {
     this.url = GLOBAL.url;
 
     this.priority = '';
-    this.newRequester = false;
     this.keyPress = false;
     this.requesterFilter = '';
 
     this.ticket = new Ticket('','',null,'',null,null,'','','',null,null,'',[null],'',this.identity['company']['_id'],'');
-    this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false)
+    this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false);
+    this.nreq = new User('','','','','','','ROLE_REQUESTER','','null','',false,'');
    }
 
   ngOnInit() {
@@ -110,8 +113,7 @@ export class TicketNewComponent implements OnInit {
   }
 
   createRequester(){
-    this.requester = new User('','','','','','','ROLE_REQUESTER','','','',false,'');
-    this.newRequester = true;
+    this.nreq = new User('','','','','','','ROLE_REQUESTER','','null','',false,'');
   }
 
 
@@ -141,13 +143,6 @@ export class TicketNewComponent implements OnInit {
     this.requesterFilter = '';
     this.requester = requester;
     this.ticket.requester = requester._id;
-    this.newRequester = false;
-  }
-
-  unSetRequester(){
-    this.requester = undefined;
-    this.ticket.requester = undefined;
-    this.newRequester = false;
   }
 
   filterRequester(){
@@ -165,25 +160,16 @@ export class TicketNewComponent implements OnInit {
   onSubmit(){
 
     this.ticket.priority = this.priority;
-
-    if(this.identity['role'] == 'ROLE_REQUESTER'){
-      this.ticket.source = 'PORTAL';
-      this.textblock.type = 'REQUEST'
-    }else{
-      this.ticket.source = 'MANUAL';
-      this.textblock.type = 'PUBLIC'
-    }
-
+    this.ticket.source = 'MANUAL';
+    this.textblock.type = 'PUBLIC'
     if(this.team){
       this.ticket.status = 'Pendiente';
     }else{
       this.ticket.status = 'Abierto';
     }
-
     if(this.ticket.priority == ''){
       this.ticket.priority = 'Normal';
     }
-
     if(this.ticket.agent == null){
       delete this.ticket.agent;
     }
@@ -191,66 +177,12 @@ export class TicketNewComponent implements OnInit {
     if(this.ticket.team == null){
       delete this.ticket.team;
     }
-
     delete this.ticket.subTypeTicket;
-
     delete this.ticket.rating;
 
-    if(this.newRequester){
-
-      if(this.requester.userName == ''){
-        delete this.requester.userName;
-        delete this.requester.password;
-      }
-
-      //Se crea un ticket con un nuevo solicitante
-      this._userService.add(this.token, this.requester).subscribe(
-        response =>{
-            if(!response.user){
-              alert('Error al crear el solicitante')
-            }else{
-
-              //Ticket
-              this.ticket.requester = response.user._id;
-
-              this._ticketService.add(this.token,this.ticket).subscribe(
-                response =>{
-                    if(!response.ticket){
-                      alert('Error al crear el ticket')
-                    }else{
-                      //TextBlock
-                      this.textblock.ticket = response.ticket._id;
-                  
-                      this._textblockService.add(this.token,this.textblock).subscribe(
-                        response =>{
-                            if(!response.textblock){
-                              alert('Error en el bloque de texto del ticket')
-                            }else{
-                              this._router.navigate(['/ticket-gestion',response.textblock.ticket]);       
-                            }
-                          },
-                          error =>{
-                              console.error(error);
-                          }
-                        );
-                    }
-                },
-                error =>{
-                    console.error(error);
-                }
-              );
-            }
-        },
-        error =>{
-            var errorMessage = <any>error;
-            if(errorMessage != null){
-              console.error(errorMessage);
-            }
-        });
-
-    }else{
       //Se crea un ticket con un solicitante ya existente
       if(this.requester){
+        delete this.requester.company;
         this._ticketService.add(this.token,this.ticket).subscribe(
           response =>{
               if(!response.ticket){
@@ -291,7 +223,25 @@ export class TicketNewComponent implements OnInit {
       }else{
         alert('Selecciona un solicitante')
       }
-    }
+  }
+
+  submitRequester(){
+    delete this.nreq.company;
+    this._userService.add(this.token, this.nreq).subscribe(
+      response =>{
+          if(!response.user){
+            alert('Error al crear el solicitante')
+          }else{
+            this.setRequester(response.user);
+            $("#createRequester").modal("hide");
+          }
+      },
+      error =>{
+          var errorMessage = <any>error;
+          if(errorMessage != null){
+            alert(errorMessage.error.message);
+          }
+      });
   }
 
 

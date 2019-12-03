@@ -2,7 +2,7 @@
   <div class="card-body">
       <form #form="ngForm" (ngSubmit)="onSubmit()">
           <div class="form-row">
-              <div class="col-sm-6 col-md-5 col-lg-5 col-xl-5 card-profile" *ngIf="!newRequester">
+              <div class="col-sm-6 col-md-5 col-lg-5 col-xl-5 card-profile">
                   <h5>Datos del solicitante</h5>
                   <div class="form-group">
 
@@ -21,13 +21,10 @@
                           </div>
                       </div>
 
-
-
-
                       <a (click)="createRequester()">
-                        <button class="btn btn-dark dark" type="button">
-                          Nuevo solicitante
-                        </button>
+                          <button class="btn btn-dark dark" type="button" data-toggle="modal" data-target="#createRequester">
+                              Nuevo solicitante
+                          </button>    
                       </a>
                     </div>
                   <div class="form-row">
@@ -100,45 +97,6 @@
               </div>
           </div>
           <hr />
-          <div class="text-center title" style="margin-bottom: 10px;" *ngIf="newRequester">
-              <h3 >
-                Datos del solicitante
-                  <a class="float-right" (click)="unSetRequester()">
-                      <i class="fa fa-window-close border rounded-0" style="background-color: #000000;color: rgb(255,255,255);font-size: 20px;">
-                      </i>
-                    </a>
-              </h3>
-          </div>
-          <div class="form-row agent-system" id="newrequester" *ngIf="newRequester">
-              <div class="col card-profile">
-                  <h5>
-                    Datos personales
-                  </h5>
-                  <div class="form-group">
-                    <label>Nombre</label>
-                    <input #name="ngModel" name="name" [(ngModel)]="requester.name" class="form-control" type="text" required placeholder="Ingresa aqui el nombre del usuario" />
-                  </div>
-                  <div class="form-group">
-                    <label>Apellido</label>
-                    <input #surname="ngModel" name="surname" [(ngModel)]="requester.surname" class="form-control" type="text" required placeholder="Ingrese aqui el apellido del usuario" />
-                  </div>
-              </div>
-              <div class="col card-profile">
-                  <h5>Datos del sistema</h5>
-                  <div class="form-group">
-                    <label>ID de usuario</label>
-                    <input #userName="ngModel" name="userName" [(ngModel)]="requester.userName" class="form-control" type="text" placeholder="Ingresa aqui el ID del usuario" /></div>
-                  <div class="form-group" *ngIf="requester.userName != ''">
-                    <label>Contraseña</label>
-                    <input #password="ngModel" name="password" [(ngModel)]="requester.password" class="form-control" required type="password" placeholder="Ingrese aqui una constraseña" />
-                  </div>
-                  <div class="form-group">
-                    <label>E-mail</label>
-                    <input #email="ngModel" name="email" [(ngModel)]="requester.email" required class="form-control" type="text" inputmode="email" placeholder="Ingrese aqui el e-mail del agente" />
-                  </div>
-              </div>
-          </div>
-          <hr>
           <div class="form-row">
               <div class="col confirm">
                 <button class="btn btn-success btn-lg float-right acept" type="submit">
@@ -148,4 +106,51 @@
           </div>
       </form>
   </div>
+</div>
+
+
+
+<div role="dialog" tabindex="-1" class="modal fade" id="createRequester">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #1e2833;">
+                <h4 class="modal-title" style="color: rgb(255,255,255);">Nuevo solicitante</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+            <form #form="ngForm" (ngSubmit)="submitRequester()">
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <h4>Datos personales</h4>
+                        <label>Nombre</label>
+                        <input placeholder="Ingrese el nombre" #name="ngModel" name="name" [(ngModel)]="nreq.name" required type="text" class="form-control" />
+                        <label>Apellido</label>
+                        <input placeholder="Ingrese el apellido" #surname="ngModel" name="surname" [(ngModel)]="nreq.surname" required type="text" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <h4>Datos de sistema</h4>
+                        <label>ID de usuario</label>
+                        <input placeholder="Ingrese el nombre de usuario" #userName="ngModel" name="userName" [(ngModel)]="nreq.userName" required type="text" class="form-control" />
+                        <label>Constraseña</label>
+                        <input placeholder="Ingrese la contraseña" #password="ngModel" name="password" [(ngModel)]="nreq.password" required type="password" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <h4>Datos de solicitante</h4>
+                        <label>Email</label>
+                        <input placeholder="Ingrese el email" #email="ngModel" name="email" [(ngModel)]="nreq.email" required type="text" class="form-control" />
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-light" type="button" data-dismiss="modal">
+                    Cerrar
+                  </button>
+                  <button class="btn btn-dark" type="submit">
+                    Guardar
+                  </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
