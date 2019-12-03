@@ -55,17 +55,38 @@ export class AppComponent implements OnInit {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     if(this.identity){
+      this.getMessages();
       if(this.identity['role'] != 'ROLE_REQUESTER'){
-        this.getMessages();
-        this.sub = Observable.interval(15000).subscribe((val) => { this.getMessages(); });
+        this.checkClose();
+        this.sub = Observable.interval(15000).subscribe((val) => { 
+          this.getMessages();
+        });
       }else{
         this.getMessagesReq();
-        this.sub = Observable.interval(15000).subscribe((val) => { this.getMessagesReq(); });
+        this.sub = Observable.interval(15000).subscribe((val) => { 
+          this.getMessagesReq();
+        });
       }
     }
     if(window.location.pathname.split('/')[1] == 'reset-password'){
       this.reset = true;
     }
+  }
+
+  checkClose(){
+    this._ticketService.checkClose(this.token).subscribe(
+      response =>{
+          
+      },
+      error =>{
+          var errorMessage = <any>error;
+          if(errorMessage != null){
+          var body = JSON.parse(error._body);
+          //this.alertMessage = body.message;
+          console.error(error);
+          }
+      }
+    );
   }
 
   getMessages(){

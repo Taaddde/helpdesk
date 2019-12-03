@@ -452,8 +452,8 @@ function saveTicket(req, res){
         ticket.rating = params.rating;
         ticket.team = params.team;
         ticket.source = params.source;
-        ticket.createDate = moment().format("DD-MM-YYYY HH:mm");
-        ticket.lastActivity = moment().format("DD-MM-YYYY HH:mm");
+        ticket.createDate = moment().format("YYYY-MM-DD HH:mm");
+        ticket.lastActivity = moment().format("YYYY-MM-DD HH:mm");
         ticket.priority = params.priority;
         ticket.company = params.company;
         ticket.resolveDate = params.resolveDate;
@@ -661,7 +661,7 @@ function updateTicket(req, res){
     var ticketId = req.params.id;
     var update =  req.body;
 
-    req.body.lastActivity = moment().format("YYYY-DDMM HH:mm");
+    req.body.lastActivity = moment().format("YYYY-DD-MM HH:mm");
     //ticketId = ticket buscado, update = datos nuevos a actualizar
     Ticket.findByIdAndUpdate(ticketId, update, (err, ticketUpdated) =>{
         if(err){
@@ -755,11 +755,11 @@ function getTeamTickets(req, res){
 function checkClose(req, res){
     var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'checkClose';
-    let now = moment().subtract(2, 'days').format('DD-MM-YYYY');
+    let now = moment().subtract(2, 'days').format('YYYY-MM-DD HH:mm');
     var query = 
     {
         status:'Finalizado', 
-        lastActivity:{$regex: now,$options: 'i'}
+        lastActivity:{$lte: now}
     }
     var update =  {status:'Cerrado'};
     //ticketId = ticket buscado, update = datos nuevos a actualizar
@@ -773,11 +773,11 @@ function checkClose(req, res){
                 res.status(404).send({message: 'No se ha encontrado el ticket'});
             }else{
                 logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
-                res.status(200).send({ticket:ticketUpdated});
+                res.status(200).send({ticketS:ticketUpdated});
             }
         }
     });
-    }
+}
     
     
 

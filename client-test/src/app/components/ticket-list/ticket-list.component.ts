@@ -4,6 +4,7 @@ import {Router, ActivatedRoute, Params} from '@angular/router'
 import {GLOBAL} from '../../services/global'
 import { userService } from '../../services/user.service';
 import { ticketService } from '../../services/ticket.service';
+import * as moment from 'moment';
 
 
 @Component({
@@ -116,5 +117,9 @@ export class TicketListComponent implements OnInit {
   changeLimit(val: number){
     this.limit = val;
     this._router.navigate(['/ticket',this.page,this.limit]);
+  }
+
+  changeDate(val:string){
+    return moment(val, 'YYYY-MM-DD HH:mm').format('DD-MM-YYYY HH:mm');
   }
 }

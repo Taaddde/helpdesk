@@ -521,6 +521,10 @@ export class TicketGestionComponent implements OnInit {
     );
   }
 
+  changeDate(val:string){
+    return moment(val, 'YYYY-MM-DD HH:mm').format('DD-MM-YYYY HH:mm');
+  }
+
   public filesToUpload: Array<File>;
   public fileChangeEvent(fileInput:any){
       this.filesToUpload = <Array<File>>fileInput.target.files;

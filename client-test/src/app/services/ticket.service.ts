@@ -53,6 +53,13 @@ export class ticketService{
         return this._httpClient.put<any>(this.url+'ticket/update/'+id, params, this.httpOptions);
 
     }
+
+    checkClose(token){
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.put<any>(this.url+'ticket/checkclose', {}, this.httpOptions);
+    }
     
     delete(token, id){
         this.httpOptions.headers =

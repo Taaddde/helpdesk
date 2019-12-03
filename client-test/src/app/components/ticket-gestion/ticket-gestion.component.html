@@ -8,8 +8,8 @@
               <div class="card-body info-card">
                   <ul class="list-group">
                       <li class="list-group-item"><span>Número: </span><span><strong>#{{ticket.numTicket}}</strong></span></li>
-                      <li class="list-group-item"><span>Creación: </span><span><strong>{{ticket.createDate}}</strong></span></li>
-                      <li class="list-group-item"><span>Actualizado: </span><span><strong>{{ticket.lastActivity}}</strong></span></li>
+                      <li class="list-group-item"><span>Creación: </span><span><strong>{{changeDate(ticket.createDate)}}</strong></span></li>
+                      <li class="list-group-item"><span>Actualizado: </span><span><strong>{{changeDate(ticket.lastActivity)}}</strong></span></li>
                       <li class="list-group-item">
                           <span>Prioridad: </span>
                           <span *ngIf="identity['company']">
