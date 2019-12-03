@@ -1,6 +1,7 @@
 'use strict'
 
 var TypeTicket = require('../models/type_ticket');
+var SubTypeTicket = require('../models/subtype_ticket');
 //Sistema de log
 var logger = require('../services/logger');
 var jwt_decode = require('jwt-decode');var path = require('path');
@@ -144,8 +145,20 @@ var decoded = jwt_decode(req.headers.authorization);
                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado el respuesta'});
             }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
-                res.status(200).send({typeTicket: typeTicketRemoved});
+                SubTypeTicket.deleteMany({typeTicket:typeTicketRemoved._id}, (err, typeTicketRemoved) =>{
+                    if(err){
+                        logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                        res.status(500).send({message: 'Error en la petición'});
+                    }else{
+                        if(!typeTicketRemoved){
+                            logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                            res.status(404).send({message: 'No se ha encontrado los subtipos'});
+                        }else{
+                            logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                            res.status(200).send({typeTicket: typeTicketRemoved});            
+                        }
+                    }
+                });
             }
         }
     });

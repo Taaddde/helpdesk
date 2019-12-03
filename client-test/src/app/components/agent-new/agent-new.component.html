@@ -1,5 +1,15 @@
 <div class="card">
     <div class="card-body">
+            <div class="text-right" *ngIf="user.role != 'ROLE_REQUESTER'" id="back" style="margin-bottom: -40px;">
+                <a class="btn btn-dark" [routerLink]="['/agent']" role="button" style="color: white;margin-right: 5px;margin-top: 5px;">
+                    <i class="fa fa-arrow-left"></i>
+                </a>
+            </div>
+            <div class="text-right" *ngIf="user.role == 'ROLE_REQUESTER'" id="back" style="margin-bottom: -40px;">
+                <a class="btn btn-dark" [routerLink]="['/agent', 'requester']" role="button" style="color: white;margin-right: 5px;margin-top: 5px;">
+                    <i class="fa fa-arrow-left"></i>
+                </a>
+            </div>
         <form name="my-form" #form="ngForm" (ngSubmit)="onSubmit()">
             <div class="form-row">
                 <div class="col-sm-5 col-md-5 col-lg-3 card-profile">
@@ -35,6 +45,11 @@
                     <div class="form-check" *ngIf="user.role != 'ROLE_REQUESTER'"><input class="form-check-input" type="checkbox" [disabled]="identity['role'] != 'ROLE_ADMIN'" id="formCheck-1" name="isAdm" [(ngModel)]="isAdm" /><label class="form-check-label" for="formCheck-1">Es administrador</label></div>
                     <div class="form-check"><input class="form-check-input" [disabled]="identity['role'] != 'ROLE_ADMIN' && !isUser" type="checkbox" id="formCheck-1" #receiveMail="ngModel" name="receiveMail" [(ngModel)]="user.receiveMail" /><label class="form-check-label" for="formCheck-1">Recibir notificaciones al correo electronico</label></div>
                     
+                    <!-- <div id="delete" *ngIf="user._id" style="margin-bottom: -40px;">
+                        <a class="btn btn-danger" role="button" style="color:white;margin-right: 5px;margin-top: 5px;">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </div>             -->
                 </div>
                 <div class="col card-profile">
                     <h5>Datos de agente</h5>

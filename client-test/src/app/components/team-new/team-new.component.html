@@ -1,5 +1,10 @@
 <div class="card">
     <div class="card-body">
+            <div class="text-right" id="delete" style="margin-bottom: -40px;">
+                    <a class="btn btn-dark" [routerLink]="['/agent', 'team']" role="button" style="color: white;margin-right: 5px;margin-top: 5px;">
+                        <i class="fa fa-arrow-left"></i>
+                    </a>
+                </div>    
         <form name="my-form" #form="ngForm" (ngSubmit)="onSubmit()">
             <div class="form-row">
                 <div class="col-sm-5 col-md-5 col-lg-3 card-profile">

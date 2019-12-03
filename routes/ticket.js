@@ -25,6 +25,7 @@ api.get('/teamPaged/:page/:perPage/:userId', md_auth.ensureAuth, ticketControlle
 //ABM
 api.post('/add',md_auth.ensureAuth, ticketController.saveTicket);
 api.put('/update/:id', md_auth.ensureAuth, ticketController.updateTicket);
+api.put('/checkclose', md_auth.ensureAuth, ticketController.checkClose);
 api.delete('/delete/:id', md_auth.ensureAuth, ticketController.deleteTicket);
 
 module.exports = api;

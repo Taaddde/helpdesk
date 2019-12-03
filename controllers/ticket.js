@@ -656,12 +656,12 @@ var decoded = jwt_decode(req.headers.authorization);
 
 
 function updateTicket(req, res){
-var decoded = jwt_decode(req.headers.authorization);
+    var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'updateTicket';
     var ticketId = req.params.id;
     var update =  req.body;
 
-    req.body.lastActivity = moment().format("DD-MM-YYYY HH:mm");
+    req.body.lastActivity = moment().format("YYYY-DDMM HH:mm");
     //ticketId = ticket buscado, update = datos nuevos a actualizar
     Ticket.findByIdAndUpdate(ticketId, update, (err, ticketUpdated) =>{
         if(err){
@@ -747,14 +747,38 @@ function getTeamTickets(req, res){
                         }
                     }
                 });
-            
             }
         }
     });
-
-
-
 }
+
+function checkClose(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+    var functionName = 'checkClose';
+    let now = moment().subtract(2, 'days').format('DD-MM-YYYY');
+    var query = 
+    {
+        status:'Finalizado', 
+        lastActivity:{$regex: now,$options: 'i'}
+    }
+    var update =  {status:'Cerrado'};
+    //ticketId = ticket buscado, update = datos nuevos a actualizar
+    Ticket.updateMany(query, update, (err, ticketUpdated) =>{
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                res.status(500).send({message: 'Error del servidor en la petición',err:err});
+        }else{
+            if(!ticketUpdated){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                res.status(404).send({message: 'No se ha encontrado el ticket'});
+            }else{
+                logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({ticket:ticketUpdated});
+            }
+        }
+    });
+    }
+    
     
 
 module.exports = {
@@ -773,6 +797,8 @@ module.exports = {
     getTicketReports,
     getDateTickets,
     getTeamTickets,
+
+    checkClose,
 
     saveTicket,
     updateTicket,

@@ -24,6 +24,16 @@ export class AgentTeamComponent implements OnInit {
   }
 
   ngOnInit() {
+    this._route.params.forEach((params: Params) =>{
+      let back = params['back'];
+      if(back == 'requester'){
+        this.state = 'requester';
+      }else{
+        if(back == 'team'){
+          this.state = 'team';
+        }
+      }
+    })
   }
 
   changeTo(val: string){

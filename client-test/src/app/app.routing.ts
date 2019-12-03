@@ -33,6 +33,7 @@ const appRoutes: Routes = [
     { path: 'ticket-gestion/:id', component: TicketGestionComponent},
     { path: 'ticket-new', component: TicketNewComponent},
 
+    {path: 'agent/:back', component: AgentTeamComponent},
     {path: 'agent', component: AgentTeamComponent},
     {path: 'agent/new', component: AgentNewComponent},
     {path: 'user/edit/:id', component: AgentEditComponent},
