@@ -1,4 +1,4 @@
-<a *ngIf="identity['role'] == 'ROLE_ADMIN'" class="btn btn-dark dark newtype" role="button" href="#newtype" data-toggle="modal">Nuevo tipo de solicitud</a>
+<a *ngIf="identity['role'] == 'ROLE_ADMIN'" class="btn btn-dark dark newtype" role="button" href="#newtype" data-toggle="modal" (click)="getNew()">Nuevo tipo de solicitud</a>
 
 <ul class="list-group">
   <li class="list-group-item" *ngFor="let type of types">
@@ -153,6 +153,13 @@
                                 </tfoot>                      
                           </table>
                           </form>
+                          <button *ngIf="identity['role'] == 'ROLE_ADMIN'" class="btn btn-danger float-right" style="margin-left: 3px;" type="button" (click)="deleteType(type.name)">
+                            Eliminar <i class="fa fa-trash"></i>
+                          </button>
+                          <button (click)="getEdit(type)" *ngIf="identity['role'] == 'ROLE_ADMIN'" class="btn btn-dark float-right" type="button" href="#edittype" data-toggle="modal">
+                            Modificar <i class="fa fa-pencil-alt"></i>
+                          </button>  
+  
                       </div>
                   </li>
 
@@ -162,6 +169,45 @@
       </div>
   </li>
 </ul>
+
+
+<div role="dialog" tabindex="-1" class="modal fade" id="edittype">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Editar tipo de solicitud</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+            <form name="my-form" #form="ngForm" (ngSubmit)="editType()">
+                <div class="modal-body">
+                    <div class="form-group">
+                      <input 
+                        [readonly]="identity['role'] != 'ROLE_ADMIN'"
+                        type="text" 
+                        class="form-control form-control-lg" 
+                        placeholder="Ingrese el nombre del tipo de solicitud" 
+                        #name="ngModel" 
+                        name="name" 
+                        [(ngModel)]="newType.name" 
+                        autofocus 
+                        required 
+                      />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-light" type="button" data-dismiss="modal">
+                    Cerrar
+                  </button>
+                  <button class="btn btn-success" type="submit">
+                    Guardar
+                  </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 <div role="dialog" tabindex="-1" class="modal fade" id="newtype">

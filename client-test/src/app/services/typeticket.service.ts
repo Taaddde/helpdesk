@@ -44,7 +44,7 @@ export class typeTicketService{
         this.httpOptions.headers =
         this.httpOptions.headers.set('Authorization', token);
 
-        return this._httpClient.delete<any>(this.url+'type-ticket/delete/', this.httpOptions);
+        return this._httpClient.delete<any>(this.url+'type-ticket/delete/'+id, this.httpOptions);
     }
 
     getList(token, company:string){

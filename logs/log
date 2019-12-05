@@ -258,3 +258,15 @@
 [05-12-2019 10:08] [info] [index] Servidor iniciado en puerto 3977
 [05-12-2019 10:11] [info] [index] Servidor iniciado en puerto 3977
 [05-12-2019 10:18] [info] [index] Servidor iniciado en puerto 3977
+[05-12-2019 10:22] [info] [index] Servidor iniciado en puerto 3977
+[05-12-2019 10:23] [warn] [user/loginUser] dperez (::1) Objeto no encontrado
+[05-12-2019 10:23] [warn] [user/loginUser] dperez (::1) Objeto no encontrado
+[05-12-2019 10:23] [warn] [user/loginUser] dperez (::1) Objeto no encontrado
+[05-12-2019 10:28] [info] [user/loginUser] dperez (::1) Usuario conectado
+[05-12-2019 10:28] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[05-12-2019 10:29] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[05-12-2019 10:29] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
+[05-12-2019 10:29] [info] [TextBlock/readAgent] dperez (::1) Petición realizada | params:{"id":"5db9a3c854030041d4bfcd0e"} body:{"read":true}
+[05-12-2019 10:57] [info] [user/loginUser] dperez (::1) Usuario conectado
+[05-12-2019 10:57] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[05-12-2019 10:58] [info] [subtype_ticket/deleteSubTypeTicket] dperez (::1) Petición realizada | params:{"id":"5dc04a334fa9ef3ecc01781b"} body:{}

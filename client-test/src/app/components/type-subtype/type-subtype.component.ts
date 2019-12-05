@@ -149,6 +149,26 @@ export class TypeSubtypeComponent implements OnInit {
     }
   }
 
+  deleteType(name:string){
+    var r = confirm("¿Estas seguro que quieres eliminar el tipo "+name+"?");
+    if (r == true) {
+      this._typeTicketService.delete(this.token, this.typeSelected).subscribe(
+        response =>{
+            if(!response.typeTicket){
+                alert('Error en el servidor');
+            }else{
+              this.getTypes();
+            }
+        },
+        error =>{
+            console.error(error);
+        }
+      );
+  
+    }
+  }
+
+
   deleteCheck(val:string){
     var r = confirm("¿Estas seguro que quieres eliminar esta validación? "+val);
     if (r == true) {
@@ -291,6 +311,29 @@ export class TypeSubtypeComponent implements OnInit {
     );
   }
 
+  editType(){
+    this._typeTicketService.edit(this.token, this.newType._id, this.newType).subscribe(
+      response =>{
+          if(!response.typeTicket){
+              alert('Error en el servidor');
+          }else{
+            this.newType = new TypeTicket('','',this.identity['company']['_id']);
+            this.getTypes();
+            $("#edittype").modal("hide");
+          }
+      },
+      error =>{
+          console.error(error);
+      }
+    );
+  }
 
+  getEdit(val: TypeTicket){
+    this.newType = val;
+  }
+
+  getNew(){
+    this.newType = new TypeTicket('','',this.identity['company']['_id']);
+  }
 
 }
