@@ -25,6 +25,11 @@ var TicketSchema = Schema({
     priority: {type: String, default:"Normal"},
     company: {type: Schema.ObjectId, ref:'Company'},
     subTypeTicket: {type: Schema.ObjectId, ref:'SubTypeTicket',},
+    cc:{
+        type: [Schema.ObjectId],
+        ref:'User',
+        default: undefined
+    },
 
 });
 

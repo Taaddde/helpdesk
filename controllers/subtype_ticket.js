@@ -42,17 +42,6 @@ var decoded = jwt_decode(req.headers.authorization);
     subTypeTicket.name = params.name;
     subTypeTicket.team = params.team;
     subTypeTicket.desc = params.desc;
-    /* PARA CUANDO SE DEBA HACER EL CALCULO DE DIAS
-    if(params.resolveDate){
-        let day = moment().add(params.resolveDate, "days").format("DD-MM-YYYY");
-        // 0 = DOM
-        // 6 = SAB
-        if(moment(day, "DD-MM-YYYY").weekday() == 6 || moment(day, "DD-MM-YYYY").weekday() == 0){ 
-            day = moment(day, "DD-MM-YYYY").add(2, "days").format("DD-MM-YYYY");
-        }
-        subTypeTicket.resolveDate = day;
-    }*/
-
     subTypeTicket.resolveDays = params.resolveDays;
 
 
@@ -81,7 +70,7 @@ var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getSubTypeTickets';
     var typeId = req.params.typeId;
 
-    SubTypeTicket.find({typeTicket:typeId}).populate(populateQuery).sort('name').exec(function(err, subTypeTickets){
+    SubTypeTicket.find({typeTicket:typeId, deleted:false}).populate(populateQuery).sort('name').exec(function(err, subTypeTickets){
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -103,7 +92,7 @@ var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getSubTypeTicketsForName';
     var name = req.params.name;
     var typeId = req.params.typeId;
-    SubTypeTicket.find({name: { "$regex": name, "$options": "i" }, typeTicket:typeId}).populate(populateQuery).sort('name').exec(function(err, subTypeTickets){
+    SubTypeTicket.find({name: { "$regex": name, "$options": "i" }, deleted:false, typeTicket:typeId}).populate(populateQuery).sort('name').exec(function(err, subTypeTickets){
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -194,7 +183,7 @@ var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'deleteSubTypeTicket';
     var subTypeTicketId = req.params.id;
 
-    SubTypeTicket.findByIdAndDelete(subTypeTicketId, (err, subTypeTicketRemoved) =>{
+    SubTypeTicket.findByIdAndUpdate(subTypeTicketId, {deleted:true}, (err, subTypeTicketRemoved) =>{
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error en la petición'});

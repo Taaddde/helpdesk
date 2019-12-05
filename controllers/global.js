@@ -149,6 +149,7 @@ function sendMail(req, res){
     var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'sendMail';
     let to = req.body.to;
+    let cc = req.body.cc;
     let sub = req.body.sub;
     let txt = req.body.txt;
     let c = req.body.company;
@@ -162,7 +163,7 @@ function sendMail(req, res){
                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 res.status(404).send({message: 'La compañia no existe'});
             }else{
-                mail.send(company.email, company.password, to, sub, txt)
+                mail.send(company.email, company.password, to, sub, txt, cc)
                 res.status(200).send({mail:true});
             }
         }

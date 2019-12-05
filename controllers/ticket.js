@@ -21,7 +21,8 @@ var decoded = jwt_decode(req.headers.authorization);
         {path:'agent',select:['name','surname','image','email','receiveMail']},
         {path:'team',select:['users','name','image'], populate:{path: 'users', model: 'User',select:['name','surname','image']}},
         {path:'company',select:['name','email','image','mailSender']},
-        {path:'subTypeTicket',select:['name','typeTicket'], populate:{path: 'typeTicket'}}
+        {path:'subTypeTicket',select:['name','typeTicket'], populate:{path: 'typeTicket'}},
+        {path:'cc', model:'User', select:['name','surname','image', 'email']}
     ];
     var ticketId = req.params.id;
 
@@ -141,7 +142,7 @@ var decoded = jwt_decode(req.headers.authorization);
     let query =[
         // First Stage
         {
-          $match : { requester: ObjectId(userId) }
+          $match : { $or:[{requester: ObjectId(userId)},{cc:ObjectId(userId)}] }
           
         },
         // Second Stage
@@ -575,13 +576,13 @@ var decoded = jwt_decode(req.headers.authorization);
     var userId = req.params.userId;
     var status = req.params.status;
 
-    var query = {requester:userId};
+    var query = {$or:[{requester:userId},{cc:userId}]};
 
     if(status){
         if(status == 'Finalizado' || status == 'Cerrado'){
-            query = {requester:userId, $or: [ {status:'Finalizado'}, {status:'Cerrado'} ]};
+            query = {$and:[{$or:[{requester:userId},{cc:userId}]}, {$or: [ {status:'Finalizado'}, {status:'Cerrado'} ]}]};
         }else{
-            query = {requester:userId, $or: [ {status:'Abierto'}, {status:'Pendiente'} ]};
+            query = {$and:[{$or:[{requester:userId},{cc:userId}]}, {$or: [ {status:'Abierto'}, {status:'Pendiente'} ]}]};
         }
     }
 
@@ -779,6 +780,46 @@ function checkClose(req, res){
     });
 }
     
+function addCc(req, res){
+        var decoded = jwt_decode(req.headers.authorization);
+        var functionName = 'addCc';
+        var ticketId = req.params.id;
+        var user = req.body.user;
+       
+        Ticket.findByIdAndUpdate(
+            ticketId,
+            { $push: {"cc": {_id:user}}},
+            {  safe: true, upsert: true},
+            function(err, ticket) {
+                if(err){
+                    console.log(err);
+                    return res.send(err);
+                }else{
+                    logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                    res.status(200).send({ticket:ticket});
+            }
+        });
+    }
+    
+    function removeCc(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+        var functionName = 'removeCc';
+        var ticketId = req.params.id;
+        var user = req.body.user;
+         
+         Ticket.findByIdAndUpdate(
+            ticketId,
+            { $pull: {"cc": user}},
+            {  safe: true, upsert: false},
+            function(err, ticket) {
+                if(err){
+                console.log(err);
+                return res.send(err);
+                }
+            logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Solicitud de '+req.params.id}});
+            res.status(200).send({ticket:ticket});
+        });
+    }
     
 
 module.exports = {
@@ -799,6 +840,8 @@ module.exports = {
     getTeamTickets,
 
     checkClose,
+    addCc,
+    removeCc,
 
     saveTicket,
     updateTicket,

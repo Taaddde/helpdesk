@@ -66,7 +66,7 @@ var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getTypeTickets';
 
 
-    TypeTicket.find({company:company}).populate(populateQuery).sort('name').exec(function(err, typeTickets){
+    TypeTicket.find({company:company, deleted:false}).populate(populateQuery).sort('name').exec(function(err, typeTickets){
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -89,7 +89,7 @@ var decoded = jwt_decode(req.headers.authorization);
     var company = req.params.company;
     var functionName = 'getTypeTicketsForName';
 
-    TypeTicket.find({name: { "$regex": name, "$options": "i" }, company:company}).populate(populateQuery).sort('name').exec(function(err, typeTickets){
+    TypeTicket.find({name: { "$regex": name, "$options": "i" }, deleted:false , company:company}).populate(populateQuery).sort('name').exec(function(err, typeTickets){
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -136,7 +136,7 @@ var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'deletetypeTicket';
 
 
-    TypeTicket.findByIdAndDelete(typeTicketId, (err, typeTicketRemoved) =>{
+    TypeTicket.findByIdAndUpdate(typeTicketId, {deleted:true}, (err, typeTicketRemoved) =>{
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error en la petición'});

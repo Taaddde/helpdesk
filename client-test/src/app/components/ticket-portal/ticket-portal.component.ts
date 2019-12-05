@@ -79,7 +79,7 @@ export class TicketPortalComponent implements OnInit {
     this.subTypeFilter = '';
 
     this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'');
-    this.ticket = new Ticket('','',null,this.identity['_id'],null,null,'Abierto','','','',null,'PORTAL',[null],'Normal','','');
+    this.ticket = new Ticket('','',null,this.identity['_id'],null,null,'Abierto','','','',null,'PORTAL',[null],'Normal','','',['']);
     this.tb = new TextBlock('','',this.identity['_id'],'','','REQUEST',[''],false);
 
     this.allChecked = false;
@@ -234,7 +234,7 @@ export class TicketPortalComponent implements OnInit {
     this.filesToUpload = new Array<File>();
 
     this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'');
-    this.ticket = new Ticket('','',null,this.identity['_id'],null,null,'Abierto','','','',null,'PORTAL',[null],'Normal','','');
+    this.ticket = new Ticket('','',null,this.identity['_id'],null,null,'Abierto','','','',null,'PORTAL',[null],'Normal','','',['']);
     this.tb = new TextBlock('','',this.identity['_id'],'','','REQUEST',[''],false);
 
     this.allChecked = false;

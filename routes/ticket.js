@@ -28,4 +28,8 @@ api.put('/update/:id', md_auth.ensureAuth, ticketController.updateTicket);
 api.put('/checkclose', md_auth.ensureAuth, ticketController.checkClose);
 api.delete('/delete/:id', md_auth.ensureAuth, ticketController.deleteTicket);
 
+//AÑADIR UN CC
+api.put('/addcc/:id', md_auth.ensureAuth, ticketController.addCc);
+api.put('/removecc/:id', md_auth.ensureAuth, ticketController.removeCc);
+
 module.exports = api;

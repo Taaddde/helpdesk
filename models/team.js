@@ -13,7 +13,8 @@ var TeamSchema = Schema({
     },
     default: {type: Boolean, default:false},
     createDate: {type: String, default:''},
-    company: {type: Schema.ObjectId, ref:'Company'}
+    company: {type: Schema.ObjectId, ref:'Company'},
+    deleted: {type: Boolean, default:false}
 });
 
 module.exports = mongoose.model('Team', TeamSchema);

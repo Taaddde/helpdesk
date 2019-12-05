@@ -17,5 +17,6 @@ export class Ticket{
         public priority: string, 
         public company:string,
         public subTypeTicket: string,
+        public cc: [string],
     ){}
 }

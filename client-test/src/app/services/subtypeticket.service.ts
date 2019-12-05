@@ -77,7 +77,7 @@ export class subTypeTicketService{
         };
 
 
-        return this._httpClient.put<any>(this.url+'subtype-ticket/add', params, options);
+        return this._httpClient.put<any>(this.url+'subtype-ticket/delete-check/'+id, params, options);
     }
 
     getList(token, ticketId:string){

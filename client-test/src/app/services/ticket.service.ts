@@ -4,6 +4,7 @@ import 'rxjs/add/operator/map';
 import {GLOBAL} from './global'; // Hecho a mano
 import {Ticket} from '../models/ticket';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { User } from '../models/user';
 
 //Inyeccion de dependencias
 @Injectable()
@@ -33,10 +34,10 @@ export class ticketService{
         return this._httpClient.post<any>(this.url+'ticket/add', params, this.httpOptions);
     }
 
-    sendMail(token, name, ticket: Ticket, text, nameTo, mailTo, link:string){
+    sendMail(token, name, ticket: Ticket, text, nameTo, mailTo, link:string, cc:string[]){
         var sub = 'Novedades en el ticket #'+ticket.numTicket+' - '+ticket.sub;
         var txt = '<div style="position: relative;display: flex;flex-direction: column;min-width: 0;word-wrap: break-word;background-color: #fff;background-clip: border-box;border: 1px solid #e3e6f0;border-radius: .35rem;font-family: Nunito,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;"><div style="flex: 1 1 auto;padding: 1.25rem;"><h4 style="margin-bottom: .75rem;"><strong>¡Hola '+nameTo+'! Hay novedades en el ticket #'+ticket.numTicket+'</strong></h4><hr/><h6 style="color: #858796!important;margin-bottom: .5rem!important;margin-bottom: 0;margin-top: 9px;font-size: 1rem;margin-bottom: .5rem;font-weight: 400;line-height: 1.2;">'+name+'</h6><p class="card-text">'+text+'</p><hr /><a style="" href="'+link+'" role="button" >Ingresar al ticket</a></div></div>'
-        var params = {company:ticket.company['_id'], to:mailTo, sub:sub, txt:txt}
+        var params = {company:ticket.company['_id'], to:mailTo, cc:cc, sub:sub, txt:txt}
 
         this.httpOptions.headers =
         this.httpOptions.headers.set('Authorization', token);
@@ -53,6 +54,26 @@ export class ticketService{
         return this._httpClient.put<any>(this.url+'ticket/update/'+id, params, this.httpOptions);
 
     }
+
+    addCc(token, id:string, cc: string){
+        let params = {user:cc};
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.put<any>(this.url+'ticket/addcc/'+id, params, this.httpOptions);
+
+    }
+
+    removecc(token, id:string, cc: string){
+        let params = {user:cc};
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.put<any>(this.url+'ticket/removecc/'+id, params, this.httpOptions);
+
+    }
+
+
 
     checkClose(token){
         this.httpOptions.headers =

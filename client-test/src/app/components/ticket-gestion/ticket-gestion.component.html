@@ -176,6 +176,43 @@
               </div>
           </div>
       </div>
+      <div class="row" id="cc">
+        <div class="card info-card">
+            <div class="container title-container">
+                <div class="text-center title"><label style="margin-left: 13px;font-size: 24px;"><strong>En copia</strong></label></div>
+            </div>
+            <div class="card-body info-card">
+                <ul class="list-group" >
+                  <span *ngIf="ticket.cc && getLenght(ticket.cc) != 0">
+                      <li class="list-group-item" *ngFor="let user of ticket.cc">
+                          <img *ngIf="user.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+user.image}}" />
+                          <img *ngIf="user.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="../../../assets/img/system/user-placeholder.png" />
+                          <span>{{user.name}} {{user.surname}}</span>
+                          <button class="btn btn-danger float-right" type="button" (click)="deleteCc(user)">
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </li>    
+                  </span>
+                    <li class="list-group-item text-center">
+                        <div class="dropdown d-inline" >
+                            <button class="btn btn-dark dark dropdown-toggle" (click)="getCc()" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span>Poner en copia</span>
+                            </button>        
+                            <div class="dropdown-menu" >
+                                <input type="text" class="form-control form-control dropdown-search-input" placeholder="Buscar.." (keyup)="filterCc()" [(ngModel)]="ccFilter" name="ccFilter"/>                         
+                                <span *ngIf="keyPress">
+                                    <a class="dropdown-item" *ngFor="let cc of ccList" (click)="setCc(cc)">
+                                        {{cc.name+' '+cc.surname}}
+                                    </a>
+                                </span>
+                            </div>
+                        </div>  
+                    </li>
+                </ul>
+            </div>
+        </div>
+      </div>
+
       <div class="row" id="requester-tickets">
           <div class="card info-card">
               <div class="container title-container" style="padding-right: 0;padding-left: 0;">
@@ -306,7 +343,7 @@
                       </div>
 
                       <div class="row" style="margin-top: 8px;">
-                          <div id="editable" [contentEditable]="identity['_id'] == ticket.requester['_id']"
+                          <div id="editable" [contentEditable]="identity['_id'] == ticket.requester['_id'] || isCc"
                           (input)="textblock.text = $event.target.innerHTML"
                           >
                             <span contentEditable="false"></span>
@@ -363,7 +400,7 @@
                     </span>
                     <span *ngIf="!identity['company']">
     
-                      <button class="btn btn-primary float-right" [disabled]="identity['_id'] != ticket.requester['_id']" type="submit">
+                      <button class="btn btn-primary float-right" [disabled]="identity['_id'] != ticket.requester['_id'] && !isCc" type="submit">
                         <i class="fa fa-paper-plane"></i>
                       </button>
 

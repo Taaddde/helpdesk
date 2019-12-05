@@ -15,7 +15,8 @@ var UserSchema = Schema({
     company: {type: Schema.ObjectId, ref:'Company'},
     receiveMail: {type: Boolean, default:false},
     passToken: {type: String, default:null},
-    passTokenExp: {type: String, default:'2000-01-01'}
+    passTokenExp: {type: String, default:'2000-01-01'},
+    deleted: {type: Boolean, default:false}
 });
 
 module.exports = mongoose.model('User', UserSchema);

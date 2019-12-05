@@ -80,12 +80,14 @@ export class AgentEditComponent implements OnInit {
   }
 
   onSubmit(){
-    if(this.identity['role'] != 'ROLE_REQUESTER'){
-      if(!this.isAdm){
-        this.user.role = 'ROLE_AGENT';
-      }else{
-        this.user.role = 'ROLE_ADMIN';
-      }
+    if(this.user.role != 'ROLE_REQUESTER'){
+      if(this.identity['role'] != 'ROLE_REQUESTER'){
+        if(!this.isAdm){
+          this.user.role = 'ROLE_AGENT';
+        }else{
+          this.user.role = 'ROLE_ADMIN';
+        }
+      }  
     }
     
     if(this.user.sign = ''){

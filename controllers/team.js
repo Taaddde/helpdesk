@@ -98,7 +98,6 @@ var decoded = jwt_decode(req.headers.authorization);
     });
 }
 
-
 function getTeams(req, res){
 var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getTeams';
@@ -110,7 +109,7 @@ var decoded = jwt_decode(req.headers.authorization);
     let company = req.params.company
 
 
-    Team.find({company:company}).sort('name').populate(populateQuery).exec(function(err, teams){
+    Team.find({company:company, deleted:false}).sort('name').populate(populateQuery).exec(function(err, teams){
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -138,7 +137,7 @@ var decoded = jwt_decode(req.headers.authorization);
     let company = req.params.company
     let name = req.params.name
 
-    Team.find({company:company, name:{ "$regex": name, "$options": "i" }}).sort('name').populate(populateQuery).exec(function(err, teams){
+    Team.find({company:company, deleted:false, name:{ "$regex": name, "$options": "i" }}).sort('name').populate(populateQuery).exec(function(err, teams){
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -154,7 +153,6 @@ var decoded = jwt_decode(req.headers.authorization);
         }
     });
 }
-
 
 function updateTeam(req, res){
 var decoded = jwt_decode(req.headers.authorization);
@@ -184,7 +182,7 @@ var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'deleteTeam';
     var teamId = req.params.id;
 
-    Team.findByIdAndDelete(teamId, (err, teamRemoved) =>{
+    Team.findByIdAndUpdate(teamId, {deleted:true}, (err, teamRemoved) =>{
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error en la petición'});
@@ -254,7 +252,6 @@ function getImageFile(req, res){
         }
     });
 }
-
 
 function addUser(req, res){
 var decoded = jwt_decode(req.headers.authorization);

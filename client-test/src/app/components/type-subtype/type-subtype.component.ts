@@ -44,7 +44,6 @@ export class TypeSubtypeComponent implements OnInit {
     private _typeTicketService: typeTicketService,
     private _subTypeTicketService: subTypeTicketService,
     private _teamService: teamService,
-
   ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();

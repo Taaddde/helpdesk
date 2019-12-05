@@ -231,7 +231,7 @@ function getUsers(req, res){
 
 
     if(!role){
-        User.find({company:company}).sort('name').exec(function(err, users){
+        User.find({company:company, deleted:false}).sort('name').exec(function(err, users){
             if(err){
                 logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+getUsers.name, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -248,7 +248,7 @@ function getUsers(req, res){
         });
     }else{
         if(role == 'ROLE_AGENT' || role == 'ROLE_ADMIN'){
-            User.find({$or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}],company:company}).sort('name').exec(function(err, users){
+            User.find({$or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}], deleted:false,company:company}).sort('name').exec(function(err, users){
                 if(err){
                     logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -264,7 +264,7 @@ function getUsers(req, res){
                 }
             });
         }else{
-            User.find({role:'ROLE_REQUESTER'}).sort('name').exec(function(err, users){
+            User.find({role:'ROLE_REQUESTER', deleted:false}).sort('name').exec(function(err, users){
                 if(err){
                     logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -290,7 +290,7 @@ function getUsersForName(req, res){
     var company = req.params.company;
     var functionName = 'getUsersForName';
 
-    User.find({company:ObjectId(company),$or:[{name:{ "$regex": name, "$options": "i" }},{surname:{ "$regex": name, "$options": "i" }}]}).sort('name').exec(function(err, users){
+    User.find({company:ObjectId(company), deleted:false,$or:[{name:{ "$regex": name, "$options": "i" }},{surname:{ "$regex": name, "$options": "i" }}]}).sort('name').exec(function(err, users){
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -312,7 +312,7 @@ function getReqForName(req, res){
     var name = req.params.name;
     var functionName = 'getReqForName';
 
-    User.find({role:'ROLE_REQUESTER',$or:[{name:{ "$regex": name, "$options": "i" }},{surname:{ "$regex": name, "$options": "i" }}]}).sort('name').exec(function(err, users){
+    User.find({role:'ROLE_REQUESTER', deleted:false ,$or:[{name:{ "$regex": name, "$options": "i" }},{surname:{ "$regex": name, "$options": "i" }}]}).sort('name').exec(function(err, users){
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -329,7 +329,6 @@ function getReqForName(req, res){
     });
 }
 
-
 function loginUser(req, res){
     var params = req.body;
     var functionName = 'loginUser';
@@ -341,7 +340,7 @@ function loginUser(req, res){
         {path:'company',select:['name','email','image','mailSender']}    
     ];
 
-    User.findOne({userName: userName.toLowerCase()}, (err, user) => {
+    User.findOne({userName: userName.toLowerCase(), deleted:false}, (err, user) => {
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message:'Error del servidor en la petición'});
@@ -436,7 +435,7 @@ function deleteUser(req, res){
     var functionName = 'deleteUser';
 
 
-    User.findByIdAndDelete(userId, (err, userRemoved) =>{
+    User.findByIdAndUpdate(userId, {deleted:true}, (err, userRemoved) =>{
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la petición'});

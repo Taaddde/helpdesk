@@ -29,6 +29,9 @@ export class TicketGestionComponent implements OnInit {
   public reqTickets: [Ticket];
   public textblock: TextBlock;
   public responses: Response[];
+  public ccList: User[];
+  public allCcList: User[];
+  public ccFilter: string;
   public chat: TextBlock[];
   public companies: Company[];
   public identity;
@@ -39,7 +42,10 @@ export class TicketGestionComponent implements OnInit {
   public editSub: boolean;
   public subMod:string;
   public isPrivate: boolean;
+  public isCc: boolean;
   public space: string;
+
+  public keyPress: boolean;
 
   constructor(
     private _route: ActivatedRoute,
@@ -61,14 +67,102 @@ export class TicketGestionComponent implements OnInit {
     this.isPrivate = false;
     this.space = ' ';
 
-    this.ticket = new Ticket('','',null,'','','','','','','',null,'',[''],'','','');
+    this.keyPress = false;
+
+    this.ccList = [];
+    this.allCcList = [];
+    this.ccFilter = '';
+    this.isCc = false;
+
+
+    this.ticket = new Ticket('','',null,'','','','','','','',null,'',[''],'','','',['']);
     this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false)
-   }
+  }
 
   ngOnInit() {
     this.getTicket();
     this.getHashtags(); 
     this.getCompanies();
+  }
+
+  getCc(){
+    this._userService.getListReq(this.token, this.ticket.company['_id']).subscribe(
+      response =>{
+          if(!response.users){
+            this._router.navigate(['/']);
+          }else{
+            this.allCcList = response.users;
+          }
+      },
+      error =>{
+          var errorMessage = <any>error;
+          if(errorMessage != null){
+          var body = JSON.parse(error._body);
+          //this.alertMessage = body.message;
+          console.error(error);
+          }
+      }
+    );
+  }
+
+
+  filterCc(){
+    if(this.ccFilter.length >= 3){
+      this.keyPress = true;
+    } else{
+      this.keyPress = false;
+    }
+
+    this.ccList = this.allCcList.filter(cc =>{
+      return (cc['name']+cc['surname']).toLowerCase().includes(this.ccFilter.toString().toLowerCase());
+    })
+  }
+
+  setCc(val: User){
+    this._ticketService.addCc(this.token, this.ticket._id, val._id).subscribe(
+      response =>{
+          if(!response.ticket){
+            this._router.navigate(['/']);
+          }else{
+            this.newInfo(this.identity['name']+' '+this.identity['surname']+' puso en copia a '+val.name+' '+val.surname+' en este ticket')
+            this.getTicket();
+          }
+      },
+      error =>{
+          var errorMessage = <any>error;
+          if(errorMessage != null){
+          var body = JSON.parse(error._body);
+          //this.alertMessage = body.message;
+          console.error(error);
+          }
+      }
+    );
+  }
+
+
+  deleteCc(val: User){
+    this._ticketService.removecc(this.token, this.ticket._id, val._id).subscribe(
+      response =>{
+          if(!response.ticket){
+            this._router.navigate(['/']);
+          }else{
+            this.newInfo(this.identity['name']+' '+this.identity['surname']+' elminó a '+val.name+' '+val.surname+' de los usuarios en copia')
+            this.getTicket();
+          }
+      },
+      error =>{
+          var errorMessage = <any>error;
+          if(errorMessage != null){
+          var body = JSON.parse(error._body);
+          //this.alertMessage = body.message;
+          console.error(error);
+          }
+      }
+    );
+  }
+
+  getLenght(val: Array<any>){
+    return val.length;
   }
 
   getTeams(company: any){
@@ -237,6 +331,15 @@ export class TicketGestionComponent implements OnInit {
             this.agents = response.ticket.team.users;
           }
           this.getReqTickets(response.ticket.requester);
+
+          let cc = this.ticket.cc.map(function(user) {
+            return user['_id'];
+          });
+
+          if(cc.indexOf(this.identity['_id']) != -1){
+            this.isCc = true;
+          }
+
       },
         error => {
           var errorMessage = <any>error;
@@ -473,8 +576,11 @@ export class TicketGestionComponent implements OnInit {
             if(nameTo){
               let link:string = window.location.href;
               let nameFrom:string = this.identity['name']+' '+this.identity['surname'];
-    
-              this._ticketService.sendMail(this.token, nameFrom, this.ticket, response.textblock.text, nameTo, mailTo, link).subscribe(
+              let cc = this.ticket.cc.map(function(user) {
+                return user['email'];
+              });
+              
+              this._ticketService.sendMail(this.token, nameFrom, this.ticket, response.textblock.text, nameTo, mailTo, link, cc).subscribe(
                 response =>{
                 },
                 error =>{

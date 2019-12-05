@@ -1,6 +1,6 @@
 var nodemailer = require('nodemailer');
 
-function send(email, pass, to, sub, txt){
+function send(email, pass, to, sub, txt, cc){
     var transporter = nodemailer.createTransport({
         host: "smtp-mail.outlook.com", // hostname
         secureConnection: false, // TLS requires secureConnection to be false
@@ -21,6 +21,7 @@ function send(email, pass, to, sub, txt){
     var mailOptions = {
         from: email, // sender address (who sends)
         to: to, // list of receivers (who receives)
+        cc: cc,
         subject: sub, // Subject line
         html: txt
     };

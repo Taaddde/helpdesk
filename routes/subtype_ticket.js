@@ -17,6 +17,6 @@ api.put('/update/:id', md_auth.ensureAuth, subTypeTicketController.updateSubType
 api.put('/goodcheck/:id', md_auth.ensureAuth, subTypeTicketController.addGoodCheck);
 api.put('/add-check/:id', md_auth.ensureAuth, subTypeTicketController.addCheck);
 api.delete('/delete/:id', md_auth.ensureAuth, subTypeTicketController.deleteSubTypeTicket);
-api.delete('/delete-check/:id', md_auth.ensureAuth, subTypeTicketController.deleteCheck);
+api.put('/delete-check/:id', md_auth.ensureAuth, subTypeTicketController.deleteCheck);
 
 module.exports = api;

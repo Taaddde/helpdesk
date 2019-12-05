@@ -63,7 +63,7 @@ export class TicketNewComponent implements OnInit {
     this.keyPress = false;
     this.requesterFilter = '';
 
-    this.ticket = new Ticket('','',null,'',null,null,'','','',null,null,'',[null],'',this.identity['company']['_id'],'');
+    this.ticket = new Ticket('','',null,'',null,null,'','','',null,null,'',[null],'',this.identity['company']['_id'],'',['']);
     this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false);
     this.nreq = new User('','','','','','','ROLE_REQUESTER','','null','',false,'');
    }
