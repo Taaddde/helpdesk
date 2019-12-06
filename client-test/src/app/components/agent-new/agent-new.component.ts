@@ -4,6 +4,7 @@ import {Router, ActivatedRoute, Params} from '@angular/router'
 import {GLOBAL} from '../../services/global'
 import { User } from '../../models/user';
 import { uploadService } from '../../services/upload.service';
+import { IfStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-agent-new',
@@ -43,45 +44,51 @@ export class AgentNewComponent implements OnInit {
   }
 
   onSubmit(){
-    if(!this.isAdm){
-      this.user.role = 'ROLE_AGENT';
-    }else{
-      this.user.role = 'ROLE_ADMIN';
-    }
 
-    if(this.user.userName = ''){
-      delete this.user.userName;
-      delete this.user.password;
-    }
-
-
-    this._userService.add(this.token,this.user).subscribe(
-      response =>{
-          if(!response.user){
-              this.alertMessage = 'Error en el servidor';
-          }else{
-                  if(!this.filesToUpload){
-                      this._router.navigate(['/agent']);
-                  }else{
-                      this._uploadService.makeFileRequest(this.url+'user/image/'+response.user._id, [], this.filesToUpload, this.token, 'image')
-                      .then(
-                          result =>{
-                              this._router.navigate(['/agent']);
-                          }, 
-                          error =>{
-                          }
-                      );
-                  }
-          }
-      },
-      error =>{
-        var errorMessage = <any>error;
-        if(errorMessage != null){
-          var body = JSON.parse(error._body);
-          alert(body.message);
-        }
+    if(this.user.name != '' && this.user.surname != '' && this.user.userName != '' && this.user.email != ''){
+      if(!this.isAdm){
+        this.user.role = 'ROLE_AGENT';
+      }else{
+        this.user.role = 'ROLE_ADMIN';
       }
-    );
+  
+      if(this.user.userName = ''){
+        delete this.user.userName;
+        delete this.user.password;
+      }
+  
+  
+      this._userService.add(this.token,this.user).subscribe(
+        response =>{
+            if(!response.user){
+                this.alertMessage = 'Error en el servidor';
+            }else{
+                    if(!this.filesToUpload){
+                        this._router.navigate(['/agent']);
+                    }else{
+                        this._uploadService.makeFileRequest(this.url+'user/image/'+response.user._id, [], this.filesToUpload, this.token, 'image')
+                        .then(
+                            result =>{
+                                this._router.navigate(['/agent']);
+                            }, 
+                            error =>{
+                            }
+                        );
+                    }
+            }
+        },
+        error =>{
+          var errorMessage = <any>error;
+          if(errorMessage != null){
+            var body = JSON.parse(error._body);
+            alert(body.message);
+          }
+        }
+      );
+    }else{
+      alert('Faltan campos para completar');
+    }
+    
   }
 
   public filesToUpload: Array<File>;

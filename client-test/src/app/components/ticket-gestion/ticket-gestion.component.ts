@@ -332,14 +332,16 @@ export class TicketGestionComponent implements OnInit {
           }
           this.getReqTickets(response.ticket.requester);
 
-          let cc = this.ticket.cc.map(function(user) {
-            return user['_id'];
-          });
-
-          if(cc.indexOf(this.identity['_id']) != -1){
-            this.isCc = true;
+          if(this.ticket.cc){
+            let cc = this.ticket.cc.map(function(user) {
+              return user['_id'];
+            });
+  
+            if(cc.indexOf(this.identity['_id']) != -1){
+              this.isCc = true;
+            }
+    
           }
-
       },
         error => {
           var errorMessage = <any>error;
@@ -532,80 +534,93 @@ export class TicketGestionComponent implements OnInit {
 
   onSubmit(){
 
-    if(this.identity['role'] == 'ROLE_REQUESTER'){
-      this.textblock.type = 'REQUEST'
-    }else{
-      this.textblock.read = true;
-      if(this.isPrivate){
-        this.textblock.type = 'PRIVATE'
-      }else{
-        this.textblock.type = 'PUBLIC'
-      }
+    if(this.textblock.text != ''){
+      this.textblock.text = this.textblock.text.split('<span')[0];
     }
 
-    this._route.params.forEach((params: Params) =>{
-      this.textblock.ticket = params['id'];
-    });
+    console.log(this.textblock.text)
 
-    this._textblockService.add(this.token,this.textblock).subscribe(
-      response =>{
-          if(!response.textblock){
-            console.log('Error en el chat');
-          }else{
-            if(this.filesToUpload){
-                this._uploadService.makeFileRequest(this.url+'textblock/file/'+response.textblock._id, [], this.filesToUpload, this.token, 'file');
-            }
-          }
-
-          let nameTo:string;
-          let mailTo:string;
-
-          if(this.ticket.company['mailSender'] == true){
-            if(this.identity['role'] != 'REQUESTER'){
-              if(this.ticket.requester['receiveMail'] == true){
-                nameTo = this.ticket.requester['name']+' '+this.ticket.requester['surname'];
-                mailTo = this.ticket.requester['email'];  
-              }
-            }else{
-              if(this.ticket.agent['receiveMail'] == true){
-                nameTo = this.ticket.agent['name']+' '+this.ticket.agent['surname'];
-                mailTo = this.ticket.agent['email'];
-              }
-            }
-  
-            if(nameTo){
-              let link:string = window.location.href;
-              let nameFrom:string = this.identity['name']+' '+this.identity['surname'];
-              let cc = this.ticket.cc.map(function(user) {
-                return user['email'];
-              });
-              
-              this._ticketService.sendMail(this.token, nameFrom, this.ticket, response.textblock.text, nameTo, mailTo, link, cc).subscribe(
-                response =>{
-                },
-                error =>{
-                    console.error(error);
-                }
-              );
-            }
-  
-          }
-
-          
-          this.editTicket()
-          this.pushText(response.textblock._id) ;
-          this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false);
-          document.getElementById('editable').innerHTML = ''
-          this.filesToUpload = new Array<File>();
-      },
-      error =>{
-        var errorMessage = <any>error;
-        if(errorMessage != null){
-          var body = JSON.parse(error._body);
-          console.error(error);
+    if(this.textblock.text != ''){
+      console.log(this.textblock.text);
+      if(this.identity['role'] == 'ROLE_REQUESTER'){
+        this.textblock.type = 'REQUEST'
+      }else{
+        this.textblock.read = true;
+        if(this.isPrivate){
+          this.textblock.type = 'PRIVATE'
+        }else{
+          this.textblock.type = 'PUBLIC'
         }
       }
-    );
+  
+      this._route.params.forEach((params: Params) =>{
+        this.textblock.ticket = params['id'];
+      });
+  
+      this._textblockService.add(this.token,this.textblock).subscribe(
+        response =>{
+            if(!response.textblock){
+              console.log('Error en el chat');
+            }else{
+              if(this.filesToUpload){
+                  this._uploadService.makeFileRequest(this.url+'textblock/file/'+response.textblock._id, [], this.filesToUpload, this.token, 'file');
+              }
+            }
+  
+            let nameTo:string;
+            let mailTo:string;
+  
+            if(this.ticket.company['mailSender'] == true){
+              if(this.identity['role'] != 'REQUESTER'){
+                if(this.ticket.requester['receiveMail'] == true){
+                  nameTo = this.ticket.requester['name']+' '+this.ticket.requester['surname'];
+                  mailTo = this.ticket.requester['email'];  
+                }
+              }else{
+                if(this.ticket.agent['receiveMail'] == true){
+                  nameTo = this.ticket.agent['name']+' '+this.ticket.agent['surname'];
+                  mailTo = this.ticket.agent['email'];
+                }
+              }
+    
+              if(nameTo){
+                let link:string = window.location.href;
+                let nameFrom:string = this.identity['name']+' '+this.identity['surname'];
+                let cc = this.ticket.cc.map(function(user) {
+                  return user['email'];
+                });
+                
+                this._ticketService.sendMail(this.token, nameFrom, this.ticket, response.textblock.text, nameTo, mailTo, link, cc).subscribe(
+                  response =>{
+                  },
+                  error =>{
+                      console.error(error);
+                  }
+                );
+              }
+    
+            }
+  
+            
+            this.editTicket()
+            this.pushText(response.textblock._id) ;
+            this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false);
+            document.getElementById('editable').innerHTML = ''
+            this.filesToUpload = new Array<File>();
+        },
+        error =>{
+          var errorMessage = <any>error;
+          if(errorMessage != null){
+            var body = JSON.parse(error._body);
+            console.error(error);
+          }
+        }
+      );
+    }else{
+      alert('Escribe un mensaje antes de enviarlo')
+    }
+
+    
   }
 
   pushText(id:string){

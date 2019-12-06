@@ -12,7 +12,9 @@ var SubTypeTicketSchema = Schema({
     goodChecks: {type: Number, default:0},
     requireAttach: {type:Boolean, default:false},
     desc: {type:String, default:'Por favor, describa los detalles de su solicitud, muchas gracias'},
-    deleted: {type: Boolean, default:false}
+    deleted: {type: Boolean, default:false},
+    autoSub: {type: String, default:''},
+    autoDesc: {type:String, default:''}
 });
 
 module.exports = mongoose.model('SubTypeTicket', SubTypeTicketSchema);

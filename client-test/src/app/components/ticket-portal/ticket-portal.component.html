@@ -68,14 +68,6 @@
                           name="sub" 
                           [(ngModel)]="ticket.sub"
                         />
-                        <!-- <textarea 
-                          class="form-control" 
-                          placeholder="Descripción" 
-                          style="margin-top: 11px;"
-                          #text="ngModel" 
-                          name="text" 
-                          [(ngModel)]="tb.text"></textarea> -->
-
                           <div class="row" style="margin-left: 4px; margin-top: 8px;">
                               <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('bold');" style="margin-right: 4px;padding-right: 7px; padding-left: 7px"><i class="fa fa-bold"></i></button>
     
@@ -103,6 +95,7 @@
     
                           <div class="row" style="margin-top: 8px;margin-left: 4px;">
                               <div id="editable" contentEditable="true"
+                              [innerHtml]="selectedSubtype.autoDesc"
                               (input)="tb.text = $event.target.innerHTML"
                               >
                                 <span contentEditable="false"></span>

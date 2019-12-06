@@ -10,5 +10,7 @@ export class SubTypeTicket{
         public goodChecks: number,
         public requireAttach: boolean,
         public desc: string,
+        public autoSub: string,
+        public autoDesc: string
     ){}
 }

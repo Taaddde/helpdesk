@@ -35,7 +35,7 @@ const appRoutes: Routes = [
 
     {path: 'agent/:back', component: AgentTeamComponent},
     {path: 'agent', component: AgentTeamComponent},
-    {path: 'agent/new', component: AgentNewComponent},
+    {path: 'agents/new', component: AgentNewComponent},
     {path: 'user/edit/:id', component: AgentEditComponent},
 
     {path: 'requester/new', component: RequesterNewComponent},

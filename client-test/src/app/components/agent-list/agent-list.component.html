@@ -1,7 +1,7 @@
 <div class="card-body">
     <div class="row">
         <div class="col-lg-10">
-            <input *ngIf="identity['role'] == 'ROLE_ADMIN' && !requester" type="button" class="btn btn-dark" value="Nuevo agente" [routerLink]="['/agent/new']">
+            <input *ngIf="identity['role'] == 'ROLE_ADMIN' && !requester" type="button" class="btn btn-dark" value="Nuevo agente" [routerLink]="['/agents/new']">
             <input *ngIf="identity['role'] == 'ROLE_ADMIN' && requester" type="button" class="btn btn-dark" value="Nuevo solicitante" [routerLink]="['/requester/new']">
         </div>
     </div>

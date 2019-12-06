@@ -78,7 +78,7 @@ export class TicketPortalComponent implements OnInit {
     this.typeFilter = '';
     this.subTypeFilter = '';
 
-    this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'');
+    this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'','','');
     this.ticket = new Ticket('','',null,this.identity['_id'],null,null,'Abierto','','','',null,'PORTAL',[null],'Normal','','',['']);
     this.tb = new TextBlock('','',this.identity['_id'],'','','REQUEST',[''],false);
 
@@ -165,7 +165,7 @@ export class TicketPortalComponent implements OnInit {
     this.companyFilter = '';
     this.typeName = 'Tipo';
     this.subTypeName = 'Subtipo';
-    this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'');
+    this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'','','');
 
   }
 
@@ -174,7 +174,7 @@ export class TicketPortalComponent implements OnInit {
     this.getSubtypes(val._id);
     this.typeName = val.name;
     this.subTypeName = 'Subtipo';
-    this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'');
+    this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'','','');
 
   }
 
@@ -194,6 +194,9 @@ export class TicketPortalComponent implements OnInit {
 
     this.subTypeName = val.name;
     this.selectedSubtype = val;
+
+    this.ticket.sub = this.selectedSubtype.autoSub;
+    this.tb.text = this.selectedSubtype.autoDesc;
   }
 
   getLenght(val: any[]){
@@ -233,7 +236,7 @@ export class TicketPortalComponent implements OnInit {
 
     this.filesToUpload = new Array<File>();
 
-    this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'');
+    this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'','','')
     this.ticket = new Ticket('','',null,this.identity['_id'],null,null,'Abierto','','','',null,'PORTAL',[null],'Normal','','',['']);
     this.tb = new TextBlock('','',this.identity['_id'],'','','REQUEST',[''],false);
 

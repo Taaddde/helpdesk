@@ -80,48 +80,53 @@ export class AgentEditComponent implements OnInit {
   }
 
   onSubmit(){
-    if(this.user.role != 'ROLE_REQUESTER'){
-      if(this.identity['role'] != 'ROLE_REQUESTER'){
-        if(!this.isAdm){
-          this.user.role = 'ROLE_AGENT';
-        }else{
-          this.user.role = 'ROLE_ADMIN';
+    if(this.user.name != '' && this.user.surname != '' && this.user.userName != '' && this.user.email != ''){
+      if(this.user.role != 'ROLE_REQUESTER'){
+        if(this.identity['role'] != 'ROLE_REQUESTER'){
+          if(!this.isAdm){
+            this.user.role = 'ROLE_AGENT';
+          }else{
+            this.user.role = 'ROLE_ADMIN';
+          }
+        }  
+      }
+      
+      if(this.user.sign = ''){
+        this.user.sign = null
+      }
+  
+      if(this.user.password == ''){
+        delete this.user.password;
+      }
+  
+  
+      this._userService.edit(this.token, this.user).subscribe(
+        response =>{
+            if(!response.user){
+                this.alertMessage = 'Error en el servidor';
+            }else{
+                if(this.filesToUpload){
+                    this._uploadService.makeFileRequest(this.url+'user/image/'+response.user._id, [], this.filesToUpload, this.token, 'image')
+                }
+                if(this.identity['role'] != 'ROLE_REQUESTER'){
+                  this._router.navigate(['/agent']);
+                }else{
+                  this._router.navigate(['/home']);
+                }
+            }
+        },
+        error =>{
+          var errorMessage = <any>error;
+          if(errorMessage != null){
+            var body = JSON.parse(error._body);
+            alert(body.message);
+          }
         }
-      }  
+      );
+    }else{
+      alert('Faltan campos para completar');
     }
     
-    if(this.user.sign = ''){
-      this.user.sign = null
-    }
-
-    if(this.user.password == ''){
-      delete this.user.password;
-    }
-
-
-    this._userService.edit(this.token, this.user).subscribe(
-      response =>{
-          if(!response.user){
-              this.alertMessage = 'Error en el servidor';
-          }else{
-              if(this.filesToUpload){
-                  this._uploadService.makeFileRequest(this.url+'user/image/'+response.user._id, [], this.filesToUpload, this.token, 'image')
-              }
-              if(this.identity['role'] != 'ROLE_REQUESTER'){
-                this._router.navigate(['/agent']);
-              }else{
-                this._router.navigate(['/home']);
-              }
-          }
-      },
-      error =>{
-        var errorMessage = <any>error;
-        if(errorMessage != null){
-          var body = JSON.parse(error._body);
-          alert(body.message);
-        }
-      }
-    );
   }
 
   public filesToUpload: Array<File>;
