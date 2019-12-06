@@ -11,6 +11,7 @@ export class SubTypeTicket{
         public requireAttach: boolean,
         public desc: string,
         public autoSub: string,
-        public autoDesc: string
+        public autoDesc: string,
+        public workTime: number,
     ){}
 }

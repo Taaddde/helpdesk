@@ -49,9 +49,9 @@ export class TypeSubtypeComponent implements OnInit {
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
     this.newType = new TypeTicket('','',this.identity['company']['_id']);
-    this.newSubtype = new SubTypeTicket('','','',0,'',String[''],0,false, '','','');
+    this.newSubtype = new SubTypeTicket('','','',0,'',String[''],0,false, '','','',null);
     this.typeSelected = ''
-    this.subtypeSelected = new SubTypeTicket('','','',0,'',String[''],0,false,'','','');
+    this.subtypeSelected = new SubTypeTicket('','','',0,'',String[''],0,false,'','','',null);
     this.teamSelected = '';
     this.subtypeTeamSelected = '';
     this.check = '';
@@ -190,14 +190,14 @@ export class TypeSubtypeComponent implements OnInit {
 
 
   cancelSubtype(){
-    this.subtypeSelected =  new SubTypeTicket('','','',0,'',String[''],0,false,'','','');
+    this.subtypeSelected =  new SubTypeTicket('','','',0,'',String[''],0,false,'','','',null);
     this.getSubTypes();
     this.subtypeTeamSelected = null;
 
   }
 
   cancelValidation(){
-    this.subtypeSelected =  new SubTypeTicket('','','',0,'',String[''],0,false,'','','');
+    this.subtypeSelected =  new SubTypeTicket('','','',0,'',String[''],0,false,'','','',null);
     $("#newsubtype").modal("hide");
   }
 
@@ -236,7 +236,7 @@ export class TypeSubtypeComponent implements OnInit {
           if(!response.subTypeTicket){
               alert('Error en el servidor');
           }else{
-            this.newSubtype = new SubTypeTicket('','','',0,'',String[''],0,false,'','','');
+            this.newSubtype = new SubTypeTicket('','','',0,'',String[''],0,false,'','','',null);
             this.getSubTypes();
           }
       },

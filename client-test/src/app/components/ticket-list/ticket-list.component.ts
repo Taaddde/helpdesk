@@ -83,7 +83,8 @@ export class TicketListComponent implements OnInit {
                 this.prevPage = response.tickets.prevPage;
                 this.totalDocs = response.tickets.totalDocs;
                 this.totalPages = response.tickets.totalPages;
-                this.pagingCounter = response.tickets.pagingCounter
+                this.pagingCounter = response.tickets.pagingCounter;
+
               }
           },
           error =>{
@@ -101,7 +102,7 @@ export class TicketListComponent implements OnInit {
                 this.prevPage = response.tickets.prevPage;
                 this.totalDocs = response.tickets.totalDocs;
                 this.totalPages = response.tickets.totalPages;
-                this.pagingCounter = response.tickets.pagingCounter
+                this.pagingCounter = response.tickets.pagingCounter;
               }
           },
           error =>{
@@ -112,6 +113,14 @@ export class TicketListComponent implements OnInit {
 
       
     })
+  }
+
+  isLastPage(){
+    if(this.totalDocs < this.pagingCounter+this.limit){
+      return this.totalDocs;
+    }else{
+      return this.pagingCounter+this.limit-1;
+    }
   }
 
   changeLimit(val: number){

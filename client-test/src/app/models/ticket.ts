@@ -18,5 +18,8 @@ export class Ticket{
         public company:string,
         public subTypeTicket: string,
         public cc: [string],
+        public workTime: number,
+        public realWorkTime: number,
+        public obsWorkTime: string
     ){}
 }

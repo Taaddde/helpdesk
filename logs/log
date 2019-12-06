@@ -271,3 +271,9 @@
 [05-12-2019 10:57] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
 [05-12-2019 10:58] [info] [subtype_ticket/deleteSubTypeTicket] dperez (::1) Petición realizada | params:{"id":"5dc04a334fa9ef3ecc01781b"} body:{}
 [06-12-2019 08:43] [info] [index] Servidor iniciado en puerto 3977
+[06-12-2019 09:01] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[06-12-2019 09:07] [info] [index] Servidor iniciado en puerto 3977
+[06-12-2019 09:09] [info] [index] Servidor iniciado en puerto 3977
+[06-12-2019 09:09] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[06-12-2019 09:11] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}
+[06-12-2019 09:11] [info] [ticket/checkClose] dperez (::1) Petición realizada | params:{} body:{}

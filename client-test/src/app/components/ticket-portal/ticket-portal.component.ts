@@ -78,8 +78,8 @@ export class TicketPortalComponent implements OnInit {
     this.typeFilter = '';
     this.subTypeFilter = '';
 
-    this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'','','');
-    this.ticket = new Ticket('','',null,this.identity['_id'],null,null,'Abierto','','','',null,'PORTAL',[null],'Normal','','',['']);
+    this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'','','',null);
+    this.ticket = new Ticket('','',null,this.identity['_id'],null,null,'Abierto','','','',null,'PORTAL',[null],'Normal','','',[''],null,null,'');
     this.tb = new TextBlock('','',this.identity['_id'],'','','REQUEST',[''],false);
 
     this.allChecked = false;
@@ -165,7 +165,7 @@ export class TicketPortalComponent implements OnInit {
     this.companyFilter = '';
     this.typeName = 'Tipo';
     this.subTypeName = 'Subtipo';
-    this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'','','');
+    this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'','','',null);
 
   }
 
@@ -174,7 +174,7 @@ export class TicketPortalComponent implements OnInit {
     this.getSubtypes(val._id);
     this.typeName = val.name;
     this.subTypeName = 'Subtipo';
-    this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'','','');
+    this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'','','',null);
 
   }
 
@@ -236,8 +236,8 @@ export class TicketPortalComponent implements OnInit {
 
     this.filesToUpload = new Array<File>();
 
-    this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'','','')
-    this.ticket = new Ticket('','',null,this.identity['_id'],null,null,'Abierto','','','',null,'PORTAL',[null],'Normal','','',['']);
+    this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'','','',null)
+    this.ticket = new Ticket('','',null,this.identity['_id'],null,null,'Abierto','','','',null,'PORTAL',[null],'Normal','','',[''],null,null,'');
     this.tb = new TextBlock('','',this.identity['_id'],'','','REQUEST',[''],false);
 
     this.allChecked = false;

@@ -75,7 +75,7 @@ export class TicketGestionComponent implements OnInit {
     this.isCc = false;
 
 
-    this.ticket = new Ticket('','',null,'','','','','','','',null,'',[''],'','','',['']);
+    this.ticket = new Ticket('','',null,'','','','','','','',null,'',[''],'','','',[''],null,null,'');
     this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false)
   }
 

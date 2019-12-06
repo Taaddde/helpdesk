@@ -182,6 +182,14 @@ export class HomeComponent implements OnInit {
     );
   }
 
+  isLastPage(){
+    if(this.totalDocs < this.pagingCounter+this.limit){
+      return this.totalDocs;
+    }else{
+      return this.pagingCounter+this.limit-1;
+    }
+  }
+
   paginate(page){
     this.page = page;
     this.getTeamTickets();

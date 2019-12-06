@@ -30,7 +30,9 @@ var TicketSchema = Schema({
         ref:'User',
         default: undefined
     },
-
+    workTime: {type: Number, default:null},
+    realWorkTime: {type: Number, default:null},
+    obsWorkTime : {type: String, default:''}
 });
 
 TicketSchema.plugin(mongoosePaginate);
