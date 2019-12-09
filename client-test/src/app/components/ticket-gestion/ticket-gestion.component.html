@@ -315,7 +315,6 @@
                   
                     </span>
                   <span *ngIf="!identity['company']">
-                      <!-- <textarea [readonly]="identity['_id'] != ticket.requester['_id']" id="chat-textbox" #text="ngModel" name="text" [(ngModel)]="textblock.text" required placeholder="Ingresa un texto para enviar" style="margin-top: 8px;"></textarea> -->
                   
                       <div class="row">
                           <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('bold');" style="margin-right: 4px;padding-right: 7px; padding-left: 7px"><i class="fa fa-bold"></i></button>
@@ -389,10 +388,10 @@
                               <a role="presentation" class="dropdown-item" *ngIf="ticket.status != 'Pendiente'" (click)="setStatus('Pendiente')">
                                   Pendiente
                               </a>
-                              <a role="presentation" class="dropdown-item" *ngIf="ticket.status != 'Finalizado'" (click)="setStatus('Finalizado')">
+                              <a role="presentation" class="dropdown-item" *ngIf="ticket.status != 'Finalizado'" (click)="checkWorkTime('Finalizado')">
                                   Finalizado
                               </a>
-                              <a role="presentation" class="dropdown-item" *ngIf="ticket.status != 'Cerrado'" (click)="setStatus('Cerrado')">
+                              <a role="presentation" class="dropdown-item" *ngIf="ticket.status != 'Cerrado'" (click)="checkWorkTime('Cerrado')">
                                   Cerrado
                               </a>
                           </div>
@@ -416,4 +415,63 @@
           </div>
       </div>
   </div>
+</div>
+
+<div role="dialog" tabindex="-1" class="modal fade" id="timework">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Tiempo de trabajo</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+            <form name="my-form" #form="ngForm">
+              <div class="modal-body">
+                  <div class="form-group">
+                      <label>¿Cuanto tiempo te tomó realizar las tareas para finalizar el ticket?</label>
+                      <div class="input-group mb-3">
+                          <input 
+                          [readonly]="identity['role'] != 'ROLE_ADMIN'"
+                          type="number"
+                          min="0" 
+                          class="form-control form-control-lg" 
+                          placeholder="Tiempo" 
+                          #realWorkTime="ngModel" 
+                          name="realWorkTime" 
+                          [(ngModel)]="ticket.realWorkTime" 
+                          autofocus 
+                          required 
+                          />
+                        <div class="input-group-append">
+                          <span class="input-group-text" id="basic-addon2">Minutos</span>
+                        </div>
+                      </div>
+                  </div>
+              
+
+              
+              
+                  <div class="form-group" *ngIf="outOfLimit()">
+                      <hr>
+                      <label>
+                          Se detectó un tiempo fuera de lo normal, podes dejar una observación de
+                          los problemas que tuviste para resolver la solicitud.
+                        </label>
+                      <div class="form-group">
+                          <textarea placeholder="Observaciones" class="form-control" #obsWorkTime="ngModel" name="obsWorkTime" [(ngModel)]="ticket.obsWorkTime"></textarea>
+                      </div>
+                  </div>
+            </div>
+                <div class="modal-footer">
+                  <button class="btn btn-light" type="button" data-dismiss="modal">
+                    Cerrar
+                  </button>
+                  <button class="btn btn-success" [disabled]="ticket.realWorkTime == 0" (click)="setStatus(stat)">
+                    Guardar
+                  </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

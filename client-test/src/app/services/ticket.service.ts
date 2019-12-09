@@ -198,4 +198,13 @@ export class ticketService{
 
     }
 
+    getTimeWorkRep(token, companyId:string){
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'ticket/timework/report/'+companyId, this.httpOptions);
+
+    }
+
+
 }

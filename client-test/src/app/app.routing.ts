@@ -17,6 +17,7 @@ import { SearchListComponent } from './components/search-list/search-list.compon
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { RequesterNewComponent } from './components/agent-new/requester-new.component';
 import { PassResetComponent } from './components/pass-reset/pass-reset.component';
+import { TimeworkListComponent } from './components/timework-list/timework-list.component';
 
 
 const appRoutes: Routes = [
@@ -49,6 +50,9 @@ const appRoutes: Routes = [
     {path: 'search/:stat/:q', component: SearchListComponent},
 
     {path: 'calendar', component: CalendarComponent},
+
+    {path: 'timework', component: TimeworkListComponent},
+
 
 ];
 

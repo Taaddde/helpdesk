@@ -262,6 +262,7 @@ export class TicketPortalComponent implements OnInit {
         this.ticket.status = 'Pendiente'
       }
 
+      this.ticket.workTime = this.selectedSubtype.workTime;
       this.ticket.subTypeTicket = this.selectedSubtype._id;
 
       delete this.tb.createDate;

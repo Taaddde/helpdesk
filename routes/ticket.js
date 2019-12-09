@@ -21,6 +21,7 @@ api.get('/req-unread/:userId', md_auth.ensureAuth, ticketController.getUnreadTic
 api.get('/report/:company', md_auth.ensureAuth, ticketController.getTicketReports);
 api.get('/calendar/:userId', md_auth.ensureAuth, ticketController.getDateTickets);
 api.get('/teamPaged/:page/:perPage/:userId', md_auth.ensureAuth, ticketController.getTeamTickets);
+api.get('/timework/report/:companyId', md_auth.ensureAuth, ticketController.getTimeWork);
 
 //ABM
 api.post('/add',md_auth.ensureAuth, ticketController.saveTicket);

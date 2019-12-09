@@ -85,7 +85,7 @@
                                       </td>
                                       <td>
                                           <a href="#newsubtype" data-toggle="modal" (click)="setValidation(subtype)" style="margin-left: 10px;">
-                                        <span>{{getLenght(subtype.checks)}} validaciones</span>
+                                        <span>{{getLenght(subtype.checks)}} </span>
                                           <i class="fa fa-info-circle"></i>
                                         </a>
                                       </td>
@@ -370,6 +370,36 @@
                           </div>
                       </div>
                       <script src="../../../assets/scripts/chatbox.js"></script>
+
+                      <h5 style="margin-top: 25px;" *ngIf="identity['role'] == 'ROLE_ADMIN'" for="desc">Control de tiempo</h5>
+                      <div class="form-check" *ngIf="identity['role'] == 'ROLE_ADMIN'">
+                        <input type="checkbox" 
+                          [disabled]="identity['role'] != 'ROLE_ADMIN'"
+                          class="form-check-input" 
+                          id="formCheck-worktime" 
+                          name="checkWt" 
+                          [(ngModel)]="checkWt"
+                        />
+                        <label class="form-check-label" for="formCheck-worktime">
+                          Requiere un control de tiempo de trabajo
+                        </label>
+
+                        <div class="form-group" *ngIf="checkWt">
+                            <label>Tiempo estimado</label>
+                            <input type="number" 
+                            placeholder="Expresión en minutos"
+                            min="0"
+                            [disabled]="identity['role'] != 'ROLE_ADMIN'"
+                            class="form-control" 
+                            #workTime="ngModel" 
+                            name="workTime" 
+                            [(ngModel)]="subtypeSelected.workTime"/>
+                        </div>
+    
+                      </div>
+
+
+
                 </div>
                 <div class="modal-footer">
                   <button class="btn btn-light" type="button" (click)="cancelValidation()">

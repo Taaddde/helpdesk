@@ -38,6 +38,7 @@ import { PassForgotComponent } from './components/pass-forgot/pass-forgot.compon
 import { PassResetComponent } from './components/pass-reset/pass-reset.component';
 import { MyHttpInterceptor } from './services/myhttpinterceptor';
 import { RequesterListComponent } from './components/agent-list/request-list.component';
+import { TimeworkListComponent } from './components/timework-list/timework-list.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { RequesterListComponent } from './components/agent-list/request-list.com
     RequesterNewComponent,
     PassForgotComponent,
     PassResetComponent,
-    RequesterListComponent
+    RequesterListComponent,
+    TimeworkListComponent
   ],
   imports: [
     BrowserModule,

@@ -36,6 +36,7 @@ export class TypeSubtypeComponent implements OnInit {
   public teamSelected: string;
 
   public check: string;
+  public checkWt:boolean;
 
   constructor(
     private _route: ActivatedRoute,
@@ -222,6 +223,12 @@ export class TypeSubtypeComponent implements OnInit {
 
   setValidation(val: SubTypeTicket){
     this.subtypeSelected = val;
+    console.log(this.subtypeSelected)
+    if(val.workTime != null){
+      this.checkWt = true;
+    }else{
+      this.checkWt = false;
+    }
     document.getElementById('editable').innerHTML = val.autoDesc;
   }
 
@@ -298,6 +305,14 @@ export class TypeSubtypeComponent implements OnInit {
   }
 
   saveSubtype(){
+    if(!this.checkWt){
+      this.subtypeSelected.workTime = null;
+    }else{
+      if(!this.subtypeSelected.workTime){
+        this.subtypeSelected.workTime = 0;
+      }
+    }
+
     this._subTypeTicketService.edit(this.token, this.subtypeSelected._id, this.subtypeSelected).subscribe(
       response =>{
           if(!response.subTypeTicket){

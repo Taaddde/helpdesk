@@ -1,0 +1,33 @@
+<div id="content">
+    <div class="container-fluid">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 font-weight-bold">Listado de los trabajos que tienen configurado un control de tiempo</p>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Trabajo</th>
+                                <th>Promedio estimado</th>
+                                <th>Promedio real</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let type of tickets">
+                                <td>{{type._id.subTypeTicket.name}}</td>
+                                <td>{{type.workTime}}m</td>
+                                <td *ngIf="getCompare(type.workTime, type.avgRealWorkTime) == '='" style="font-weight: bold;">{{type.avgRealWorkTime}}m</td>
+                                <td *ngIf="getCompare(type.workTime, type.avgRealWorkTime) == '+'" style="color: red;font-weight: bold;">{{type.avgRealWorkTime}}m</td>
+                                <td *ngIf="getCompare(type.workTime, type.avgRealWorkTime) == '-'" style="color: green;font-weight: bold;">{{type.avgRealWorkTime}}m</td>
+                                <td><button class="btn btn-info" type="button"><i class="fa fa-info-circle"></i></button><button class="btn btn-success" type="button"><i class="fas fa-pencil-alt"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

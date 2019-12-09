@@ -17,6 +17,9 @@ import { companyService } from '../../services/company.service';
 import { Company } from '../../models/company';
 import { User } from '../../models/user';
 
+declare var $: any;
+
+
 @Component({
   selector: 'app-ticket-gestion',
   templateUrl: './ticket-gestion.component.html',
@@ -47,6 +50,8 @@ export class TicketGestionComponent implements OnInit {
 
   public keyPress: boolean;
 
+  public stat: string;
+
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
@@ -73,6 +78,8 @@ export class TicketGestionComponent implements OnInit {
     this.allCcList = [];
     this.ccFilter = '';
     this.isCc = false;
+
+    this.stat = '';
 
 
     this.ticket = new Ticket('','',null,'','','','','','','',null,'',[''],'','','',[''],null,null,'');
@@ -461,6 +468,16 @@ export class TicketGestionComponent implements OnInit {
     this.editSub = false;
   }
 
+  checkWorkTime(val:string){
+    console.log(this.ticket)
+    if(this.ticket.workTime){
+      this.stat = val;
+      $("#timework").modal("show");
+    }else{
+      this.setStatus(val);
+    }
+  }
+
   setStatus(val:string){
     if(
       ((val == 'Cerrado' || val == 'Finalizado') && this.ticket.team && this.ticket.agent)
@@ -471,7 +488,8 @@ export class TicketGestionComponent implements OnInit {
     ){
       this.newInfo(this.identity['name']+' '+this.identity['surname']+' ha cambiado el estado de la solicitud de '+this.ticket.status+' a '+val)
       this.ticket.status = val;
-      this.editTicket();  
+      this.editTicket(); 
+      $("#timework").modal("hide"); 
     }else{
       alert('Debe seleccionar un responsable para cambiar el ticket a ese estado')
     }
@@ -644,6 +662,14 @@ export class TicketGestionComponent implements OnInit {
 
   changeDate(val:string){
     return moment(val, 'YYYY-MM-DD HH:mm').format('DD-MM-YYYY HH:mm');
+  }
+
+  outOfLimit(){
+    if(this.ticket.realWorkTime*100/this.ticket.workTime >= 150){
+      return true;
+    }else{
+      return false;
+    }
   }
 
   public filesToUpload: Array<File>;

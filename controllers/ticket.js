@@ -458,7 +458,8 @@ function saveTicket(req, res){
         ticket.priority = params.priority;
         ticket.company = params.company;
         ticket.resolveDate = params.resolveDate;
-        ticket.subTypeTicket = params.subTypeTicket
+        ticket.subTypeTicket = params.subTypeTicket;
+        ticket.workTime = params.workTime;
     
         ticket.save((err, ticketStored) =>{
             if(err){
@@ -662,7 +663,7 @@ function updateTicket(req, res){
     var ticketId = req.params.id;
     var update =  req.body;
 
-    req.body.lastActivity = moment().format("YYYY-DD-MM HH:mm");
+    req.body.lastActivity = moment().format("YYYY-MM-DD HH:mm");
     //ticketId = ticket buscado, update = datos nuevos a actualizar
     Ticket.findByIdAndUpdate(ticketId, update, (err, ticketUpdated) =>{
         if(err){
@@ -756,11 +757,11 @@ function getTeamTickets(req, res){
 function checkClose(req, res){
     var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'checkClose';
-    let now = moment().subtract(2, 'days').format('YYYY-MM-DD HH:mm');
+    let now = moment().add(2, 'days').format('YYYY-MM-DD HH:mm');
     var query = 
     {
         status:'Finalizado', 
-        lastActivity:{$lte: now}
+        lastActivity:{$gte: now}
     }
     var update =  {status:'Cerrado'};
     //ticketId = ticket buscado, update = datos nuevos a actualizar
@@ -774,7 +775,7 @@ function checkClose(req, res){
                 res.status(404).send({message: 'No se ha encontrado el ticket'});
             }else{
                 logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
-                res.status(200).send({ticketS:ticketUpdated});
+                res.status(200).send({tickets:ticketUpdated});
             }
         }
     });
@@ -799,27 +800,147 @@ function addCc(req, res){
                     res.status(200).send({ticket:ticket});
             }
         });
-    }
-    
-    function removeCc(req, res){
+}
+
+function removeCc(req, res){
+var decoded = jwt_decode(req.headers.authorization);
+    var functionName = 'removeCc';
+    var ticketId = req.params.id;
+    var user = req.body.user;
+        
+        Ticket.findByIdAndUpdate(
+        ticketId,
+        { $pull: {"cc": user}},
+        {  safe: true, upsert: false},
+        function(err, ticket) {
+            if(err){
+            console.log(err);
+            return res.send(err);
+            }
+        logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Solicitud de '+req.params.id}});
+        res.status(200).send({ticket:ticket});
+    });
+}
+
+function getTimeWork(req, res){
     var decoded = jwt_decode(req.headers.authorization);
-        var functionName = 'removeCc';
-        var ticketId = req.params.id;
-        var user = req.body.user;
-         
-         Ticket.findByIdAndUpdate(
-            ticketId,
-            { $pull: {"cc": user}},
-            {  safe: true, upsert: false},
-            function(err, ticket) {
-                if(err){
-                console.log(err);
-                return res.send(err);
-                }
-            logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Solicitud de '+req.params.id}});
-            res.status(200).send({ticket:ticket});
-        });
-    }
+    var functionName = 'getTimeWork';
+
+    var query =  [
+        {
+            $match:
+            {
+                workTime: {$ne: null},
+                company: ObjectId(req.params.companyId),
+                $or: [
+                    {
+                        status: 'Finalizado',
+                    },
+                    {
+                        status: 'Cerrado'
+                    }
+                ]
+                
+            }
+        },
+        {
+            $group:
+            {
+                _id: {
+                    subTypeTicket: "$subTypeTicket",
+                },
+                workTime: { $last: "$workTime" },
+                avgRealWorkTime: { $avg: "$realWorkTime" },
+                count:{$sum:1}
+            }
+        },
+        {
+            $lookup:
+            {
+                from: "subtypetickets",
+                localField: "_id.subTypeTicket",
+                foreignField: "_id",
+                as: "_id.subTypeTicket"
+            }
+        },
+        { 
+            $unwind: 
+            { 
+                path: "$_id.subTypeTicket", 
+                preserveNullAndEmptyArrays: true
+            } 
+        },
+        {
+            $lookup:
+            {
+                from: "teams",
+                localField: "_id.subTypeTicket.team",
+                foreignField: "_id",
+                as: "_id.subTypeTicket.team"
+            }
+        },
+        { 
+            $unwind: 
+            { 
+                path: "$_id.subTypeTicket.team", 
+                preserveNullAndEmptyArrays: true
+            } 
+        },
+        {
+            $lookup:
+            {
+                from: "typetickets",
+                localField: "_id.subTypeTicket.typeTicket",
+                foreignField: "_id",
+                as: "_id.subTypeTicket.typeTicket"
+            }
+        },
+        { 
+            $unwind: 
+            { 
+                path: "$_id.subTypeTicket.typeTicket", 
+                preserveNullAndEmptyArrays: true
+            } 
+        },
+        { 
+            $project: 
+            { 
+                "_id.subTypeTicket.resolveDays":0,
+                "_id.subTypeTicket.checks":0,
+                "_id.subTypeTicket.goodChecks":0,
+                "_id.subTypeTicket.requireAttach":0,
+                "_id.subTypeTicket.desc":0,
+                "_id.subTypeTicket.deleted":0,
+                "_id.subTypeTicket.autoSub":0,
+                "_id.subTypeTicket.autoDesc":0,
+                "_id.subTypeTicket.typeTicket.company":0,
+                "_id.subTypeTicket.typeTicket.deleted":0,
+                "_id.subTypeTicket.team.default":0,
+                "_id.subTypeTicket.team.createDate":0,
+                "_id.subTypeTicket.team.users":0,
+                "_id.subTypeTicket.team.company":0,
+                "_id.subTypeTicket.team.deleted":0,
+
+            } 
+        }
+    ]
+      
+
+
+    Ticket.aggregate(query, (err, tickets) =>{
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            res.status(500).send({message: 'Error del servidor en la peticion'})
+        }else{
+            if(!tickets){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                res.status(404).send({message: 'No hay tickets'})
+            }else{
+                res.status(200).send({tickets:tickets})
+            }
+        }
+    });
+}
     
 
 module.exports = {
@@ -838,6 +959,7 @@ module.exports = {
     getTicketReports,
     getDateTickets,
     getTeamTickets,
+    getTimeWork,
 
     checkClose,
     addCc,
