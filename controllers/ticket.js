@@ -47,7 +47,7 @@ var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getTicketsForUser';
     var userId = req.params.id;
 
-    Ticket.find({$or: [{agent: userId}, {requester: userId}]}, (err, tickets) =>{
+    Ticket.find({$or: [{agent: userId}, {requester: userId}]}).sort({numTicket:-1}).exec((err, tickets) =>{
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'});
@@ -941,7 +941,107 @@ function getTimeWork(req, res){
         }
     });
 }
-    
+
+function getTypeTimeWork(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+    var functionName = 'getTypeTimeWork';
+
+    var subTypeTicket = ObjectId(req.params.subTypeTicket);
+    var workTime = req.params.workTime;
+    var perPage = 10;
+    if(req.params.page){
+        var page = req.params.page;
+    }else{
+        var page = 1;
+
+    }
+
+    var populateQuery = [
+        {path:'agent',select:['name','surname','image']},
+        {path:'subTypeTicket',select:['name']}, 
+    ];
+
+    var query = {
+                    workTime: {$ne: null},
+                    subTypeTicket: subTypeTicket,
+                    workTime:workTime,
+                    $or: [
+                        {
+                            status: 'Finalizado',
+                        },
+                        {
+                            status: 'Cerrado'
+                        }
+                    ]
+                }
+
+
+    Ticket.paginate(query,{page:page, limit:perPage, populate:populateQuery}, function(err, tickets){
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            res.status(500).send({message: 'Error en la peticion'})
+        }else{
+            if(!tickets){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+            res.status(404).send({message: 'No hay items'})
+            }else{
+            res.status(200).send({
+                    tickets
+                });
+            }
+        }
+    });
+
+}
+
+function getTimeWorkPhases(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+    var functionName = 'getTimeWorkPhases';
+
+    var subTypeTicket =  ObjectId(req.params.subTypeTicket);
+
+    var query =  [
+        {
+            $match:
+            {
+                workTime: {$ne: null},
+                subTypeTicket: subTypeTicket,
+                $or: [
+                    {
+                        status: 'Finalizado',
+                    },
+                    {
+                        status: 'Cerrado'
+                    }
+                ]
+                
+            }
+        },
+        {
+            $group:
+            {
+                _id: "$workTime",
+            }
+        },
+    ]
+      
+
+
+    Ticket.aggregate(query, (err, tickets) =>{
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            res.status(500).send({message: 'Error del servidor en la peticion'})
+        }else{
+            if(!tickets){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                res.status(404).send({message: 'No hay tickets'})
+            }else{
+                res.status(200).send({tickets:tickets})
+            }
+        }
+    });
+}
+
 
 module.exports = {
     getTicket,
@@ -960,6 +1060,8 @@ module.exports = {
     getDateTickets,
     getTeamTickets,
     getTimeWork,
+    getTypeTimeWork,
+    getTimeWorkPhases,
 
     checkClose,
     addCc,

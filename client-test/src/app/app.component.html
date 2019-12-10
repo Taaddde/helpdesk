@@ -36,7 +36,7 @@
                         <li class="nav-item" role="presentation"><a class="nav-link" [routerLink]="['/ticket']"><i class="fas fa-ticket-alt"></i><span *ngIf="identity['role'] != 'ROLE_REQUESTER'">Tickets</span><span *ngIf="identity['role'] == 'ROLE_REQUESTER'">Mis tickets</span></a></li>
                         <li *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="nav-item" role="presentation"><a class="nav-link" [routerLink]="['/agent']"><i class="fas fa-user-friends"></i><span>Usuarios</span></a></li>
                         <li *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="nav-item" role="presentation"><a class="nav-link" [routerLink]="['/calendar']"><i class="fas fa-calendar-check"></i><span>Calendario</span></a></li>
-                        <li *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="nav-item" role="presentation"><a class="nav-link" [routerLink]="['/report']"><i class="far fa-chart-bar"></i><span>Reportes</span></a></li>
+                        <li *ngIf="identity['role'] == 'ROLE_ADMIN'" class="nav-item" role="presentation"><a class="nav-link" [routerLink]="['/report']"><i class="far fa-chart-bar"></i><span>Reportes</span></a></li>
                     </ul>
                 </div>
             </nav>

@@ -206,5 +206,22 @@ export class ticketService{
 
     }
 
+    getTimeWorkForSubtype(token, subTypeId:string, time:number, page:number){
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'ticket/timework/for-subtype/'+subTypeId+'/'+time+'/'+page, this.httpOptions);
+
+    }
+
+    getTimeWorkPhase(token, subTypeId:string){
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'ticket/timework/phases/'+subTypeId, this.httpOptions);
+
+    }
+
+
 
 }

@@ -1,0 +1,78 @@
+<div class="card shadow">
+    <div class="card-header py-3">
+        <p class="text-primary m-0 font-weight-bold">Tickets correspondientes a <strong>{{title}}</strong> controlado con un tiempo estimado de <strong>{{time}} minutos</strong></p>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6 text-nowrap">
+                <div id="dataTable_length" class="dataTables_length">
+                    <label>Vigencia de control
+                    <select class="form-control form-control-sm custom-select custom-select-sm" (change)="changeLimit($event.target.value)">
+                        <option value="" selected></option>
+                        <option *ngFor="let t of times" [ngValue]="t['_id']">{{t['_id']}}</option>
+                    </select>
+                  </label>
+              </div>
+            </div>
+        </div>
+        <div class="table-responsive table mt-2" id="dataTable">
+            <table class="table dataTable my-0" id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Numero</th>
+                        <th>Agente</th>
+                        <th>Asunto</th>
+                        <th>Tiempo</th>
+                        <th>Observaciones</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let ticket of tickets">
+                    <tr class="select" [routerLink]="['/ticket-gestion',ticket._id]">
+                        <td data-title="Numero">{{ticket.numTicket}}</td>
+                        <td data-title="Agente" *ngIf="ticket.agent">
+                            <img *ngIf="ticket.agent.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+ticket.agent.image}}" />
+                            <img *ngIf="ticket.agent.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="../../../assets/img/system/user-placeholder.png" />
+                            {{ticket.agent.name}}
+                            <span> </span>
+                            {{ticket.agent.surname}}
+                        </td>
+                        <td data-title="Asunto">{{ticket.sub}}</td>
+                        <td *ngIf="getCompare(ticket.workTime, ticket.realWorkTime) == '='" style="font-weight: bold;" data-title="Tiempo">{{ticket.realWorkTime}} minutos</td>
+                        <td *ngIf="getCompare(ticket.workTime, ticket.realWorkTime) == '+'" style="color: red;font-weight: bold;" data-title="Tiempo">{{ticket.realWorkTime}} minutos</td>
+                        <td *ngIf="getCompare(ticket.workTime, ticket.realWorkTime) == '-'" style="color: green;font-weight: bold;;" data-title="Tiempo">{{ticket.realWorkTime}} minutos</td>
+                        <td *ngIf="ticket.obsWorkTime" data-title="Observaciones">{{ticket.obsWorkTime}}</td>
+                        <td *ngIf="!ticket.obsWorkTime" data-title="Observaciones"></td>
+                        <td data-title="Fecha">{{changeDate(ticket.createDate)}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td><strong>Numero</strong></td>
+                        <td><strong>Agente</strong></td>
+                        <td><strong>Asunto</strong></td>
+                        <td><strong>Tiempo</strong></td>
+                        <td><strong>Observaciones</strong></td>
+                        <td><strong>Fecha</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="row">
+            <div class="col-md-6 align-self-center">
+                <p id="dataTable_info" class="dataTables_info">Mostrando {{pagingCounter}} a {{isLastPage()}} de {{totalDocs}}</p>
+            </div>
+            <div class="col-md-6">
+                <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                    <ul class="pagination">
+                        <li class="page-item"><a class="page-link" *ngIf="prevPage != null" [routerLink]="['/timework-subtype', subId, 1]"><span>«</span></a></li>
+                        <li class="page-item"><a class="page-link" *ngIf="prevPage != null" [routerLink]="['/timework-subtype', subId,prevPage]">{{prevPage}}</a></li>
+                        <li class="page-item active"><a class="page-link">{{page}}</a></li>
+                        <li class="page-item"><a class="page-link" *ngIf="nextPage != null" [routerLink]="['/timework-subtype', subId,nextPage]">{{nextPage}}</a></li>
+                        <li class="page-item"><a class="page-link" *ngIf="nextPage != null" [routerLink]="['/timework-subtype', subId,totalPages]"><span>»</span></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+  </div>

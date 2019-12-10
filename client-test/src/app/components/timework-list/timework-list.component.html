@@ -22,7 +22,7 @@
                                 <td *ngIf="getCompare(type.workTime, type.avgRealWorkTime) == '='" style="font-weight: bold;">{{type.avgRealWorkTime}}m</td>
                                 <td *ngIf="getCompare(type.workTime, type.avgRealWorkTime) == '+'" style="color: red;font-weight: bold;">{{type.avgRealWorkTime}}m</td>
                                 <td *ngIf="getCompare(type.workTime, type.avgRealWorkTime) == '-'" style="color: green;font-weight: bold;">{{type.avgRealWorkTime}}m</td>
-                                <td><button class="btn btn-info" type="button"><i class="fa fa-info-circle"></i></button><button class="btn btn-success" type="button"><i class="fas fa-pencil-alt"></i></button></td>
+                                <td><a class="btn btn-info" [routerLink]="['/timework-subtype',type._id.subTypeTicket._id,type.workTime,1]" role="button" style="color: white;"><i class="fa fa-info-circle"></i></a></td>
                             </tr>
                         </tbody>
                     </table>

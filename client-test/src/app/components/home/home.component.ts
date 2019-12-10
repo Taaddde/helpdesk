@@ -144,11 +144,11 @@ export class HomeComponent implements OnInit {
             response.tickets.forEach(e => {
               var date = moment(e.resolveDate, "DD-MM-YYYY").format("YYYY-MM-DD");
               if(e.resolveDate != 'null'){
-                if(moment(date).isSame(moment().format("YYYY-MM-DD"))){
-                  this.status = "PENDIENTE";
+                if(moment(date).isBefore(moment().format("YYYY-MM-DD"))){
+                  this.status = "ATRASADO";
                 }else{
-                  if(moment(date).isBefore(moment().format("YYYY-MM-DD"))){
-                    this.status = "ATRASADO";
+                  if(moment(date).isSame(moment().format("YYYY-MM-DD"))){
+                    this.status = "PENDIENTE";
                   }
                 }
               }

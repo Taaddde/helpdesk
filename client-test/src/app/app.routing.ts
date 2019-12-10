@@ -18,6 +18,7 @@ import { CalendarComponent } from './components/calendar/calendar.component';
 import { RequesterNewComponent } from './components/agent-new/requester-new.component';
 import { PassResetComponent } from './components/pass-reset/pass-reset.component';
 import { TimeworkListComponent } from './components/timework-list/timework-list.component';
+import { TimeworkSubtypeListComponent } from './components/timework-subtype-list/timework-subtype-list.component';
 
 
 const appRoutes: Routes = [
@@ -51,7 +52,7 @@ const appRoutes: Routes = [
 
     {path: 'calendar', component: CalendarComponent},
 
-    {path: 'timework', component: TimeworkListComponent},
+    {path: 'timework-subtype/:subtype/:time/:page', component: TimeworkSubtypeListComponent},
 
 
 ];
