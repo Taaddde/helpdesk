@@ -31,6 +31,9 @@
               </div>
           </div>
       </div>      
+      <div style="margin-top: 15px;">
+            <app-timework-list></app-timework-list>
+        </div>
       
   </div>
 
@@ -50,16 +53,16 @@
           </div>
           <div class="col-md-12 col-lg-6 col-xl-6">
               <div style="width: 100%;">
-                <app-agent-report 
-                
-                ></app-agent-report>
+                <app-agent-time-report 
+                    [labelChart]=workReportId
+                    [dataChartP]=workReportCountTime
+                    [dataChartF]=workReportCountTickets
+                ></app-agent-time-report>
               </div>
           </div>
           
       </div>      
-        <div>
-            <app-timework-list></app-timework-list>
-        </div>
+        
       
   </div>
 </div>

@@ -420,6 +420,58 @@ var decoded = jwt_decode(req.headers.authorization);
                     }
                 },
               ],
+              "byWorkTime":  [
+                {
+                    $match:
+                    {
+                        workTime: {$ne: null},
+                        lastActivity: { $lte: moment().format("YYYY-MM-DD")+" 23:59" },
+                        lastActivity: { $gte: moment().format("YYYY-MM-DD")+" 00:00" },
+                        $or: [
+                            {
+                                status: 'Finalizado',
+                            },
+                            {
+                                status: 'Cerrado'
+                            }
+                        ]
+                        
+                    }
+                },
+                {
+                    $group:
+                    {
+                        _id: {
+                            agent: "$agent",
+                        },
+                        ticketsCount:{$sum:1},
+                        timeWorked:{$avg:"$realWorkTime"}
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'users', 
+                        localField: '_id.agent', 
+                        foreignField: '_id', 
+                        as: '_id.agent'} 
+                },
+                {
+                    $unwind:"$_id.agent"
+                },
+                {
+                    $project : {
+                        ticketsCount:1, 
+                        timeWorked:1, 
+                        _id :{
+                            agent: {
+                                _id:1,
+                                name:1,
+                                surname:1,
+                            },
+                        }
+                    }
+                },
+                ]
             },
         },
     ]
@@ -1041,7 +1093,6 @@ function getTimeWorkPhases(req, res){
         }
     });
 }
-
 
 module.exports = {
     getTicket,

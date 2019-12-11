@@ -53,6 +53,10 @@ export class TimeworkListComponent implements OnInit {
       });
   }
 
+  getNoDecimal(val: number){
+    return val.toString().split('.')[0];
+  }
+
   getCompare(defVal:number, val:number ){
     if(defVal == val){
       return '='

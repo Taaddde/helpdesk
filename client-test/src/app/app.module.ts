@@ -40,6 +40,7 @@ import { MyHttpInterceptor } from './services/myhttpinterceptor';
 import { RequesterListComponent } from './components/agent-list/request-list.component';
 import { TimeworkListComponent } from './components/timework-list/timework-list.component';
 import { TimeworkSubtypeListComponent } from './components/timework-subtype-list/timework-subtype-list.component';
+import { AgentTimeReportComponent } from './components/agent-report/agent-time-report.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { TimeworkSubtypeListComponent } from './components/timework-subtype-list
     PassResetComponent,
     RequesterListComponent,
     TimeworkListComponent,
-    TimeworkSubtypeListComponent
+    TimeworkSubtypeListComponent,
+    AgentTimeReportComponent
   ],
   imports: [
     BrowserModule,

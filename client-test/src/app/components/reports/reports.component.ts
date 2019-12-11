@@ -24,6 +24,10 @@ export class ReportsComponent implements OnInit {
   public timeReportId: any[];
   public timeReportCount: any[];
 
+  public workReportId: any[];
+  public workReportCountTickets: any[];
+  public workReportCountTime: any[];
+
   public statusAgentId: string[];
   public statusAgentName: string[];
   public statusAgentPending: any[];
@@ -53,6 +57,11 @@ export class ReportsComponent implements OnInit {
     this.statusAgentPending = new Array<any>();
     this.statusAgentFinish = new Array<any>();
 
+    //Reporte por tiempo de trabajo
+    this.workReportCountTickets = new Array<string>();
+    this.workReportCountTime = new Array<string>();
+    this.workReportId = new Array<string>();
+
   }
 
   ngOnInit() {
@@ -77,6 +86,12 @@ export class ReportsComponent implements OnInit {
           response.tickets[0].byTime.forEach(e => {
             this.timeReportId.push(e['_id']);
             this.timeReportCount.push(e['count']);
+          });
+
+          response.tickets[0].byWorkTime.forEach(e => {
+            this.workReportId.push(e['_id']['agent']['name']+' '+e['_id']['agent']['surname']);
+            this.workReportCountTickets.push(e['ticketsCount']);
+            this.workReportCountTime.push(e['timeWorked']);
           });
 
           response.tickets[0].byAgent.forEach(e => {
