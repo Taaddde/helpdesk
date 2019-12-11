@@ -1,7 +1,7 @@
 'use strict'
 
 var express = require('express');
-var textblockController = require('../controllers/TextBlock');
+var textblockController = require('../controllers/textblock');
 var md_auth = require('../middlewares/autenticate');
 
 var multipart = require('connect-multiparty'); //Para enviar ficheros
