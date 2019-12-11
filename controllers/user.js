@@ -335,6 +335,9 @@ function loginUser(req, res){
 
     var userName = params.userName;
     var password = params.password;
+
+    console.log(userName, password);
+    
     
     var populateQuery = [
         {path:'company',select:['name','email','image','mailSender']}    

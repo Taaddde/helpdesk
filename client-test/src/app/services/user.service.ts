@@ -28,7 +28,8 @@ export class userService{
         }
         let json = JSON.stringify(user_to_login);
         let params = json;
-
+        console.log(params);
+        console.log(this.url);
         return this._httpClient.post<any>(this.url+'user/login', params, this.httpOptions);
 
     }
