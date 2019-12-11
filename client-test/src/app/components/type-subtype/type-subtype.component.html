@@ -364,7 +364,7 @@
                       </div>
 
                       <div class="row" style="margin-top: 8px;margin-left: 4px;">
-                          <div id="editable" [contentEditable]="identity['role'] == 'ROLE_ADMIN' || isUser"
+                          <div id="editable" [contentEditable]="identity['role'] == 'ROLE_ADMIN'"
                           (input)="subtypeSelected.autoDesc = $event.target.innerHTML">
                             <span contentEditable="false"></span>
                           </div>
