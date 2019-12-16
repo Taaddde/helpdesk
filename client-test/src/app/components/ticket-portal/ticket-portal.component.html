@@ -104,24 +104,37 @@
                           <script src="../../../assets/scripts/chatbox.js"></script>
   
 
-                        <label class="d-inline attach" style="margin-bottom: 0px;">
+                        <label *ngIf="!filesToUpload" class="d-inline attach" style="margin-bottom: 0px; ">
                           <span>Adjuntar archivo </span>
                           <i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 5px;"></i>
                           <input type="file" class="d-none" (change)="fileChangeEvent($event)"/>
                         </label>
-                        <span *ngIf="filesToUpload">+{{getLenght(filesToUpload)}}</span>
+                        <label *ngIf="filesToUpload" class="d-inline btn btn-success" style="margin-bottom: 0px; border: 1px solid gray;">
+                          <span>Adjuntar archivo </span>
+                          <i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 5px;"></i>
+                          <input type="file" class="d-none" (change)="fileChangeEvent($event)"/>
+                        </label>
+                        <span *ngIf="filesToUpload">
+                          <a class="btn btn-danger" style="margin-left: 8px; color: white;margin-bottom: 0px; margin-top: 8px;" (click)=cleanAttach()>
+                            <i class="fa fa-trash"></i>
+                          </a>    
+                        </span>
                     </div>
                   </div>
                 </div>
-              <div
-          class="modal-footer">
-          <button class="btn btn-light" type="button" (click)="cancelTicket()">
-            Cancelar
-          </button>
-          <button class="btn btn-success" type="submit" [disabled]="(getLenght(selectedSubtype.checks) != 0 && !allChecked) || ticket.sub == '' || tb.text == ''">
-            Aceptar
-          </button>
-        </div>
+              <div class="modal-footer">
+                <span *ngIf="(getLenght(selectedSubtype.checks) == 0 || allChecked) && selectedSubtype._id != ''">
+                    <label *ngIf="ticket.sub == ''" style="color: red;">*Falta completar el asunto</label>
+                    <label *ngIf="tb.text == ''" style="color: red;">*Falta completar la descripción</label>
+    
+                </span>
+                <button class="btn btn-light" type="button" (click)="cancelTicket()">
+                  Cancelar
+                </button>
+                <button class="btn btn-success" type="submit" [disabled]="(getLenght(selectedSubtype.checks) != 0 && !allChecked) || ticket.sub == '' || tb.text == ''">
+                  Aceptar
+                </button>
+            </div>
       </form>
   </div>
 </div>

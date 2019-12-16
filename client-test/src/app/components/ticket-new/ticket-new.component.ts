@@ -19,7 +19,7 @@ declare var $: any;
 @Component({
   selector: 'app-ticket-new',
   templateUrl: './ticket-new.component.html',
-  styleUrls: ['./ticket-new.component.scss'],
+  styleUrls: ['../../styles/form.scss'],
   providers: [userService, ticketService, teamService, textblockService, uploadService]
 })
 export class TicketNewComponent implements OnInit {

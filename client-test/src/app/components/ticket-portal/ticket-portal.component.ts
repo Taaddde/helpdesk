@@ -246,6 +246,10 @@ export class TicketPortalComponent implements OnInit {
     $("#newticket").modal("hide");
   }
 
+  cleanAttach(){
+    this.filesToUpload = undefined;
+  }
+
   onSubmit(){
     if(this.selectedSubtype.requireAttach && this.filesToUpload == undefined){
       alert('La solicitud requiere de un adjunto obligatorio')

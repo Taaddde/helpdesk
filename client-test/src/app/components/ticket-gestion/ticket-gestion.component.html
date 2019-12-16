@@ -366,9 +366,14 @@
                           </button>
                           
                           <div role="menu" class="dropdown-menu" *ngIf="identity['company']['_id'] == ticket.company['_id']" >
-                            <a role="presentation" class="dropdown-item" *ngFor="let resp of responses" (click)="selectHashtag(resp.resp)">
-                               {{resp.hashtag}}
-                            </a>
+                            <span *ngIf="getLenght(responses) != 0">
+                              <a role="presentation" class="dropdown-item" *ngFor="let resp of responses" (click)="selectHashtag(resp.resp)">
+                                  {{resp.hashtag}}
+                              </a>
+                            </span>
+                            <span *ngIf="getLenght(responses) == 0" class="card" style="padding: 5px;border: 1px solid gray;">
+                              No tenes ningúna respuesta rápida configurada
+                            </span>
                           </div>
     
     

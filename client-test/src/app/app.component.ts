@@ -161,7 +161,7 @@ export class AppComponent implements OnInit {
                 // Crear elemento en el localstorage para tener el token en sesion
                 localStorage.setItem('token', token);
                 this.user = new User('','','','','','','ROLE_REQUESTER','','','', false,'');
-                location.reload();
+                this._router.navigate(['/home']);
               }
             },
             error =>{
