@@ -165,12 +165,7 @@ export class AppComponent implements OnInit {
               }
             },
             error =>{
-              var errorMessage = <any>error;
-              if(errorMessage != null){
-                var body = JSON.parse(error._body);
-                this.alertMessage = body.message;
-                console.error(error);
-              }
+              this.alertMessage = "Usuario/contraseña inválido";
             }
           )          
         }   
