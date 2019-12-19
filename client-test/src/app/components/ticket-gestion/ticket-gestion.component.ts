@@ -112,7 +112,6 @@ export class TicketGestionComponent implements OnInit {
     );
   }
 
-
   filterCc(){
     if(this.ccFilter.length >= 3){
       this.keyPress = true;
@@ -145,7 +144,6 @@ export class TicketGestionComponent implements OnInit {
       }
     );
   }
-
 
   deleteCc(val: User){
     this._ticketService.removecc(this.token, this.ticket._id, val._id).subscribe(
@@ -373,12 +371,19 @@ export class TicketGestionComponent implements OnInit {
       this.ticket.agent = val;
       this.ticket.status = 'Pendiente'
       this.editTicket();
-      this.newInfo(this.identity['name']+' '+this.identity['surname']+' asignó a '+name+' '+surname+' como agente de esta solicitud')
-      this.newInfo(this.identity['name']+' '+this.identity['surname']+' ha cambiado el estado de la solicitud a pendiente');
+      if(this.identity['_id'] == val){
+        this.newInfo(this.identity['name']+' '+this.identity['surname']+' se asignó como agente de esta solicitud')
+      }else{
+        this.newInfo(this.identity['name']+' '+this.identity['surname']+' asignó a '+name+' '+surname+' como agente de esta solicitud')
+      }
     }else{
       this.ticket.agent = val;
       this.editTicket();
-      this.newInfo(this.identity['name']+' '+this.identity['surname']+' asignó a '+name+' '+surname+' como agente de esta solicitud')
+      if(this.identity['_id'] == val){
+        this.newInfo(this.identity['name']+' '+this.identity['surname']+' se asignó como agente de esta solicitud')
+      }else{
+        this.newInfo(this.identity['name']+' '+this.identity['surname']+' asignó a '+name+' '+surname+' como agente de esta solicitud')
+      }
     }
   }
 
@@ -551,15 +556,11 @@ export class TicketGestionComponent implements OnInit {
   }
 
   onSubmit(){
-
     if(this.textblock.text != ''){
-      this.textblock.text = this.textblock.text.split('<span')[0];
+      this.textblock.text = this.textblock.text.split('<span _ngco')[0];
     }
 
-    console.log(this.textblock.text)
-
     if(this.textblock.text != ''){
-      console.log(this.textblock.text);
       if(this.identity['role'] == 'ROLE_REQUESTER'){
         this.textblock.type = 'REQUEST'
       }else{
@@ -604,10 +605,14 @@ export class TicketGestionComponent implements OnInit {
               if(nameTo){
                 let link:string = window.location.href;
                 let nameFrom:string = this.identity['name']+' '+this.identity['surname'];
-                let cc = this.ticket.cc.map(function(user) {
-                  return user['email'];
-                });
-                
+                let cc = undefined;
+
+                if(this.ticket.cc){
+                  cc = this.ticket.cc.map(function(user) {
+                    return user['email'];
+                  });
+                    
+                }
                 this._ticketService.sendMail(this.token, nameFrom, this.ticket, response.textblock.text, nameTo, mailTo, link, cc).subscribe(
                   response =>{
                   },

@@ -161,7 +161,9 @@ export class AppComponent implements OnInit {
                 // Crear elemento en el localstorage para tener el token en sesion
                 localStorage.setItem('token', token);
                 this.user = new User('','','','','','','ROLE_REQUESTER','','','', false,'');
-                this._router.navigate(['/home']);
+                //this._router.navigate(['/home']);
+                console.log(window.location.hostname+':3977/home')
+                window.location.href='http://'+window.location.hostname+':'+window.location.port+'/home'
               }
             },
             error =>{
