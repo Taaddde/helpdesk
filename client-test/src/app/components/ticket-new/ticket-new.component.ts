@@ -196,8 +196,8 @@ export class TicketNewComponent implements OnInit {
                       if(!response.textblock){
                         alert('Error en el bloque de texto del ticket')
                       }else{
-                        if(!this.filesToUpload){
-                        }else{
+                        console.log(this.filesToUpload)
+                        if(this.filesToUpload){
                             this._uploadService.makeFileRequest(this.url+'textblock/file/'+response.textblock._id, [], this.filesToUpload, this.token, 'file')
                             .then(
                                 result =>{

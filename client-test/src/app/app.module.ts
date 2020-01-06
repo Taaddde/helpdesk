@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import {FullCalendarModule} from 'primeng/fullcalendar';
@@ -83,7 +84,8 @@ import { AgentTimeReportComponent } from './components/agent-report/agent-time-r
     routing,
     ChartModule,
     FullCalendarModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    BrowserAnimationsModule
   ],
   providers: [
     appRoutingProviders,

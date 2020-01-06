@@ -783,7 +783,7 @@ function getTeamTickets(req, res){
                 }
             
                 var perPage = req.params.perPage;
-                var status = 'Pendiente';
+                var status = ['Pendiente','Abierto'];
             
                 var query = {team:teams,status:status,$or:[{agent:null}, {agent:undefined}]};
                 Ticket.paginate(query,{page:page, limit:perPage, populate:populateQuery, sort:{numTicket:-1}}, function(err, tickets){

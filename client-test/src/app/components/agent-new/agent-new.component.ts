@@ -52,7 +52,7 @@ export class AgentNewComponent implements OnInit {
         this.user.role = 'ROLE_ADMIN';
       }
   
-      if(this.user.userName = ''){
+      if(this.user.userName == ''){
         delete this.user.userName;
         delete this.user.password;
       }
