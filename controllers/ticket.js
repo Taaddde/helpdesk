@@ -809,11 +809,11 @@ function getTeamTickets(req, res){
 function checkClose(req, res){
     var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'checkClose';
-    let now = moment().add(2, 'days').format('YYYY-MM-DD HH:mm');
+    let now = moment().subtract(2, 'days').format('YYYY-MM-DD HH:mm');
     var query = 
     {
         status:'Finalizado', 
-        lastActivity:{$gte: now}
+        lastActivity:{$lte: now}
     }
     var update =  {status:'Cerrado'};
     //ticketId = ticket buscado, update = datos nuevos a actualizar
@@ -832,6 +832,7 @@ function checkClose(req, res){
         }
     });
 }
+
     
 function addCc(req, res){
         var decoded = jwt_decode(req.headers.authorization);

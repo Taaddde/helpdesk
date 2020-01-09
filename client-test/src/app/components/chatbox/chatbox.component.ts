@@ -14,7 +14,9 @@ export class ChatboxComponent implements AfterViewInit {
   @Input() user: string;
   @Input() date: string;
   @Input() type: string;
-  @Input() files: [string];
+  @Input() files: string;
+
+  public groupFiles: string[];
 
   public url: string;
 
@@ -25,7 +27,8 @@ export class ChatboxComponent implements AfterViewInit {
    }
 
   ngOnInit(){
-    this.date = moment(this.date, "YYYY-MM-DD HH:mm").format("DD-MM-YYYY HH:mm")
+    this.date = moment(this.date, "YYYY-MM-DD HH:mm").format("DD-MM-YYYY HH:mm");
+    this.groupFiles = this.files.split(',')
   }
 
   ngAfterViewInit() {

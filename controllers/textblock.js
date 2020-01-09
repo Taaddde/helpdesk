@@ -108,7 +108,7 @@ var decoded = jwt_decode(req.headers.authorization);
 }
 
 function getTextBlockForTicket(req, res){
-var decoded = jwt_decode(req.headers.authorization);
+    var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getTextBlockForTicket';
     var ticket = req.params.ticket;
     var type = req.params.type
@@ -232,46 +232,97 @@ var decoded = jwt_decode(req.headers.authorization);
     });
 }
 
-function uploadFile(req, res){
-var decoded = jwt_decode(req.headers.authorization);
+function uploadFiles(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'uploadFile';
     var tbId = req.params.id;
     var file_name = 'No subido';
-
     if(req.files){
-        var file_path = req.files.file.path;
-        var file_split = file_path.split('\\'); //eliminar y recortar las barras del path
-        var file_name = file_split[2]; // [ 'uploads', 'users', 'pWgu0s-hHBgJl-5w1RSPS5G7.jpg' ]
-
-        var ext_split = file_name.split('\.');
-        var file_ext = ext_split [1]; //Comprueba si es un jpg [ 'j5HRZbfL7qgOgp2YRQ3F0ub8', 'jpg' ]
-        if(true){
-
+            var file_path = req.files.file.path;
+            var file_split = file_path.split('\\'); //eliminar y recortar las barras del path
+            var file_name = file_split[2]; // [ 'uploads', 'users', 'pWgu0s-hHBgJl-5w1RSPS5G7.jpg' ]
+    
+            var ext_split = file_name.split('\.');
+            var file_ext = ext_split [1]; //Comprueba si es un jpg [ 'j5HRZbfL7qgOgp2YRQ3F0ub8', 'jpg' ]
+    
             TextBlock.findByIdAndUpdate(tbId, {$push: {files: file_name}}, (err, textblockUpdated) =>{
                 if(err){
                     logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
-                res.status(500).send({message: 'Error al actualizar el usuario'});
+                    res.status(500).send({message: 'Error al actualizar el usuario'});
                 }else{
                     if(!textblockUpdated){
                         logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha podido actualizar el usuario'});
                     }else{
-                      logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
-                res.status(200).send({order: textblockUpdated});
+                        logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                        res.status(200).send({order: textblockUpdated});
                     }
                 }
             });
-        }else{
-                      logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
-                res.status(200).send({message: 'Extension de archivo no valido'});
-        }
-
-        console.log(ext_split);
+    
+            console.log(ext_split);
+    
     }else{
         logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Solicitud de '+req.params.id}});
                 res.status(200).send({message: 'No ha subido ninguna imagen'});
     }
 }
+
+async function uploadFile(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+    var functionName = 'uploadFile';
+    var tbId = req.params.id;
+    var file_name = 'No subido';
+
+    if(req.files){
+        if(req.files.file.length > 1){
+            req.files.file.forEach(async e => {
+                var file_path = e.path;
+                var file_split = file_path.split('\\'); //eliminar y recortar las barras del path
+                var file_name = file_split[2]; // [ 'uploads', 'users', 'pWgu0s-hHBgJl-5w1RSPS5G7.jpg' ]
+        
+                var ext_split = file_name.split('\.');
+                var file_ext = ext_split [1]; //Comprueba si es un jpg [ 'j5HRZbfL7qgOgp2YRQ3F0ub8', 'jpg' ]
+        
+                TextBlock.findByIdAndUpdate(tbId, {$push: {files: file_name}}, (err, textblockUpdated) =>{
+                    if(err){
+                        logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                        res.status(500).send({message: 'Error al actualizar el usuario'});
+                    }else{
+                        if(!textblockUpdated){
+                            logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                            res.status(404).send({message: 'No se ha podido actualizar el usuario'});
+                        }
+                    }
+                });
+            });    
+        }else{
+            var file_path = req.files.file.path;
+            var file_split = file_path.split('\\'); //eliminar y recortar las barras del path
+            var file_name = file_split[2]; // [ 'uploads', 'users', 'pWgu0s-hHBgJl-5w1RSPS5G7.jpg' ]
+    
+            var ext_split = file_name.split('\.');
+            var file_ext = ext_split [1]; //Comprueba si es un jpg [ 'j5HRZbfL7qgOgp2YRQ3F0ub8', 'jpg' ]
+            TextBlock.findByIdAndUpdate(tbId, {$push: {files: file_name}}, (err, textblockUpdated) =>{
+                if(err){
+                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                    res.status(500).send({message: 'Error al actualizar el usuario'});
+                }else{
+                    if(!textblockUpdated){
+                        logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                        res.status(404).send({message: 'No se ha podido actualizar el usuario'});
+                    }
+                }
+            });
+        }
+        logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+        res.status(200).send({message:'Adjuntos subidos correctamente'});
+    }else{
+        logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Solicitud de '+req.params.id}});
+                res.status(200).send({message: 'No ha subido ninguna imagen'});
+    }
+}
+
 
 function getFile(req, res){
     var file = req.params.fileName;

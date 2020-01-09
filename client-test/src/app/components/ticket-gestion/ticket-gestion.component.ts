@@ -227,6 +227,10 @@ export class TicketGestionComponent implements OnInit {
     }
   }
 
+  cleanAttach(){
+    this.filesToUpload = undefined;
+  }
+
   getChat(){
     this._route.params.forEach((params: Params) =>{
       let id = params['id'];

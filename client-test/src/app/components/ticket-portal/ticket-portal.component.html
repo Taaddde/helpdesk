@@ -107,12 +107,12 @@
                         <label *ngIf="!filesToUpload" class="d-inline attach" style="margin-bottom: 0px; ">
                           <span>Adjuntar archivo </span>
                           <i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 5px;"></i>
-                          <input type="file" class="d-none" (change)="fileChangeEvent($event)"/>
+                          <input type="file" multiple class="d-none" (change)="fileChangeEvent($event)"/>
                         </label>
                         <label *ngIf="filesToUpload" class="d-inline btn btn-success" style="margin-bottom: 0px; border: 1px solid gray;">
                           <span>Adjuntar archivo </span>
                           <i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 5px;"></i>
-                          <input type="file" class="d-none" (change)="fileChangeEvent($event)"/>
+                          <input type="file" multiple class="d-none" (change)="fileChangeEvent($event)"/>
                         </label>
                         <span *ngIf="filesToUpload">
                           <a class="btn btn-danger" style="margin-left: 8px; color: white;margin-bottom: 0px; margin-top: 8px;" (click)=cleanAttach()>

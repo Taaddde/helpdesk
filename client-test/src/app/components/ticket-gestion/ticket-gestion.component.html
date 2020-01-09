@@ -366,13 +366,15 @@
                           </button>
                           
                           <div role="menu" class="dropdown-menu" *ngIf="identity['company']['_id'] == ticket.company['_id']" >
-                            <span *ngIf="getLenght(responses) != 0">
-                              <a role="presentation" class="dropdown-item" *ngFor="let resp of responses" (click)="selectHashtag(resp.resp)">
-                                  {{resp.hashtag}}
-                              </a>
-                            </span>
-                            <span *ngIf="getLenght(responses) == 0" class="card" style="padding: 5px;border: 1px solid gray;">
-                              No tenes ningúna respuesta rápida configurada
+                            <span *ngIf="responses">
+                              <span *ngIf="getLenght(responses) != 0">
+                                <a role="presentation" class="dropdown-item" *ngFor="let resp of responses" (click)="selectHashtag(resp.resp)">
+                                    {{resp.hashtag}}
+                                </a>
+                              </span>
+                              <span *ngIf="getLenght(responses) == 0" class="card" style="padding: 5px;border: 1px solid gray;">
+                                No tenes ningúna respuesta rápida configurada
+                              </span>  
                             </span>
                           </div>
     
@@ -380,11 +382,16 @@
                       </div>
                       <label class="d-inline" style="margin-left: 10px;margin-bottom: 0px;margin-top: 0;">
                         <i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 5px;"></i>
-                        <input type="file" class="d-none" [disabled]="identity['company']['_id'] != ticket.company['_id']" (change)="fileChangeEvent($event)" />
+                        <input type="file" multiple class="d-none" [disabled]="identity['company']['_id'] != ticket.company['_id']" (change)="fileChangeEvent($event)" />
                         <span *ngIf="filesToUpload">
                             +{{filesToUpload.length}}
                         </span>
-                        </label>
+                      </label>
+                      <span *ngIf="filesToUpload">
+                        <a class="btn btn-danger" style="margin-left: 8px; color: white;margin-bottom: 8px; margin-top: 0px;" (click)=cleanAttach()>
+                          <i class="fa fa-trash"></i>
+                        </a>    
+                      </span>  
                       <div class="dropdown d-inline float-right">
                         <button class="btn btn-dark dropdown-toggle dark" [disabled]="identity['company']['_id'] != ticket.company['_id']" data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
                           {{ticket.status}}

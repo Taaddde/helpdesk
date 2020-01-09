@@ -244,6 +244,9 @@ export class TicketNewComponent implements OnInit {
       });
   }
 
+  cleanAttach(){
+    this.filesToUpload = undefined;
+  }
 
 
   public filesToUpload: Array<File>;

@@ -8,6 +8,8 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/interval';
 import { ticketService } from './services/ticket.service';
 import { globalService } from './services/global.service';
+declare var $: any;
+
 
 
 
@@ -210,6 +212,12 @@ export class AppComponent implements OnInit {
     }
   }
 
-  
+  wrapp(){
+    $("body").toggleClass("sidebar-toggled");
+    $(".sidebar").toggleClass("toggled");
+    if ($(".sidebar").hasClass("toggled")) {
+      $('.sidebar .collapse').collapse('hide');
+    };
+  }
 
 }

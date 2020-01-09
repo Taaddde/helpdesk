@@ -49,11 +49,16 @@
                       <div class="form-group"><label><span class="required">*</span> Requerimiento</label>
                         <label class="d-inline" style="margin-left: 10px;margin-bottom: 0px;margin-top: 0;">
                           <i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 5px;"></i>
-                          <input class="d-none" type="file" (change)="fileChangeEvent($event)"/>
+                          <input class="d-none" type="file" multiple (change)="fileChangeEvent($event)"/>
                           <span *ngIf="filesToUpload">
                               +{{filesToUpload.length}}
                           </span>
                         </label>
+                        <span *ngIf="filesToUpload">
+                          <a class="btn btn-danger" style="margin-left: 8px; color: white;margin-bottom: 8px; margin-top: 0px;" (click)=cleanAttach()>
+                            <i class="fa fa-trash"></i>
+                          </a>    
+                        </span>  
 
                         <textarea required placeholder="Describa el requerimiento solicitado" class="form-control message" #text="ngModel" name="text" [(ngModel)]="textblock.text"></textarea>
                       </div>
