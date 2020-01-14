@@ -13,7 +13,7 @@
                       <li class="list-group-item">
                           <span>Prioridad: </span>
                           <span *ngIf="identity['company']">
-                            <div class="dropdown d-inline" *ngIf="identity['company']['_id'] == ticket.company['_id']">
+                            <div class="dropdown d-inline" *ngIf="identity['company']['_id'] == ticket.company['_id'] && ticket.status != 'Cerrado'">
                               <button class="btn btn-dark dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
                                 {{ticket.priority}}
                             </button>
@@ -26,7 +26,7 @@
                                     </a>
                                 </div>
                           </div>
-                          <span *ngIf="identity['company']['_id'] != ticket.company['_id']"><strong>{{ticket.priority}}</strong></span>
+                          <span *ngIf="identity['company']['_id'] != ticket.company['_id'] || ticket.status == 'Cerrado'"><strong>{{ticket.priority}}</strong></span>
 
                           </span>
                           <span *ngIf="!identity['company']">
@@ -101,7 +101,7 @@
 
                       <li class="list-group-item"><span style="font-size: 18px;"><strong>Departamento</strong></span>
                         <span *ngIf="identity['company']">
-                          <div class="dropdown d-inline float-right" *ngIf="identity['company']['_id'] == ticket.company['_id']">
+                          <div class="dropdown d-inline float-right" *ngIf="identity['company']['_id'] == ticket.company['_id'] && ticket.status != 'Cerrado'">
                             <button class="btn btn-dark dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button">
                                 Cambiar
                               </button>
@@ -124,7 +124,7 @@
                       <span style="font-size: 18px;"><strong>Equipo</strong></span>
 
                       <span *ngIf="identity['company']">
-                        <div class="dropdown d-inline float-right" *ngIf="identity['company']['_id'] == ticket.company['_id']">
+                        <div class="dropdown d-inline float-right" *ngIf="identity['company']['_id'] == ticket.company['_id'] && ticket.status != 'Cerrado'">
                           <button class="btn btn-dark dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button">
                               Cambiar
                             </button>
@@ -146,7 +146,7 @@
                           <hr />
                           <span style="font-size: 18px;"><strong>Agente</strong></span>
                           <span *ngIf="identity['company']">
-                            <div class="dropdown d-inline float-right" *ngIf="identity['company']['_id'] == ticket.company['_id']">
+                            <div class="dropdown d-inline float-right" *ngIf="identity['company']['_id'] == ticket.company['_id'] && ticket.status != 'Cerrado'">
                               <button class="btn btn-dark dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button">
                                 Cambiar
                               </button>
@@ -188,12 +188,12 @@
                           <img *ngIf="user.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+user.image}}" />
                           <img *ngIf="user.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="../../../assets/img/system/user-placeholder.png" />
                           <span>{{user.name}} {{user.surname}}</span>
-                          <button class="btn btn-danger float-right" type="button" (click)="deleteCc(user)">
+                          <button *ngIf="ticket.status != 'Cerrado'" class="btn btn-danger float-right" type="button" (click)="deleteCc(user)">
                             <i class="fa fa-trash"></i>
                           </button>
                         </li>    
                   </span>
-                    <li class="list-group-item text-center">
+                    <li class="list-group-item text-center" *ngIf="ticket.status != 'Cerrado'">
                         <div class="dropdown d-inline" >
                             <button class="btn btn-dark dark dropdown-toggle" (click)="getCc()" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span>Poner en copia</span>
@@ -242,8 +242,8 @@
   <div class="col-md-6 col-lg-7 col-xl-8">
       <div class="container text-center">
             <input type="text" *ngIf="editSub" name="sub" [(ngModel)]="subMod" />
-            <input type="button" class="btn btn-dark dark" *ngIf="editSub" value="Aplicar" (click)="editTicketSub()">
-            <input type="button" class="btn btn-danger" *ngIf="editSub" value="Cancelar" (click)="editSub = false">
+            <input style="margin-left: 3px;" type="button" class="btn btn-dark dark" *ngIf="editSub" value="Aceptar" (click)="editTicketSub()">
+            <input style="margin-left: 3px;" type="button" class="btn btn-danger" *ngIf="editSub" value="Cancelar" (click)="editSub = false">
             <h6 *ngIf="!editSub" class="d-inline" (click)="subToEdit(ticket.sub)">
               <strong>{{ticket.sub}}</strong>
             </h6>
@@ -255,12 +255,17 @@
       <div class="row">
           <div class="col chatbox-scroll" id="chatbox-scroll">
             <app-chatbox *ngFor="let textblock of chat"
+            _id={{textblock._id}}
             text={{textblock.text}}
             sign={{textblock.user.sign}}
             type={{textblock.type}}
             user={{textblock.user.name+space+textblock.user.surname}}
+            userId={{textblock.user._id}}
             date={{textblock.createDate}}
             files={{textblock.files}}
+            (deleteMessage)="deleteMessage()"
+            (refresh)="getChat()"
+            (errorMessage)="errorMessage()"
             ></app-chatbox>
           </div>
           <span></span>
@@ -312,7 +317,6 @@
                       </div>
                   
                       <script src="../../../assets/scripts/chatbox.js"></script>
-                  
                     </span>
                   <span *ngIf="!identity['company']">
                   
@@ -355,7 +359,7 @@
                 </div>
                 <div class="container" id="options-container">
                     <span *ngIf="identity['company']">
-                      <button class="btn btn-primary float-right" [disabled]="identity['company']['_id'] != ticket.company['_id']" type="submit">
+                      <button class="btn btn-primary float-right" [disabled]="identity['company']['_id'] != ticket.company['_id'] || ticket.status == 'Cerrado'" type="submit">
                         <i class="fa fa-paper-plane"></i>
                       </button>
                       <input type="checkbox" [disabled]="identity['company']['_id'] != ticket.company['_id']" name="isPrivate" [(ngModel)]="isPrivate" />      
@@ -393,7 +397,7 @@
                         </a>    
                       </span>  
                       <div class="dropdown d-inline float-right">
-                        <button class="btn btn-dark dropdown-toggle dark" [disabled]="identity['company']['_id'] != ticket.company['_id']" data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
+                        <button class="btn btn-dark dropdown-toggle dark" [disabled]="identity['company']['_id'] != ticket.company['_id'] || ticket.status == 'Cerrado'" data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
                           {{ticket.status}}
                         </button>
                           <div role="menu" class="dropdown-menu dark">
@@ -403,9 +407,9 @@
                               <a role="presentation" class="dropdown-item" *ngIf="ticket.status != 'Finalizado'" (click)="checkWorkTime('Finalizado')">
                                   Finalizado
                               </a>
-                              <a role="presentation" class="dropdown-item" *ngIf="ticket.status != 'Cerrado'" (click)="checkWorkTime('Cerrado')">
+                              <!-- <a role="presentation" class="dropdown-item" *ngIf="ticket.status != 'Cerrado'" (click)="checkWorkTime('Cerrado')">
                                   Cerrado
-                              </a>
+                              </a> -->
                           </div>
                       </div>
                     </span>
@@ -487,3 +491,4 @@
         </div>
     </div>
 </div>
+<app-message></app-message>

@@ -1095,6 +1095,117 @@ function getTimeWorkPhases(req, res){
     });
 }
 
+async function unify(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+    var functionName = 'unify';
+
+    var now = moment().format("YYYY-MM-DD HH:mm");
+    var arr = new Array();
+    req.body.tickets.forEach(e => {
+        arr.push(ObjectId(e));
+    });
+
+    var first = arr[0];
+    arr.forEach(e => {
+        if(e < first){
+            first = e;
+        }
+    });
+
+    arr.splice(arr.indexOf(first,1));
+
+    var query = {_id:arr};
+
+    //Ticket origen se le ponen todos los CC
+    arr.forEach(async id => {
+        await Ticket.findById(id, (err, ticket) =>{
+            if(err){
+                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                //res.status(500).send({message: 'Error del servidor en la peticion'})
+            }else{
+                if(!ticket){
+                    logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                    //res.status(404).send({message: 'No hay tickets'})
+                }else{
+                    //Añade en copia
+                    let ccUpdate = {$addToSet:{cc:{$each:ticket.cc}}, $addToSet:{cc:ticket.requester}}
+                    Ticket.findByIdAndUpdate(first, ccUpdate, (err, firstUpdated) =>{
+                        if(err){
+                            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                            //res.status(500).send({message: 'Error del servidor en la peticion'})
+                        }else{
+                            if(!firstUpdated){
+                                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+
+                            }else{
+                                //Crea una info de que se cerró
+                                let tb = new TextBlock();
+                                tb.text = 'Éste ticket fue cerrado y unificado con el #'+firstUpdated.numTicket;
+                                tb.ticket = ticket._id;
+                                tb.user = ticket.requester;
+                                tb.type = 'INFO';
+                                tb.read = false;
+                                tb.createDate = moment().format("YYYY-MM-DD HH:mm");
+                                tb.save((err, textblockStored) =>{
+                                });                
+                                
+                            }
+                        }
+                    })
+
+                
+                }
+            }
+        });
+    });
+
+    //Quitar de CC al solicitante
+    Ticket.findById(first, (err, ticket) =>{
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            //res.status(500).send({message: 'Error del servidor en la peticion'})
+        }else{
+            if(!ticket){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+            }else{
+                let ccUpdate = { $pull: {"cc": ticket.requester}}
+                Ticket.findByIdAndUpdate(
+                    first,
+                    ccUpdate,
+                    {  safe: true, upsert: true},
+                    function(err, ticket) {
+                        if(err){
+                            console.log(err)
+                            return res.send(err);
+                        }else{
+                            logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                    }
+                });        
+            }
+        }
+    })
+
+    //Los demas tickets se cierran y ponen ultima actualización
+    var update = {status:'Cerrado', lastActivity:now};
+    Ticket.updateMany(query, update, (err, tickets) =>{
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            //res.status(500).send({message: 'Error del servidor en la peticion'})
+        }else{
+            if(!tickets){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                //res.status(404).send({message: 'No hay tickets'})
+            }else{
+                res.status(200).send({tickets:tickets})
+            }
+        }
+    });
+
+}
+
+
+
+
 module.exports = {
     getTicket,
     getTicketsForNumber,
@@ -1118,6 +1229,8 @@ module.exports = {
     checkClose,
     addCc,
     removeCc,
+
+    unify,
 
     saveTicket,
     updateTicket,

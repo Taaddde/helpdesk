@@ -1,25 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {Ticket} from '../../models/ticket';
 import {Router, ActivatedRoute, Params} from '@angular/router'
 import {GLOBAL} from '../../services/global'
 import { userService } from '../../services/user.service';
 import { ticketService } from '../../services/ticket.service';
 import * as moment from 'moment';
+import { MessageComponent } from '../message/message.component';
 
 
 @Component({
   selector: 'app-ticket-list',
   templateUrl: './ticket-list.component.html',
   styleUrls: ['../../styles/list.scss'],
-  providers:[userService, ticketService]
+  providers:[userService, ticketService, MessageComponent]
 })
 export class TicketListComponent implements OnInit {
+  @ViewChild(MessageComponent, {static:false}) message: MessageComponent;
   public title: String;
   public tickets: Ticket[];
   public filtro: String;
   public identity;
   public token;
   public url: string;
+
+  public groupTicket: string[];
 
   public limit: number;
   public page: number;
@@ -52,6 +56,10 @@ export class TicketListComponent implements OnInit {
     this.totalDocs= null;
     this.totalPages= 1;
     this.pagingCounter = 1;
+
+    this.groupTicket = new Array<string>();
+    this.message = new MessageComponent();
+
   }
 
   ngOnInit() {
@@ -131,4 +139,47 @@ export class TicketListComponent implements OnInit {
   changeDate(val:string){
     return moment(val, 'YYYY-MM-DD HH:mm').format('DD-MM-YYYY HH:mm');
   }
+
+  selectTicket(event, ticket: Ticket){
+    if(event.ctrlKey){
+      if(ticket.status != 'Cerrado'){
+        if(this.groupTicket.indexOf(ticket._id) != -1){
+          this.groupTicket.splice(this.groupTicket.indexOf(ticket._id),1);
+        }else{
+          this.groupTicket.push(ticket._id)
+        }
+      }else{
+        this.message.error('Ticket cerrado', 'No es posible realizar alguna acción sobre un ticket cerrado')
+      }  
+    }else{
+      this._router.navigate(['/ticket-gestion',ticket._id]);
+    }
+  }
+
+  isInGroup(ticket:Ticket){
+    if(this.groupTicket.indexOf(ticket._id) == -1){
+      return false;
+    }else{
+      return true;
+    }
+  }
+
+  unify(){
+    if (confirm('¿Esta seguro que quiere unificar los tickets seleccionados? Prevalecerá el ticket mas antigüo y se pondrá en copia a los solicitantes que hayan generado las otras consultas')) {
+      this._ticketService.unify(this.token, this.groupTicket).subscribe(
+        response =>{
+            if(!response.tickets){
+              this._router.navigate(['/']);
+            }else{
+              this.message.info('Unificación realizada', 'La unificación fue realizada correctamente.')
+              this.groupTicket = new Array<string>();
+              this.getTickets();
+            }
+        },
+        error =>{
+            console.error(error);
+        });
+    }
+  }
+
 }

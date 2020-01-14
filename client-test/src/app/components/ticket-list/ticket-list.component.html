@@ -13,10 +13,18 @@
                             <option value="50">50</option>
                             <option value="100">100</option>
                     </select>
-                </label>
+                    </label>
+                </div>
+
             </div>
-          </div>
-      </div>
+            <div class="col-md-6 text-nowrap">
+                <button 
+                *ngIf="identity['role'] != 'ROLE_REQUESTER' && this.groupTicket.length > 1" 
+                class="btn btn-dark dark" type="button" 
+                (click)="unify()">Unificar</button>
+            </div>
+  
+        </div>
       <div class="table-responsive table mt-2" id="dataTable">
           <table class="table dataTable my-0" id="dataTable">
               <thead>
@@ -29,27 +37,27 @@
                       <th>Fecha</th>
                   </tr>
               </thead>
-              <tbody *ngFor="let ticket of tickets">
-                  <tr class="select" [routerLink]="['/ticket-gestion',ticket._id]">
-                      <td data-title="Numero">{{ticket.numTicket}}</td>
-                      <td data-title="Solicitante">
+              <tbody *ngFor="let ticket of tickets" [className]="ticket.status == 'Cerrado' ? 'closed' : ''">
+                  <tr [className]="isInGroup(ticket) && identity['role'] != 'ROLE_REQUESTER' ? 'selected' : 'select'" (click)="selectTicket($event, ticket)" >
+                      <td data-title="Numero" >{{ticket.numTicket}}</td>
+                      <td data-title="Solicitante" >
                         <img *ngIf="ticket.requester && ticket.requester.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+ticket.requester.image}}" />
                         <img *ngIf="!ticket.requester || ticket.requester.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="../../../assets/img/system/user-placeholder.png" />
                         {{ticket.requester.name}}
                         <span> </span>
                         {{ticket.requester.surname}}
                       </td>
-                      <td data-title="Asunto">{{ticket.sub}}</td>
-                      <td data-title="Agente" *ngIf="ticket.agent">
+                      <td data-title="Asunto" >{{ticket.sub}}</td>
+                      <td data-title="Agente"  *ngIf="ticket.agent">
                           <img *ngIf="ticket.agent.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+ticket.agent.image}}" />
                           <img *ngIf="ticket.agent.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="../../../assets/img/system/user-placeholder.png" />
                           {{ticket.agent.name}}
                           <span> </span>
                           {{ticket.agent.surname}}
                       </td>
-                      <td data-title="Agente" *ngIf="!ticket.agent"></td>
-                      <td data-title="Estado">{{ticket.status}}</td>
-                      <td data-title="Fecha">{{changeDate(ticket.createDate)}}</td>
+                      <td data-title="Agente"  *ngIf="!ticket.agent"></td>
+                      <td data-title="Estado" >{{ticket.status}}</td>
+                      <td data-title="Fecha" >{{changeDate(ticket.createDate)}}</td>
                   </tr>
               </tbody>
               <tfoot>
@@ -82,3 +90,5 @@
       </div>
   </div>
 </div>
+
+<app-message></app-message>

@@ -1,4 +1,15 @@
+.closed{
+    background-color: #F1F1F1;
+    font-style: italic;
+}
+
 .select:hover{
-    background-color: #2D9DF1;
+    background-color: #018dda;
     color: white;
 }
+
+.selected{
+    background-color: #001570;
+    color: white;
+}
+

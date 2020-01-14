@@ -2,6 +2,10 @@
   box-shadow: 2px 2px 10px #666;
 }
 
+.option{
+  color: gainsboro;
+}
+
 .chatheader {
     height: 30px;
     display: flex;
@@ -63,4 +67,6 @@
   }
   
   
-  
+  .card-text{
+    overflow-x: auto;
+  }

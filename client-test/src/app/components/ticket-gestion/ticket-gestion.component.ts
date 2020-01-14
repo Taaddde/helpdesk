@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { userService } from '../../services/user.service';
 import {Router, ActivatedRoute, Params} from '@angular/router'
 import {GLOBAL} from '../../services/global'
@@ -16,6 +16,7 @@ import * as moment from 'moment';
 import { companyService } from '../../services/company.service';
 import { Company } from '../../models/company';
 import { User } from '../../models/user';
+import { MessageComponent } from '../message/message.component';
 
 declare var $: any;
 
@@ -24,10 +25,11 @@ declare var $: any;
   selector: 'app-ticket-gestion',
   templateUrl: './ticket-gestion.component.html',
   styleUrls: ['./ticket-gestion.component.scss'],
-  providers: [userService, ticketService, teamService, textblockService, uploadService, responseService, companyService]
+  providers: [userService, ticketService, teamService, textblockService, uploadService, responseService, companyService, MessageComponent]
 })
 export class TicketGestionComponent implements OnInit {
-  
+  @ViewChild(MessageComponent, {static:false}) message: MessageComponent;
+
   public ticket: Ticket;
   public reqTickets: [Ticket];
   public textblock: TextBlock;
@@ -81,6 +83,7 @@ export class TicketGestionComponent implements OnInit {
 
     this.stat = '';
 
+    this.message = new MessageComponent()
 
     this.ticket = new Ticket('','',null,'','','','','','','',null,'',[''],'','','',[''],null,null,'');
     this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false)
@@ -90,6 +93,10 @@ export class TicketGestionComponent implements OnInit {
     this.getTicket();
     this.getHashtags(); 
     this.getCompanies();
+  }
+
+  ngAfterViewInit(){
+    document.getElementById("editable").focus();
   }
 
   getCc(){
@@ -170,6 +177,14 @@ export class TicketGestionComponent implements OnInit {
     return val.length;
   }
 
+  deleteMessage(){
+    this.message.success('Realizado', 'El mensaje fue eliminado correctamente.');
+  }
+
+  errorMessage(){
+    this.message.error('Fuera de tiempo', 'No puede eliminar un mensaje con más de dos horas de realizado');
+  }
+
   getTeams(company: any){
     this._teamService.getList(this.token, company).subscribe(
       response =>{
@@ -177,6 +192,7 @@ export class TicketGestionComponent implements OnInit {
             this._router.navigate(['/']);
           }else{
             this.teams = response.teams;
+
           }
       },
       error =>{
@@ -457,16 +473,18 @@ export class TicketGestionComponent implements OnInit {
   }
 
   subToEdit(val:string){
-    if(this.identity['company']){
-      if(this.identity['company']['_id'] == this.ticket.company['_id']){
-        this.editSub = true; 
-        this.subMod = val  
-      }
-    }else{
-      if(this.identity['_id'] == this.ticket.requester['_id']){
-        this.editSub = true; 
-        this.subMod = val  
-      }
+    if(this.ticket.status != 'Cerrado'){
+      if(this.identity['company']){
+        if(this.identity['company']['_id'] == this.ticket.company['_id']){
+          this.editSub = true; 
+          this.subMod = val  
+        }
+      }else{
+        if(this.identity['_id'] == this.ticket.requester['_id']){
+          this.editSub = true; 
+          this.subMod = val  
+        }
+      }  
     }
   }
 
@@ -478,7 +496,6 @@ export class TicketGestionComponent implements OnInit {
   }
 
   checkWorkTime(val:string){
-    console.log(this.ticket)
     if(this.ticket.workTime){
       this.stat = val;
       $("#timework").modal("show");
@@ -560,6 +577,7 @@ export class TicketGestionComponent implements OnInit {
   }
 
   onSubmit(){
+    console.log(this.textblock.text)
     if(this.textblock.text != ''){
       this.textblock.text = this.textblock.text.split('<span _ngco')[0];
     }
@@ -655,7 +673,7 @@ export class TicketGestionComponent implements OnInit {
       response =>{
           if(!response.textblock){
           }else{
-            this.chat.push(response.textblock)
+            this.chat.push(response.textblock);
           }
       },
       error =>{

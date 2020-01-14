@@ -6,6 +6,7 @@ import { ticketService } from '../../services/ticket.service';
 
 import * as moment from "moment"
 import { Ticket } from 'src/app/models/ticket';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -16,9 +17,9 @@ import { Ticket } from 'src/app/models/ticket';
 })
 export class HomeComponent implements OnInit {
 
-  public identity;
-  public token;
-  public url: string;
+    public identity;
+    public token;
+    public url: string;
 
     public open:number;
     public pending:number;
@@ -26,7 +27,7 @@ export class HomeComponent implements OnInit {
     public close: number;
     public status: string;
 
-
+   public refresh;
 
     public tickets: Ticket[];
     public limit: number;
@@ -71,8 +72,16 @@ export class HomeComponent implements OnInit {
     if(this.identity['role'] != 'ROLE_REQUESTER'){
       this.getStatusCalendar();
       this.getTeamTickets();
+      this.refresh = Observable.interval(15000).subscribe((val) => { 
+        this.getCountTickets();
+        this.getStatusCalendar();
+        this.getTeamTickets();  
+      });  
+    }else{
+      this.refresh = Observable.interval(15000).subscribe((val) => { 
+        this.getCountTickets();
+      });  
     }
-    
   }
 
   getCountTickets(){

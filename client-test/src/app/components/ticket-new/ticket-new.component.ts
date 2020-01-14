@@ -248,6 +248,13 @@ export class TicketNewComponent implements OnInit {
     this.filesToUpload = undefined;
   }
 
+  focus(){
+    setTimeout(() => 
+      {
+        document.getElementById("searchrequester").focus();
+      },
+      1);
+  }
 
   public filesToUpload: Array<File>;
   public fileChangeEvent(fileInput:any){

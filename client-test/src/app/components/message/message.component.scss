@@ -1,0 +1,35 @@
+@keyframes fade {
+    0% {
+        display: none;
+        opacity: 0;
+    }
+
+    1% {
+        display: block;
+        opacity: 0;
+    }
+
+    30% {
+        display: block;
+        opacity: 1;
+    }
+
+    70% {
+        display: block;
+        opacity: 1;
+    }
+
+    100% {
+        display: block;
+        opacity: 0;
+    }
+}
+
+#message{
+    opacity: 0;
+}
+
+.message {
+    animation-name: fade;
+    animation-duration: 6s;
+}

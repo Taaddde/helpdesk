@@ -3,6 +3,20 @@
         <div class="user-date" style="margin-top: 4px;">
             <label *ngIf="type != 'INFO'" style="margin-left: 13px;">{{user}}</label>
             <label *ngIf="type == 'INFO'" style="margin-left: 13px;">Información</label>
+            <div class="dropdown float-right" style="margin-top:-7px;" *ngIf="userId == identity['_id'] && type != 'INFO'">
+                <button class="btn btn-sm" 
+                        data-toggle="dropdown" 
+                        aria-expanded="false" 
+                        type="button"
+                        >
+                    <i class="fas fa-ellipsis-v option"></i>
+                </button>
+                <div role="menu" class="dropdown-menu">
+                    <a role="presentation" class="dropdown-item" (click)="delete()">
+                        Eliminar
+                    </a>
+                </div>
+            </div>
             <label class="float-right" style="margin-right: 15px;">{{date}}</label>
         </div>
     </div>

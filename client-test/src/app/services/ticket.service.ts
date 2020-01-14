@@ -55,6 +55,14 @@ export class ticketService{
 
     }
 
+    unify(token, tickets){
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.put<any>(this.url+'ticket/unify/', {tickets:tickets}, this.httpOptions);
+
+    }
+
     addCc(token, id:string, cc: string){
         let params = {user:cc};
         this.httpOptions.headers =

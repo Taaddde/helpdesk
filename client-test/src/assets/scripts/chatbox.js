@@ -12,6 +12,7 @@ function htmlDecode(input){
     return e.childNodes[0].nodeValue;
 }
 
+
 $("#apply").click(function(){
     console.log($("#editable").html())
   $("#holder").html($("#editable").html());

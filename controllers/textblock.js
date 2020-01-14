@@ -215,8 +215,8 @@ function deletetextblock(req, res){
 var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'deletetextblock';
     var textblockId = req.params.id;
-
-    TextBlock.findByIdAndDelete(textblockId, (err, textblockRemoved) =>{
+    let update = {text:'Este mensaje fue eliminado por el usuario.', files:undefined}
+    TextBlock.findByIdAndUpdate(textblockId, update, (err, textblockRemoved) =>{
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error en la petición'});
@@ -225,8 +225,16 @@ var decoded = jwt_decode(req.headers.authorization);
                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado El bloque de texto'});
             }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({textblock: textblockRemoved});
+
+                if(textblockRemoved.files){
+                    textblockRemoved.files.forEach(e => {
+                        fs.unlink('../helpdesk/uploads/attachs/'+e, function (err) {
+                            if (err) console.log(err);
+                        });     
+                    });    
+                }
             }
         }
     });

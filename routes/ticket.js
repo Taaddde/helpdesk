@@ -35,4 +35,7 @@ api.delete('/delete/:id', md_auth.ensureAuth, ticketController.deleteTicket);
 api.put('/addcc/:id', md_auth.ensureAuth, ticketController.addCc);
 api.put('/removecc/:id', md_auth.ensureAuth, ticketController.removeCc);
 
+//UNIFICAR
+api.put('/unify', md_auth.ensureAuth, ticketController.unify);
+
 module.exports = api;

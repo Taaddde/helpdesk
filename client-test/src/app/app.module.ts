@@ -42,6 +42,7 @@ import { RequesterListComponent } from './components/agent-list/request-list.com
 import { TimeworkListComponent } from './components/timework-list/timework-list.component';
 import { TimeworkSubtypeListComponent } from './components/timework-subtype-list/timework-subtype-list.component';
 import { AgentTimeReportComponent } from './components/agent-report/agent-time-report.component';
+import { MessageComponent } from './components/message/message.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { AgentTimeReportComponent } from './components/agent-report/agent-time-r
     RequesterListComponent,
     TimeworkListComponent,
     TimeworkSubtypeListComponent,
-    AgentTimeReportComponent
+    AgentTimeReportComponent,
+    MessageComponent
   ],
   imports: [
     BrowserModule,
