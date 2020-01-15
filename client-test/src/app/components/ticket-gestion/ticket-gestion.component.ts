@@ -489,7 +489,7 @@ export class TicketGestionComponent implements OnInit {
   }
 
   editTicketSub(){
-    this.newInfo(this.identity['name']+' '+this.identity['surname']+' ha cambiado el asunto de la solicitud de '+this.ticket.sub+' a '+this.subMod)
+    this.newInfo(this.identity['name']+' '+this.identity['surname']+' ha cambiado el asunto de la solicitud de '+this.ticket.sub+' a '+this.subMod.toUpperCase())
     this.ticket.sub = this.subMod;
     this.editTicket();
     this.editSub = false;

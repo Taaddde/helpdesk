@@ -498,7 +498,7 @@ function saveTicket(req, res){
 
     Ticket.countDocuments({}, function(err, count) {
         ticket.numTicket = count+1;
-        ticket.sub = params.sub;
+        ticket.sub = params.sub.toUpperCase();
         ticket.requester = params.requester;
         ticket.agent = params.agent;
         ticket.status = params.status;
@@ -713,6 +713,10 @@ function updateTicket(req, res){
     var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'updateTicket';
     var ticketId = req.params.id;
+
+    if(req.body.sub){
+        req.body.sub = req.body.sub.toUpperCase();
+    }
     var update =  req.body;
 
     req.body.lastActivity = moment().format("YYYY-MM-DD HH:mm");
@@ -1102,7 +1106,7 @@ async function unify(req, res){
     var now = moment().format("YYYY-MM-DD HH:mm");
     var arr = new Array();
     req.body.tickets.forEach(e => {
-        arr.push(ObjectId(e));
+        arr.push(e);
     });
 
     var first = arr[0];
@@ -1114,11 +1118,10 @@ async function unify(req, res){
 
     arr.splice(arr.indexOf(first,1));
 
-    var query = {_id:arr};
-
+    var query = {numTicket:arr};
     //Ticket origen se le ponen todos los CC
-    arr.forEach(async id => {
-        await Ticket.findById(id, (err, ticket) =>{
+    arr.forEach(async n => {
+        await Ticket.findOne({numTicket:n}, (err, ticket) =>{
             if(err){
                 logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 //res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -1129,7 +1132,7 @@ async function unify(req, res){
                 }else{
                     //Añade en copia
                     let ccUpdate = {$addToSet:{cc:{$each:ticket.cc}}, $addToSet:{cc:ticket.requester}}
-                    Ticket.findByIdAndUpdate(first, ccUpdate, (err, firstUpdated) =>{
+                    Ticket.updateOne({numTicket:first}, ccUpdate, async (err, firstUpdated) =>{
                         if(err){
                             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                             //res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -1140,15 +1143,16 @@ async function unify(req, res){
                             }else{
                                 //Crea una info de que se cerró
                                 let tb = new TextBlock();
-                                tb.text = 'Éste ticket fue cerrado y unificado con el #'+firstUpdated.numTicket;
+                                tb.text = 'Éste ticket fue cerrado y unificado con el #'+first;
                                 tb.ticket = ticket._id;
                                 tb.user = ticket.requester;
                                 tb.type = 'INFO';
                                 tb.read = false;
                                 tb.createDate = moment().format("YYYY-MM-DD HH:mm");
-                                tb.save((err, textblockStored) =>{
+                                await tb.save((err, textblockStored) =>{
                                 });                
                                 
+
                             }
                         }
                     })
@@ -1158,6 +1162,45 @@ async function unify(req, res){
             }
         });
     });
+
+    //Crea una info de que se unificó
+    Ticket.findOne({numTicket:first}, async (err, ticket) =>{
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            //res.status(500).send({message: 'Error del servidor en la peticion'})
+        }else{
+            if(!ticket){
+
+            }else{
+                let tb = new TextBlock();
+                if(arr.length > 1){
+                    //Contabiliza
+                    tb.text = 'Éste ticket fue unificado por '+decoded.name+' '+decoded.surname+' con los siguientes números: ';
+                    arr.forEach(e => {
+                        tb.text = tb.text+'#'+e+' ';
+                    });
+                }else{
+                    //Solo anuncia
+                    tb.text = 'Éste ticket fue unificado por '+decoded.name+' '+decoded.surname+'  con el #'+arr[0];
+                }
+            
+                tb.ticket = ticket._id;
+                tb.user = ticket.requester;
+                tb.type = 'INFO';
+                tb.read = false;
+                tb.createDate = moment().format("YYYY-MM-DD HH:mm");
+                await tb.save( (err, textblockStored) =>{
+                    if(err){
+                        console.log(err)
+                    }
+                    if(textblockStored){
+                        console.log(textblockStored)
+
+                    }
+                });                            
+            }
+        }
+    })
 
     //Quitar de CC al solicitante
     Ticket.findById(first, (err, ticket) =>{

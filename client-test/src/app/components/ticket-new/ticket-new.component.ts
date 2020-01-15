@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {Router, ActivatedRoute, Params} from '@angular/router'
 import {GLOBAL} from '../../services/global'
 
@@ -11,6 +11,7 @@ import { TextBlock } from '../../models/textblock';
 import { Team } from '../../models/team';
 import { User } from '../../models/user';
 import { uploadService } from '../../services/upload.service';
+import { MessageComponent } from '../message/message.component';
 
 declare var $: any;
 
@@ -20,10 +21,11 @@ declare var $: any;
   selector: 'app-ticket-new',
   templateUrl: './ticket-new.component.html',
   styleUrls: ['../../styles/form.scss'],
-  providers: [userService, ticketService, teamService, textblockService, uploadService]
+  providers: [userService, ticketService, teamService, textblockService, uploadService, MessageComponent]
 })
 export class TicketNewComponent implements OnInit {
 
+  @ViewChild(MessageComponent, {static:false}) message: MessageComponent;
   public ticket: Ticket;
   public textblock: TextBlock;
 
@@ -66,6 +68,7 @@ export class TicketNewComponent implements OnInit {
     this.ticket = new Ticket('','',null,'',null,null,'','','',null,null,'',[null],'',this.identity['company']['_id'],'',[''],null,null,'');
     this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false);
     this.nreq = new User('','','','','','','ROLE_REQUESTER','','null','',false,'');
+    this.message = new MessageComponent();
    }
 
   ngOnInit() {
@@ -159,70 +162,76 @@ export class TicketNewComponent implements OnInit {
 
   onSubmit(){
 
-    this.ticket.priority = this.priority;
-    this.ticket.source = 'MANUAL';
-    this.textblock.type = 'PUBLIC'
-    if(this.team){
-      this.ticket.status = 'Pendiente';
-    }else{
-      this.ticket.status = 'Abierto';
-    }
-    if(this.ticket.priority == ''){
-      this.ticket.priority = 'Normal';
-    }
-    if(this.ticket.agent == null){
-      delete this.ticket.agent;
-    }
-
-    if(this.ticket.team == null){
-      delete this.ticket.team;
-    }
-    delete this.ticket.subTypeTicket;
-    delete this.ticket.rating;
-
-      //Se crea un ticket con un solicitante ya existente
-      if(this.requester){
-        delete this.requester.company;
-        this._ticketService.add(this.token,this.ticket).subscribe(
-          response =>{
-              if(!response.ticket){
-                alert('Error al crear el ticket')
-              }else{
-                //TextBlock
-                this.textblock.ticket = response.ticket._id;
-            
-                this._textblockService.add(this.token,this.textblock).subscribe(
-                  response =>{
-                      if(!response.textblock){
-                        alert('Error en el bloque de texto del ticket')
-                      }else{
-                        console.log(this.filesToUpload)
-                        if(this.filesToUpload){
-                            this._uploadService.makeFileRequest(this.url+'textblock/file/'+response.textblock._id, [], this.filesToUpload, this.token, 'file')
-                            .then(
-                                result =>{
-                                }, 
-                                error =>{
-                                    console.error(error);
-                                }
-                            );
-                        }
-                        this._router.navigate(['/ticket-gestion',response.textblock.ticket]);       
-                      }
-                    },
-                    error =>{
-                        console.error(error);
-                    }
-                  );
-              }
-          },
-          error =>{
-              console.error(error);
-          }
-        );
+    if(this.ticket.sub != '' && this.textblock.text!= ''){
+      this.ticket.priority = this.priority;
+      this.ticket.source = 'MANUAL';
+      this.textblock.type = 'PUBLIC'
+      if(this.team){
+        this.ticket.status = 'Pendiente';
       }else{
-        alert('Selecciona un solicitante')
+        this.ticket.status = 'Abierto';
       }
+      if(this.ticket.priority == ''){
+        this.ticket.priority = 'Normal';
+      }
+      if(this.ticket.agent == null){
+        delete this.ticket.agent;
+      }
+  
+      if(this.ticket.team == null){
+        delete this.ticket.team;
+      }
+      delete this.ticket.subTypeTicket;
+      delete this.ticket.rating;
+  
+        //Se crea un ticket con un solicitante ya existente
+        if(this.requester){
+          delete this.requester.company;
+          this._ticketService.add(this.token,this.ticket).subscribe(
+            response =>{
+                if(!response.ticket){
+                  alert('Error al crear el ticket')
+                }else{
+                  //TextBlock
+                  this.textblock.ticket = response.ticket._id;
+              
+                  this._textblockService.add(this.token,this.textblock).subscribe(
+                    response =>{
+                        if(!response.textblock){
+                          alert('Error en el bloque de texto del ticket')
+                        }else{
+                          console.log(this.filesToUpload)
+                          if(this.filesToUpload){
+                              this._uploadService.makeFileRequest(this.url+'textblock/file/'+response.textblock._id, [], this.filesToUpload, this.token, 'file')
+                              .then(
+                                  result =>{
+                                  }, 
+                                  error =>{
+                                      console.error(error);
+                                  }
+                              );
+                          }
+                          this._router.navigate(['/ticket-gestion',response.textblock.ticket]);       
+                        }
+                      },
+                      error =>{
+                          console.error(error);
+                      }
+                    );
+                }
+            },
+            error =>{
+                console.error(error);
+            }
+          );
+        }else{
+          this.message.error('Faltan campos a completar', 'Selecciona un solicitante para poder finalizar el ticket');
+        }
+  
+    }else{
+      this.message.error('Faltan campos a completar', 'Los campos de asunto y descripción son obligatorios');
+    }
+
   }
 
   submitRequester(){

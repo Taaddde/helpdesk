@@ -23,7 +23,7 @@ export class TicketListComponent implements OnInit {
   public token;
   public url: string;
 
-  public groupTicket: string[];
+  public groupTicket: number[];
 
   public limit: number;
   public page: number;
@@ -57,7 +57,7 @@ export class TicketListComponent implements OnInit {
     this.totalPages= 1;
     this.pagingCounter = 1;
 
-    this.groupTicket = new Array<string>();
+    this.groupTicket = new Array<number>();
     this.message = new MessageComponent();
 
   }
@@ -143,10 +143,10 @@ export class TicketListComponent implements OnInit {
   selectTicket(event, ticket: Ticket){
     if(event.ctrlKey){
       if(ticket.status != 'Cerrado'){
-        if(this.groupTicket.indexOf(ticket._id) != -1){
-          this.groupTicket.splice(this.groupTicket.indexOf(ticket._id),1);
+        if(this.groupTicket.indexOf(ticket.numTicket) != -1){
+          this.groupTicket.splice(this.groupTicket.indexOf(ticket.numTicket),1);
         }else{
-          this.groupTicket.push(ticket._id)
+          this.groupTicket.push(ticket.numTicket)
         }
       }else{
         this.message.error('Ticket cerrado', 'No es posible realizar alguna acción sobre un ticket cerrado')
@@ -157,7 +157,7 @@ export class TicketListComponent implements OnInit {
   }
 
   isInGroup(ticket:Ticket){
-    if(this.groupTicket.indexOf(ticket._id) == -1){
+    if(this.groupTicket.indexOf(ticket.numTicket) == -1){
       return false;
     }else{
       return true;
@@ -165,14 +165,14 @@ export class TicketListComponent implements OnInit {
   }
 
   unify(){
-    if (confirm('¿Esta seguro que quiere unificar los tickets seleccionados? Prevalecerá el ticket mas antigüo y se pondrá en copia a los solicitantes que hayan generado las otras consultas')) {
+    if (confirm('¿Esta seguro que quiere unificar los tickets seleccionados? Prevalecerá el ticket mas antiguo y se pondrá en copia a los solicitantes que hayan generado las otras consultas.')) {
       this._ticketService.unify(this.token, this.groupTicket).subscribe(
         response =>{
             if(!response.tickets){
               this._router.navigate(['/']);
             }else{
               this.message.info('Unificación realizada', 'La unificación fue realizada correctamente.')
-              this.groupTicket = new Array<string>();
+              this.groupTicket = new Array<number>();
               this.getTickets();
             }
         },
