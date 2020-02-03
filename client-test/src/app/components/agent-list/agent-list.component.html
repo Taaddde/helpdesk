@@ -3,7 +3,13 @@
         <div class="col-lg-10">
             <input *ngIf="identity['role'] == 'ROLE_ADMIN' && !requester" type="button" class="btn btn-dark" value="Nuevo agente" [routerLink]="['/agents/new']">
             <input *ngIf="identity['role'] == 'ROLE_ADMIN' && requester" type="button" class="btn btn-dark" value="Nuevo solicitante" [routerLink]="['/requester/new']">
+        
+            <button *ngIf="identity['role'] != 'ROLE_REQUESTER' && this.groupUser.length > 1" 
+            class="btn btn-dark" type="button"  style="margin-left: 5px;" 
+            data-toggle="modal" data-target="#confirm"
+            >Unificar</button>
         </div>
+
     </div>
     <div class="table-responsive table mt-2" id="dataTable">
         <table class="table dataTable my-0" id="dataTable">
@@ -18,7 +24,7 @@
                 </tr>
             </thead>
             <tbody *ngFor="let user of users">
-                <tr class="select" [routerLink]="['/user/edit',user._id]">
+                <tr [className]="isInGroup(user) ? 'selected' : 'select'" (click)="selectUser($event, user)">
                     <td data-title="Img">
                         <img *ngIf="user.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+user.image}}" />
                         <img *ngIf="user.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="../../../assets/img/system/user-placeholder.png" />
@@ -46,3 +52,29 @@
         </table>
     </div>
 </div>
+
+<div role="dialog" tabindex="-1" class="modal fade" id="confirm" aria-labelledby="confirmTitle" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Unificación de personas</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+            <form>
+                <div class="modal-body">
+                    <div class="form-group"><label>Selecciona cual usuario permanecerá.</label></div>
+                    <div class="form-group text-center">
+                        <button class="btn btn-dark" type="button" *ngIf="groupUser[0]" data-dismiss="modal" (click)="unify(groupUser[1], groupUser[0])">
+                            {{searchName(groupUser[0])}}
+                        </button>
+                    </div>
+                    <div class="form-group text-center">
+                        <button class="btn btn-dark" type="button" *ngIf="groupUser[1]" data-dismiss="modal" (click)="unify(groupUser[0], groupUser[1])">
+                            {{searchName(groupUser[1])}}
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Cerrar</button></div>
+            </form>
+        </div>
+    </div>
+</div>
+<app-message></app-message>

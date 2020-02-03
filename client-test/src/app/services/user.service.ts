@@ -54,6 +54,14 @@ export class userService{
 
     }
 
+    unify(token, origin, destiny){
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.put<any>(this.url+'user/unify/'+origin+'/'+destiny, {}, this.httpOptions);
+
+    }
+
     delete(token, id){
         this.httpOptions.headers =
         this.httpOptions.headers.set('Authorization', token);
