@@ -576,10 +576,102 @@ function resetPass(req, res){
     }).select({_id:1, name:1, surname:1, passToken:1, passTokenExp:1})
 }
 
+function unifyUser(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+    var functionName = 'unifyUser';
+
+    var userDest = req.params.userDest;
+    var userOrigin = req.params.userOrigin;
+
+    //Se conserva el destino, se elimina el origen
+
+    User.findById(userDest, (err, userD) =>{
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            return res.status(500).send({message: 'Error del servidor en la petición'});
+        }else{
+            if(!userD){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                return res.status(404).send({message: 'No se ha encontrado el usuario destino'});
+            }else{
+                User.findById(userDest, (err, userO) =>{
+                    if(err){
+                        logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                        return res.status(500).send({message: 'Error del servidor en la petición'});
+                    }else{
+                        if(!userO){
+                            logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                            return res.status(404).send({message: 'No se ha encontrado el usuario origen'});
+                        }else{
+                            //Cambiar de usuario los tickets
+                            var update;
+                            var query;
+                            var Ticket = require('../models/ticket');
+
+                            if(userO.role == 'ROLE_REQUESTER'){
+                                update = {requester:userDest};
+                                query = {requester:userOrigin}
+                            }else{
+                                update = {agent:userDest};
+                                query = {agent:userOrigin}
+                            }
+
+                            Ticket.updateMany(query, update, (err, userUpdated) =>{
+                                if(err){
+                                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                                }else{
+                                    if(!userUpdated){
+                                        logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                                    }
+                                }
+                            });
+
+
+                            //Cambiar persona en copia
+                            query = {cc: userOrigin}
+                            Ticket.updateMany(
+                                query,
+                                { $pull: {"cc": userOrigin}},
+                                {  safe: true, upsert: false},
+                                function(err, ticket) {
+                            });
+
+                            Ticket.updateMany(
+                                query,
+                                { $push: {"cc": userDest}},
+                                {  safe: true, upsert: false},
+                                function(err, ticket) {
+                            });
+
+                        
+                            
+                            //Eliminar origen
+                            User.findByIdAndDelete(userOrigin, (err,userRemoved)=>{
+                                if(err){
+                                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                                }else{
+                                    if(!userRemoved){
+                                        logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                                    }else{
+                                        logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                                        return res.status(200).send({user:userRemoved})
+                                    }
+                                }
+                            })
+                        }
+                    }
+                })
+
+            }
+        }
+    })
+}
+
 module.exports = {
     saveUser,
     updateUser,
     deleteUser,
+    unifyUser,
 
     uploadImage,
     getImageFile,

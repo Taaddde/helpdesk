@@ -27,6 +27,8 @@ api.get('/image/:imageFile', userController.getImageFile);
 api.post('/add', md_auth.ensureAuth, userController.saveUser);
 api.put('/update/:id', md_auth.ensureAuth, userController.updateUser);
 api.delete('/delete/:id', md_auth.ensureAuth, userController.deleteUser);
+api.put('/unify/:userOrigin/:userDest', md_auth.ensureAuth, userController.unifyUser);
+
 api.put('/reset-password/:id/:passToken', userController.resetPass);
 
 
