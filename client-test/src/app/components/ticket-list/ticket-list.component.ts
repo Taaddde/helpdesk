@@ -46,7 +46,7 @@ export class TicketListComponent implements OnInit {
   public requesterFilter: string;
   public agentFilter: string;
 
-
+  public query: any;
   
   constructor(
     private _route: ActivatedRoute,
@@ -98,6 +98,7 @@ export class TicketListComponent implements OnInit {
   getTickets(){
     this._route.params.forEach((params: Params) =>{
       this._route.queryParams.forEach((query: Params) =>{
+        this.query = query;
         this.page = params['page'];
         this.limit = params['perPage'];
         var q = query
@@ -339,6 +340,12 @@ export class TicketListComponent implements OnInit {
         break;
     }
 
+  }
+
+  getQuery(){
+    this._route.queryParams.forEach((query: Params) =>{
+      return query;
+    })
   }
 
 }

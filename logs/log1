@@ -1589,3 +1589,37 @@
 [05-02-2020 15:38] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
 [05-02-2020 15:40] [info] [index] Servidor iniciado en puerto 3977
 [05-02-2020 15:40] [info] [test] Servidor iniciado en puerto 3978
+[05-02-2020 15:40] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[05-02-2020 15:43] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[05-02-2020 15:43] [error] [user/loginUser] aalegre (::ffff:10.0.3.88) Usuario/contraseña incorrecta
+[05-02-2020 15:43] [info] [user/loginUser] aalegre (::ffff:10.0.3.88) Usuario conectado
+[05-02-2020 15:44] [info] [textblock/readRequest] aalegre (::ffff:10.0.3.88) Petición realizada | params:{"id":"5e316cbefb59b1229c3fbf42"} body:{"read":true}
+[05-02-2020 15:44] [info] [textblock/readRequest] aalegre (::ffff:10.0.3.88) Petición realizada | params:{"id":"5e316cbefb59b1229c3fbf42"} body:{"read":true}
+[05-02-2020 15:45] [info] [user/loginUser] TROSOCHACKI (::ffff:10.0.3.88) Usuario conectado
+[05-02-2020 15:45] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[05-02-2020 15:50] [info] [index] Servidor iniciado en puerto 3977
+[05-02-2020 15:52] [info] [index] Servidor iniciado en puerto 3977
+[05-02-2020 15:54] [info] [index] Servidor iniciado en puerto 3977
+[05-02-2020 15:54] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[05-02-2020 16:01] [info] [test] Servidor iniciado en puerto 3978
+[05-02-2020 16:05] [info] [ticket/checkClose] dperez (::ffff:10.0.2.26) Petición realizada | params:{} body:{}
+[05-02-2020 16:05] [info] [textblock/readAgent] dperez (::ffff:10.0.2.26) Petición realizada | params:{"id":"5e3afa00d13feb1aec35121b"} body:{"read":true}
+[05-02-2020 16:05] [info] [textblock/readAgent] dperez (::ffff:10.0.2.26) Petición realizada | params:{"id":"5e3afa00d13feb1aec35121b"} body:{"read":true}
+[05-02-2020 16:06] [info] [textblock/saveTextBlock] dperez (::ffff:10.0.2.26) Petición realizada | params:{} body:{"_id":"","text":"Las claves fueron entregadas en Recursos Humanos.","user":"5e0f9f27c1306a0b3c09b1ac","createDate":"","ticket":"5e3afa00d13feb1aec35121b","type":"PUBLIC","files":[""],"read":true}
+[05-02-2020 16:06] [info] [ticket/updateTicket] dperez (::ffff:10.0.2.26) Petición realizada | params:{"id":"5e3afa00d13feb1aec35121b"} body:{"agent":{"receiveMail":false,"_id":"5e0f9f27c1306a0b3c09b1ac","name":"Daniel Alberto","surname":"Perez","email":"daniel.perez@sanjuandedios.org.ar","image":"null"},"status":"Pendiente","resolveDate":null,"rating":0,"source":"MANUAL","priority":"Normal","workTime":null,"realWorkTime":null,"obsWorkTime":"","_id":"5e3afa00d13feb1aec35121b","tags":[],"numTicket":357,"sub":"SOLICITUD DE CLAVES","requester":{"receiveMail":false,"_id":"5e15e70d6a45fc1964a9dbe9","name":"Nicolas","surname":"Lescano","email":"nicolas.lescano@sanjuandedios.org.ar","image":"null"},"team":{"image":"null","_id":"5e0f91a5e0d85c12205b9f32","name":"Funcional","users":[{"_id":"5e0f8a1a692f8111f44f85d3","name":"Tadeo","surname":"Rosochacki","image":"6dhwaaIAZELdpSLUa56pfO9S.png"},{"_id":"5e0f8f15e0d85c12205b9f31","name":"Bettina","surname":"Andion Wilvers","image":"HxoDMc346E5Oz9SLPTklAtaQ.png"},{"_id":"5e0f93063cca1013aca9c63c","name":"Guillermo","surname":"Luparia","image":"Jg8wIPTuy2yLoU2NjZE0gtbH.jpg"},{"_id":"5e0f9f27c1306a0b3c09b1ac","name":"Daniel Alberto","surname":"Perez","image":"null"}]},"createDate":"2020-02-05 14:23","lastActivity":"2020-02-05 16:06","company":{"image":"null","mailSender":false,"_id":"5e0f89b99d81431060a9a1ce","name":"Sistemas","email":"sistemas@sanjuandedios.org.ar"},"__v":0}
+[05-02-2020 16:06] [info] [textblock/readAgent] dperez (::ffff:10.0.2.26) Petición realizada | params:{"id":"5e3afa00d13feb1aec35121b"} body:{"read":true}
+[05-02-2020 16:06] [info] [textblock/readAgent] dperez (::ffff:10.0.2.26) Petición realizada | params:{"id":"5e3afa00d13feb1aec35121b"} body:{"read":true}
+[05-02-2020 16:06] [info] [textblock/saveTextBlock] dperez (::ffff:10.0.2.26) Petición realizada | params:{} body:{"_id":"","text":"Daniel Alberto Perez ha cambiado el estado de la solicitud de Pendiente a Finalizado","user":"5e0f9f27c1306a0b3c09b1ac","createDate":"","ticket":"5e3afa00d13feb1aec35121b","type":"INFO","files":[""],"read":false}
+[05-02-2020 16:06] [info] [ticket/updateTicket] dperez (::ffff:10.0.2.26) Petición realizada | params:{"id":"5e3afa00d13feb1aec35121b"} body:{"agent":{"receiveMail":false,"_id":"5e0f9f27c1306a0b3c09b1ac","name":"Daniel Alberto","surname":"Perez","email":"daniel.perez@sanjuandedios.org.ar","image":"null"},"status":"Finalizado","resolveDate":null,"rating":0,"source":"MANUAL","priority":"Normal","workTime":null,"realWorkTime":null,"obsWorkTime":"","_id":"5e3afa00d13feb1aec35121b","tags":[],"numTicket":357,"sub":"SOLICITUD DE CLAVES","requester":{"receiveMail":false,"_id":"5e15e70d6a45fc1964a9dbe9","name":"Nicolas","surname":"Lescano","email":"nicolas.lescano@sanjuandedios.org.ar","image":"null"},"team":{"image":"null","_id":"5e0f91a5e0d85c12205b9f32","name":"Funcional","users":[{"_id":"5e0f8a1a692f8111f44f85d3","name":"Tadeo","surname":"Rosochacki","image":"6dhwaaIAZELdpSLUa56pfO9S.png"},{"_id":"5e0f8f15e0d85c12205b9f31","name":"Bettina","surname":"Andion Wilvers","image":"HxoDMc346E5Oz9SLPTklAtaQ.png"},{"_id":"5e0f93063cca1013aca9c63c","name":"Guillermo","surname":"Luparia","image":"Jg8wIPTuy2yLoU2NjZE0gtbH.jpg"},{"_id":"5e0f9f27c1306a0b3c09b1ac","name":"Daniel Alberto","surname":"Perez","image":"null"}]},"createDate":"2020-02-05 14:23","lastActivity":"2020-02-05 16:06","company":{"image":"null","mailSender":false,"_id":"5e0f89b99d81431060a9a1ce","name":"Sistemas","email":"sistemas@sanjuandedios.org.ar"},"__v":0}
+[05-02-2020 16:06] [info] [textblock/readAgent] dperez (::ffff:10.0.2.26) Petición realizada | params:{"id":"5e3afa00d13feb1aec35121b"} body:{"read":true}
+[05-02-2020 16:06] [info] [textblock/readAgent] dperez (::ffff:10.0.2.26) Petición realizada | params:{"id":"5e3afa00d13feb1aec35121b"} body:{"read":true}
+[05-02-2020 16:06] [info] [ticket/checkClose] mjpereyra (::ffff:10.0.3.114) Petición realizada | params:{} body:{}
+[05-02-2020 16:10] [info] [ticket/checkClose] dperez (::ffff:10.0.2.26) Petición realizada | params:{} body:{}
+[05-02-2020 16:11] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[05-02-2020 16:11] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[05-02-2020 16:11] [info] [ticket/checkClose] mjpereyra (::ffff:10.0.3.114) Petición realizada | params:{} body:{}
+[05-02-2020 16:12] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[05-02-2020 16:15] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[05-02-2020 16:15] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[05-02-2020 16:20] [info] [index] Servidor iniciado en puerto 3977
+[05-02-2020 16:21] [info] [index] Servidor iniciado en puerto 3977
