@@ -611,6 +611,12 @@ var decoded = jwt_decode(req.headers.authorization);
 
 function getListPaged(req, res){
     var functionName = 'getListPaged';
+    var decoded = jwt_decode(req.headers.authorization);
+    var populateQuery = [
+        {path:'requester',select:['name','surname','image']},
+        {path:'agent',select:['name','surname','image']}, 
+        {path:'company',select:['name','email','image','mailSender']}
+    ];
 
     if(req.params.page){
         var page = req.params.page;
@@ -620,21 +626,27 @@ function getListPaged(req, res){
     var perPage = req.params.perPage;
 
     var query = req.query;
-    var sort = {numTicket:1}
+    var sort = {numTicket:-1}
 
     if(query['sub']){
         query['sub'] = { "$regex": query['sub'], "$options": "i" }
     }
 
-    console.log(query)
+    if(query['status'] && !query['company'] && query['status'] == 'Pendiente'){
+        query['status'] = {$in:['Pendiente','Abierto']};
+    }
 
-    Ticket.paginate(query,{page:page, limit:perPage, sort:sort}, function(err, tickets){
+    if(query['status'] && query['status'] == 'Finalizado'){
+        query['status'] = {$in:['Finalizado','Cerrado']};
+    }
+
+    Ticket.paginate(query,{page:page, limit:perPage, populate:populateQuery, sort:sort}, function(err, tickets){
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
             console.log(err)
             res.status(500).send({message: err})
         }else{
-            if(!requests){
+            if(!tickets){
                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 res.status(404).send({message: 'No hay items'})
             }else{

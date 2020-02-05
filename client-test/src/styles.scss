@@ -27,7 +27,15 @@ a.dark{
     color: white;
 }  
 
+a{
+    cursor: pointer;
+}
+
 .dark:hover{
+    background-color: $hoveroficial;
+}
+
+.dark-selected{
     background-color: $hoveroficial;
 }
 

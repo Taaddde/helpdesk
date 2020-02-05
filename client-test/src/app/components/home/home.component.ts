@@ -146,7 +146,24 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  
+  redirecTo(val:string){
+    if(val == 'P'){
+      if(this.identity['role'] == 'ROLE_REQUESTER'){
+        this._router.navigate(['/ticket',1,10], { queryParams: { status: 'Pendiente', requester:this.identity['_id'] } });
+      }else{
+        this._router.navigate(['/ticket',1,10], { queryParams: { status: 'Pendiente', agent:this.identity['_id'] } });
+
+      }
+    }else{
+      if(this.identity['role'] == 'ROLE_REQUESTER'){
+        this._router.navigate(['/ticket',1,10], { queryParams: { status: 'Finalizado', requester:this.identity['_id'] } });
+
+      }else{
+        this._router.navigate(['/ticket',1,10], { queryParams: { status: 'Finalizado', agent:this.identity['_id'] } });
+
+      }
+    }
+  }
 
   getStatusCalendar(){
     this._ticketService.getCalendar(this.token, this.identity['_id']).subscribe(

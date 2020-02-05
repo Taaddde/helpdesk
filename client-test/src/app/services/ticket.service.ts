@@ -118,6 +118,28 @@ export class ticketService{
         return this._httpClient.get<any>(this.url+'ticket/ticketsPaged/'+page+'&'+perPage+'&'+company+'&'+status+'&'+userId, this.httpOptions);
     }
 
+    getTmpPaginatedList(token, page, perPage, query, company, requester){
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+            var q = [];
+            for (var p in query) {
+                if (query.hasOwnProperty(p)) {
+                    q.push(encodeURIComponent(p) + "=" + encodeURIComponent(query[p]));
+                  }
+            }
+
+            var t = '';
+            if(company){
+                t = '&company='+company
+            }
+            if(requester){
+                t = t+'&requester='+requester
+            }
+        return this._httpClient.get<any>(this.url+'ticket/listPaged/'+page+'/'+perPage+'/?'+q.join('&')+t, this.httpOptions);
+    }
+
+
     getPaginatedTeamList(token, page, perPage, userId){
         this.httpOptions.headers =
             this.httpOptions.headers.set('Authorization', token);

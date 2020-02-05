@@ -35,14 +35,15 @@
                             <i>
                                 <!-- <span style="font-family: Audiowide, cursive;font-size: 24px;">TR&nbsp;
                                 </span> -->
-                                <img src="../assets/img/system/hsjd-logo.png" style="width: 80px; margin-top: 40px;" alt="">
+                                <img src="../assets/img/system/hsjd-logo.png" style="width: 80px; margin-top: 50px;" alt="">
                             </i>
                             <!-- <span>helpdesk</span> -->
                         <p *ngIf="identity['company']">{{identity['company']['name']}}</p>
+                        <p *ngIf="!identity['company']">Mesa de ayuda</p>
                         </div>
                     </a>
                     <hr class="sidebar-divider my-0" >
-                    <ul class="nav navbar-nav text-light" id="accordionSidebar" style="margin-top: 20px;">
+                    <ul class="nav navbar-nav text-light" id="accordionSidebar" style="margin-top: 40px;">
                         <li class="nav-item" role="presentation"><a class="nav-link item" [routerLink]="['/home']"><i class="fas fa-home"></i><span>Principal</span></a></li>
                         <li class="nav-item" role="presentation"><a class="nav-link item" [routerLink]="['/ticket']"><i class="fas fa-ticket-alt"></i><span *ngIf="identity['role'] != 'ROLE_REQUESTER'">Todos los tickets</span><span *ngIf="identity['role'] == 'ROLE_REQUESTER'">Mis tickets</span></a></li>
                         <li *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="nav-item " role="presentation"><a class="nav-link item" [routerLink]="['/agent']"><i class="fas fa-user-friends"></i><span>Usuarios</span></a></li>

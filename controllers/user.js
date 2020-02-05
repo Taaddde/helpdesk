@@ -248,7 +248,14 @@ function getUsers(req, res){
         });
     }else{
         if(role == 'ROLE_AGENT' || role == 'ROLE_ADMIN'){
-            User.find({$or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}], deleted:false,company:company}).sort('name').exec(function(err, users){
+            let query;
+            if(company == 'null'){
+                query = {$or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}], deleted:false}
+
+            }else{
+                query = {$or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}], deleted:false,company:company}
+            }
+            User.find(query).sort('name').exec(function(err, users){
                 if(err){
                     logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})

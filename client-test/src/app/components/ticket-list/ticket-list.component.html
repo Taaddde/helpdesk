@@ -14,10 +14,16 @@
                             <option value="100">100</option>
                     </select>
                     </label>
+                    <button style="margin-left: 70px;" 
+                    data-toggle="modal" data-target="#filter" type="button"
+                    [className]="(filter['sub'] == null || filter['sub'] == '') && (filter['status'] == null || filter['status'] == '') && filter['requester'] == null && filter['agent'] == null ? 'btn btn-dark dark' : 'btn btn-dark dark-selected'">
+                        <i class="fa fa-filter"></i>
+                    </button>
                 </div>
 
+
             </div>
-            <div class="col-md-6 text-nowrap">
+            <div class="col-md-2 text-nowrap">
                 <button 
                 *ngIf="identity['role'] != 'ROLE_REQUESTER' && this.groupTicket.length > 1" 
                 class="btn btn-dark dark" type="button" 
@@ -92,3 +98,102 @@
 </div>
 
 <app-message></app-message>
+
+<div role="dialog" tabindex="-1" class="modal fade" id="filter">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    Filtro
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="input-group fg" *ngIf="identity['role'] != 'ROLE_REQUESTER'">
+                        <div class="input-group-prepend">
+                            <div class="dropdown btn-group" role="group">
+                                <button class="btn btn-dark dark dropdown-toggle filter" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" (click)="focus('r')">
+                                    <span>Solicitante</span>
+                                </button>        
+                                <div class="dropdown-menu" style="width: 200px;" >
+                                    <input autocomplete="off" type="text" id="searchrequester" class="form-control form-control dropdown-search-input" placeholder="Buscar.." (keyup)="filterRequester()" [(ngModel)]="requesterFilter" name="requesterFilter"/>                         
+                                    <span *ngIf="keyPress">
+                                        <a class="dropdown-item" *ngFor="let requester of requesters" (click)="set(requester, 'requester')">
+                                            {{requester.name+' '+requester.surname}}
+                                        </a>    
+                                    </span>
+                                </div>
+                            </div>
+      
+                        
+                        </div><input type="text" class="form-control" id="requestername" readonly />
+                        <div class="input-group-append">
+                            <button class="btn btn-danger" (click)="deleteFilter('requester')" type="button">
+                                <i class="fa fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="input-group fg" >
+                        <div class="input-group-prepend">
+                            <div class="dropdown btn-group" role="group">
+                                <button class="btn btn-dark dark dropdown-toggle filter" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" (click)="focus('a')">
+                                    <span>Agente</span>
+                                </button>        
+                                <div class="dropdown-menu" style="width: 200px;"  >
+                                    <input autocomplete="off" type="text" id="searchagent" class="form-control form-control dropdown-search-input" placeholder="Buscar.." (keyup)="filterAgent()" [(ngModel)]="agentFilter" name="agentFilter"/>                         
+                                    <span *ngIf="keyPress">
+                                        <a class="dropdown-item" *ngFor="let agent of agents" (click)="set(agent, 'agent')">
+                                            {{agent.name+' '+agent.surname}}
+                                        </a>    
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="text" class="form-control" readonly id="agentname" />
+                        <div class="input-group-append">
+                            <button class="btn btn-danger" (click)="deleteFilter('agent')" type="button">
+                                <i class="fa fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="input-group fg">
+                        <div class="input-group-prepend">
+                            <div class="dropdown btn-group" role="group"><button class="btn btn-dark dropdown-toggle filter dark" data-toggle="dropdown" aria-expanded="false" type="button">Estado</button>
+                                <div role="menu" class="dropdown-menu">
+                                    <a role="presentation" class="dropdown-item" (click)="set('Pendiente', 'status')">
+                                        Pendiente
+                                    </a>
+                                    <a role="presentation" class="dropdown-item" (click)="set('Finalizado', 'status')">
+                                        Finalizado
+                                    </a>
+                                </div>
+                            </div>
+                        </div><input type="text" class="form-control" readonly id="statusname"/>
+                        <div class="input-group-append">
+                            <button class="btn btn-danger" (click)="deleteFilter('status')" type="button">
+                                <i class="fa fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="input-group fg">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text filter" style="padding-left: 31px;">Asunto</span></div>
+                            <input type="text" class="form-control" [(ngModel)]="filter['sub']" name="sub" />
+                        <div class="input-group-append">
+                            <button class="btn btn-danger" (click)="deleteFilter('sub')" type="button">
+                                <i class="fa fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-light" type="button" data-dismiss="modal">Cerrar</button>
+                <button class="btn btn-dark dark" type="button" (click)="filterArguments()">Filtrar</button>
+            </div>
+        </div>
+    </div>
+</div>

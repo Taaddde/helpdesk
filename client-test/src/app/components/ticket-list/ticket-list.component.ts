@@ -6,6 +6,8 @@ import { userService } from '../../services/user.service';
 import { ticketService } from '../../services/ticket.service';
 import * as moment from 'moment';
 import { MessageComponent } from '../message/message.component';
+import { User } from 'src/app/models/user';
+declare var $: any;
 
 
 @Component({
@@ -18,7 +20,6 @@ export class TicketListComponent implements OnInit {
   @ViewChild(MessageComponent, {static:false}) message: MessageComponent;
   public title: String;
   public tickets: Ticket[];
-  public filtro: String;
   public identity;
   public token;
   public url: string;
@@ -34,6 +35,16 @@ export class TicketListComponent implements OnInit {
   public totalDocs: number;
   public totalPages: number;
   public pagingCounter: number;
+
+
+  public filter: any;
+  public allRequesters: User[];
+  public allAgents: User[];
+  public keyPress: boolean;
+  public requesters: User[];
+  public agents: User[];
+  public requesterFilter: string;
+  public agentFilter: string;
 
 
   
@@ -57,52 +68,55 @@ export class TicketListComponent implements OnInit {
     this.totalPages= 1;
     this.pagingCounter = 1;
 
+
+    this.filter = {
+      sub:null,
+      requester:null,
+      agent:null,
+      status:null
+    }
+
+    this.agentFilter = '';
+    this.requesterFilter = '';
     this.groupTicket = new Array<number>();
     this.message = new MessageComponent();
 
   }
 
   ngOnInit() {
-
     this.getTickets();
+
+    if(this.identity['role'] != 'ROLE_REQUESTER'){
+      this.getRequesters();
+      
+
+    }
+    this.getAgents();
+
   }
 
   getTickets(){
-
     this._route.params.forEach((params: Params) =>{
-      this.page = params['page'];
-      this.limit = params['perPage'];
-      if(params['userId']){
-        this.user = params['userId'];
-      }
-      if(params['status']){
-        this.status = params['status']
-      }
-      
-      if(this.identity['role'] == 'ROLE_REQUESTER'){
-        this._ticketService.getPaginatedReqList(this.token, this.page, this.limit, this.identity['_id'], this.status).subscribe(
-          response =>{
-              if(!response.tickets){
-                this._router.navigate(['/']);
-              }else{
-                this.tickets = response.tickets.docs;
-                this.limit = response.tickets.limit;
-                this.nextPage = response.tickets.nextPage;
-                this.prevPage = response.tickets.prevPage;
-                this.totalDocs = response.tickets.totalDocs;
-                this.totalPages = response.tickets.totalPages;
-                this.pagingCounter = response.tickets.pagingCounter;
+      this._route.queryParams.forEach((query: Params) =>{
+        this.page = params['page'];
+        this.limit = params['perPage'];
+        var q = query
+        var c;
+        var r;
+        if(this.identity['company'] && this.identity['company'] != null){
+          c = this.identity['company']['_id'];
+        }else{
+          c = null;
+        }
 
-              }
-          },
-          error =>{
-              console.error(error);
-          });
-      }else{
-        this._ticketService.getPaginatedList(this.token, this.page, this.limit,this.identity['company']['_id'], this.status, this.user).subscribe(
+        if(this.identity['role'] == 'ROLE_REQUESTER'){
+          r = this.identity['_id']
+        }
+
+        this._ticketService.getTmpPaginatedList(this.token, this.page, this.limit, query, c, r).subscribe(
           response =>{
               if(!response.tickets){
-                this._router.navigate(['/']);
+                //this._router.navigate(['/']);
               }else{
                 this.tickets = response.tickets.docs;
                 this.limit = response.tickets.limit;
@@ -116,12 +130,51 @@ export class TicketListComponent implements OnInit {
           error =>{
               console.error(error);
           }
-      );
-      }
-
-      
+        );
+      })
     })
   }
+
+  getRequesters(){
+    this._userService.getListReq(this.token, this.identity['company']['_id']).subscribe(
+      response =>{
+          if(!response.users){
+            //this._router.navigate(['/']);
+          }else{
+            this.allRequesters = response.users;
+            this.requesters = response.users;
+          }
+      },
+      error =>{
+          console.error(error);
+      }
+    );
+  }
+
+  getAgents(){
+    let i;
+    if(this.identity['company']){
+      i = this.identity['company']['_id'];
+    }else{
+      i = 'null';
+    }
+    this._userService.getListAgents(this.token, i).subscribe(
+      response =>{
+
+          if(!response.users){
+            //this._router.navigate(['/']);
+          }else{
+            this.allAgents = response.users
+            this.agents = response.users;
+          }
+      },
+      error =>{
+          console.error(error);
+      }
+    );
+
+  }
+
 
   isLastPage(){
     if(this.totalDocs < this.pagingCounter+this.limit){
@@ -180,6 +233,112 @@ export class TicketListComponent implements OnInit {
             console.error(error);
         });
     }
+  }
+
+  focus(val){
+    this.keyPress = false;
+    if(val == 'r'){
+      setTimeout(() => 
+      {
+        document.getElementById("searchrequester").focus();
+      },
+      1);
+
+    }else{
+      setTimeout(() => 
+      {
+        document.getElementById("searchagent").focus();
+      },
+      1);
+
+    }
+  }
+
+  filterRequester(){
+    if(this.requesterFilter.length >= 3){
+      this.keyPress = true;
+    }else{
+      this.keyPress = false;
+    }
+
+    this.requesters = this.allRequesters.filter(requester =>{
+      return (requester['name']+requester['surname']).toLowerCase().includes(this.requesterFilter.toString().toLowerCase());
+    })
+  }
+
+  filterAgent(){
+    if(this.agentFilter.length >= 3){
+      this.keyPress = true;
+    }else{
+      this.keyPress = false;
+    }
+
+    this.agents = this.allAgents.filter(agent =>{
+      return (agent['name']+agent['surname']).toLowerCase().includes(this.agentFilter.toString().toLowerCase());
+    })
+  }
+
+  filterArguments(){
+    if(this.filter['sub'] == ''){
+      this.filter['sub'] = null;
+    }
+    if(this.identity['role'] == 'ROLE_REQUESTER'){
+      this.filter['requester'] = this.identity['_id'];
+    }
+    this._router.navigate(['/ticket',1,10], { queryParams: this.filter });
+
+    $("#filter").modal("hide");      
+
+  }
+
+  set(item, option){
+    switch (option) {
+      case 'requester':
+        this.requesterFilter = '';
+        this.filter['requester'] = item['_id'];
+        $('#requestername').val(item['name']+' '+item['surname']);
+  
+        break;
+      case 'agent':
+        this.requesterFilter = '';
+        this.filter['agent'] = item['_id'];
+        $('#agentname').val(item['name']+' '+item['surname']);  
+        break;
+      case 'status':
+        this.filter['status'] = item;
+        $('#statusname').val(item);  
+
+        break;
+      
+      default:
+        break;
+    }
+  }
+
+  deleteFilter(val){
+    switch (val) {
+      case 'requester':
+        this.filter['requester'] = null;
+        $('#requestername').val('');
+
+        break;
+      case 'agent':
+        this.filter['agent'] = null;
+        $('#agentname').val('');
+
+        break;
+      case 'status':
+        this.filter['status'] = null;
+        $('#statusname').val('');
+
+        break;
+      case 'sub':
+        this.filter['sub'] = '';
+          break;
+      default:
+        break;
+    }
+
   }
 
 }
