@@ -1,8 +1,8 @@
 <div class="login-dark form-login" *ngIf="!identity && !reset">
     <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
         <div class="illustration">
-            <img class="img-fluid logo" src="../assets/img/system/helpdesk-logo.png">
-            <h1 style="font-family: Audiowide, cursive;font-size: 38px;">TR</h1>
+            <img class="img-fluid logo" src="../assets/img/system/hsjd-logo.png">
+            <h1 style="font-family: Audiowide, cursive;font-size: 38px;"></h1>
             <h3 style="font-size: 20px;">{{title}}</h3>
             
         </div>
@@ -13,6 +13,11 @@
         <a class="forgot" role="button" data-toggle="modal" data-target="#passforgot">
             ¿Olvidaste la contraseña?
         </a>
+
+
+        <span class="forgot" role="button" style="margin-top: 20px;">
+            TR Helpdesk - V 0.8.7
+        </span>
     </form>
 </div>
 
@@ -22,16 +27,22 @@
 <div *ngIf="identity">
     <div id="page-top">
         <div id="wrapper" >
-            <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0" style="background-color: #1e2833;">
+            <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0" style="background-color: #018aca;">
                 <div class="container-fluid d-flex flex-column p-0">
                     <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" [routerLink]="['/home']">
                         <div class="sidebar-brand-icon rotate-n-15"></div>
-                        <div class="sidebar-brand-text mx-3"><i><span style="font-family: Audiowide, cursive;font-size: 24px;">TR&nbsp;</span></i><span>helpdesk</span>
+                        <div class="sidebar-brand-text mx-3">
+                            <i>
+                                <!-- <span style="font-family: Audiowide, cursive;font-size: 24px;">TR&nbsp;
+                                </span> -->
+                                <img src="../assets/img/system/hsjd-logo.png" style="width: 80px; margin-top: 40px;" alt="">
+                            </i>
+                            <!-- <span>helpdesk</span> -->
                         <p *ngIf="identity['company']">{{identity['company']['name']}}</p>
                         </div>
                     </a>
-                    <hr class="sidebar-divider my-0">
-                    <ul class="nav navbar-nav text-light" id="accordionSidebar">
+                    <hr class="sidebar-divider my-0" >
+                    <ul class="nav navbar-nav text-light" id="accordionSidebar" style="margin-top: 20px;">
                         <li class="nav-item" role="presentation"><a class="nav-link item" [routerLink]="['/home']"><i class="fas fa-home"></i><span>Principal</span></a></li>
                         <li class="nav-item" role="presentation"><a class="nav-link item" [routerLink]="['/ticket']"><i class="fas fa-ticket-alt"></i><span *ngIf="identity['role'] != 'ROLE_REQUESTER'">Todos los tickets</span><span *ngIf="identity['role'] == 'ROLE_REQUESTER'">Mis tickets</span></a></li>
                         <li *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="nav-item " role="presentation"><a class="nav-link item" [routerLink]="['/agent']"><i class="fas fa-user-friends"></i><span>Usuarios</span></a></li>
@@ -144,8 +155,17 @@
                                         <div
                                             class="dropdown-menu shadow dropdown-menu-right animated--grow-in" role="menu">
                                             <a class="dropdown-item" role="presentation" [routerLink]="['/user/edit',identity['_id']]">
-                                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Perfil</a>
-                                                <a *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="dropdown-item" role="presentation" [routerLink]="['/config']"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Configuración</a>
+                                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Perfil
+                                            </a>
+                                            <a *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="dropdown-item" role="presentation" [routerLink]="['/config']">
+                                                <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Configuración
+                                            </a>
+                                            <a *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="dropdown-item" role="presentation" (click)="changeToRequester()">
+                                                <i class="fas fa-exchange-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Modo solicitante
+                                            </a>
+                                            <a *ngIf="identity['changedMode']" class="dropdown-item" role="presentation" (click)="changeToAgent()">
+                                                <i class="fas fa-exchange-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Modo agente
+                                            </a>
                                                 <!-- <a class="dropdown-item" role="presentation" href="#"><i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Actividad</a> -->
                                                 <div class="dropdown-divider"></div><a class="dropdown-item" role="presentation" (click)="logout()"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Cerrar sesión</a></div>
                         </div>

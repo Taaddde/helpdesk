@@ -20,7 +20,7 @@ declare var $: any;
   providers:[userService, ticketService, globalService]
 })
 export class AppComponent implements OnInit {
-  public title = 'HelpDesk';
+  public title = 'Mesa de ayuda';
   public user: User;
   public user_register: User;
   public identity;
@@ -218,6 +218,30 @@ export class AppComponent implements OnInit {
     if ($(".sidebar").hasClass("toggled")) {
       $('.sidebar .collapse').collapse('hide');
     };
+  }
+
+  changeToRequester(){
+    let identity = this.identity;
+    identity['role'] = 'ROLE_REQUESTER';
+    identity['company'] = null;
+    identity['changedMode'] = true;
+    localStorage.setItem('identity', JSON.stringify(identity));
+    location.reload();
+
+  }
+
+  changeToAgent(){
+    this._userService.getOne(this.token, this.identity['_id']).subscribe(
+      response =>{
+        if(response.user){
+          localStorage.setItem('identity', JSON.stringify(response.user));
+          location.reload();      
+        }
+      },
+      error =>{
+        console.error(error);
+      }
+    )
   }
 
 }

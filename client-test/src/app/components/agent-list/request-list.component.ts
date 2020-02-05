@@ -48,7 +48,7 @@ export class RequesterListComponent implements OnInit {
   }
 
   getUsers(){
-    this._userService.getListReq(this.token, this.identity['_id']).subscribe(
+    this._userService.getListReq(this.token, this.identity['company']['_id']).subscribe(
       response =>{
           if(!response.users){
             this._router.navigate(['/']);

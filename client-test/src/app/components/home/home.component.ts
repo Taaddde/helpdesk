@@ -146,6 +146,8 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  
+
   getStatusCalendar(){
     this._ticketService.getCalendar(this.token, this.identity['_id']).subscribe(
       response =>{

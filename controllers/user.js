@@ -264,7 +264,9 @@ function getUsers(req, res){
                 }
             });
         }else{
-            User.find({role:'ROLE_REQUESTER', deleted:false}).sort('name').exec(function(err, users){
+            let query = {$or:[{role:'ROLE_REQUESTER'},{company:{$ne:company}}], deleted:false};
+            console.log(query, company);
+            User.find(query).sort('name').exec(function(err, users){
                 if(err){
                     logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})

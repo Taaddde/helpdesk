@@ -17,11 +17,11 @@
                               <button class="btn btn-dark dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
                                 {{ticket.priority}}
                             </button>
-                              <div role="menu" class="dropdown-menu dark">
-                                    <a role="presentation" class="dropdown-item" *ngIf="ticket.priority != 'Urgente'" (click)="setPriority('Urgente')">
+                              <div role="menu" class="dropdown-menu">
+                                    <a role="presentation" class="dropdown-item dark" *ngIf="ticket.priority != 'Urgente'" (click)="setPriority('Urgente')">
                                       Urgente
                                     </a>
-                                    <a role="presentation" class="dropdown-item" *ngIf="ticket.priority != 'Normal'" (click)="setPriority('Normal')">
+                                    <a role="presentation" class="dropdown-item dark" *ngIf="ticket.priority != 'Normal'" (click)="setPriority('Normal')">
                                       Normal
                                     </a>
                                 </div>
@@ -201,7 +201,7 @@
                             <div class="dropdown-menu" >
                                 <input type="text" class="form-control form-control dropdown-search-input" placeholder="Buscar.." (keyup)="filterCc()" [(ngModel)]="ccFilter" name="ccFilter"/>                         
                                 <span *ngIf="keyPress">
-                                    <a class="dropdown-item" *ngFor="let cc of ccList" (click)="setCc(cc)">
+                                    <a class="dropdown-item dark" *ngFor="let cc of ccList" (click)="setCc(cc)">
                                         {{cc.name+' '+cc.surname}}
                                     </a>
                                 </span>
@@ -400,11 +400,11 @@
                         <button class="btn btn-dark dropdown-toggle dark" [disabled]="identity['company']['_id'] != ticket.company['_id'] || ticket.status == 'Cerrado'" data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
                           {{ticket.status}}
                         </button>
-                          <div role="menu" class="dropdown-menu dark">
-                              <a role="presentation" class="dropdown-item" *ngIf="ticket.status != 'Pendiente'" (click)="setStatus('Pendiente')">
+                          <div role="menu" class="dropdown-menu">
+                              <a role="presentation" class="dropdown-item dark" *ngIf="ticket.status != 'Pendiente'" (click)="setStatus('Pendiente')">
                                   Pendiente
                               </a>
-                              <a role="presentation" class="dropdown-item" *ngIf="ticket.status != 'Finalizado'" (click)="checkWorkTime('Finalizado')">
+                              <a role="presentation" class="dropdown-item dark" *ngIf="ticket.status != 'Finalizado'" (click)="checkWorkTime('Finalizado')">
                                   Finalizado
                               </a>
                               <!-- <a role="presentation" class="dropdown-item" *ngIf="ticket.status != 'Cerrado'" (click)="checkWorkTime('Cerrado')">

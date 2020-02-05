@@ -73,7 +73,6 @@ function getCountTickets(req, res){
         // First Stage
         {
           $match : { $or: [ { agent: ObjectId(userId) }, { company:ObjectId(company), status: 'Abierto' } ] }
-          
         },
         // Second Stage
         {
@@ -82,7 +81,7 @@ function getCountTickets(req, res){
              count: { $sum: 1 }
             },
         },
-       ]
+    ]
 
     Ticket.aggregate(query, (err, tickets) =>{
         if(err){
@@ -608,6 +607,43 @@ var decoded = jwt_decode(req.headers.authorization);
                 }
             }
         });
+}
+
+function getListPaged(req, res){
+    var functionName = 'getListPaged';
+
+    if(req.params.page){
+        var page = req.params.page;
+    }else{
+        var page = 1;
+    }
+    var perPage = req.params.perPage;
+
+    var query = req.query;
+    var sort = {numTicket:1}
+
+    if(query['sub']){
+        query['sub'] = { "$regex": query['sub'], "$options": "i" }
+    }
+
+    console.log(query)
+
+    Ticket.paginate(query,{page:page, limit:perPage, sort:sort}, function(err, tickets){
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            console.log(err)
+            res.status(500).send({message: err})
+        }else{
+            if(!requests){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                res.status(404).send({message: 'No hay items'})
+            }else{
+                res.status(200).send({
+                    tickets:tickets
+                });
+            }
+        }
+    });
 }
 
 function getReqTicketsPaged(req, res){
@@ -1255,6 +1291,7 @@ module.exports = {
     getTicketsForName,
     getTickets,
     getTicketsPaged,
+    getListPaged,
     getReqTicketsPaged,
     getTicketsForUser,
     getCountTickets,

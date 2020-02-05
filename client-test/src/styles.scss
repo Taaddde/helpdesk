@@ -5,6 +5,13 @@
 @import '../node_modules/fullcalendar/dist/fullcalendar.css';
 //@import '../node_modules/fullcalendar/dist/fullcalendar.print.css';
 
+$dark: #1e2833;
+$hoverdark:#545e69;
+
+$oficial: #018aca;
+$hoveroficial:#001570;
+
+
 body{
     //background-image: url('./assets/img/solid-blue-wp.jpg');
     background: radial-gradient(circle at 50% 100%, #dcdfe0, #abadae);;
@@ -12,12 +19,30 @@ body{
 }
 
 .dark{
-    background-color: #1e2833;
+    background-color: $oficial;
+    color: white !important;
 }
 
+a.dark{
+    color: white;
+}  
+
 .dark:hover{
-    background-color: #545e69;
+    background-color: $hoveroficial;
 }
+
+.olddark{
+    background-color: $dark;
+}
+
+a.olddark{
+    color: white;
+}  
+
+.olddark:hover{
+    background-color: $hoverdark;
+}
+
 
 #editable {
     width: 100%;

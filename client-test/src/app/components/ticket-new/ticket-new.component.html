@@ -14,7 +14,7 @@
                           <div class="dropdown-menu"  >
                               <input type="text" id="searchrequester" class="form-control form-control dropdown-search-input" placeholder="Buscar.." (keyup)="filterRequester()" [(ngModel)]="requesterFilter" name="requesterFilter"/>                         
                               <span *ngIf="keyPress">
-                                  <a class="dropdown-item" *ngFor="let requester of requesters" (click)="setRequester(requester)">
+                                  <a class="dropdown-item dark" *ngFor="let requester of requesters" (click)="setRequester(requester)">
                                       {{requester.name+' '+requester.surname}}
                                   </a>    
                               </span>
@@ -144,7 +144,7 @@
           <hr />
           <div class="form-row">
               <div class="col confirm">
-                <button class="btn btn-success btn-lg float-right acept" type="submit">
+                <button class="btn btn-success btn-lg float-right acept dark" type="submit">
                   Aceptar
                 </button>
               </div>
