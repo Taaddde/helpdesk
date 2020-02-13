@@ -10,6 +10,7 @@ var api = express.Router();
 api.get('/sector/:id', md_auth.ensureAuth, controller.getSector);
 api.get('/sectors', md_auth.ensureAuth, controller.getSectors);
 api.get('/for-name/:name', md_auth.ensureAuth, controller.getSectorsForName);
+api.get('/sectorsPaged/:page/:perPage', md_auth.ensureAuth, controller.getListPaged);
 
 //ABM
 api.post('/add',md_auth.ensureAuth, controller.saveSector);

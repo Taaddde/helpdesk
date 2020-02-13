@@ -4,12 +4,14 @@
             <li class="nav-item"><a [className]="state == 'agent' ? 'nav-link active' : 'nav-link'" (click)="changeTo('agent')">Agentes</a></li>
             <li class="nav-item"><a [className]="state == 'team' ? 'nav-link active' : 'nav-link'" (click)="changeTo('team')">Equipos</a></li>
             <li class="nav-item"><a [className]="state == 'requester' ? 'nav-link active' : 'nav-link'" (click)="changeTo('requester')">Solicitantes</a></li>
+            <li class="nav-item"><a [className]="state == 'sector' ? 'nav-link active' : 'nav-link'" (click)="changeTo('sector')">Sectores</a></li>
         </ul>
     </div>
     <div class="card-body">
         <app-agent-list *ngIf="state == 'agent'"></app-agent-list>
         <app-team-list *ngIf="state == 'team'"></app-team-list>
         <app-requester-list *ngIf="state == 'requester'"></app-requester-list>
+        <app-sector-list *ngIf="state == 'sector'"></app-sector-list>
 
     </div>
 </div>

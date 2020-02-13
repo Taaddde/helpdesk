@@ -10,7 +10,7 @@ var UserSchema = Schema({
     password: String,
     email: String,
     role: {type: String, default:'ROLE_USER'},
-    sector: {type: String, default:'NN'},
+    user: {type: Schema.ObjectId, ref:'Sector'},
     sectorRef: {type: Boolean, default:false},
     sign: {type: String, default:''},
     image:{type: String, default:'null'},

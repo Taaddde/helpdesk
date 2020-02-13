@@ -56,6 +56,13 @@ export class sectorService{
         return this._httpClient.get<any>(this.url+'sector/sectors', this.httpOptions);
     }
 
+    getPaginatedList(token, page, perPage){
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'sector/sectorsPaged/'+page+'/'+perPage, this.httpOptions);
+    }
+
     getOne(token, id){
         this.httpOptions.headers =
             this.httpOptions.headers.set('Authorization', token);

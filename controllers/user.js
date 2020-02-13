@@ -215,7 +215,8 @@ var decoded = jwt_decode(req.headers.authorization);
     User.findById(userId, (err, user) =>{
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
-                res.status(500).send({message: 'Error del servidor en la petición'});
+                console.log(err)
+            res.status(500).send({message: 'Error del servidor en la petición'});
         }else{
             if(!user){
                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
@@ -356,7 +357,10 @@ function loginUser(req, res){
     User.findOne({userName: userName.toLowerCase(), deleted:false}, (err, user) => {
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: userName+' ('+req.ip+') '+err}});
-                res.status(500).send({message:'Error del servidor en la petición'});
+                console.log(err)
+            res.status(500).send({message:'Error del servidor en la petición'});
+
+                
         }else{
             if(!user){
                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: userName+' ('+req.ip+') Objeto no encontrado'}});

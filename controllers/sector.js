@@ -73,6 +73,7 @@ var decoded = jwt_decode(req.headers.authorization);
     var params = req.body;
 
     sector.name = params.name;
+    sector.initials = params.initials;
     sector.email = params.email;
 
     sector.save((err, sectorStored) =>{
@@ -135,14 +136,46 @@ function deleteSector(req, res){
     });
 }
 
+function getListPaged(req, res){
+    var functionName = 'getListPaged';
+    var decoded = jwt_decode(req.headers.authorization);
+
+    if(req.params.page){
+        var page = req.params.page;
+    }else{
+        var page = 1;
+    }
+
+    var perPage = req.params.perPage;
+
+    var sort = {name:1}
+
+    Sector.paginate({},{page:page, limit:perPage, sort:sort}, function(err, sectors){
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            console.log(err)
+            res.status(500).send({message: err})
+        }else{
+            if(!sectors){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                res.status(404).send({message: 'No hay items'})
+            }else{
+                res.status(200).send({
+                    sectors:sectors
+                });
+            }
+        }
+    });
+}
+
 
 module.exports = {
     getSector,
     getSectors,
     getSectorsForName,
+    getListPaged,
 
     saveSector,
     updateSector,
     deleteSector,
-
 };

@@ -1,0 +1,35 @@
+<div class="card-body">
+    <div class="row">
+        <div class="col-lg-10">
+            <input *ngIf="identity['role'] == 'ROLE_ADMIN'" type="button" class="btn btn-dark dark" value="Nuevo sector">
+        </div>
+    </div>
+    <div class="table-responsive table mt-2" id="dataTable">
+        <table class="table dataTable my-0" id="dataTable">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Siglas de proceso</th>
+                    <th>Email</th>
+                    <th>Usuarios</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let sector of sectors">
+                <tr class="select">
+                    <td data-title="Nombre">{{sector.name}}</td>
+                    <td data-title="Siglas de proceso">{{sector.initials}}</td>
+                    <td data-title="Email">{{sector.email}}</td>
+                    <td data-title="Usuarios" >5</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td><strong>Nombre</strong></td>
+                    <td><strong>Siglas de proceso</strong></td>
+                    <td><strong>Email</strong></td>
+                    <td><strong>Usuarios</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
