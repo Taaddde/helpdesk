@@ -16,6 +16,7 @@ import { Ticket } from '../../models/ticket';
 import { TextBlock } from '../../models/textblock';
 import { uploadService } from '../../services/upload.service';
 import * as moment from "moment"
+import { Observable, Subscription } from 'rxjs';
 
 
 declare var $: any;
@@ -197,6 +198,16 @@ export class TicketPortalComponent implements OnInit {
 
     this.ticket.sub = this.selectedSubtype.autoSub;
     this.tb.text = this.selectedSubtype.autoDesc;
+
+    let i = Observable.interval(100)
+    .subscribe((val) => { 
+      $('#editable table').attr('border', '1');  
+    });
+
+    setTimeout(() => {
+      i.unsubscribe();
+    }, 1000);
+
   }
 
   getLenght(val: any[]){
