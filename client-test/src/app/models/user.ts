@@ -8,6 +8,9 @@ export class User{
         public password: string,
         public email: string,
 
+        public sector: string,
+        public sectorRef: boolean,
+
         public role: string,
         public sign: string,
         public image: string,

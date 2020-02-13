@@ -32,7 +32,7 @@ export class AgentEditComponent implements OnInit {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
-    this.user = new User('','','','','','','','','','', false,'');
+    this.user = new User('','','','','','','',false,'','','','', false,'');
     this.isAdm = false;
     this.isUser = false;
     this.alertMessage = '';

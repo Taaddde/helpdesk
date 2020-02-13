@@ -29,7 +29,6 @@ function saveUser(req, res){
 
 
     var params = req.body;
-    console.log(params)
     user.name = params.name;
     user.surname = params.surname;
     user.userName = params.userName;
@@ -39,6 +38,9 @@ function saveUser(req, res){
     user.image = 'null';
     user.company = params.company;
     user.receiveMail = params.receiveMail;
+    user.sector = params.sector;
+    user.sectorRef = params.sectorRef;
+
 
     User.findOne({userName:user.userName}, (err, userCheck) =>{
         if(err){
@@ -207,7 +209,9 @@ var decoded = jwt_decode(req.headers.authorization);
 
     var populateQuery = [
         {path:'company'},
+        {path:'sector'}
     ];
+    
     User.findById(userId, (err, user) =>{
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
@@ -272,7 +276,6 @@ function getUsers(req, res){
             });
         }else{
             let query = {$or:[{role:'ROLE_REQUESTER'},{company:{$ne:company}}], deleted:false};
-            console.log(query, company);
             User.find(query).sort('name').exec(function(err, users){
                 if(err){
                     logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
@@ -341,12 +344,13 @@ function getReqForName(req, res){
 function loginUser(req, res){
     var params = req.body;
     var functionName = 'loginUser';
-
+    
     var userName = params.userName;
     var password = params.password;    
     
     var populateQuery = [
-        {path:'company',select:['name','email','image','mailSender']}    
+        {path:'company',select:['name','email','image','mailSender']},
+        {path:'sector',select:['name','email']}
     ];
 
     User.findOne({userName: userName.toLowerCase(), deleted:false}, (err, user) => {

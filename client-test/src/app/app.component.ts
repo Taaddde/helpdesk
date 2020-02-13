@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import {User} from './models/user';
 
 import {Router, ActivatedRoute, Params} from '@angular/router'
@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/interval';
 import { ticketService } from './services/ticket.service';
 import { globalService } from './services/global.service';
+import { MessageComponent } from './components/message/message.component';
 declare var $: any;
 
 
@@ -20,6 +21,8 @@ declare var $: any;
   providers:[userService, ticketService, globalService]
 })
 export class AppComponent implements OnInit {
+  @ViewChild(MessageComponent, {static:false}) message: MessageComponent;
+
   public title = 'Mesa de ayuda';
   public user: User;
   public user_register: User;
@@ -44,13 +47,15 @@ export class AppComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router
   ){
-    this.user = new User('','','','','','','ROLE_REQUESTER','','','', false,'');
-    this.user_register = new User('','','','','','','ROLE_REQUESTER','','','', false,'');
+    this.user = new User('','','','','','','',false,'ROLE_REQUESTER','','','', false,'');
+    this.user_register = new User('','','','','','','',false,'ROLE_REQUESTER','','','', false,'');
     this.url=GLOBAL.url;
     this.alertMessage = '';
     this.notifications = '';
     this.valSearch = '';
     this.reset = false;
+    this.message = new MessageComponent();
+
   } 
 
   ngOnInit(){
@@ -142,7 +147,6 @@ export class AppComponent implements OnInit {
 
         if(!identity._id){
           this.alertMessage = "El usuario no esta correctamente identificado";
-
         }else{
           this.identity = identity;
             // Crear elemento en el localstorage para tener el usuario en sesion
@@ -162,25 +166,20 @@ export class AppComponent implements OnInit {
               }else{
                 // Crear elemento en el localstorage para tener el token en sesion
                 localStorage.setItem('token', token);
-                this.user = new User('','','','','','','ROLE_REQUESTER','','','', false,'');
+                this.user = new User('','','','','','','',false,'ROLE_REQUESTER','','','', false,'');
                 //this._router.navigate(['/home']);
                 console.log(window.location.hostname+':3977/home')
                 window.location.href='http://'+window.location.hostname+':'+window.location.port+'/home'
               }
             },
             error =>{
-              this.alertMessage = "Usuario/contraseña inválido";
+              this.message.error('Credenciales incorrectas', 'Revise si su usuario y/o contraseña es correcto')
             }
           )          
         }   
       },
       error =>{
-        var errorMessage = <any>error;
-        if(errorMessage != null){
-          var body = JSON.parse(error._body);
-          this.alertMessage = body.message;
-          console.error(error);
-        }
+        this.message.error('Credenciales incorrectas', 'Revise si su usuario y/o contraseña es correcto')
       }
     )
   }

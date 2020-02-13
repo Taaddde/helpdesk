@@ -17,6 +17,7 @@ var textblock_routes = require('./routes/textblock');
 var typeticket_routes = require('./routes/type_ticket');
 var subtypeticket_routes = require('./routes/subtype_ticket');
 var global_routes = require('./routes/global');
+var sector_routes = require('./routes/sector');
 
 
 app.use(bodyparser.urlencoded({extended:false}));
@@ -44,6 +45,7 @@ app.use('/api/textblock', textblock_routes);
 app.use('/api/type-ticket', typeticket_routes);
 app.use('/api/subtype-ticket', subtypeticket_routes);
 app.use('/api/global', global_routes);
+app.use('/api/sector', sector_routes);
 
 
 app.get('*', function(req, res, next){

@@ -34,7 +34,7 @@ export class AgentNewComponent implements OnInit {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
-    this.user = new User('','','','','','','','','null',this.identity['company']['_id'],false,'');
+    this.user = new User('','','','','','','',false,'','','null',this.identity['company']['_id'],false,'');
     this.isAdm = false;
     this.isUser = true;
     this.alertMessage = '';
