@@ -44,6 +44,7 @@ import { TimeworkSubtypeListComponent } from './components/timework-subtype-list
 import { AgentTimeReportComponent } from './components/agent-report/agent-time-report.component';
 import { MessageComponent } from './components/message/message.component';
 import { SectorListComponent } from './components/sector-list/sector-list.component';
+import { NewsComponent } from './components/news/news.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +79,8 @@ import { SectorListComponent } from './components/sector-list/sector-list.compon
     TimeworkSubtypeListComponent,
     AgentTimeReportComponent,
     MessageComponent,
-    SectorListComponent
+    SectorListComponent,
+    NewsComponent
   ],
   imports: [
     BrowserModule,

@@ -228,6 +228,39 @@ var decoded = jwt_decode(req.headers.authorization);
     }).populate(populateQuery)
 }
 
+function getNews(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+        var userId = req.params.id;
+        var functionName = 'getNews';
+
+        User.findById(userId, (err, user) =>{
+            if(err){
+                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                res.status(500).send({message: 'Error del servidor en la petición'});
+            }else{
+                if(!user){
+                    logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                    res.status(404).send({message: 'No se ha encontrado el usuario'});
+                }else{
+                    if(user.news){
+                        let update = {news:false};
+                        User.findByIdAndUpdate(userId, update, (err, userUpdated) =>{
+                             if(err){
+                                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                                 res.status(500).send({message: 'Error del servidor en la petición'});
+                             }else{
+                                 res.status(200).send({news:true});
+                             }
+                        });
+                    }else{
+                        res.status(200).send({news:false});
+                    }
+                }
+            }
+        })
+    }
+    
+
 function getUsers(req, res){
     var decoded = jwt_decode(req.headers.authorization);
     var role = req.params.role;
@@ -698,6 +731,7 @@ module.exports = {
     getUsersForName,
     getReqForName,
     validUser,
+    getNews,
 
     loginUser,
     forgotPassword,

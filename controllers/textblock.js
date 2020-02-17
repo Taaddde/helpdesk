@@ -331,6 +331,33 @@ async function uploadFile(req, res){
     }
 }
 
+async function uploadImage(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+    var functionName = 'uploadImage';
+    var file_name = 'No subido';
+    console.log(req.files);
+    if(req.files.image){
+        var file_path = req.files.image.path;
+        var file_split = file_path.split('\\'); //eliminar y recortar las barras del path
+        var file_name = file_split[2]; // [ 'uploads', 'users', 'pWgu0s-hHBgJl-5w1RSPS5G7.jpg' ]
+
+        var ext_split = file_name.split('\.');
+        var file_ext = ext_split [1]; //Comprueba si es un jpg [ 'j5HRZbfL7qgOgp2YRQ3F0ub8', 'jpg' ]
+        if(file_ext == 'jpg' || file_ext == 'png'){
+            res.status(200).send({filename:file_name});    
+        }else{
+            logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+            res.status(404).send({message: 'Solo puede ingresar una imágen'});    
+        }
+
+
+    }else{
+        logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+        res.status(404).send({message: 'No ha subido ninguna imagen'});
+    }
+}
+
+
 
 function getFile(req, res){
     var file = req.params.fileName;
@@ -345,6 +372,20 @@ function getFile(req, res){
     });
 }
 
+function getImage(req, res){
+    var file = req.params.fileName;
+    var pathFile = './uploads/images/'+file;
+
+    fs.exists(pathFile, function(exists){
+        if(exists){
+            res.sendFile(path.resolve(pathFile));
+        }else{
+            res.status(200).send({message: 'No existe el archivo...'});
+        }
+    });
+}
+
+
 module.exports = {
     getTextBlock,
     getTextBlockForText,
@@ -358,5 +399,7 @@ module.exports = {
     readRequest,
 
     uploadFile,
-    getFile
+    uploadImage,
+    getFile,
+    getImage
 };

@@ -123,6 +123,13 @@ export class userService{
         return this._httpClient.get<any>(this.url+'user/user/'+id, this.httpOptions);
     }
 
+    getNews(token, id){
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'user/news/'+id, this.httpOptions);
+    }
+
     getIdentity(){
         let identity = JSON.parse(localStorage.getItem('identity'));
         if(identity != "undefined"){

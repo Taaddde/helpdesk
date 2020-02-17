@@ -6,6 +6,7 @@ var md_auth = require('../middlewares/autenticate');
 
 var multipart = require('connect-multiparty'); //Para enviar ficheros
 var md_upload = multipart({uploadDir: './uploads/attachs'}); //Donde se van a subir los ficheros
+var md_upload_img = multipart({uploadDir: './uploads/images'}); //Donde se van a subir los ficheros
 
 
 var api = express.Router(); 
@@ -19,6 +20,9 @@ api.get('/for-ticket/:ticket/:type', md_auth.ensureAuth, textblockController.get
 //Archivos
 api.post('/file/:id',[md_auth.ensureAuth, md_upload], textblockController.uploadFile);
 api.get('/file/:fileName', textblockController.getFile);
+api.post('/image',[md_auth.ensureAuth, md_upload_img], textblockController.uploadImage);
+api.get('/image/:fileName', textblockController.getImage);
+
 
 //ABM
 api.post('/add',md_auth.ensureAuth, textblockController.saveTextBlock);

@@ -310,9 +310,10 @@
                           <div id="editable" contentEditable="true"
                           
                           (input)="textblock.text = $event.target.innerHTML"
+                          (paste)="pastePicture($event)"
                           
                           >
-                            <span contentEditable="false"></span>
+                            <span id="antieditable" contentEditable="false"></span>
                           </div>
                       </div>
                   
@@ -348,11 +349,12 @@
                       <div class="row" style="margin-top: 8px;">
                           <div id="editable" [contentEditable]="identity['_id'] == ticket.requester['_id'] || isCc"
                           (input)="textblock.text = $event.target.innerHTML"
+                          (paste)="pastePicture($event)"
                           >
-                            <span contentEditable="false"></span>
-                          </div>
+                          <span id="antieditable" contentEditable="false"></span>
+                        </div>
                       </div>
-                  
+                      
                       <script src="../../../assets/scripts/chatbox.js"></script>
 
                     </span>
@@ -414,7 +416,19 @@
                       </div>
                     </span>
                     <span *ngIf="!identity['company']">
-    
+                      <label class="d-inline" style="margin-bottom: 0px;margin-top: 0;">
+                        <i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 5px;"></i>
+                        <input type="file" multiple class="d-none" (change)="fileChangeEvent($event)" />
+                        <span *ngIf="filesToUpload">
+                            +{{filesToUpload.length}}
+                        </span>
+                      </label>
+                      <span *ngIf="filesToUpload">
+                        <a class="btn btn-danger" style="margin-left: 8px; color: white;margin-bottom: 8px; margin-top: 0px;" (click)=cleanAttach()>
+                          <i class="fa fa-trash"></i>
+                        </a>    
+                      </span>  
+
                       <button class="btn btn-primary float-right" [disabled]="identity['_id'] != ticket.requester['_id'] && !isCc" type="submit">
                         <i class="fa fa-paper-plane"></i>
                       </button>

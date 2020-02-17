@@ -206,6 +206,7 @@ export class TicketPortalComponent implements OnInit {
 
     setTimeout(() => {
       i.unsubscribe();
+      document.getElementById('editable').innerHTML += '<span id="antieditable" contentEditable="false"></span>';
     }, 1000);
 
   }
@@ -315,6 +316,30 @@ export class TicketPortalComponent implements OnInit {
       
     }
   }
+
+
+  public imagesToUpload: Array<File> = new Array<File>();
+  async pastePicture(event: ClipboardEvent) {
+    if(event.clipboardData.files.length != 0){
+      this.imagesToUpload = new Array<File>();
+     
+      this.imagesToUpload.push(event.clipboardData.files.item(0));
+      console.log(this.imagesToUpload)
+      await this._uploadService.makeFileRequest(this.url+'textblock/image', [], this.imagesToUpload, this.token, 'image')
+      .then(data =>{
+        console.log(data)
+        let antiEdit = document.getElementById('antieditable');
+        console.log(antiEdit);
+        antiEdit.parentNode.removeChild(antiEdit);
+        document.getElementById('editable').innerHTML += '<a target="_blank" href="'+this.url+'textblock/image/'+data['filename']+'"><img src="'+this.url+'textblock/image/'+data['filename']+'" class="img-fluid" style="width: 80%; margin: 5px" alt="Responsive image"></a>';
+        document.getElementById('editable').innerHTML += '<span id="antieditable" contentEditable="false"></span>';
+      })
+  
+      this.tb.text = document.getElementById('editable').innerHTML;
+      this.imagesToUpload = new Array<File>();
+    }
+  }
+
 
   public filesToUpload: Array<File>;
   public fileChangeEvent(fileInput:any){

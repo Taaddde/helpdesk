@@ -119,6 +119,7 @@ export class TicketGestionComponent implements OnInit {
     );
   }
 
+
   filterCc(){
     if(this.ccFilter.length >= 3){
       this.keyPress = true;
@@ -577,7 +578,6 @@ export class TicketGestionComponent implements OnInit {
   }
 
   onSubmit(){
-    console.log(this.textblock.text)
     if(this.textblock.text != ''){
       this.textblock.text = this.textblock.text.split('<span _ngco')[0];
     }
@@ -651,7 +651,9 @@ export class TicketGestionComponent implements OnInit {
             this.pushText(response.textblock._id) ;
             this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false);
             document.getElementById('editable').innerHTML = ''
+            document.getElementById('editable').innerHTML += '<span id="antieditable" contentEditable="false"></span>';
             this.filesToUpload = new Array<File>();
+            this.imagesToUpload = new Array<File>();
         },
         error =>{
           var errorMessage = <any>error;
@@ -699,11 +701,30 @@ export class TicketGestionComponent implements OnInit {
     }
   }
 
-  public filesToUpload: Array<File>;
-  public fileChangeEvent(fileInput:any){
-      this.filesToUpload = <Array<File>>fileInput.target.files;
+  public imagesToUpload: Array<File> = new Array<File>();
+  async pastePicture(event: ClipboardEvent) {
+    if(event.clipboardData.files.length != 0){
+      this.imagesToUpload = new Array<File>();
+
+      this.imagesToUpload.push(event.clipboardData.files.item(0));
+  
+      await this._uploadService.makeFileRequest(this.url+'textblock/image', [], this.imagesToUpload, this.token, 'image')
+      .then(data =>{
+        let antiEdit = document.getElementById('antieditable');
+        antiEdit.parentNode.removeChild(antiEdit);
+        document.getElementById('editable').innerHTML += '<a target="_blank" href="'+this.url+'textblock/image/'+data['filename']+'"><img src="'+this.url+'textblock/image/'+data['filename']+'" class="img-fluid" style="width: 80%; margin: 5px" alt="Responsive image"></a>';
+        document.getElementById('editable').innerHTML += '<span id="antieditable" contentEditable="false"></span>';
+      })
+  
+      this.textblock.text = document.getElementById('editable').innerHTML;
+      this.imagesToUpload = new Array<File>();
+    }
   }
 
 
-
+  public filesToUpload: Array<File>;
+  public fileChangeEvent(fileInput:any){
+      this.filesToUpload = <Array<File>>fileInput.target.files;
+      console.log(this.filesToUpload)
+  }
 }

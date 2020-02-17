@@ -10,6 +10,7 @@ var api = express.Router();
 
 //CONSULTAS
 api.get('/user/:id', md_auth.ensureAuth, userController.getUser);
+api.get('/news/:id', md_auth.ensureAuth, userController.getNews);
 api.get('/users/:company/:role?', md_auth.ensureAuth, userController.getUsers);
 api.get('/for-name/:company/:name', md_auth.ensureAuth, userController.getUsersForName);
 api.get('/req-for-name/:name', md_auth.ensureAuth, userController.getReqForName);

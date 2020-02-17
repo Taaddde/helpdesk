@@ -46,9 +46,9 @@
                               {{check}}
                             </label>
                         </div>
-                        <div class="text-center" style="margin-top: 6px;">
+                        <!-- <div class="text-center" style="margin-top: 6px;">
                           <a class="btn btn-primary" (click)="goodCheck()" style="color:white" role="button">Estas validaciones me sirvieron para solucionar mi problema</a>
-                        </div>
+                        </div> -->
                       </div>
                   </div>
                   <hr/>
@@ -97,8 +97,9 @@
                               <div id="editable" class="text-chat" contentEditable="true"
                               [innerHtml]="selectedSubtype.autoDesc"
                               (input)="tb.text = $event.target.innerHTML"
+                              (paste)="pastePicture($event)"
                               >
-                                <span contentEditable="false"></span>
+                                <span id="antieditable" contentEditable="false"></span>
                               </div>
                           </div>
                           <script src="../../../assets/scripts/chatbox.js"></script>

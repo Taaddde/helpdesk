@@ -90,9 +90,10 @@
                               <div id="editable" contentEditable="true" class="text-chat"
                               
                               (input)="textblock.text = $event.target.innerHTML"
-                              
+                              (paste)="pastePicture($event)"
+
                               >
-                                <span contentEditable="false"></span>
+                                <span id="antieditable" contentEditable="false"></span>
                               </div>
                           </div>
                       

@@ -18,6 +18,7 @@ var UserSchema = Schema({
     receiveMail: {type: Boolean, default:false},
     passToken: {type: String, default:null},
     passTokenExp: {type: String, default:'2000-01-01'},
+    news: {type: Boolean, default:true},
     deleted: {type: Boolean, default:false}
 });
 
