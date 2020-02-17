@@ -412,8 +412,10 @@ export class TicketGestionComponent implements OnInit {
 
       this.ticket.team = val;
       this.ticket.agent = null;
+      this.ticket.status = 'Pendiente';
       this.editTicket();
       this.newInfo(this.identity['name']+' '+this.identity['surname']+' asignó a '+name+' como equipo de esta solicitud');
+      this.newInfo(this.identity['name']+' '+this.identity['surname']+' ha cambiado el estado de la solicitud a pendiente');
 
   }
 

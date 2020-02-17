@@ -1,12 +1,21 @@
-<div role="dialog" id="news" tabindex="-1" class="modal fade">
+<div role="dialog" tabindex="-1" id="news" class="modal fade">
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="border: 1px solid #018dda">
             <div class="modal-header" style="background-color: #018dda;color: rgb(255,255,255);">
-                <h4 class="modal-title">
-                    ¡Novedades! - Versión 0.9.1 (17/02/2020)
-                </h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                <h4 class="modal-title">¡Novedades! - Versión 0.9.1 (17/02/2020)</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
             <div class="modal-body">
+                <span *ngIf="identity['role'] != 'ROLE_REQUESTER'">
+                    <div>
+                        <h4><i class="fas fa-ticket-alt"></i><strong> Novedades</strong></h4>
+                        <p>Cada actualización aparecerá esta pantalla por única vez.<br />Las novedades marcadas con un <i class="fas fa-ticket-alt"></i> son visualizadas únicamente por los agentes.</p>
+                    </div>
+                    <div>
+                        <h4><i class="fas fa-ticket-alt"></i><strong> FIX</strong></h4>
+                        <ul style="list-style-type: inherit;">
+                            <li style="font-size: 15px;">Los tickets abiertos cambiarán a estado pendiente cuando se seleccione un equipo.</li>
+                        </ul>
+                    </div>
+                </span>
                 <div>
                     <h4><strong>Portapapeles</strong></h4>
                     <p>A partir de ahora, el sistema permite copiar y pegar imagenes directamente la caja de chat en lugar de adjuntarlos.</p>

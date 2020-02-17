@@ -3902,3 +3902,29 @@
 [17-02-2020 11:25] [info] [test] Servidor iniciado en puerto 3978
 [17-02-2020 11:25] [info] [index] Servidor iniciado en puerto 3977
 [17-02-2020 11:25] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[17-02-2020 11:26] [info] [test] Servidor iniciado en puerto 3978
+[17-02-2020 11:26] [info] [index] Servidor iniciado en puerto 3977
+[17-02-2020 11:26] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[17-02-2020 11:28] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[17-02-2020 11:28] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[17-02-2020 11:28] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[17-02-2020 11:28] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[17-02-2020 11:28] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[17-02-2020 11:29] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[17-02-2020 11:29] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[17-02-2020 11:29] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[17-02-2020 11:29] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[17-02-2020 11:31] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[17-02-2020 11:31] [info] [ticket/saveTicket] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{"_id":"","sub":"asda","numTicket":null,"requester":"5e382d19e0715c0cf0f6db98","status":"Abierto","lastActivity":"","createDate":"","resolveDate":null,"source":"MANUAL","tags":[null],"priority":"Normal","company":"5e0f89b99d81431060a9a1ce","cc":[""],"workTime":null,"realWorkTime":null,"obsWorkTime":""}
+[17-02-2020 11:32] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[17-02-2020 11:32] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[17-02-2020 11:32] [info] [ticket/checkClose] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{}
+[17-02-2020 11:41] [info] [ticket/checkClose] dperez (::ffff:10.0.2.26) Petición realizada | params:{} body:{}
+[17-02-2020 11:51] [info] [ticket/saveTicket] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{"_id":"","sub":"APS - Resumen Practicas Ambulatorio Honorarios","requester":"5e0f8a1a692f8111f44f85d3","agent":null,"team":"5e0f91a5e0d85c12205b9f32","status":"Pendiente","resolveDate":"18-02-2020","source":"PORTAL","priority":"Normal","company":"5e0f89b99d81431060a9a1ce","subTypeTicket":"5e4690544ecb7e2044899acf","cc":[""],"workTime":null,"realWorkTime":null,"obsWorkTime":""}
+[17-02-2020 11:51] [info] [textblock/readRequest] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{"id":"5e4aa8575dddd807dcefa6f3"} body:{"read":true}
+[17-02-2020 12:00] [info] [ticket/saveTicket] dperez (::ffff:10.0.2.26) Petición realizada | params:{} body:{"_id":"","sub":"Claves - LC - Dorrego, Frank, Sewaka","numTicket":null,"requester":"5e2879a7fb59b1229c3fbec7","agent":"5e0f9f27c1306a0b3c09b1ac","team":"5e0f91a5e0d85c12205b9f32","status":"Pendiente","lastActivity":"","createDate":"","resolveDate":null,"source":"MANUAL","tags":[null],"priority":"Normal","company":"5e0f89b99d81431060a9a1ce","cc":[""],"workTime":null,"realWorkTime":null,"obsWorkTime":""}
+[17-02-2020 12:00] [info] [textblock/readAgent] dperez (::ffff:10.0.2.26) Petición realizada | params:{"id":"5e4aaa8d5ec6391224adef7a"} body:{"read":true}
+[17-02-2020 12:00] [info] [textblock/readAgent] dperez (::ffff:10.0.2.26) Petición realizada | params:{"id":"5e4aaa8d5ec6391224adef7a"} body:{"read":true}
+[17-02-2020 12:00] [info] [textblock/uploadFile] dperez (::ffff:10.0.2.26) Petición realizada | params:{"id":"5e4aaa8d5ec6391224adef7b"} body:{}
+[17-02-2020 12:10] [info] [ticket/saveTicket] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{} body:{"_id":"","sub":"APS - Resumen Practicas Ambulatorio Honorarios","requester":"5e0f8a1a692f8111f44f85d3","agent":null,"team":"5e0f91a5e0d85c12205b9f32","status":"Pendiente","resolveDate":"18-02-2020","source":"PORTAL","priority":"Normal","company":"5e0f89b99d81431060a9a1ce","subTypeTicket":"5e4690544ecb7e2044899acf","cc":[""],"workTime":null,"realWorkTime":null,"obsWorkTime":""}
+[17-02-2020 12:10] [info] [textblock/readRequest] trosochacki (::ffff:10.0.3.88) Petición realizada | params:{"id":"5e4aacf45dddd807dcefa6f5"} body:{"read":true}
