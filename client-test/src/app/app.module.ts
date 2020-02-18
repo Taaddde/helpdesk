@@ -45,6 +45,7 @@ import { AgentTimeReportComponent } from './components/agent-report/agent-time-r
 import { MessageComponent } from './components/message/message.component';
 import { SectorListComponent } from './components/sector-list/sector-list.component';
 import { NewsComponent } from './components/news/news.component';
+import { SectorNewComponent } from './components/sector-new/sector-new.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { NewsComponent } from './components/news/news.component';
     AgentTimeReportComponent,
     MessageComponent,
     SectorListComponent,
-    NewsComponent
+    NewsComponent,
+    SectorNewComponent
   ],
   imports: [
     BrowserModule,

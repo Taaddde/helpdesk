@@ -63,6 +63,10 @@ export class SectorListComponent implements OnInit {
     this.getSectors();
   }
 
+  showModal(){
+    $("#newsector").modal("show");
+  }
+
   getSectors(){
         this._sectorService.getPaginatedList(this.token, this.page, this.limit).subscribe(
           response =>{

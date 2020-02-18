@@ -1,0 +1,45 @@
+<div role="dialog" tabindex="-1" class="modal fade" id="newsector">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 *ngIf="!isEdit" class="modal-title">Nuevo sector</h4>
+                <h4 *ngIf="isEdit" class="modal-title">Editar sector</h4>
+                <button data-dismiss="modal" type="button" class="close" aria-label="Close">
+                    <a *ngIf="isEdit" (click)="delete()" aria-hidden="true"><i class="fa fa-trash text-danger" aria-hidden="true"></i></a>
+                </button>
+            </div>
+            <form name="my-form" #form="ngForm" (ngSubmit)="onSubmit()">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" class="form-control input" 
+                        placeholder="Atención al público"
+                        #name="ngModel" name="name" [(ngModel)]="sector.name"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Siglas de proceso</label>
+                        <input type="text" class="form-control input" 
+                        placeholder="ATP"
+                        #initials="ngModel" name="initials" [(ngModel)]="sector.initials"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="text" class="form-control input" 
+                        placeholder="referentes.atp@sanjuandedios.org.ar"
+                        #email="ngModel" name="email" [(ngModel)]="sector.email"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button data-dismiss="modal" class="btn btn-light" type="button">
+                    Cancelar
+                  </button>
+                  <button class="btn btn-success" type="submit">
+                    Aceptar
+                  </button>
+                </div>
+            </form>
+    </div>
+  </div>
+</div>

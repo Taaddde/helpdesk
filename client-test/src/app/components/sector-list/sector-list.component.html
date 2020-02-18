@@ -1,7 +1,7 @@
 <div class="card-body">
     <div class="row">
         <div class="col-lg-10">
-            <input *ngIf="identity['role'] == 'ROLE_ADMIN'" type="button" class="btn btn-dark dark" value="Nuevo sector">
+            <input *ngIf="identity['role'] == 'ROLE_ADMIN'" type="button" (click)="sectorsView.newSector();showModal()" class="btn btn-dark dark" value="Nuevo sector">
         </div>
     </div>
     <div class="table-responsive table mt-2" id="dataTable">
@@ -15,7 +15,7 @@
                 </tr>
             </thead>
             <tbody *ngFor="let sector of sectors">
-                <tr class="select">
+                <tr class="select" (click)="sectorsView.getSector(sector._id);showModal()">
                     <td data-title="Nombre">{{sector.name}}</td>
                     <td data-title="Siglas de proceso">{{sector.initials}}</td>
                     <td data-title="Email">{{sector.email}}</td>
@@ -33,3 +33,5 @@
         </table>
     </div>
 </div>
+
+<app-sector-new #sectorsView (refreshList)="getSectors()"></app-sector-new>

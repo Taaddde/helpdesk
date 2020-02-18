@@ -628,6 +628,12 @@ function getListPaged(req, res){
     var query = req.query;
     var sort = {numTicket:-1}
 
+
+    //Parche por errores del http
+    if(query['requester'] && (query['requester'][0] == query['requester'][1])){
+        query['requester'] = query['requester'][0];
+    }
+
     if(query['sub']){
         query['sub'] = { "$regex": query['sub'], "$options": "i" }
     }
@@ -638,6 +644,11 @@ function getListPaged(req, res){
 
     if(query['status'] && query['status'] == 'Finalizado'){
         query['status'] = {$in:['Finalizado','Cerrado']};
+    }
+
+    if(query['requester']){
+        query['$or'] = [{requester: query['requester']},{cc: ObjectId(query['requester'])}]
+        delete query['requester']
     }
 
     Ticket.paginate(query,{page:page, limit:perPage, populate:populateQuery, sort:sort}, function(err, tickets){

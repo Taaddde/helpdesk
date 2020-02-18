@@ -53,7 +53,7 @@
                         <span> </span>
                         {{ticket.requester.surname}}
                       </td>
-                      <td data-title="Asunto" >{{ticket.sub}}</td>
+                      <td class="text-nowrap text-truncate text-break" data-title="Asunto" ><p class="body-cell" style="font-size: 14px;" title="{{ticket.sub}}" ng-bind="ticket.sub">{{ticket.sub}}</p></td>
                       <td data-title="Agente"  *ngIf="ticket.agent">
                           <img *ngIf="ticket.agent.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+ticket.agent.image}}" />
                           <img *ngIf="ticket.agent.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="../../../assets/img/system/user-placeholder.png" />
