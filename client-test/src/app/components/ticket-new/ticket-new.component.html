@@ -158,9 +158,9 @@
 
 <div role="dialog" tabindex="-1" class="modal fade" id="createRequester">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color: #1e2833;">
-                <h4 class="modal-title" style="color: rgb(255,255,255);">Nuevo solicitante</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+      <div class="modal-content" style="border: 1px solid #018dda">
+        <div class="modal-header" style="background-color: #018dda;color: rgb(255,255,255);">
+            <h4 class="modal-title" style="color: rgb(255,255,255);">Nuevo solicitante</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
             <form #form="ngForm" (ngSubmit)="submitRequester()">
                 <div class="modal-body">
 
@@ -182,6 +182,11 @@
 
                     <div class="form-group">
                         <h4>Datos de solicitante</h4>
+                        <label>Sector</label>
+                          <select class="custom-select" (change)="setSector($event.target.value)">
+                            <option selected>Seleccionar sector</option>
+                            <option *ngFor="let sector of sectors" [value]="sector._id">{{sector.name}}</option>
+                          </select>
                         <label>Email</label>
                         <input placeholder="Ingrese el email" #email="ngModel" name="email" [(ngModel)]="nreq.email" required type="text" class="form-control" />
                     </div>

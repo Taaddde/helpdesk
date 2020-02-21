@@ -19,17 +19,22 @@
                     [className]="(filter['sub'] == null || filter['sub'] == '') && (filter['status'] == null || filter['status'] == '') && filter['requester'] == null && filter['agent'] == null ? 'btn btn-dark dark' : 'btn btn-dark dark-selected'">
                         <i class="fa fa-filter"></i>
                     </button>
+                    <button 
+                        *ngIf="identity['role'] != 'ROLE_REQUESTER' && this.groupTicket.length > 1" 
+                        class="btn btn-dark dark" type="button" style="margin-left: 5px;"
+                        (click)="unify()">Unificar</button>
                 </div>
 
 
             </div>
-            <div class="col-md-2 text-nowrap">
-                <button 
-                *ngIf="identity['role'] != 'ROLE_REQUESTER' && this.groupTicket.length > 1" 
-                class="btn btn-dark dark" type="button" 
-                (click)="unify()">Unificar</button>
+            
+            <div class="col-md-6">
+                <div class="text-md-right dataTables_filter" id="dataTable_filter" *ngIf="identity['sectorRef']==true">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="ref" (change)="refCheck($event)" />
+                        <label class="form-check-label" for="ref">TICKETS DEL SECTOR</label></div>
+                </div>
             </div>
-  
         </div>
       <div class="table-responsive table mt-2" id="dataTable">
           <table class="table dataTable my-0" id="dataTable">

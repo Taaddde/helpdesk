@@ -142,11 +142,10 @@ function getTextBlockForTicket(req, res){
 }
 
 function updateTextBlock(req, res){
-var decoded = jwt_decode(req.headers.authorization);
+    var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'updateTextBlock';
     var textblockId = req.params.id;
     var update =  req.body;
-
     //textblockId = textblock buscado, update = datos nuevos a actualizar
     TextBlock.findByIdAndUpdate(textblockId, update, (err, textblockUpdated) =>{
         if(err){

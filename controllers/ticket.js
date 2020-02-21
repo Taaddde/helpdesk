@@ -17,12 +17,12 @@ function getTicket(req, res){
 var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getTicket';
     var populateQuery = [
-        {path:'requester',select:['name','surname','image','email','receiveMail']},
+        {path:'requester',select:['name','surname','image','email','receiveMail','sector'], populate:{path: 'sector'}},
         {path:'agent',select:['name','surname','image','email','receiveMail']},
         {path:'team',select:['users','name','image'], populate:{path: 'users', model: 'User',select:['name','surname','image']}},
         {path:'company',select:['name','email','image','mailSender']},
         {path:'subTypeTicket',select:['name','typeTicket'], populate:{path: 'typeTicket'}},
-        {path:'cc', model:'User', select:['name','surname','image', 'email']}
+        {path:'cc', model:'User', select:['name','surname','image', 'email']},
     ];
     var ticketId = req.params.id;
 
@@ -30,6 +30,7 @@ var decoded = jwt_decode(req.headers.authorization);
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'});
+                console.log(err)
         }else{
             if(!ticket){
                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
@@ -668,6 +669,75 @@ function getListPaged(req, res){
         }
     });
 }
+
+function getSectorListPaged(req, res){
+    const User = require('../models/user')
+    var functionName = 'getSectorListPaged';
+    var decoded = jwt_decode(req.headers.authorization);
+    var populateQuery = [
+        {path:'requester',select:['name','surname','image','sector']},
+        {path:'agent',select:['name','surname','image']}, 
+        {path:'company',select:['name','email','image','mailSender']}
+    ];
+
+    if(req.params.page){
+        var page = req.params.page;
+    }else{
+        var page = 1;
+    }
+    var perPage = req.params.perPage;
+
+    var query = req.query;
+    var sort = {numTicket:-1}
+
+
+    delete query['requester'];
+
+    if(query['sub']){
+        query['sub'] = { "$regex": query['sub'], "$options": "i" }
+    }
+
+    if(query['status'] && !query['company'] && query['status'] == 'Pendiente'){
+        query['status'] = {$in:['Pendiente','Abierto']};
+    }
+
+    if(query['status'] && query['status'] == 'Finalizado'){
+        query['status'] = {$in:['Finalizado','Cerrado']};
+    }
+
+    User.find({sector: req.params.sector}).distinct('_id').exec((err, users) =>{
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            console.log(err)
+            return res.status(500).send({message: err})
+        }else{
+            if(!users){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                return res.status(404).send({message: 'No hay items'})
+            }else{
+                query['requester'] = users;
+                Ticket.paginate(query,{page:page, limit:perPage, populate:populateQuery, sort:sort}, function(err, tickets){
+                    if(err){
+                        logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                        console.log(err)
+                        res.status(500).send({message: err})
+                    }else{
+                        if(!tickets){
+                            logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                            res.status(404).send({message: 'No hay items'})
+                        }else{
+                            
+                            res.status(200).send({
+                                tickets:tickets
+                            });
+                        }
+                    }
+                });            
+            }
+        }
+    });
+}
+
 
 function getReqTicketsPaged(req, res){
 var decoded = jwt_decode(req.headers.authorization);
@@ -1314,6 +1384,7 @@ module.exports = {
     getTicketsForName,
     getTickets,
     getTicketsPaged,
+    getSectorListPaged,
     getListPaged,
     getReqTicketsPaged,
     getTicketsForUser,

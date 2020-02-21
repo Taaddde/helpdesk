@@ -13,6 +13,7 @@ api.get('/for-number/:num', md_auth.ensureAuth, ticketController.getTicketsForNu
 api.get('/for-name/:company/:sub', md_auth.ensureAuth, ticketController.getTicketsForName);
 api.get('/ticketsPaged/:page&:perPage&:company&:status?&:userId?', md_auth.ensureAuth, ticketController.getTicketsPaged);
 api.get('/listPaged/:page/:perPage/*', md_auth.ensureAuth, ticketController.getListPaged);
+api.get('/listSectorPaged/:page/:perPage/:sector/*', md_auth.ensureAuth, ticketController.getSectorListPaged);
 api.get('/reqTicketsPaged/:page&:perPage&:userId&:status?', md_auth.ensureAuth, ticketController.getReqTicketsPaged);
 api.get('/for-user/:id', md_auth.ensureAuth, ticketController.getTicketsForUser);
 api.get('/counts-agent/:company/:userId', md_auth.ensureAuth, ticketController.getCountTickets);

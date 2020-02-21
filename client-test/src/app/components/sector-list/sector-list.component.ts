@@ -68,18 +68,13 @@ export class SectorListComponent implements OnInit {
   }
 
   getSectors(){
-        this._sectorService.getPaginatedList(this.token, this.page, this.limit).subscribe(
+        this._sectorService.getList(this.token).subscribe(
           response =>{
               if(!response.sectors){
                 //this._router.navigate(['/']);
               }else{
-                this.sectors = response.sectors.docs;
-                this.limit = response.sectors.limit;
-                this.nextPage = response.sectors.nextPage;
-                this.prevPage = response.sectors.prevPage;
-                this.totalDocs = response.sectors.totalDocs;
-                this.totalPages = response.sectors.totalPages;
-                this.pagingCounter = response.sectors.pagingCounter;
+                this.sectors = response.sectors;
+                console.log(this.sectors)
               }
           },
           error =>{

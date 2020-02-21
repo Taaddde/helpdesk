@@ -81,8 +81,8 @@
                                   <div class="row">
                                       <div class="col"><span><strong>{{ticket.requester['name']+' '+ticket.requester['surname']}}</strong></span></div>
                                   </div>
-                                  <div class="row">
-                                      <div class="col"><span><em>{{ticket.requester['email']}}</em></span></div>
+                                  <div class="row" *ngIf="ticket.requester['sector']">
+                                    <div class="col"><span><em>{{ticket.requester['sector']['name']}}</em></span></div>
                                   </div>
                               </div>
                           </div>
@@ -433,11 +433,17 @@
                         <i class="fa fa-paper-plane"></i>
                       </button>
 
+                      <button class="btn btn-danger float-right" title="Reabrir el ticket" *ngIf="ticket.status == 'Finalizado' && identity['_id'] == ticket.requester['_id']" type="button" style="margin-right: 15px;" (click)="cancelFinish()">
+                        <i class="fa fa-paper-plane"></i>
+                      </button>
+
                       <div class="dropdown d-inline float-right">
-                          <button class="btn btn-dark dropdown-toggle dark" disabled data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
-                            {{ticket.status}}
-                          </button>
-                        </div>
+                        <button class="btn btn-dark dropdown-toggle dark" disabled data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
+                          {{ticket.status}}
+                        </button>
+                      </div>
+
+                      
 
                     </span>
               </div>

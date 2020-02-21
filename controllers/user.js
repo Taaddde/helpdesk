@@ -38,14 +38,14 @@ function saveUser(req, res){
     user.image = 'null';
     user.company = params.company;
     user.receiveMail = params.receiveMail;
-    user.sector = params.sector;
     user.sectorRef = params.sectorRef;
-
+    user.sector = params.sector;
 
     User.findOne({userName:user.userName}, (err, userCheck) =>{
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
             res.status(500).send({message: err});
+            console.log(err)
         }else{
             if(!userCheck){
                 if(params.password){
@@ -59,6 +59,7 @@ function saveUser(req, res){
                                 if(err){
                                     logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                                     res.status(500).send({message:err});
+                                    console.log(err)
                                 }else{
                                    if(!userStore){
                                     logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});

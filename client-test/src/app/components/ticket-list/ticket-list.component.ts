@@ -88,9 +88,8 @@ export class TicketListComponent implements OnInit {
 
     if(this.identity['role'] != 'ROLE_REQUESTER'){
       this.getRequesters();
-      
-
     }
+
     this.getAgents();
 
   }
@@ -135,6 +134,38 @@ export class TicketListComponent implements OnInit {
       })
     })
   }
+
+  getSectorTickets(){
+    this._route.params.forEach((params: Params) =>{
+      this._route.queryParams.forEach((query: Params) =>{
+        this.query = query;
+        this.page = params['page'];
+        this.limit = params['perPage'];
+        var sector = this.identity['sector']['_id']
+
+        this._ticketService.getSectorPaginatedList(this.token, this.page, this.limit, query, sector).subscribe(
+          response =>{
+              if(!response.tickets){
+                //this._router.navigate(['/']);
+              }else{
+                this.tickets = response.tickets.docs;
+                console.log(this.tickets)
+                this.limit = response.tickets.limit;
+                this.nextPage = response.tickets.nextPage;
+                this.prevPage = response.tickets.prevPage;
+                this.totalDocs = response.tickets.totalDocs;
+                this.totalPages = response.tickets.totalPages;
+                this.pagingCounter = response.tickets.pagingCounter;
+              }
+          },
+          error =>{
+              console.error(error);
+          }
+        );
+      })
+    })
+  }
+
 
   getRequesters(){
     this._userService.getListReq(this.token, this.identity['company']['_id']).subscribe(
@@ -346,6 +377,14 @@ export class TicketListComponent implements OnInit {
     this._route.queryParams.forEach((query: Params) =>{
       return query;
     })
+  }
+
+  refCheck(event:any){
+    if(event.currentTarget.checked){
+      this.getSectorTickets();
+    }else{
+      this.getTickets();
+    }
   }
 
 }

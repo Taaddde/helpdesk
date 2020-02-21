@@ -12,6 +12,8 @@ import { Team } from '../../models/team';
 import { User } from '../../models/user';
 import { uploadService } from '../../services/upload.service';
 import { MessageComponent } from '../message/message.component';
+import { Sector } from 'src/app/models/sector';
+import { sectorService } from 'src/app/services/sector.service';
 
 declare var $: any;
 
@@ -21,7 +23,7 @@ declare var $: any;
   selector: 'app-ticket-new',
   templateUrl: './ticket-new.component.html',
   styleUrls: ['../../styles/form.scss'],
-  providers: [userService, ticketService, teamService, textblockService, uploadService, MessageComponent]
+  providers: [userService, ticketService, sectorService, teamService, textblockService, uploadService, MessageComponent]
 })
 export class TicketNewComponent implements OnInit {
 
@@ -39,6 +41,8 @@ export class TicketNewComponent implements OnInit {
   public requester: User;
   public nreq: User;
 
+  public sectors: Sector[];
+
   public priority: string;
   public keyPress: boolean;
   public requesterFilter: string;
@@ -55,7 +59,8 @@ export class TicketNewComponent implements OnInit {
     private _ticketService: ticketService,
     private _teamService: teamService,
     private _textblockService: textblockService,
-    private _uploadService: uploadService
+    private _uploadService: uploadService,
+    private _sectorService: sectorService
   ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
@@ -74,6 +79,7 @@ export class TicketNewComponent implements OnInit {
   ngOnInit() {
     this.getRequesters();
     this.getTeams();
+    this.getSectors();
   }
 
   getTeams(){
@@ -114,6 +120,29 @@ export class TicketNewComponent implements OnInit {
       }
     );
   }
+
+  setSector(value){
+    this.nreq.sector = value;
+  }
+
+  getSectors(){
+    this._sectorService.getList(this.token).subscribe(
+      response =>{
+          if(response.sectors){
+            this.sectors = response.sectors;
+          }
+      },
+      error =>{
+          var errorMessage = <any>error;
+          if(errorMessage != null){
+          var body = JSON.parse(error._body);
+          //this.alertMessage = body.message;
+          console.error(error);
+          }
+      }
+    );
+  }
+
 
   createRequester(){
     this.nreq = new User('','','','','','','',false,'ROLE_REQUESTER','','null','',false,'');
@@ -236,6 +265,9 @@ export class TicketNewComponent implements OnInit {
 
   submitRequester(){
     delete this.nreq.company;
+    if(this.nreq.sector == ''){
+      delete this.nreq.sector;
+    }
     this._userService.add(this.token, this.nreq).subscribe(
       response =>{
           if(!response.user){

@@ -16,7 +16,7 @@
 
 
         <span class="forgot" role="button" style="margin-top: 20px;">
-            TR Helpdesk - V 0.8.8
+            TR Helpdesk - V 1.0.2
         </span>
     </form>
 </div>
@@ -166,6 +166,9 @@
                                             </a>
                                             <a *ngIf="identity['changedMode']" class="dropdown-item" role="presentation" (click)="changeToAgent()">
                                                 <i class="fas fa-exchange-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Modo agente
+                                            </a>
+                                            <a class="dropdown-item" role="presentation" (click)="showModal()">
+                                                <i class="fas fa-newspaper fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Novedades
                                             </a>
                                                 <!-- <a class="dropdown-item" role="presentation" href="#"><i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Actividad</a> -->
                                                 <div class="dropdown-divider"></div><a class="dropdown-item" role="presentation" (click)="logout()"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Cerrar sesión</a></div>

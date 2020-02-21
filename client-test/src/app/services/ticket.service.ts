@@ -139,6 +139,21 @@ export class ticketService{
         return this._httpClient.get<any>(this.url+'ticket/listPaged/'+page+'/'+perPage+'/?'+q.join('&')+t, this.httpOptions);
     }
 
+    getSectorPaginatedList(token, page, perPage, query, sector){
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+            var q = [];
+            for (var p in query) {
+                if (query.hasOwnProperty(p)) {
+                    q.push(encodeURIComponent(p) + "=" + encodeURIComponent(query[p]));
+                  }
+            }
+
+        return this._httpClient.get<any>(this.url+'ticket/listSectorPaged/'+page+'/'+perPage+'/'+sector+'/?'+q.join('&'), this.httpOptions);
+    }
+
+
 
     getPaginatedTeamList(token, page, perPage, userId){
         this.httpOptions.headers =

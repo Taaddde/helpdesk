@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose');
 var mongoosePaginate = require('mongoose-paginate-v2');
+var aggregatePaginate = require('mongoose-aggregate-paginate-v2');
 
 var Schema = mongoose.Schema; //Para crear documentos en la coleccion
 
@@ -36,5 +37,6 @@ var TicketSchema = Schema({
 });
 
 TicketSchema.plugin(mongoosePaginate);
+TicketSchema.plugin(aggregatePaginate);
 
 module.exports = mongoose.model('Ticket', TicketSchema);

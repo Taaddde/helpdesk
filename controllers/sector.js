@@ -1,15 +1,20 @@
 var Sector = require('../models/sector');
+var User = require('../models/user');
 
 //Sistema de log
 var logger = require('../services/logger');
 var jwt_decode = require('jwt-decode');
 var path = require('path');
+const mongoose =require('mongoose')
+
+const ObjectId = mongoose.Types.ObjectId;
 
 
 function getSectors(req, res){
     var decoded = jwt_decode(req.headers.authorization);
 
     var functionName = 'getSectors';
+
 
     Sector.find({}).sort('name').exec((err, sectors) =>{
         if(err){
@@ -22,6 +27,17 @@ function getSectors(req, res){
             }else{
                 res.status(200).send({sectors:sectors});
             }
+        }
+    });
+}
+
+function getCount(id){
+    User.countDocuments({sector:id}, (err, count) => {
+        if(err){
+            console.log(err);
+        }else{
+            //console.log(count)
+            return count;
         }
     });
 }

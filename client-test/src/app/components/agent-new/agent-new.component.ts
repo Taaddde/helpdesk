@@ -4,13 +4,14 @@ import {Router, ActivatedRoute, Params} from '@angular/router'
 import {GLOBAL} from '../../services/global'
 import { User } from '../../models/user';
 import { uploadService } from '../../services/upload.service';
-import { IfStmt } from '@angular/compiler';
+import { sectorService } from 'src/app/services/sector.service';
+import { Sector } from 'src/app/models/sector';
 
 @Component({
   selector: 'app-agent-new',
   templateUrl: './agent-new.component.html',
   styleUrls: ['../../styles/form.scss'],
-  providers: [userService, uploadService]
+  providers: [userService, uploadService, sectorService]
 })
 export class AgentNewComponent implements OnInit {
 
@@ -22,6 +23,7 @@ export class AgentNewComponent implements OnInit {
 
   public isUser: boolean;
 
+  public sectors: Sector[];
 
   public alertMessage: string;
 
@@ -30,6 +32,8 @@ export class AgentNewComponent implements OnInit {
     private _router: Router,
     private _userService: userService,
     private _uploadService: uploadService,
+    private _sectorService: sectorService,
+
   ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
@@ -41,6 +45,30 @@ export class AgentNewComponent implements OnInit {
    }
 
   ngOnInit() {
+    this.getSectors();
+
+  }
+
+  setSector(value){
+    this.user.sector = value;
+  }
+
+  getSectors(){
+    this._sectorService.getList(this.token).subscribe(
+      response =>{
+          if(response.sectors){
+            this.sectors = response.sectors;
+          }
+      },
+      error =>{
+          var errorMessage = <any>error;
+          if(errorMessage != null){
+          var body = JSON.parse(error._body);
+          //this.alertMessage = body.message;
+          console.error(error);
+          }
+      }
+    );
   }
 
   onSubmit(){
@@ -57,6 +85,9 @@ export class AgentNewComponent implements OnInit {
         delete this.user.password;
       }
   
+      if(this.user.sector == ''){
+        delete this.user.sector;
+      }
   
       this._userService.add(this.token,this.user).subscribe(
         response =>{

@@ -80,6 +80,11 @@ export class AppComponent implements OnInit {
     }
   }
 
+  showModal(){
+    $("#news").modal("show");
+
+  }
+
   checkClose(){
     this._ticketService.checkClose(this.token).subscribe(
       response =>{

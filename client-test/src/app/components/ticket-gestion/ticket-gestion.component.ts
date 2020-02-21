@@ -419,6 +419,22 @@ export class TicketGestionComponent implements OnInit {
 
   }
 
+  cancelFinish(){
+    let text = this.textblock.text;
+    if(text != ''){
+      text = text.split('<span _ngco')[0];
+    }
+
+    if(text != ''){
+      this.newInfo(this.identity['name']+' '+this.identity['surname']+' ha reabierto el ticket');
+      this.onSubmit();
+      this.ticket.status = 'Pendiente'
+      this.editTicket();
+    }else{
+      this.message.error('Error','Escribe un mensaje antes de enviarlo');
+    }
+  }
+
   selectCompany(val: string, name:string){
     if(this.ticket.status != 'Abierto'){
       this.ticket.company = val;
@@ -666,7 +682,7 @@ export class TicketGestionComponent implements OnInit {
         }
       );
     }else{
-      alert('Escribe un mensaje antes de enviarlo')
+      this.message.error('Error','Escribe un mensaje antes de enviarlo');
     }
 
     
