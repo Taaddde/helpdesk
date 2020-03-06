@@ -192,6 +192,17 @@ export class ticketService{
         return this._httpClient.get<any>(this.url+'ticket/for-name/'+company+'/'+name, this.httpOptions);
     }
 
+    getPrevNext(token, userId, numTicket, status, role){
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
+        if(role == 'ROLE_REQUESTER'){
+            return this._httpClient.get<any>(this.url+'ticket/prev-next/requester/'+status+'/'+numTicket+'/'+userId, this.httpOptions);
+        }else{
+            return this._httpClient.get<any>(this.url+'ticket/prev-next/agent/'+status+'/'+numTicket+'/'+userId, this.httpOptions);
+        }
+    }
+
+
 
     getForUser(token, id: string){
         this.httpOptions.headers =

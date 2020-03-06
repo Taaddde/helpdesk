@@ -52,6 +52,9 @@ export class TicketGestionComponent implements OnInit {
 
   public keyPress: boolean;
 
+  public next: Ticket;
+  public prev: Ticket;
+
   public stat: string;
 
   constructor(
@@ -119,6 +122,22 @@ export class TicketGestionComponent implements OnInit {
     );
   }
 
+  getPrevNext(num, status){
+    this._ticketService.getPrevNext(this.token, this.identity['_id'], num, status, this.identity['role']).subscribe(
+      response =>{
+          this.next = response.nextTicket;
+          this.prev = response.prevTicket;
+      },
+      error =>{
+          var errorMessage = <any>error;
+          if(errorMessage != null){
+          var body = JSON.parse(error._body);
+          //this.alertMessage = body.message;
+          console.error(error);
+          }
+      }
+    );
+  }
 
   filterCc(){
     if(this.ccFilter.length >= 3){
@@ -352,11 +371,12 @@ export class TicketGestionComponent implements OnInit {
         response => {
           this.ticket = response.ticket;
           this.getChat();
+          this.getPrevNext(response.ticket['numTicket'], response.ticket['status']);
           this.getTeams(response.ticket.company['_id']);
           if(response.ticket.team){
             this.agents = response.ticket.team.users;
           }
-          this.getReqTickets(response.ticket.requester);
+          //this.getReqTickets(response.ticket.requester);
 
           if(this.ticket.cc){
             let cc = this.ticket.cc.map(function(user) {
@@ -368,6 +388,8 @@ export class TicketGestionComponent implements OnInit {
             }
     
           }
+
+          
       },
         error => {
           var errorMessage = <any>error;
@@ -625,23 +647,25 @@ export class TicketGestionComponent implements OnInit {
                   this._uploadService.makeFileRequest(this.url+'textblock/file/'+response.textblock._id, [], this.filesToUpload, this.token, 'file');
               }
             }
-  
+
             let nameTo:string;
             let mailTo:string;
-  
+
             if(this.ticket.company['mailSender'] == true){
-              if(this.identity['role'] != 'REQUESTER'){
+              if(this.identity['role'] != 'ROLE_REQUESTER'){
+                //Esta mandando el mensaje un agente
                 if(this.ticket.requester['receiveMail'] == true){
                   nameTo = this.ticket.requester['name']+' '+this.ticket.requester['surname'];
                   mailTo = this.ticket.requester['email'];  
                 }
               }else{
+                //Esta mandando el mensaje un solicitante
                 if(this.ticket.agent['receiveMail'] == true){
                   nameTo = this.ticket.agent['name']+' '+this.ticket.agent['surname'];
                   mailTo = this.ticket.agent['email'];
                 }
               }
-    
+
               if(nameTo){
                 let link:string = window.location.href;
                 let nameFrom:string = this.identity['name']+' '+this.identity['surname'];
@@ -653,6 +677,7 @@ export class TicketGestionComponent implements OnInit {
                   });
                     
                 }
+
                 this._ticketService.sendMail(this.token, nameFrom, this.ticket, response.textblock.text, nameTo, mailTo, link, cc).subscribe(
                   response =>{
                   },

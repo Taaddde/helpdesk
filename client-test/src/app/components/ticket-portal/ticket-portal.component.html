@@ -94,10 +94,11 @@
                           </div>
     
                           <div class="row" style="margin-top: 8px;margin-left: 4px;">
-                              <div id="editable" class="text-chat" contentEditable="true"
+                              <div id="editable" style="padding-left: 5px !important;" class="text-chat" contentEditable="true"
                               [innerHtml]="selectedSubtype.autoDesc"
                               (input)="tb.text = $event.target.innerHTML"
                               (paste)="pastePicture($event)"
+                              
                               >
                                 <span id="antieditable" contentEditable="false"></span>
                               </div>

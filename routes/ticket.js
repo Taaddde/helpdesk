@@ -26,6 +26,8 @@ api.get('/teamPaged/:page/:perPage/:userId', md_auth.ensureAuth, ticketControlle
 api.get('/timework/report/:companyId', md_auth.ensureAuth, ticketController.getTimeWork);
 api.get('/timework/for-subtype/:subTypeTicket/:workTime/:page?', md_auth.ensureAuth, ticketController.getTypeTimeWork);
 api.get('/timework/phases/:subTypeTicket', md_auth.ensureAuth, ticketController.getTimeWorkPhases);
+api.get('/prev-next/agent/:status/:numTicket/:agentId', md_auth.ensureAuth, ticketController.getPrevNextOfAgent);
+api.get('/prev-next/requester/:status/:numTicket/:requesterId', md_auth.ensureAuth, ticketController.getPrevNextOfRequester);
 
 //ABM
 api.post('/add',md_auth.ensureAuth, ticketController.saveTicket);

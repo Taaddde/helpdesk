@@ -213,7 +213,7 @@
         </div>
       </div>
 
-      <div class="row" id="requester-tickets">
+      <!-- <div class="row" id="requester-tickets">
           <div class="card info-card">
               <div class="container title-container" style="padding-right: 0;padding-left: 0;">
                   <div class="text-center title">
@@ -237,7 +237,7 @@
                     </ul>
               </div>
           </div>
-      </div>
+      </div> -->
   </div>
   <div class="col-md-6 col-lg-7 col-xl-8">
       <div class="container text-center">
@@ -247,6 +247,8 @@
             <h6 *ngIf="!editSub" class="d-inline" (click)="subToEdit(ticket.sub)">
               <strong>{{ticket.sub}}</strong>
             </h6>
+            <a *ngIf="(identity['role'] == 'ROLE_REQUESTER' || ticket.agent) && prev" [routerLink]="['/ticket-gestion', prev._id]" class="float-left" ><i class="fa fa-arrow-circle-left adjunt" style="margin-left: 6px;"></i></a>
+            <a *ngIf="(identity['role'] == 'ROLE_REQUESTER' || ticket.agent) && next" [routerLink]="['/ticket-gestion', next._id]" class="float-right" ><i class="fa fa-arrow-circle-right adjunt" style="margin-left: 6px;"></i></a>
         </div>
 
 
@@ -434,7 +436,7 @@
                       </button>
 
                       <button class="btn btn-danger float-right" title="Reabrir el ticket" *ngIf="ticket.status == 'Finalizado' && identity['_id'] == ticket.requester['_id']" type="button" style="margin-right: 15px;" (click)="cancelFinish()">
-                        <i class="fa fa-paper-plane"></i>
+                        <i class="fa fa-unlock"></i>
                       </button>
 
                       <div class="dropdown d-inline float-right">

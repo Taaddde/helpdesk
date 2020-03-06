@@ -42,6 +42,77 @@ var decoded = jwt_decode(req.headers.authorization);
     }).populate(populateQuery);
 }
 
+function getPrevNextOfAgent(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+    var functionName = 'getPrevNextOfAgent';
+    let numTicket = req.params.numTicket;
+    let agentId = req.params.agentId;
+    let status = req.params.status;
+
+    let updateNext = {numTicket: {$gt: numTicket}, agent: agentId};
+    let updatePrev = {numTicket: {$lt: numTicket}, agent: agentId};
+
+    if(status == 'Pendiente'){
+        updateNext['status'] = 'Pendiente';
+        updatePrev['status'] = 'Pendiente';
+
+    }else{
+        updateNext['$or'] = [{status:'Finalizado'}, {status:'Cerrado'}];
+        updatePrev['$or'] = [{status:'Finalizado'}, {status:'Cerrado'}];
+    }
+
+    Ticket.findOne(updateNext, (err, nextTicket) =>{
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            return res.status(500).send({message: err});
+        }else{
+            Ticket.findOne(updatePrev).sort({numTicket:-1}).exec((err, prevTicket) =>{
+                if(err){
+                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                    return res.status(500).send({message: err});
+                }else{
+                    res.status(200).send({nextTicket, prevTicket});
+                }
+            });
+        }
+    });
+}
+
+function getPrevNextOfRequester(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+    var functionName = 'getPrevNextOfRequester';
+    let numTicket = req.params.numTicket;
+    let requesterId = req.params.requesterId;
+    let status = req.params.status;
+
+    let updateNext = {numTicket: {$gt: numTicket}, $or:[{requester:requesterId},{cc:requesterId}]};
+    let updatePrev = {numTicket: {$lt: numTicket}, $or:[{requester:requesterId},{cc:requesterId}]};
+
+    if(status == 'Pendiente'){
+        updateNext['status'] = 'Pendiente';
+        updatePrev['status'] = 'Pendiente';
+
+    }else{
+        updateNext['$or'] = [{status:'Finalizado'}, {status:'Cerrado'}];
+        updatePrev['$or'] = [{status:'Finalizado'}, {status:'Cerrado'}];
+    }
+
+    Ticket.findOne(updateNext, (err, nextTicket) =>{
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            return res.status(500).send({message: err});
+        }else{
+            Ticket.findOne(updatePrev).sort({numTicket:-1}).exec((err, prevTicket) =>{
+                if(err){
+                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                    return res.status(500).send({message: err});
+                }else{
+                    res.status(200).send({nextTicket, prevTicket});
+                }
+            });
+        }
+    });
+}
 
 function getTicketsForUser(req, res){
 var decoded = jwt_decode(req.headers.authorization);
@@ -1396,9 +1467,13 @@ module.exports = {
     getTicketReports,
     getDateTickets,
     getTeamTickets,
+    
     getTimeWork,
     getTypeTimeWork,
     getTimeWorkPhases,
+
+    getPrevNextOfAgent,
+    getPrevNextOfRequester,
 
     checkClose,
     addCc,

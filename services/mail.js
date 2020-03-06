@@ -29,6 +29,8 @@ function send(email, pass, to, sub, txt, cc){
     // send mail with defined transport object
     transporter.sendMail(mailOptions, function(error, info){
         if(error){
+            console.log(error)
+
             return false;
         }else{
             return true;

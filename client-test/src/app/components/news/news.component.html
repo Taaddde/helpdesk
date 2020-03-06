@@ -2,52 +2,34 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="border: 1px solid #018dda">
             <div class="modal-header" style="background-color: #018dda;color: rgb(255,255,255);">
-                <h4 class="modal-title">¡Novedades! - Versión 1.0.2 (20/02/2020)</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                <h4 class="modal-title">¡Novedades! - Versión 1.0.5 (27/02/2020)</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
             <div class="modal-body">
                 <span *ngIf="identity['role'] != 'ROLE_REQUESTER'">
                     <div>
-                        <h4><i class="fas fa-ticket-alt"></i><strong> Sectorización</strong></h4>
-                        <p>Ahora el sistema permite realizar un ABM de sectores y asignarlos a los usuarios.</p>
-                    </div>
-                    <div>
-                        <h4><i class="fas fa-ticket-alt"></i><strong> Referentes</strong></h4>
-                        <p>Los solicitantes pueden marcarse como referentes.</p>
+                        <h4><i class="fas fa-ticket-alt"></i><strong> Ticket anterior y siguiente</strong></h4>
+                        <p>Cuando esten dentro de un ticket, los agentes pueden saltar entre los tickets que tengan tomados con los botones <i class="fa fa-arrow-circle-left" ></i> y <i class="fa fa-arrow-circle-right" style="margin-right: 6px;"></i></p>
                     </div>
                     <div>
                         <h4><i class="fas fa-ticket-alt"></i><strong> FIX</strong></h4>
                         <ul style="list-style-type: inherit;">
-                            <li style="font-size: 15px;">Ahora el cursor del mouse cambia cuando se para encima de un ticket en una lista.</li>
-                            <li style="font-size: 15px;">Se unificaron los colores de los pop-ups.</li>
+                            <li style="font-size: 15px;">Ahora la lista de solicitantes se ordenan por apellido</li>
                         </ul>
                     </div>
                 </span>
-                
                 <div>
-                    <h4><strong>Acceso externo</strong></h4>
-                    <p>A partir de ahora, el sistema permite acceder de forma remota desde cualquier dispositivo utilizando el link <a href="http://190.220.159.37:3977/">http://190.220.159.37:3977/</a>.</p>
-                    <p>En celulares se recomienda usar la aplicación de forma horizontal.</p>
+                    <h4><strong> Ticket anterior y siguiente</strong></h4>
+                    <p>Cuando esten dentro de un ticket, los usuarios pueden saltar entre los tickets que hayan generado y los que esten en copia con los botones <i class="fa fa-arrow-circle-left" ></i> y <i class="fa fa-arrow-circle-right" style="margin-right: 6px;"></i></p>
                 </div>
-                <div>
-                    <h4><strong>Acceso desde el PIUA</strong></h4>
-                    <p>A partir de ahora, el sistema se encuentra disponible para acceder en el PIUA.</p>
-                </div>
-                <div>
-                    <h4><strong>Sectorización</strong></h4>
-                    <ul style="list-style-type: inherit;">
-                        <li style="font-size: 15px;">Los usuarios ahora tienen identificado a que sector pertenecen. </li>
-                        <li style="font-size: 15px;">Los referentes tienen la función de visualizar los tickets enviados por su sector.</li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4><strong>Reapertura de tickets</strong></h4>
-                    <p>Una vez finalizado el ticket, el solicitante podrá volver el estado a <strong>pendiente</strong> si considera que el problema no se encuentra resuelto.</p>
-                </div>
+
                 <div>
                     <h4><strong>FIX</strong></h4>
                     <ul style="list-style-type: inherit;">
-                        <li style="font-size: 15px;">Los usuarios que hayan sido copiados en otros tickets ahora podrán visualizarlo correctamente en su pantalla</li>
-                        <li style="font-size: 15px;">En las listas de tickets, ahora se recortará el asunto para dar mas espacio a otra información. Si el usuario ubica el mouse encima del asunto, éste desplegará el texto completo.</li>
+                        <li style="font-size: 15px;">Se eliminó el apartado de <strong>Tickets del solicitante</strong>, por su poca utilidad y para agilizar la aplicación.</li>
+                        <li style="font-size: 15px;">Se reemplazó el icono de reabrir tickets a 
+                            <button class="btn btn-danger btn-sm" type="button">
+                                <i class="fa fa-unlock fa-sm"></i>
+                            </button>
+                        </li>
                     </ul>
                 </div>
             </div>

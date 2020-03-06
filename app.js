@@ -20,8 +20,8 @@ var global_routes = require('./routes/global');
 var sector_routes = require('./routes/sector');
 
 
-app.use(bodyparser.urlencoded({extended:false}));
-app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({limit: '50mb', extended: true}));
+app.use(bodyparser.json({limit: '50mb', extended: true}));
 
 //configurar cabeceras http
 
