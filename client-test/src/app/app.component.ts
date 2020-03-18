@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
 import {User} from './models/user';
 
 import {Router, ActivatedRoute, Params} from '@angular/router'
@@ -20,7 +20,7 @@ declare var $: any;
   styleUrls: ['./app.component.scss'],
   providers:[userService, ticketService, globalService]
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   @ViewChild(MessageComponent, {static:false}) message: MessageComponent;
 
   public title = 'Mesa de ayuda';
@@ -78,6 +78,10 @@ export class AppComponent implements OnInit {
     if(window.location.pathname.split('/')[1] == 'reset-password'){
       this.reset = true;
     }
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe()
   }
 
   showModal(){

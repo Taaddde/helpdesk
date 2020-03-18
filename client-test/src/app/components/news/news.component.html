@@ -2,34 +2,15 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="border: 1px solid #018dda">
             <div class="modal-header" style="background-color: #018dda;color: rgb(255,255,255);">
-                <h4 class="modal-title">¡Novedades! - Versión 1.0.5 (27/02/2020)</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                <h4 class="modal-title">¡Novedades! - Versión 1.0.6 (09/03/2020)</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
             <div class="modal-body">
                 <span *ngIf="identity['role'] != 'ROLE_REQUESTER'">
-                    <div>
-                        <h4><i class="fas fa-ticket-alt"></i><strong> Ticket anterior y siguiente</strong></h4>
-                        <p>Cuando esten dentro de un ticket, los agentes pueden saltar entre los tickets que tengan tomados con los botones <i class="fa fa-arrow-circle-left" ></i> y <i class="fa fa-arrow-circle-right" style="margin-right: 6px;"></i></p>
-                    </div>
-                    <div>
-                        <h4><i class="fas fa-ticket-alt"></i><strong> FIX</strong></h4>
-                        <ul style="list-style-type: inherit;">
-                            <li style="font-size: 15px;">Ahora la lista de solicitantes se ordenan por apellido</li>
-                        </ul>
-                    </div>
-                </span>
-                <div>
-                    <h4><strong> Ticket anterior y siguiente</strong></h4>
-                    <p>Cuando esten dentro de un ticket, los usuarios pueden saltar entre los tickets que hayan generado y los que esten en copia con los botones <i class="fa fa-arrow-circle-left" ></i> y <i class="fa fa-arrow-circle-right" style="margin-right: 6px;"></i></p>
-                </div>
 
+                </span>
                 <div>
                     <h4><strong>FIX</strong></h4>
                     <ul style="list-style-type: inherit;">
-                        <li style="font-size: 15px;">Se eliminó el apartado de <strong>Tickets del solicitante</strong>, por su poca utilidad y para agilizar la aplicación.</li>
-                        <li style="font-size: 15px;">Se reemplazó el icono de reabrir tickets a 
-                            <button class="btn btn-danger btn-sm" type="button">
-                                <i class="fa fa-unlock fa-sm"></i>
-                            </button>
-                        </li>
+                        <li style="font-size: 15px;">Se eliminó el inconveniente que generaba constantes peticiones al servidor, esto hacía que el sistema esté mucho mas tiempo del debido cargando.</li>
                     </ul>
                 </div>
             </div>

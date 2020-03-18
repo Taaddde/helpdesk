@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {Router, ActivatedRoute, Params} from '@angular/router'
 import { GLOBAL } from '../../services/global';
 import { userService } from '../../services/user.service';
@@ -15,7 +15,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['../../styles/list.scss'],
   providers: [userService, ticketService]
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 
     public identity;
     public token;
@@ -82,6 +82,10 @@ export class HomeComponent implements OnInit {
         this.getCountTickets();
       });  
     }
+  }
+
+  ngOnDestroy() {
+    this.refresh.unsubscribe();
   }
 
   getCountTickets(){

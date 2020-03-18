@@ -505,8 +505,8 @@ function deleteUser(req, res){
 function forgotPassword(req, res){
     var userName = req.params.userName;
     var functionName = 'forgotPassword';
-
-    User.findOne({userName:userName}, (err, user) =>{
+    var query = {$or:[{userName:userName},{email:userName}]};
+    User.findOne(query, (err, user) =>{
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: userName+' ('+req.ip+') '+err}});
             res.status(500).send({message: 'Error del servidor en la petición'});
@@ -530,7 +530,7 @@ function forgotPassword(req, res){
                                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: userName+' ('+req.ip+') Objeto no encontrado'}});
                                 res.status(404).send({message: 'El nombre de usuario no existe'});
                             }else{
-                                let txt = '<div style="position: relative;display: flex;flex-direction: column;min-width: 0;word-wrap: break-word;background-color: #fff;background-clip: border-box;border: 1px solid #e3e6f0;border-radius: .35rem;font-family: Nunito,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;"><div style="flex: 1 1 auto;padding: 1.25rem;"><h4 style="margin-bottom: .75rem;"><strong>¡Hola '+user.name+'!</strong></h4><hr/><p class="card-text">Se ha solicitado un cambio de contraseña para el usuario '+userUpdated.userName+', tiene 30 minutos para utilizar este link</p><hr /><a style="" href="http://10.0.0.98:3977/reset-password/'+userUpdated._id+'/'+update.passToken+'" role="button" >Cambiar contraseña</a></div></div>'
+                                let txt = '<div style="position: relative;display: flex;flex-direction: column;min-width: 0;word-wrap: break-word;background-color: #fff;background-clip: border-box;border: 1px solid #e3e6f0;border-radius: .35rem;font-family: Nunito,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;"><div style="flex: 1 1 auto;padding: 1.25rem;"><h4 style="margin-bottom: .75rem;"><strong>¡Hola '+user.name+'!</strong></h4><hr/><p class="card-text">Se ha solicitado un cambio de contraseña para el usuario '+userUpdated.userName+', tiene 30 minutos para utilizar este link</p><hr /><a style="" href="http://10.0.0.98:3977/reset-password/'+userUpdated._id+'/'+update.passToken+'" role="button" >Cambiar contraseña</a><hr /><a style="" href="http://190.220.159.37:3977/reset-password/'+userUpdated._id+'/'+update.passToken+'" role="button" >Si estas fuera de la red del hospital, utiliza este link</a></div></div>'
                                 let title = 'Recuperación de contraseña';
                                 mail.forgot(userUpdated.email, title, txt);
                                 logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});

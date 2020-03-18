@@ -40,7 +40,7 @@ function send(email, pass, to, sub, txt, cc){
 
 function forgot(to, sub, txt){
     let email = 'req.sistemas@sanjuandedios.org.ar';
-    let pass = 'Hospital2';
+    let pass = 'Hospital10';
 
     var transporter = nodemailer.createTransport({
         host: "smtp-mail.outlook.com", // hostname

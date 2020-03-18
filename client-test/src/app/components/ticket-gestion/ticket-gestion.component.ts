@@ -651,7 +651,7 @@ export class TicketGestionComponent implements OnInit {
             let nameTo:string;
             let mailTo:string;
 
-            if(this.ticket.company['mailSender'] == true){
+            if(this.textblock.type != 'PRIVATE' && this.ticket.company['mailSender'] == true){
               if(this.identity['role'] != 'ROLE_REQUESTER'){
                 //Esta mandando el mensaje un agente
                 if(this.ticket.requester['receiveMail'] == true){

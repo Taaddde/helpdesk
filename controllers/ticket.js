@@ -699,6 +699,7 @@ function getListPaged(req, res){
 
     var query = req.query;
     var sort = {numTicket:-1}
+    var _ids;
 
 
     //Parche por errores del http
@@ -709,7 +710,7 @@ function getListPaged(req, res){
     if(query['sub']){
         query['sub'] = { "$regex": query['sub'], "$options": "i" }
     }
-
+    
     if(query['status'] && !query['company'] && query['status'] == 'Pendiente'){
         query['status'] = {$in:['Pendiente','Abierto']};
     }

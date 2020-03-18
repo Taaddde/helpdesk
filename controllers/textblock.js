@@ -267,8 +267,6 @@ function uploadFiles(req, res){
                 }
             });
     
-            console.log(ext_split);
-    
     }else{
         logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Solicitud de '+req.params.id}});
                 res.status(200).send({message: 'No ha subido ninguna imagen'});
@@ -281,7 +279,7 @@ async function uploadFile(req, res){
     var tbId = req.params.id;
     var file_name = 'No subido';
 
-    if(req.files){
+    if(req.files && req.files.file){
         if(req.files.file.length > 1){
             req.files.file.forEach(async e => {
                 var file_path = e.path;
@@ -334,7 +332,6 @@ async function uploadImage(req, res){
     var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'uploadImage';
     var file_name = 'No subido';
-    console.log(req.files);
     if(req.files.image){
         var file_path = req.files.image.path;
         var file_split = file_path.split('\\'); //eliminar y recortar las barras del path
