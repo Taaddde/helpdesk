@@ -18,6 +18,9 @@ var typeticket_routes = require('./routes/type_ticket');
 var subtypeticket_routes = require('./routes/subtype_ticket');
 var global_routes = require('./routes/global');
 var sector_routes = require('./routes/sector');
+var chat_routes = require('./routes/chat');
+var message_routes = require('./routes/message');
+
 
 
 app.use(bodyparser.urlencoded({limit: '50mb', extended: true}));
@@ -46,6 +49,8 @@ app.use('/api/type-ticket', typeticket_routes);
 app.use('/api/subtype-ticket', subtypeticket_routes);
 app.use('/api/global', global_routes);
 app.use('/api/sector', sector_routes);
+app.use('/api/chat', chat_routes);
+app.use('/api/message', message_routes);
 
 
 app.get('*', function(req, res, next){

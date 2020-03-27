@@ -18,11 +18,11 @@ function getSectors(req, res){
 
     Sector.find({}).sort('name').exec((err, sectors) =>{
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            //logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
             res.status(500).send({message: 'Error del servidor en la peticion'});
         }else{
             if(!sectors){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                //logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 res.status(404).send({message: 'La compañia no existe'});
             }else{
                 res.status(200).send({sectors:sectors});

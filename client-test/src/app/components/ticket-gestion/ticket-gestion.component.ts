@@ -57,6 +57,8 @@ export class TicketGestionComponent implements OnInit {
 
   public stat: string;
 
+  public emojis: boolean;
+
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
@@ -89,7 +91,9 @@ export class TicketGestionComponent implements OnInit {
     this.message = new MessageComponent()
 
     this.ticket = new Ticket('','',null,'','','','','','','',null,'',[''],'','','',[''],null,null,'');
-    this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false)
+    this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false);
+
+    this.emojis = false;
   }
 
   ngOnInit() {
@@ -660,7 +664,7 @@ export class TicketGestionComponent implements OnInit {
                 }
               }else{
                 //Esta mandando el mensaje un solicitante
-                if(this.ticket.agent['receiveMail'] == true){
+                if(this.ticket.agent && this.ticket.agent['receiveMail'] == true){
                   nameTo = this.ticket.agent['name']+' '+this.ticket.agent['surname'];
                   mailTo = this.ticket.agent['email'];
                 }
@@ -713,6 +717,19 @@ export class TicketGestionComponent implements OnInit {
     
   }
 
+  showEmojis(){
+    if(this.emojis){
+      this.emojis = false;
+    }else{
+      this.emojis = true;
+    }
+  }
+
+  addEmoji(val: String){
+    this.textblock.text = this.textblock.text + val;
+    document.getElementById('editable').innerHTML = document.getElementById('editable').innerHTML + val;
+  }
+
   pushText(id:string){
     this._textblockService.getOne(this.token, id).subscribe(
       response =>{
@@ -743,6 +760,7 @@ export class TicketGestionComponent implements OnInit {
       return false;
     }
   }
+
 
   public imagesToUpload: Array<File> = new Array<File>();
   async pastePicture(event: ClipboardEvent) {

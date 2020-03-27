@@ -25,7 +25,6 @@ function send(email, pass, to, sub, txt, cc){
         subject: sub, // Subject line
         html: txt
     };
-    
     // send mail with defined transport object
     transporter.sendMail(mailOptions, function(error, info){
         if(error){

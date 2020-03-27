@@ -52,7 +52,9 @@ export class TicketPortalComponent implements OnInit {
   public tb: TextBlock;
 
   public selectedSubtype: SubTypeTicket;
-  public allChecked: boolean
+  public allChecked: boolean;
+
+  public emojis: boolean;
   
 
   //Asigna un valor a una propiedad
@@ -85,6 +87,7 @@ export class TicketPortalComponent implements OnInit {
 
     this.allChecked = false;
   
+    this.emojis = false;
   } 
 
   ngOnInit(){
@@ -316,6 +319,20 @@ export class TicketPortalComponent implements OnInit {
       
     }
   }
+
+  showEmojis(){
+    if(this.emojis){
+      this.emojis = false;
+    }else{
+      this.emojis = true;
+    }
+  }
+
+  addEmoji(val: String){
+    this.tb.text = this.tb.text + val;
+    document.getElementById('editable').innerHTML = document.getElementById('editable').innerHTML + val;
+  }
+
 
 
   public imagesToUpload: Array<File> = new Array<File>();

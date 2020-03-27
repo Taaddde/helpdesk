@@ -68,6 +68,47 @@
                           name="sub" 
                           [(ngModel)]="ticket.sub"
                         />
+
+
+
+                        <div class="row" style="margin-top: 10px;" *ngIf="emojis">
+                          <div class="col" id="chat-text">
+                              <div class="container">
+                                  <div>
+                                    <a (click)="addEmoji('😃')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/smiling-face-with-open-mouth_1f603.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('😄')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/smiling-face-with-open-mouth-and-smiling-eyes_1f604.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('😁')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/grinning-face-with-smiling-eyes_1f601.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('😆')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/smiling-face-with-open-mouth-and-tightly-closed-eyes_1f606.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('😅')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/smiling-face-with-open-mouth-and-cold-sweat_1f605.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('😂')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/face-with-tears-of-joy_1f602.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('😉')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/winking-face_1f609.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('😊')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/smiling-face-with-smiling-eyes_1f60a.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('😜')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/face-with-stuck-out-tongue-and-winking-eye_1f61c.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('😝')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/face-with-stuck-out-tongue-and-tightly-closed-eyes_1f61d.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('😐')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/neutral-face_1f610.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('😪')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/sleepy-face_1f62a.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('😎')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/smiling-face-with-sunglasses_1f60e.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('😲')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/astonished-face_1f632.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('😓')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/face-with-cold-sweat_1f613.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('😩')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/weary-face_1f629.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('😠')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/angry-face_1f620.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('👌')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/ok-hand-sign_1f44c.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('👍')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/thumbs-up-sign_1f44d.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('👎')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/thumbs-down-sign_1f44e.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('👏')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/clapping-hands-sign_1f44f.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('🙌')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/person-raising-both-hands-in-celebration_1f64c.png" width="30px" style="margin-right: 3px;"/></a>
+                                    <a (click)="addEmoji('🙏')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/person-with-folded-hands_1f64f.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('👀')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/eyes_1f440.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('☠️')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/skull-and-crossbones_2620.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('🙈')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/see-no-evil-monkey_1f648.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('🙉')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/hear-no-evil-monkey_1f649.png" width="30px" style="margin-right: 3px;" /></a>
+                                    <a (click)="addEmoji('🙊')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/speak-no-evil-monkey_1f64a.png" width="30px" style="margin-right: 3px;" /></a>
+                  
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  
                           <div class="row" style="margin-left: 4px; margin-top: 8px;">
                               <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('bold');" style="margin-right: 4px;padding-right: 7px; padding-left: 7px"><i class="fa fa-bold"></i></button>
     
@@ -90,7 +131,10 @@
                               <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('justifyCenter')" style="margin-right: 4px; padding-right: 7px; padding-left: 7px"><i class="fa fa-align-center"></i></button>
                               
                               <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('justifyRight')" style="margin-right: 4px; padding-right: 7px; padding-left: 7px"><i class="fa fa-align-right"></i></button>
-                              
+                              <div style="min-height:30px;display:inline;border-left:1px solid gray; margin-right:9px;margin-left:5px"></div>
+                          
+                              <button class="btn btn-dark btn-sm" type="button" (click)="showEmojis()" style="margin-right: 4px; padding-right: 7px; padding-left: 7px"><img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/smiling-face-with-open-mouth_1f603.png" width="20px"/></button>
+    
                           </div>
     
                           <div class="row" style="margin-top: 8px;margin-left: 4px;">

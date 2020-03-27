@@ -2,15 +2,20 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="border: 1px solid #018dda">
             <div class="modal-header" style="background-color: #018dda;color: rgb(255,255,255);">
-                <h4 class="modal-title">¡Novedades! - Versión 1.0.6 (09/03/2020)</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                <h4 class="modal-title">¡Novedades! - Versión 1.0.9 (25/03/2020)</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
             <div class="modal-body">
                 <span *ngIf="identity['role'] != 'ROLE_REQUESTER'">
 
                 </span>
                 <div>
+                    <h4><strong>EMOJIS</strong></h4>
+                    <p>Se integraron los emojis al chat de los tickets, por ahora se agregaron un total de 28.</p>
+                </div>
+                <div>
                     <h4><strong>FIX</strong></h4>
                     <ul style="list-style-type: inherit;">
-                        <li style="font-size: 15px;">Se eliminó el inconveniente que generaba constantes peticiones al servidor, esto hacía que el sistema esté mucho mas tiempo del debido cargando.</li>
+                        <li style="font-size: 15px;">Al momento de enviar un mensaje en un ticket, el sistema ahora refresca correctamente, evitando la duplicación del mismo.</li>
+                        <li style="font-size: 15px;">Se hizo un arreglo en los usuarios del sistema, el cual toma efecto si se cierran sesión (no cerrar el navegador) y se loguea nuevamente.</li>
                     </ul>
                 </div>
             </div>

@@ -1,0 +1,46 @@
+#chat{
+    width: 283px;
+    box-shadow: 1px 1px 4px #666;
+    overflow-y: scroll;
+    height: 145px;
+    background-color: white;
+}
+
+#mini-chat{
+    margin: 23px;
+    border: 1px #018dda solid;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin-right: 45px;
+    margin-bottom: 45px;
+    width: 300px;
+    background-color: white;
+
+}
+
+.mini-chat-header{
+    background-color: #018dda;
+    margin: 0px;
+}
+
+.mini-chat-hello{
+    margin-top: 4px;
+    color: white;
+    margin-left: 10px;
+
+}
+
+.mini-chat-desc{
+    color: white;
+    margin-left: 10px;
+    font-size: 13px;
+}
+
+.mini-chat-container{
+    margin-top: 11px;
+    margin-right: 0px;
+    margin-left: 0px;
+    margin-bottom: 12px;
+
+}
