@@ -5,6 +5,7 @@ import {GLOBAL} from '../../services/global'
 import { uploadService } from '../../services/upload.service';
 import { companyService } from '../../services/company.service';
 import { Company } from '../../models/company';
+import * as moment from 'moment';
 
 
 @Component({
@@ -30,7 +31,7 @@ export class CompanyComponent implements OnInit {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
-    this.company = new Company('','','',false, '','');
+    this.company = new Company('','','',false, false, '','', '','');
    }
 
   ngOnInit() {
@@ -55,26 +56,32 @@ export class CompanyComponent implements OnInit {
 
   onSubmit(){
 
-    if(this.company.mailSender == false){
-      this.company.password = '';
+    if(!this.company.chat || (this.company.chat && moment(this.company.chatScheduleFrom, 'HH:mm').isValid() && moment(this.company.chatScheduleTo, 'HH:mm').isValid()) ){
+      if(this.company.mailSender == false){
+        this.company.password = '';
+      }
+  
+      this._companyService.edit(this.token,this.identity['company']['_id'], this.company).subscribe(
+        response =>{
+            if(!response.company){
+                alert('Error en el servidor');
+            }else{
+                if(this.filesToUpload){
+                    this._uploadService.makeFileRequest(this.url+'company/image/'+response.company._id, [], this.filesToUpload, this.token, 'image')
+                }
+                alert('Datos guardados')
+                this.getCompany();
+            }
+        },
+        error =>{
+            console.error(error);
+        }
+      );
+    }else{
+      alert('Existen datos que no coinciden');
     }
 
-    this._companyService.edit(this.token,this.identity['company']['_id'], this.company).subscribe(
-      response =>{
-          if(!response.company){
-              alert('Error en el servidor');
-          }else{
-              if(this.filesToUpload){
-                  this._uploadService.makeFileRequest(this.url+'company/image/'+response.company._id, [], this.filesToUpload, this.token, 'image')
-              }
-              alert('Datos guardados')
-              this.getCompany();
-          }
-      },
-      error =>{
-          console.error(error);
-      }
-    );
+    
   }
 
   public filesToUpload: Array<File>;

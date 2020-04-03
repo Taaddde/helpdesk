@@ -12,6 +12,7 @@ var api = express.Router();
 //CONSULTAS
 api.get('/company/:id', companyController.getCompany);
 api.get('/companies/', companyController.getCompanies);
+api.get('/companies/chat', companyController.getChatCompany);
 api.get('/for-name/:name', companyController.getCompaniesForName);
 
 //Imagenes

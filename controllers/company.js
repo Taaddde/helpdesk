@@ -32,6 +32,27 @@ function getCompanies(req, res){
     });
 }
 
+function getChatCompany(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+
+    var functionName = 'getChatCompany';
+
+    Company.find({chat:true}, (err, companies) =>{
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            res.status(500).send({message: 'Error del servidor en la peticion'});
+        }else{
+            if(!companies){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                res.status(404).send({message: 'La compañia no existe'});
+            }else{
+                res.status(200).send({companies:companies});
+            }
+        }
+    });
+}
+
+
 function getCompany(req, res){
 var decoded = jwt_decode(req.headers.authorization);
 
@@ -201,6 +222,7 @@ module.exports = {
     getCompany,
     getCompanies,
     getCompaniesForName,
+    getChatCompany,
     saveCompany,
     updateCompany,
     deleteCompany,

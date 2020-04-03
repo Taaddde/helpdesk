@@ -8,6 +8,9 @@ var CompanySchema = Schema({
     email: String,
     image: {type: String, default:'null'},
     mailSender: {type: Boolean, default:false},
+    chat:{type: Boolean, default:false},
+    chatScheduleFrom: {type: String, default:'08:30'},
+    chatScheduleTo: {type: String, default:'18:00'},
     password: String,
 });
 

@@ -5,6 +5,9 @@ export class Company{
         public name: string,
         public email: string,
         public mailSender: boolean,
+        public chat: boolean,
+        public chatScheduleFrom: string,
+        public chatScheduleTo: string,
         public password: string,
         public image: string,
     ){}

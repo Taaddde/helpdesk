@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import {FullCalendarModule} from 'primeng/fullcalendar';
+import { NgxMaskModule, IConfig } from 'ngx-mask'
 
 import {routing, appRoutingProviders} from './app.routing';
 import { TicketListComponent } from './components/ticket-list/ticket-list.component';
@@ -47,6 +48,8 @@ import { SectorListComponent } from './components/sector-list/sector-list.compon
 import { NewsComponent } from './components/news/news.component';
 import { SectorNewComponent } from './components/sector-new/sector-new.component';
 import { ChatComponent } from './components/chat/chat.component';
+
+export var options: Partial<IConfig> | (() => Partial<IConfig>);
 
 @NgModule({
   declarations: [
@@ -95,7 +98,8 @@ import { ChatComponent } from './components/chat/chat.component';
     ChartModule,
     FullCalendarModule,
     NgxSpinnerModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgxMaskModule.forRoot(options)
   ],
   providers: [
     appRoutingProviders,

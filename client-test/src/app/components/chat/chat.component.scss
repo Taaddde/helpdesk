@@ -1,8 +1,8 @@
-#chat{
-    width: 283px;
+.chatbox{
+    width: 100%;
     box-shadow: 1px 1px 4px #666;
-    overflow-y: scroll;
-    height: 145px;
+    overflow-x: hidden;
+    height: 175px;
     background-color: white;
 }
 
@@ -17,6 +17,13 @@
     width: 300px;
     background-color: white;
 
+}
+
+.selectButton{
+    margin-top: 11px;
+    margin-right: 0px;
+    margin-left: 0px;
+    margin-bottom: 12px;
 }
 
 .mini-chat-header{
@@ -42,5 +49,8 @@
     margin-right: 0px;
     margin-left: 0px;
     margin-bottom: 12px;
+}
 
+#chat-online{
+    padding: 7px;
 }

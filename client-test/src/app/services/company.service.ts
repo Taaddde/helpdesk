@@ -56,6 +56,14 @@ export class companyService{
 
     }
 
+    getListChat(token){
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'company/companies/chat', this.httpOptions);
+
+    }
+
     getForName(token, name){
         this.httpOptions.headers =
         this.httpOptions.headers.set('Authorization', token);
@@ -63,6 +71,7 @@ export class companyService{
         return this._httpClient.get<any>(this.url+'company/for-name/'+name, this.httpOptions);
 
     }
+
 
     getOne(token, id){
         this.httpOptions.headers =

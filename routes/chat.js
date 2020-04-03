@@ -9,6 +9,8 @@ var api = express.Router();
 //CONSULTAS
 api.get('/one/:id', md_auth.ensureAuth, controller.getOne);
 api.get('/list/paged/:page/:perPage', md_auth.ensureAuth, controller.getPagedList);
+api.get('/list/team/:id', md_auth.ensureAuth, controller.getTeamList);
+api.get('/list/mychats/:id', md_auth.ensureAuth, controller.getMyChats);
 
 //ABM
 api.post('/add',md_auth.ensureAuth, controller.save);

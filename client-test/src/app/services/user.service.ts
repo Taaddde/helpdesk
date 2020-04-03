@@ -11,6 +11,8 @@ export class userService{
     public url: string; //url del api
     public identity;
     public token;
+    public chat;
+
     public httpOptions = {
         headers: new HttpHeaders({
           'Content-Type':  'application/json',
@@ -139,6 +141,17 @@ export class userService{
         }
 
         return this.identity;
+    }
+
+    getChat(){
+        let chat = JSON.parse(localStorage.getItem('chat'));
+        if(chat != "undefined"){
+            this.chat = chat;
+        }else{
+            this.chat = null;
+        }
+
+        return this.chat;
     }
 
     getToken(){

@@ -81,8 +81,6 @@ export class ticketService{
 
     }
 
-
-
     checkClose(token){
         this.httpOptions.headers =
         this.httpOptions.headers.set('Authorization', token);
@@ -152,8 +150,6 @@ export class ticketService{
 
         return this._httpClient.get<any>(this.url+'ticket/listSectorPaged/'+page+'/'+perPage+'/'+sector+'/?'+q.join('&'), this.httpOptions);
     }
-
-
 
     getPaginatedTeamList(token, page, perPage, userId){
         this.httpOptions.headers =
