@@ -3,6 +3,8 @@ import 'rxjs/add/operator/map';
 import {GLOBAL} from './global'; // Hecho a mano
 import {Message} from '../models/message';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {Http, Headers, RequestOptions} from '@angular/http';
+
 
 
 //Inyeccion de dependencias
@@ -19,7 +21,7 @@ export class messageService{
         })
     }
 
-    constructor(private _httpClient: HttpClient){
+    constructor(private _http:Http, private _httpClient: HttpClient){
         this.url = GLOBAL.url;
     }
 
@@ -40,6 +42,15 @@ export class messageService{
         return this._httpClient.put<any>(this.url+'message/update/'+id, params, this.httpOptions);
 
     }
+
+    read(token, chat: string){
+        let params = JSON.stringify({readed:true});
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.put<any>(this.url+'message/read/'+chat, params, this.httpOptions);
+
+    }
     
     delete(token, id){
         this.httpOptions.headers =
@@ -50,10 +61,15 @@ export class messageService{
     }
 
     getList(token, chat){
-        this.httpOptions.headers =
-            this.httpOptions.headers.set('Authorization', token);
 
-        return this._httpClient.get<any>(this.url+'message/list/'+chat, this.httpOptions);
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+          });
+
+          let options = new RequestOptions({headers: headers});
+          return this._http.get(this.url+'message/list/'+chat, options)
+                            .map(res => res.json())
     }
 
     getOne(token, id){

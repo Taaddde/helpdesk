@@ -109,6 +109,29 @@ var decoded = jwt_decode(req.headers.authorization);
     });
 }
 
+function read(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+        var functionName = 'read';
+        var chatId = req.params.id;
+        var update =  {readed:true};
+    
+        //messageId = message buscado, update = datos nuevos a actualizar
+        Message.updateMany({chat:chatId}, update, (err, messageUpdated) =>{
+            if(err){
+                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                    res.status(500).send({message: 'Error del servidor en la petición'});
+            }else{
+                if(!messageUpdated){
+                    logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                    res.status(404).send({message: 'No se ha encontrado El message'});
+                }else{
+                    res.status(200).send({message:messageUpdated});
+                }
+            }
+        });
+    }
+    
+
 function remove(req, res){
 var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'remove';
@@ -137,4 +160,5 @@ module.exports = {
     save,
     update,
     remove,
+    read
 };

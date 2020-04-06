@@ -20,6 +20,7 @@
     </div>
 
     <span *ngIf="identity['role'] == 'ROLE_REQUESTER'">
+        <!-- SECTOR -->
         <div class="row selectButton" *ngIf="!chat">
             <div class="col">
                 <p class="text-center">Selecciona el sector.</p>
@@ -30,6 +31,7 @@
                 </div>
             </div>
         </div>
+        <!-- EQUIPO -->
         <div class="row selectButton" *ngIf="chat && chat['company'] && !chat['team']">
             <div class="col" *ngIf="inTime()">
                 <p class="text-center">Selecciona el equipo.</p>
@@ -50,14 +52,20 @@
         </div>
         <div class="row mini-chat-container"  *ngIf="this.chat != undefined && this.chat['company'] != undefined && this.chat['team'] != undefined">
             <div class="col">
-                <div id="chat" >
+                <div *ngIf="chat" id="chat-req" class="chatbox">
                     <div *ngFor="let message of messages" id="chat-online">
                         <div class="media w-50 mb-3" *ngIf="message.user['role'] != 'ROLE_REQUESTER'">
                             <img *ngIf="!message.user || message.user['image'] == 'null'" alt="user" width="40" class="rounded-circle" src="../../../assets/img/system/user-placeholder.png" />
                             <img *ngIf="message.user && message.user['image'] != 'null'" src="{{url+'user/image/'+message['user']['image']}}" alt="user" width="40" class="rounded-circle" />
                             <div class="media-body ml-3">
-                                <p class="small mb-0 text-muted">{{message.text}}</p>
-                                <p class="small text-muted">{{changeDate(message.date)}}</p>
+                                <p class="small mb-0 text-muted" >
+                                    {{message.text}}
+                                    
+                                </p>
+                                
+                                <p class="small text-muted" style="margin-bottom: 0px">{{changeDate(message.date)}}</p>
+                                <i class="fa fa-check float-right" style="font-size: 8px;"></i>
+                                <i *ngIf="message.readed" class="fa fa-check float-right" style="font-size: 8px;"></i>
                             </div>
                         </div>
     
@@ -67,7 +75,10 @@
                                 <div class="bg-primary rounded py-2 px-3 mb-2">
                                     <p class="small mb-0 text-white">{{message.text}}</p>
                                 </div>
-                                <p class="small text-muted">{{changeDate(message.date)}}</p>
+                                
+                                <p class="small text-muted" style="margin-bottom: 0px">{{changeDate(message.date)}}</p>
+                                <i class="fa fa-check float-right" style="font-size: 8px;"></i>
+                                <i *ngIf="message.readed" class="fa fa-check float-right" style="font-size: 8px;"></i>
                             </div>
                         </div>
     
@@ -80,6 +91,8 @@
             <div class="col">
                 <form style="padding: 9px;" #chatForm="ngForm" (ngSubmit)="send()">
                     <textarea id="text" #text (change)="message.text = text.value" class="form-control form-control-sm" placeholder="Mensaje" autofocus style="resize: none;font-size: 13px;" rows="2"></textarea>
+                    <button *ngIf="identity['role'] == 'ROLE_REQUESTER'" (click)="like(1)" [className]="chat.rating == 1 ? 'btn btn-success btn' : 'btn btn-success btn-sm'" type="button" style="margin: 6px;"><i class="fa fa-thumbs-up"></i></button>
+                    <button *ngIf="identity['role'] == 'ROLE_REQUESTER'" (click)="like(-1)" [className]="chat.rating == -1 ? 'btn btn-danger btn' : 'btn btn-danger btn-sm'" type="button" style="margin: 6px;"><i class="fa fa-thumbs-down"></i></button>
                     <button class="btn btn-dark btn-sm float-right dark" type="submit" style="margin: 6px;"><i class="fa fa-paper-plane"></i></button>
                 </form>
             </div>
@@ -90,7 +103,7 @@
         <div>
             <ul class="nav nav-tabs" style="font-size: 11px;">
                 <li class="nav-item">
-                    <a role="tab" data-toggle="tab" class="nav-link active" href="#principal">Principal</a>
+                    <a role="tab" data-toggle="tab" class="nav-link active" (click)="back()" href="#principal">Principal</a>
                 </li>
                 <li class="nav-item" *ngFor="let chat of myChats">
                     <a role="tab" data-toggle="tab" class="nav-link" href="#chat" (click)="selectChat(chat)" >{{chat.requester['name']}} {{chat.requester['surname']}}</a>
@@ -147,27 +160,35 @@
                 <div role="tabpanel" class="tab-pane" id="chat" style="height: 300px;">
                     <div class="row mini-chat-container">
                         <div class="col">
-                            <div id="{{chat._id}}" class="chatbox">
+                            <div *ngIf="chat" id="{{chat._id}}" class="chatbox">
                                 <div *ngFor="let message of messages" id="chat-online">
                                     <div class="media w-50 mb-3" *ngIf="message.user['role'] != 'ROLE_REQUESTER'">
                                         <img *ngIf="!message.user || message.user['image'] == 'null'" alt="user" width="40" class="rounded-circle" src="../../../assets/img/system/user-placeholder.png" />
                                         <img *ngIf="message.user && message.user['image'] != 'null'" src="{{url+'user/image/'+message['user']['image']}}" alt="user" width="40" class="rounded-circle" />
                                         <div class="media-body ml-3">
                                             <p class="small mb-0 text-muted">{{message.text}}</p>
-                                            <p class="small text-muted">{{changeDate(message.date)}}</p>
+                                            <p class="small text-muted" style="margin-bottom: 0px">{{changeDate(message.date)}}</p>
+                                            <i class="fa fa-check float-right" style="font-size: 8px;"></i>
+                                            <i *ngIf="message.readed" class="fa fa-check float-right" style="font-size: 8px;"></i>
+        
                                         </div>
+        
                                     </div>
-                
+
                 
                                     <div class="media w-50 ml-auto mb-3" *ngIf="message.user['role'] == 'ROLE_REQUESTER'">
                                         <div class="media-body">
                                             <div class="bg-primary rounded py-2 px-3 mb-2">
                                                 <p class="small mb-0 text-white">{{message.text}}</p>
                                             </div>
-                                            <p class="small text-muted">{{changeDate(message.date)}}</p>
+                                            <p class="small text-muted" style="margin-bottom: 0px">{{changeDate(message.date)}}</p>
+                                            <i class="fa fa-check float-right" style="font-size: 8px;"></i>
+                                            <i *ngIf="message.readed" class="fa fa-check float-right" style="font-size: 8px;"></i>
+        
                                         </div>
+        
                                     </div>
-                
+
                 
                                 </div>
                             </div>
@@ -181,7 +202,7 @@
                             </form>
                         </div>
                     </div>
-                            </div>
+                </div>
             </div>
         </div>
     </span>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { chatService } from 'src/app/services/chat.service';
 import { messageService } from 'src/app/services/message.service';
 import { userService } from 'src/app/services/user.service';
@@ -40,6 +40,8 @@ export class ChatComponent implements OnInit {
   public chats: Chat[];
   public myChats: Chat[];
 
+  public messageControl;
+
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
@@ -53,17 +55,19 @@ export class ChatComponent implements OnInit {
   ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
-    this.chat = this._userService.getChat();
+    this.chat = this._userService.getChat(); 
     this.url = GLOBAL.url;
 
 
-    this.message = new Message('','',this.identity['_id'],'','');
+
+    this.message = new Message('','',false, this.identity['_id'],'','');
 
     this.messageAlert = new MessageComponent();
 
    }
 
   ngOnInit() {
+  
     if(this.identity['role'] != 'ROLE_REQUESTER'){
       this.getChat();
     }
@@ -72,6 +76,13 @@ export class ChatComponent implements OnInit {
       this.companySelected(this.chat['company']);
     }
 
+    this.messageControl = Observable.interval(5000)
+    .subscribe((val) => { 
+      if(this.chat && this.chat['_id']){
+        this.getMessages();
+      }
+    });
+
     if(this.chat && this.chat['_id']){
       this.getMessages();
     }
@@ -79,23 +90,58 @@ export class ChatComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    let i = Observable.interval(100)
+    this.goToBottom();
+  }
+
+  goToBottom(){
+    let i;
+    i = Observable.interval(100)
     .subscribe((val) => { 
-      this.scrollElement()
+      if(this.identity['role'] == 'ROLE_REQUESTER'){
+        this.scrollElement()
+      }else{
+        this.scrollCentainElement(this.chat['_id'])
+      }
     });
+
+    setTimeout(() => {
+      i.unsubscribe();
+    }, 1000);
 
     setTimeout(() => {
       i.unsubscribe();
     }, 1000);
   }
 
+  ngOnDestroy(){
+    this.messageControl.unsubscribe();
+  }
+
   getMessages(){
     this._messageService.getList(this.token, this.chat['_id']).subscribe(
       response =>{
-          if(!response.messages){
-            //this._router.navigate(['/']);
-          }else{
+          if(response.messages){
             this.messages = response.messages;
+
+            //Lee el ultimo mensaje
+            let lastMessage = this.messages[this.messages.length-1];
+            if(!lastMessage.readed && lastMessage.user['_id'] != this.identity['_id']){
+              this.readMessages();
+              this.goToBottom();
+            }
+          }
+      },
+      error =>{
+          console.error(error);
+      }
+    );
+  }
+
+  readMessages(){
+    this._messageService.read(this.token, this.chat['_id']).subscribe(
+      response =>{
+          if(response.messages){
+            this.message = response.messages;
           }
       },
       error =>{
@@ -105,11 +151,10 @@ export class ChatComponent implements OnInit {
   }
 
   getChat(){
+    //Lista de chats del equipo sin tomar
     this._chatService.getTeamList(this.token, this.identity['_id']).subscribe(
       response =>{
-          if(!response.chats){
-            //this._router.navigate(['/']);
-          }else{
+          if(response.chats){
             this.chats = response.chats;
             this.chats.forEach(e => {
               this._messageService.getList(this.token, e._id).subscribe(
@@ -134,12 +179,10 @@ export class ChatComponent implements OnInit {
       }
     );
 
-
+    //Lista de chats que tengo tomados
     this._chatService.getMyChats(this.token, this.identity['_id']).subscribe(
       response =>{
-          if(!response.chats){
-            //this._router.navigate(['/']);
-          }else{
+          if(response.chats){
             this.myChats = response.chats;
           }
       },
@@ -153,9 +196,7 @@ export class ChatComponent implements OnInit {
   getCompanies(){
     this._companyService.getListChat(this.token).subscribe(
       response =>{
-          if(!response.companies){
-            //this._router.navigate(['/']);
-          }else{
+          if(response.companies){
             this.companies = response.companies;
           }
       },
@@ -169,9 +210,7 @@ export class ChatComponent implements OnInit {
     this.company = company;
     this._teamService.getList(this.token, company._id).subscribe(
       response =>{
-          if(!response.teams){
-            //this._router.navigate(['/']);
-          }else{
+          if(response.teams){
             this.teams = response.teams;
             let chat = {};
             if(this.chat){
@@ -219,9 +258,7 @@ export class ChatComponent implements OnInit {
   }
 
   send(){
-
     if(this.message.text != ''){
-      
       if(this.chat['_id']){
         //Chat existente
         this.message.chat = this.chat['_id'];
@@ -253,6 +290,7 @@ export class ChatComponent implements OnInit {
                   response =>{
                       if(response.message){
                         this.getMessages();
+                        this.goToBottom();
                       let input = document.getElementById("text") as HTMLInputElement;
                       input.value = '';
                   }
@@ -274,14 +312,7 @@ export class ChatComponent implements OnInit {
     }
 
 
-    let i = Observable.interval(100)
-    .subscribe((val) => { 
-      this.scrollCentainElement(this.chat['_id'])
-    });
-
-    setTimeout(() => {
-      i.unsubscribe();
-    }, 1000);
+   this.goToBottom();
   }
 
   changeDate(val:string){
@@ -290,7 +321,7 @@ export class ChatComponent implements OnInit {
 
   scrollElement(){
     //get container element
-    var container = document.getElementById('chat');
+    var container = document.getElementById('chat-req');
     //scroll down
     container.scrollTop = container.scrollHeight;
   }
@@ -330,6 +361,20 @@ export class ChatComponent implements OnInit {
     setTimeout(() => {
       i.unsubscribe();
     }, 1000);
+  }
+
+  like(val: Number){
+    this.chat.rating = val;
+    this._chatService.edit(this.token, this.chat['_id'], this.chat).subscribe(
+      response =>{
+          if(response.chat){
+            localStorage.setItem('chat', JSON.stringify(this.chat));
+          }
+      },
+      error =>{
+          console.error(error);
+      }
+    );
   }
 
 }

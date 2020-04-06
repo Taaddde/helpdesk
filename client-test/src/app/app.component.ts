@@ -36,6 +36,8 @@ export class AppComponent implements OnInit, OnDestroy {
   public valSearch:string;
   public reset:boolean;
 
+  public chat: boolean;
+
   public count = 0;
   
   //Asigna un valor a una propiedad
@@ -55,7 +57,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.valSearch = '';
     this.reset = false;
     this.message = new MessageComponent();
-
+    this.chat = false;
   } 
 
   ngOnInit(){
@@ -250,6 +252,14 @@ export class AppComponent implements OnInit, OnDestroy {
         console.error(error);
       }
     )
+  }
+
+  showChat(){
+    if(this.chat){
+      this.chat = false;
+    }else{
+      this.chat = true;
+    }
   }
 
 }
