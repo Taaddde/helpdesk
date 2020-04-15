@@ -55,6 +55,7 @@ export class chatService{
 
         return this._httpClient.get<any>(this.url+'chat/list/paged/'+page+'/'+perPage, this.httpOptions);
     }
+    
 
     getMyChats(token, id){
         this.httpOptions.headers =
@@ -70,12 +71,38 @@ export class chatService{
         return this._httpClient.get<any>(this.url+'chat/one/'+id, this.httpOptions);
     }
 
+    getReqForUser(token, id){
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'chat/one/req/for-user/'+id, this.httpOptions);
+    }
+
     getTeamList(token, userId){
         this.httpOptions.headers =
             this.httpOptions.headers.set('Authorization', token);
-        console.log(this.url+'chat/list/team/'+userId,);
         return this._httpClient.get<any>(this.url+'chat/list/team/'+userId, this.httpOptions);
     }
+
+    getReqChatNotification(token, userId){
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+        return this._httpClient.get<any>(this.url+'chat/count/req/notifications/'+userId, this.httpOptions);
+    }
+
+    getForUser(token, id){
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'chat/one/for-user/'+id, this.httpOptions);
+    }
+
+    getChatNotification(token, userId){
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+        return this._httpClient.get<any>(this.url+'chat/count/notifications/'+userId, this.httpOptions);
+    }
+
 
 
 }

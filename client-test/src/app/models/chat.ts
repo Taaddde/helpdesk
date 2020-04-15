@@ -8,6 +8,8 @@ export class Chat{
         public team: string,
         public company: string,
         public rating: number,
-        public finished: boolean,
+        public finishedAgent: boolean,
+        public finishedRequester: boolean,
+
     ){}
 }

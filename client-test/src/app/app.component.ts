@@ -9,6 +9,7 @@ import 'rxjs/add/observable/interval';
 import { ticketService } from './services/ticket.service';
 import { globalService } from './services/global.service';
 import { MessageComponent } from './components/message/message.component';
+import { chatService } from './services/chat.service';
 declare var $: any;
 
 
@@ -18,7 +19,7 @@ declare var $: any;
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers:[userService, ticketService, globalService]
+  providers:[userService, ticketService, globalService, chatService]
 })
 export class AppComponent implements OnInit, OnDestroy {
   @ViewChild(MessageComponent, {static:false}) message: MessageComponent;
@@ -32,6 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public url: string;
   public sub;
   public notifications;
+  public chatNotifications: number;
   public searched;
   public valSearch:string;
   public reset:boolean;
@@ -45,6 +47,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private _userService: userService,
     private _ticketService: ticketService,
     private _globalService: globalService,
+    private _chatService: chatService,
+
 
     private _route: ActivatedRoute,
     private _router: Router
@@ -54,6 +58,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.url=GLOBAL.url;
     this.alertMessage = '';
     this.notifications = '';
+    this.chatNotifications = 0;
     this.valSearch = '';
     this.reset = false;
     this.message = new MessageComponent();
@@ -63,17 +68,29 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(){
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
+
+
     if(this.identity){
       this.getMessages();
       if(this.identity['role'] != 'ROLE_REQUESTER'){
         this.checkClose();
+        this.getMessages();
+        this.getChatNotifications();
+
+
         this.sub = Observable.interval(15000).subscribe((val) => { 
           this.getMessages();
+          this.getChatNotifications();
         });
+
+        
       }else{
         this.getMessagesReq();
+        this.getReqChatNotifications();
+
         this.sub = Observable.interval(15000).subscribe((val) => { 
           this.getMessagesReq();
+          this.getReqChatNotifications();
         });
       }
     }
@@ -84,6 +101,44 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.sub.unsubscribe()
+  }
+
+  getReqChatNotifications(){
+    this._chatService.getReqChatNotification(this.token, this.identity['_id']).subscribe(
+      response =>{
+
+          if(response.count){
+            this.chatNotifications = response.count;
+          }
+      },
+      error =>{
+          var errorMessage = <any>error;
+          if(errorMessage != null){
+          var body = JSON.parse(error._body);
+          //this.alertMessage = body.message;
+          console.error(error);
+          }
+      }
+    );
+  }
+
+  getChatNotifications(){
+    this._chatService.getChatNotification(this.token, this.identity['_id']).subscribe(
+      response =>{
+
+          if(response.count){
+            this.chatNotifications = response.count;
+          }
+      },
+      error =>{
+          var errorMessage = <any>error;
+          if(errorMessage != null){
+          var body = JSON.parse(error._body);
+          //this.alertMessage = body.message;
+          console.error(error);
+          }
+      }
+    );
   }
 
   showModal(){
@@ -259,6 +314,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.chat = false;
     }else{
       this.chat = true;
+      this.chatNotifications = 0;
     }
   }
 

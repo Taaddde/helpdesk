@@ -698,7 +698,7 @@ export class TicketGestionComponent implements OnInit {
             this.pushText(response.textblock._id) ;
             this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false);
             document.getElementById('editable').innerHTML = ''
-            document.getElementById('editable').innerHTML += '<span id="antieditable" contentEditable="false"></span>';
+            //document.getElementById('editable').innerHTML += '<span id="antieditable" contentEditable="false"></span>';
             this.filesToUpload = new Array<File>();
             this.imagesToUpload = new Array<File>();
         },
@@ -771,10 +771,10 @@ export class TicketGestionComponent implements OnInit {
   
       await this._uploadService.makeFileRequest(this.url+'textblock/image', [], this.imagesToUpload, this.token, 'image')
       .then(data =>{
-        let antiEdit = document.getElementById('antieditable');
-        antiEdit.parentNode.removeChild(antiEdit);
+        //let antiEdit = document.getElementById('antieditable');
+        //antiEdit.parentNode.removeChild(antiEdit);
         document.getElementById('editable').innerHTML += '<a target="_blank" href="'+this.url+'textblock/image/'+data['filename']+'"><img src="'+this.url+'textblock/image/'+data['filename']+'" class="img-fluid" style="width: 80%; margin: 5px" alt="Responsive image"></a>';
-        document.getElementById('editable').innerHTML += '<span id="antieditable" contentEditable="false"></span>';
+        //document.getElementById('editable').innerHTML += '<span id="antieditable" contentEditable="false"></span>';
       })
   
       this.textblock.text = document.getElementById('editable').innerHTML;

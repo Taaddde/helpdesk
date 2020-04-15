@@ -1,7 +1,7 @@
 <div class="d-inline-block" id="mini-chat">
     <div class="row" class="mini-chat-header" >
         <div class="col" style="padding: 0px;" *ngIf="identity['role'] == 'ROLE_REQUESTER'">
-            <button class="btn btn-sm" type="button" style="padding-top: 0px;padding-bottom: 0px;">
+            <button (click)="show()" class="btn btn-sm" type="button" style="padding-top: 0px;padding-bottom: 0px;">
                 <i class="fa fa-window-minimize" style="color: rgb(255,255,255);"></i>
             </button>
             <button (click)="finishChat()" class="btn btn-sm float-right" type="button" style="padding-top: 0px;padding-bottom: 0px;">
@@ -12,8 +12,11 @@
         </div>
 
         <div class="col" style="padding: 0px;" *ngIf="identity['role'] != 'ROLE_REQUESTER'">
-            <button class="btn btn-sm" type="button" style="padding-top: 0px;padding-bottom: 0px;">
+            <button (click)="show()" class="btn btn-sm" type="button" style="padding-top: 0px;padding-bottom: 0px;">
                 <i class="fa fa-window-minimize" style="color: rgb(255,255,255);"></i>
+            </button>
+            <button *ngIf="chat" (click)="finishChat()" class="btn btn-sm float-right" type="button" style="padding-top: 0px;padding-bottom: 0px;">
+                <i class="fa fa-window-close" style="color: rgb(255,255,255);"></i>
             </button>
         </div>
 
@@ -90,10 +93,14 @@
         <div class="row" style="margin-right: 0px;margin-left: 0px;" *ngIf="this.chat != undefined && this.chat['company'] != undefined && this.chat['team'] != undefined">
             <div class="col">
                 <form style="padding: 9px;" #chatForm="ngForm" (ngSubmit)="send()">
-                    <textarea id="text" #text (change)="message.text = text.value" class="form-control form-control-sm" placeholder="Mensaje" autofocus style="resize: none;font-size: 13px;" rows="2"></textarea>
+                    <textarea *ngIf="!chat['finishedAgent']" id="text" #text (change)="message.text = text.value" class="form-control form-control-sm" placeholder="Mensaje" autofocus style="resize: none;font-size: 13px;" rows="2"></textarea>
+                    <div *ngIf="chat['finishedAgent']" class="form-group">
+                        <p style="font-size:small;">El agente finalizó el chat, por favor, no te olvides de valorar tu experiencia.</p>
+                    </div>
+                    
                     <button *ngIf="identity['role'] == 'ROLE_REQUESTER'" (click)="like(1)" [className]="chat.rating == 1 ? 'btn btn-success btn' : 'btn btn-success btn-sm'" type="button" style="margin: 6px;"><i class="fa fa-thumbs-up"></i></button>
                     <button *ngIf="identity['role'] == 'ROLE_REQUESTER'" (click)="like(-1)" [className]="chat.rating == -1 ? 'btn btn-danger btn' : 'btn btn-danger btn-sm'" type="button" style="margin: 6px;"><i class="fa fa-thumbs-down"></i></button>
-                    <button class="btn btn-dark btn-sm float-right dark" type="submit" style="margin: 6px;"><i class="fa fa-paper-plane"></i></button>
+                    <button *ngIf="!chat['finishedAgent']" class="btn btn-dark btn-sm float-right dark" type="submit" style="margin: 6px;"><i class="fa fa-paper-plane"></i></button>
                 </form>
             </div>
         </div>
@@ -103,10 +110,13 @@
         <div>
             <ul class="nav nav-tabs" style="font-size: 11px;">
                 <li class="nav-item">
-                    <a role="tab" data-toggle="tab" class="nav-link active" (click)="back()" href="#principal">Principal</a>
+                    <a role="tab" id="principal-tab" data-toggle="tab" class="nav-link active" (click)="back()" href="#principal">Principal</a>
                 </li>
                 <li class="nav-item" *ngFor="let chat of myChats">
-                    <a role="tab" data-toggle="tab" class="nav-link" href="#chat" (click)="selectChat(chat)" >{{chat.requester['name']}} {{chat.requester['surname']}}</a>
+                    <a role="tab" id="chat-tab" data-toggle="tab" class="nav-link" href="#chat" (click)="selectChat(chat)" >
+                        {{chat.requester['name']}} {{chat.requester['surname']}}
+                        <i *ngIf="notifications && checkNotifications(chat._id)" class="fa fa-circle float-right" style="color: rgb(255,62,62);font-size: 6px;"></i>
+                    </a>
                 </li>
             </ul>
             <div class="tab-content">
@@ -197,8 +207,23 @@
                     <div class="row" style="margin-right: 0px;margin-left: 0px;" *ngIf="this.chat != undefined && this.chat['company'] != undefined && this.chat['team'] != undefined">
                         <div class="col">
                             <form style="padding: 9px;" #chatForm="ngForm" (ngSubmit)="send()">
-                                <textarea id="text" #text (change)="message.text = text.value" class="form-control form-control-sm" placeholder="Mensaje" autofocus style="resize: none;font-size: 13px;" rows="2"></textarea>
-                                <button class="btn btn-dark btn-sm float-right dark" type="submit" style="margin: 6px;"><i class="fa fa-paper-plane"></i></button>
+                                <textarea *ngIf="!chat['finishedRequester']" id="text" #text (change)="message.text = text.value" class="form-control form-control-sm" placeholder="Mensaje" autofocus style="resize: none;font-size: 13px;" rows="2"></textarea>
+                                <div *ngIf="chat['finishedRequester']" class="form-group">
+                                    <p style="font-size:small;">El solicitante finalizó el chat.</p>
+                                </div>
+                                <div class="dropup d-inline" *ngIf="identity['role'] != 'ROLE_REQUESTER'" >
+                                    <button class="btn btn-dark btn-sm dark" data-toggle="dropdown" aria-expanded="false" type="button" style="margin: 6px;">
+                                        <i class="fas fa-sync"></i>
+                                    </button>
+                                    <div role="menu" class="dropdown-menu">
+                                        <a *ngFor="let user of users" role="presentation" class="dropdown-item" (click)="changeAgent(user)">
+                                            <span *ngIf="user._id != identity['_id']">
+                                                {{user.name}} {{user.surname}}
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <button *ngIf="!chat['finishedRequester']" class="btn btn-dark btn-sm float-right dark" type="submit" style="margin: 6px;"><i class="fa fa-paper-plane"></i></button>
                             </form>
                         </div>
                     </div>

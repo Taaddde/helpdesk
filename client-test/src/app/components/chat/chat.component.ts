@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy, EventEmitter, Output } from '@angular/core';
 import { chatService } from 'src/app/services/chat.service';
 import { messageService } from 'src/app/services/message.service';
 import { userService } from 'src/app/services/user.service';
@@ -13,7 +13,9 @@ import * as moment from 'moment';
 import { GLOBAL } from 'src/app/services/global';
 import { Observable } from 'rxjs';
 import { Chat } from 'src/app/models/chat';
+import { User } from 'src/app/models/user';
 
+declare var $: any;
 
 
 @Component({
@@ -25,6 +27,7 @@ import { Chat } from 'src/app/models/chat';
 })
 export class ChatComponent implements OnInit {
   @ViewChild(MessageComponent, {static:false}) messageAlert: MessageComponent;
+  @Output() showChat = new EventEmitter<string>();
 
   public identity;
   public token;
@@ -40,7 +43,11 @@ export class ChatComponent implements OnInit {
   public chats: Chat[];
   public myChats: Chat[];
 
+  public users: User[];
+
   public messageControl;
+
+  public notifications: string[];
 
   constructor(
     private _route: ActivatedRoute,
@@ -57,21 +64,28 @@ export class ChatComponent implements OnInit {
     this.token = this._userService.getToken();
     this.chat = this._userService.getChat(); 
     this.url = GLOBAL.url;
-
-
-
+ 
     this.message = new Message('','',false, this.identity['_id'],'','');
 
     this.messageAlert = new MessageComponent();
-
    }
 
   ngOnInit() {
+
   
     if(this.identity['role'] != 'ROLE_REQUESTER'){
       this.getChat();
-    }
+      this.getUsers();
+    }else{
+      this.getReqChat();
+    }    
     this.getCompanies();
+
+    if(this.identity['role'] != 'ROLE_REQUESTER'){
+      this.getNotification();
+    }
+
+
     if(this.chat && this.chat['company']){
       this.companySelected(this.chat['company']);
     }
@@ -81,11 +95,18 @@ export class ChatComponent implements OnInit {
       if(this.chat && this.chat['_id']){
         this.getMessages();
       }
-    });
 
-    if(this.chat && this.chat['_id']){
-      this.getMessages();
-    }
+      if(this.identity['role'] != 'ROLE_REQUESTER'){
+        this.getChat();
+
+        this.getNotification();
+        if(this.chat['_id']){
+          this.updateChat();
+        }  
+      }else{
+        this.getReqChat();
+      }
+    });
 
   }
 
@@ -115,6 +136,7 @@ export class ChatComponent implements OnInit {
 
   ngOnDestroy(){
     this.messageControl.unsubscribe();
+    this.back();
   }
 
   getMessages(){
@@ -129,6 +151,54 @@ export class ChatComponent implements OnInit {
               this.readMessages();
               this.goToBottom();
             }
+          }
+      },
+      error =>{
+          console.error(error);
+      }
+    );
+  }
+
+  getNotification(){
+    this._chatService.getForUser(this.token, this.identity['_id']).subscribe(
+      response =>{
+        this.notifications = new Array<string>()
+
+          if(response.chats){
+            response.chats.forEach(e => {
+              this.notifications.push(e['chat']);
+            });
+          }else{
+            this.notifications = null;
+          }
+      },
+      error =>{
+          console.error(error);
+      }
+    );
+  }
+
+  updateChat(){
+    this._chatService.getOne(this.token, this.chat['_id']).subscribe(
+      response =>{
+        this.chat = response.chat;
+      },
+      error =>{
+          console.error(error);
+      }
+    );
+  }
+
+  checkNotifications(id:string){
+    return  (this.notifications.indexOf(id) > -1);
+  }
+
+  getReqChat(){
+    this._chatService.getReqForUser(this.token, this.identity['_id']).subscribe(
+      response =>{
+          if(response.chat){
+            localStorage.setItem('chat', JSON.stringify(response.chat));
+            this.chat = this._userService.getChat();
           }
       },
       error =>{
@@ -238,8 +308,52 @@ export class ChatComponent implements OnInit {
 
   finishChat(){
     if(confirm('¿Esta seguro que quiere finalizar la sesión de chat?')){
-      localStorage.removeItem('chat');
-      this.chat = null;
+      if(this.identity['role'] == 'ROLE_REQUESTER'){
+        this.chat['finishedRequester'] = true;
+      }else{
+        this.chat['finishedAgent'] = true;
+      }
+
+      this._chatService.edit(this.token, this.chat['_id'],this.chat).subscribe(
+        response =>{
+            if(response.chat){
+             this.restartPanel();
+
+            }
+        },
+        error =>{
+            console.error(error);
+        }
+      );
+    }
+  }
+
+  getUsers(){
+    this._userService.getListAgents(this.token, this.identity['company']['_id']).subscribe(
+      response =>{
+          if(response.users){
+            this.users = response.users;
+          }
+      },
+      error =>{
+          console.error(error);
+      }
+    );
+  }
+
+  changeAgent(user: User){
+    if(confirm('¿Esta seguro que quiere reasignar esta conversación a '+user.name+' '+ user.surname+'?')){
+      this.chat['agent'] = user._id;
+      this._chatService.edit(this.token, this.chat['_id'], this.chat).subscribe(
+        response =>{
+            if(response.chat){
+              this.restartPanel();
+            }
+        },
+        error =>{
+            console.error(error);
+        }
+      );
     }
   }
 
@@ -277,7 +391,7 @@ export class ChatComponent implements OnInit {
         );      
       }else{
         //Crear sala de chat
-        let chat = new Chat('',null,undefined,this.identity['_id'],this.chat['team']['_id'],this.company._id, null, false);
+        let chat = new Chat('',null,undefined,this.identity['_id'],this.chat['team']['_id'],this.company._id, null, false, false);
 
         this._chatService.add(this.token, chat).subscribe(
           response =>{
@@ -375,6 +489,20 @@ export class ChatComponent implements OnInit {
           console.error(error);
       }
     );
+  }
+
+  show(){
+    this.showChat.next();
+  }
+
+  restartPanel(){
+    localStorage.removeItem('chat');
+    this.chat = null;
+    this.getChat();
+    $("#principal").addClass('tab-pane active');
+    $("#principal-tab").addClass('nav-link active');
+    $("#chat").removeClass('active');
+    $("#chat-tab").removeClass('active');
   }
 
 }

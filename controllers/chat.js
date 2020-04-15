@@ -1,6 +1,7 @@
 'use strict'
 var Chat = require('../models/chat');
 var Team = require('../models/team');
+var Message = require('../models/message');
 
 //Sistema de log
 var logger = require('../services/logger');
@@ -80,7 +81,7 @@ function getMyChats(req, res){
         {path:'team',select:['name','image']}
     ];
 
-    Chat.find({agent:userId}, (err, chats) =>{
+    Chat.find({agent:userId, finishedAgent:false}, (err, chats) =>{
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'});
@@ -165,7 +166,7 @@ function getTeamList(req, res){
                     {path:'agent',select:['name','surname','image']}, 
                 ];
 
-                var query = {team:teams,finished:false, agent:undefined};
+                var query = {team:teams,finishedAgent:false, agent:undefined};
                 Chat.find(query).populate(populateQuery).sort('date').exec(function(err, chats){
                     if(err){
                         console.log(err)
@@ -231,11 +232,118 @@ var decoded = jwt_decode(req.headers.authorization);
     });
 }
 
+function getNotification(req, res){
+    let userId = req.params.id
+
+    Chat.find({$or:[{agent: userId},{agent: undefined}], finishedAgent: false}).select({_id:1}).exec( function(err, chats) {
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            if(chats){
+                Message.countDocuments({user: {$ne: userId}, chat: chats, readed: false}, function(err, c) {
+                    if(err){
+                        console.log(err);
+                    }else{
+                        res.status(200).send({count: c});
+                    }
+                });                
+            }else{
+                res.status(200).send({count: 0});
+            }
+           
+        }
+    });
+}
+
+function getForUser(req, res){
+    let userId = req.params.id
+
+ 
+
+    Chat.find({agent: userId, finishedAgent: false}).select({_id:1}).exec(function(err, chatsA) {
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            if(!chatsA){
+                res.status(404).send({message: 'No hay chats'});
+            }else{
+                Message.find({chat: chatsA, readed: false}).select({chat:1}).exec(function(err, chats) {
+                    if(err){
+                        res.status(500).send({message: 'Error en la petición'});
+                    }else{
+                        if(!chats){
+                            res.status(404).send({message: 'No hay chats'});
+                        }else{
+                            res.status(200).send({chats:chats});
+                        }
+                       
+                    }
+                });
+            }
+           
+        }
+    });
+}
+
+
+function getReqNotification(req, res){
+    let userId = req.params.id
+
+    Chat.findOne({requester: userId, finishedRequester: false}, function(err, chat) {
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            if(chat){
+                Message.countDocuments({user: {$ne: userId}, chat: chat._id, readed: false}, function(err, c) {
+                    if(err){
+                        console.log(err);
+                    }else{
+                        res.status(200).send({count: c});
+                    }
+                });
+                
+            }else{
+                res.status(200).send({count: 0});
+            }
+           
+        }
+    });
+}
+
+function getReqForUser(req, res){
+    let userId = req.params.id
+
+    var populateQuery = [
+        {path:'requester',select:['name','surname','image']},
+        {path:'agent',select:['name','surname','image']}, 
+        {path:'company',select:['name','email','image','mailSender']},
+        {path:'team',select:['name','image']}
+    ];
+
+    Chat.findOne({requester: userId, finishedRequester: false}, function(err, chat) {
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            if(!chat){
+                res.status(404).send({message: 'No se ha encontrado chat'});
+            }else{
+                res.status(200).send({chat:chat});
+            }
+           
+        }
+    }).populate(populateQuery);
+}
+
+
 module.exports = {
     getOne,
     getPagedList,
     getTeamList,
     getMyChats,
+    getReqNotification,
+    getReqForUser,
+    getNotification,
+    getForUser,
 
     save,
     update,

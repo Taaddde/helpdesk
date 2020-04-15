@@ -12,7 +12,9 @@ var ChatSchema = Schema({
     team: {type: Schema.ObjectId, ref:'Team'},
     company: {type: Schema.ObjectId, ref:'Company'},
     rating: {type: Number, default:null},
-    finished: {type: Boolean, default:false}
+    finishedAgent: {type: Boolean, default:false},
+    finishedRequester: {type: Boolean, default:false}
+
 });
 ChatSchema.plugin(mongoosePaginate);
 

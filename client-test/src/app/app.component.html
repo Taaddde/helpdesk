@@ -27,7 +27,7 @@
 <div *ngIf="identity">
     <div id="page-top">
         <div id="wrapper" >
-            <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0" style="background-color: #018aca;">
+            <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0" style="background: linear-gradient(to top, rgba(255, 255, 255), #018aca 40vh);">
                 <div class="container-fluid d-flex flex-column p-0">
                     <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" [routerLink]="['/home']">
                         <div class="sidebar-brand-icon rotate-n-15"></div>
@@ -92,8 +92,9 @@
                                 </div>
                             </form>
 
-                            <a *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="btn btn-dark dark" type="button" [routerLink]="['/ticket-new']">Nuevo ticket</a>
-                            <a *ngIf="identity['role'] == 'ROLE_REQUESTER'" data-toggle="modal" data-target="#newticket" class="btn btn-dark dark" type="button">Nuevo Ticket</a>
+                            <a *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="btn btn-dark dark" type="button" [routerLink]="['/ticket-new']"> <i class="fas fa-ticket-alt fa-lg"></i></a>
+                            <a *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="btn btn-dark dark" type="button" [routerLink]="['/ticket-new']" style="margin-left: 10px;"><i class="fas fa-tasks fa-lg"></i> </a>
+                            <a *ngIf="identity['role'] == 'ROLE_REQUESTER'" data-toggle="modal" data-target="#newticket" class="btn btn-dark dark" type="button"><i class="fas fa-ticket-alt"></i> Nuevo Ticket</a>
 
                             <ul class="nav navbar-nav flex-nowrap ml-auto">
                                 <li class="nav-item dropdown d-sm-none no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><i class="fas fa-search"></i></a>
@@ -188,7 +189,9 @@
             </footer>
 
         <!-- </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div> -->
-        <button (click)="showChat()" class="btn btn-primary btn-lg border rounded-circle dark" type="button" style="position: fixed;bottom: 0;right: 0;margin-right: 5px;margin-bottom: 5px;"><i class="fa fa-envelope"></i></button>
+        <button (click)="showChat()" [className]="chatNotifications != 0 ? 'btn btn-primary btn-lg border rounded-circle dark scale-up-center' : 'btn btn-primary btn-lg border rounded-circle dark'" type="button" style="position: fixed;bottom: 0;right: 0;margin-right: 5px;margin-bottom: 5px;">
+            <i class="fa fa-envelope"></i>
+        </button>
     </div>
 </div>
 
@@ -196,7 +199,7 @@
 <app-ticket-portal *ngIf="identity"></app-ticket-portal>
 <app-news *ngIf="identity"></app-news>
 <app-pass-forgot></app-pass-forgot>
-<app-chat *ngIf="chat"></app-chat>
+<app-chat *ngIf="chat" (showChat)="showChat()" ></app-chat>
 
 <ngx-spinner
     bdOpacity = 0.2

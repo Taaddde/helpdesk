@@ -48,6 +48,7 @@ import { SectorListComponent } from './components/sector-list/sector-list.compon
 import { NewsComponent } from './components/news/news.component';
 import { SectorNewComponent } from './components/sector-new/sector-new.component';
 import { ChatComponent } from './components/chat/chat.component';
+import { TasksComponent } from './components/tasks/tasks.component';
 
 export var options: Partial<IConfig> | (() => Partial<IConfig>);
 
@@ -87,7 +88,8 @@ export var options: Partial<IConfig> | (() => Partial<IConfig>);
     SectorListComponent,
     NewsComponent,
     SectorNewComponent,
-    ChatComponent
+    ChatComponent,
+    TasksComponent
   ],
   imports: [
     BrowserModule,
