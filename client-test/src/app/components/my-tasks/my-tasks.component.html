@@ -1,0 +1,209 @@
+<div class="card-body" (click)="hideContextMenu()">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <h5>No comenzada</h5>
+                </div>
+                <div class="card-body" style="padding:0.5rem">
+                
+                    <div class="container task-container"
+                        cdkDropList
+                        #uninitiated="cdkDropList"
+                        [cdkDropListData]="taskUninitiated"
+                        [cdkDropListConnectedTo]="[inProgress, wait, postponed]"
+                        (cdkDropListDropped)="onDrop($event)"
+                    >
+                        <div class="card task-uninitiated task" 
+                        *ngFor="let task of taskUninitiated"
+                        cdkDrag
+                        (contextmenu)="onRightClick($event, task)"
+                        >
+                            <div class="card-body">
+                                <h5 class="task-title">
+                                    <i *ngIf="task.priority == 'Urgente'" class="fa fa-exclamation-circle" style="color: rgb(255,0,0);"></i>
+                                    <strong>{{task.name}}</strong>
+                                </h5>
+                                <p class="task-desc">{{task.desc}}</p>
+                                <span class="task-desc text-muted">{{changeDate(task.dateWork)}}</span>
+                            </div>
+
+
+                            
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <h5>En curso</h5>
+                </div>
+                <div class="card-body" style="padding:0.5rem">
+
+                    <div class="container task-container"
+                        cdkDropList
+                        #inProgress="cdkDropList"
+                        [cdkDropListData]="taskInProgress"
+                        [cdkDropListConnectedTo]="[uninitiated, wait, postponed]"
+                        (cdkDropListDropped)="onDrop($event)"
+                    >
+                        <div class="card task-inprogress task"
+                        *ngFor="let task of taskInProgress"
+                        cdkDrag
+                        (contextmenu)="onRightClick($event, task)"
+                        >
+
+                        <div class="card-body">
+                            <h5 class="task-title">
+                                <i *ngIf="task.priority == 'Urgente'" class="fa fa-exclamation-circle" style="color: rgb(255,0,0);"></i>
+                                <strong>{{task.name}}</strong>
+                            </h5>
+                            <p class="task-desc">{{task.desc}}</p>
+                            <span class="task-desc text-muted">{{changeDate(task.dateWork)}}</span>
+                        </div>                            </div>
+                
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <h5>A la espera</h5>
+                </div>
+                <div class="card-body" style="padding:0.5rem">
+
+                    <div class="container task-container"
+                        cdkDropList
+                        #wait="cdkDropList"
+                        [cdkDropListData]="taskWait"
+                        [cdkDropListConnectedTo]="[uninitiated, inProgress, postponed]"
+                        (cdkDropListDropped)="onDrop($event)"
+                    >
+                        
+        
+                        <div class="card task-wait task" 
+                        *ngFor="let task of taskWait"
+                        cdkDrag (contextmenu)="onRightClick($event, task)">
+                            <div class="card-body">
+                                <h5 class="task-title">
+                                    <i *ngIf="task.priority == 'Urgente'" class="fa fa-exclamation-circle" style="color: rgb(255,0,0);"></i>
+                                    <strong>{{task.name}}</strong>
+                                </h5>
+                                <p class="task-desc">{{task.desc}}</p>
+                                <span class="task-desc text-muted">{{changeDate(task.dateWork)}}</span>
+                            </div>
+                        
+                    
+                        </div>
+
+                    
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Aplazada</h5>
+                </div>
+                <div class="card-body" style="padding:0.5rem">
+
+                    <div class="container task-container"
+                        cdkDropList
+                        #postponed="cdkDropList"
+                        [cdkDropListData]="taskPostponed"
+                        [cdkDropListConnectedTo]="[uninitiated, inProgress, wait]"
+                        (cdkDropListDropped)="onDrop($event)"
+                    >
+                        <div class="card task-postponed task"
+                        *ngFor="let task of taskPostponed"
+                        cdkDrag
+                        (contextmenu)="onRightClick($event, task)"
+                        >
+                        
+                            <div class="card-body">
+                                <h5 class="task-title">
+                                    <i *ngIf="task.priority == 'Urgente'" class="fa fa-exclamation-circle" style="color: rgb(255,0,0);"></i>
+                                    <strong>{{task.name}}</strong>
+                                </h5>
+                                <p class="task-desc">{{task.desc}}</p>
+                                <span class="task-desc text-muted">{{changeDate(task.dateWork)}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="dropdown-menu dropdown-menu-sm" id="context-menu">
+    <a class="dropdown-item" (click)="showModal()">Ver detalle</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" (click)="finishTask()" >Finalizar tarea</a>
+</div>
+
+
+<div role="dialog" tabindex="-1" id="task-detail" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 1px solid #018dda">
+            <div class="modal-header" style="background-color: #018dda;color: rgb(255,255,255);" *ngIf="taskInContext">
+                <h4 class="modal-title">{{taskInContext.name}}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="d-block">Descripción:</label>
+                        <textarea class="d-block form-control" readonly [(ngModel)]='taskInContext.desc'></textarea>
+                        <hr />
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend"><span class="input-group-text">Equipo responsable</span></div>
+                            <input type="text" class="form-control" readonly [(ngModel)]='taskInContext.teamWork["name"]' />
+                        </div>
+                        <div class="input-group input-group-sm" *ngIf="taskInContext.userWork">
+                            <div class="input-group-prepend"><span class="input-group-text">Agente responsable</span></div>
+                            <input type="text" class="form-control" readonly [(ngModel)]='taskInContext.userWork["name"]' />
+                        </div>
+                        <hr />
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend"><span class="input-group-text">Fecha de creación</span></div>
+                            <input type="text" class="form-control" readonly [(ngModel)]='taskInContext.dateCreated' />
+                        </div>
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend"><span class="input-group-text">Fecha de solución</span></div>
+                            <input type="text" class="form-control" readonly [(ngModel)]='taskInContext.dateWork' />
+                        </div>
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend"><span class="input-group-text">Fecha límite</span></div>
+                            <input type="text" class="form-control" readonly [(ngModel)]='taskInContext.dateLimit' />
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend"><span class="input-group-text">Estado</span></div>
+                        <input type="text" class="form-control" readonly [(ngModel)]='taskInContext.status' />
+                    </div>
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend"><span class="input-group-text">Prioridad</span></div>
+                        <input type="text" class="form-control" readonly [(ngModel)]='taskInContext.priority' />
+                    </div>
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend"><span class="input-group-text">Etiqueta</span></div>
+                        <input type="text" class="form-control" readonly [(ngModel)]='taskInContext.tag' />
+                    </div>
+                </div>
+            <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Cerrar</button></div>
+        </div>
+    </div>
+</div>

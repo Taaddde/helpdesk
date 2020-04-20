@@ -1,0 +1,78 @@
+.task-icon{
+  font-size: 30px;
+  color: rgb(129,129,129);
+}
+
+.task-column{
+  padding-top: 10vh;
+  background-color: #cacaca;
+  border: 1px solid gray;
+}
+
+.task-column:hover{
+  background-color: gray;
+}
+
+
+.task-inprogress {
+  background-color: rgb(252,255,126);
+}
+  
+.task-desc {
+font-size: 9px;
+}
+
+.task-inprogress:hover {
+background-color: rgb(250,255,63);
+}
+
+.task-title{
+    font-size: small;
+}
+
+.task-container{
+  min-height: 100px;
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
+}
+
+.task {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    cursor: pointer;
+}
+
+.task-uninitiated {
+background-color: rgb(255,203,126);
+}
+
+.task-uninitiated:hover {
+background-color: rgb(255,172,126);
+}
+
+.task-wait {
+background-color: rgb(112,221,255);
+}
+
+.task-wait:hover {
+background-color: rgb(112,178,255);
+}
+
+.task-postponed {
+background-color: rgb(170,255,140);
+}
+
+.task-postponed:hover {
+background-color: rgb(139,232,106);
+}
+  
+  
+
+.task-finished {
+  background-color: rgb(111, 255, 92);
+  }
+  
+  .task-finished:hover {
+  background-color: rgb(50, 255, 23);
+  }
+  

@@ -93,8 +93,8 @@
                             </form>
 
                             <a *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="btn btn-dark dark" type="button" [routerLink]="['/ticket-new']"> <i class="fas fa-ticket-alt fa-lg"></i></a>
-                            <a *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="btn btn-dark dark" type="button" [routerLink]="['/ticket-new']" style="margin-left: 10px;"><i class="fas fa-tasks fa-lg"></i> </a>
-                            <a *ngIf="identity['role'] == 'ROLE_REQUESTER'" data-toggle="modal" data-target="#newticket" class="btn btn-dark dark" type="button"><i class="fas fa-ticket-alt"></i> Nuevo Ticket</a>
+                            <a *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="btn btn-dark dark" type="button" [routerLink]="['/tasks']" style="margin-left: 10px;"><i class="fas fa-tasks fa-lg"></i> </a>
+                            <a *ngIf="identity['role'] == 'ROLE_REQUESTER'" data-toggle="modal" data-target="#newticket" class="btn btn-dark dark" type="button"><i class="fas fa-ticket-alt"></i> Nuevo ticket</a>
 
                             <ul class="nav navbar-nav flex-nowrap ml-auto">
                                 <li class="nav-item dropdown d-sm-none no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><i class="fas fa-search"></i></a>
@@ -168,11 +168,15 @@
                                             <a *ngIf="identity['changedMode']" class="dropdown-item" role="presentation" (click)="changeToAgent()">
                                                 <i class="fas fa-exchange-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Modo agente
                                             </a>
+                                            <a class="dropdown-item" role="presentation" >
+                                                <i class="fas fa-book fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Manual de uso
+                                            </a>
                                             <a class="dropdown-item" role="presentation" (click)="showModal()">
                                                 <i class="fas fa-newspaper fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Novedades
                                             </a>
                                                 <!-- <a class="dropdown-item" role="presentation" href="#"><i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Actividad</a> -->
-                                                <div class="dropdown-divider"></div><a class="dropdown-item" role="presentation" (click)="logout()"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Cerrar sesión</a></div>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item" role="presentation" (click)="logout()"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Cerrar sesión</a></div>
                         </div>
                         </li>
                         </ul>

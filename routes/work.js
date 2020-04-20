@@ -8,7 +8,8 @@ var api = express.Router();
 
 //CONSULTAS
 api.get('/one/:id', md_auth.ensureAuth, controller.getOne);
-api.get('/list', md_auth.ensureAuth, controller.getList);
+api.get('/list/:id', md_auth.ensureAuth, controller.getList);
+api.get('/list-finish/:id', md_auth.ensureAuth, controller.getFinishList);
 
 //ABM
 api.post('/add',md_auth.ensureAuth, controller.save);

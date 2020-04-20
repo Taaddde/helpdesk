@@ -49,6 +49,9 @@ import { NewsComponent } from './components/news/news.component';
 import { SectorNewComponent } from './components/sector-new/sector-new.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { TasksComponent } from './components/tasks/tasks.component';
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import { MyTasksComponent } from './components/my-tasks/my-tasks.component';
+import { TasksFreeComponent } from './components/tasks-free/tasks-free.component'
 
 export var options: Partial<IConfig> | (() => Partial<IConfig>);
 
@@ -89,7 +92,9 @@ export var options: Partial<IConfig> | (() => Partial<IConfig>);
     NewsComponent,
     SectorNewComponent,
     ChatComponent,
-    TasksComponent
+    TasksComponent,
+    MyTasksComponent,
+    TasksFreeComponent
   ],
   imports: [
     BrowserModule,
@@ -101,7 +106,8 @@ export var options: Partial<IConfig> | (() => Partial<IConfig>);
     FullCalendarModule,
     NgxSpinnerModule,
     BrowserAnimationsModule,
-    NgxMaskModule.forRoot(options)
+    NgxMaskModule.forRoot(options),
+    DragDropModule,
   ],
   providers: [
     appRoutingProviders,

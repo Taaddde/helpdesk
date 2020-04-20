@@ -19,6 +19,7 @@ import { RequesterNewComponent } from './components/agent-new/requester-new.comp
 import { PassResetComponent } from './components/pass-reset/pass-reset.component';
 import { TimeworkListComponent } from './components/timework-list/timework-list.component';
 import { TimeworkSubtypeListComponent } from './components/timework-subtype-list/timework-subtype-list.component';
+import { TasksComponent } from './components/tasks/tasks.component';
 
 
 const appRoutes: Routes = [
@@ -54,6 +55,7 @@ const appRoutes: Routes = [
 
     {path: 'timework-subtype/:subtype/:time/:page', component: TimeworkSubtypeListComponent},
 
+    {path: 'tasks', component: TasksComponent},
 
 ];
 
