@@ -78,13 +78,13 @@ export class ChatComponent implements OnInit {
       this.getUsers();
     }else{
       this.getReqChat();
-    }    
+    }
+
     this.getCompanies();
 
     if(this.identity['role'] != 'ROLE_REQUESTER'){
       this.getNotification();
     }
-
 
     if(this.chat && this.chat['company']){
       this.companySelected(this.chat['company']);
@@ -92,17 +92,16 @@ export class ChatComponent implements OnInit {
 
     this.messageControl = Observable.interval(5000)
     .subscribe((val) => { 
-      if(this.chat && this.chat['_id']){
-        this.getMessages();
-      }
+      this.getMessages();
 
       if(this.identity['role'] != 'ROLE_REQUESTER'){
         this.getChat();
-
         this.getNotification();
+
         if(this.chat['_id']){
           this.updateChat();
-        }  
+        }
+
       }else{
         this.getReqChat();
       }
@@ -140,23 +139,26 @@ export class ChatComponent implements OnInit {
   }
 
   getMessages(){
-    this._messageService.getList(this.token, this.chat['_id']).subscribe(
-      response =>{
-          if(response.messages){
-            this.messages = response.messages;
-
-            //Lee el ultimo mensaje
-            let lastMessage = this.messages[this.messages.length-1];
-            if(!lastMessage.readed && lastMessage.user['_id'] != this.identity['_id']){
-              this.readMessages();
-              this.goToBottom();
+    if(this.chat && this.chat['_id']){
+      this._messageService.getList(this.token, this.chat['_id']).subscribe(
+        response =>{
+            if(response.messages){
+              this.messages = response.messages;
+  
+              //Lee el ultimo mensaje
+              let lastMessage = this.messages[this.messages.length-1];
+              if(!lastMessage.readed && lastMessage.user['_id'] != this.identity['_id']){
+                this.readMessages();
+                this.goToBottom();
+              }
             }
-          }
-      },
-      error =>{
-          console.error(error);
-      }
-    );
+        },
+        error =>{
+            console.error(error);
+        }
+      );
+    }
+
   }
 
   getNotification(){
@@ -368,7 +370,7 @@ export class ChatComponent implements OnInit {
     chatScheduleFrom = moment(this.company.chatScheduleFrom, format),
     chatScheduleTo = moment(this.company.chatScheduleTo, format);
   
-    return (time.isBetween(chatScheduleFrom, chatScheduleTo));
+    return (time.isBetween(chatScheduleFrom, chatScheduleTo) && time.weekday() != 0 && time.weekday() != 6);
   }
 
   send(){

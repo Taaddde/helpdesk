@@ -3,6 +3,7 @@
 var jwt = require('jwt-simple');
 var moment = require('moment'); //fecha de creacion y expiracion del tocken
 var secret = "Havanna"; //clave secreta que usa jwt
+var logger = require('../services/logger');
 
 
 exports.ensureAuth = function(req, res, next){
@@ -11,16 +12,18 @@ exports.ensureAuth = function(req, res, next){
     }
 
     var token = req.headers.authorization.replace(/['"]+/g, '');
-
+    var payload = null;
     try{
-        var payload = jwt.decode(token, secret);
+        payload = jwt.decode(token, secret);
 
         if(payload.exp <= moment().unix()){
+            logger.error({autenticate:{module:'autenticate/ensureAuth', msg: payload.userName+' Token expirado'}});
             return res.status(401).send({message: 'El token a expirado'});
         }
     }catch(ex){
-        //console.log('Token expirado')
-        //console.log(ex);
+        if(payload){
+            logger.error({autenticate:{module:'autenticate/ensureAuth', msg: payload.userName+' Token no valido'}});
+        }
         return res.status(404).send({message: 'Token no valido'});
     }
 

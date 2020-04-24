@@ -104,27 +104,14 @@ export class MyTasksComponent implements OnInit {
   }
 
 
-  onDrop(event: CdkDragDrop<string[]>){
+  onDrop(event: CdkDragDrop<string[]>, status: string){
     //event.container.data es el array para donde va el objeto
     
     if(event.previousContainer == event.container){
       //moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     }else{
       let task = event.previousContainer.data[event.previousIndex];
-      switch(event.container.id){
-        case 'cdk-drop-list-0':
-          task['status'] = 'No comenzada';
-          break;
-        case 'cdk-drop-list-1':
-          task['status'] = 'En curso';
-          break;
-        case 'cdk-drop-list-2':
-          task['status'] = 'A la espera';
-          break;
-        default:
-          task['status'] = 'Aplazada';
-          break;
-      }
+      task['status'] = status;
 
       this._workService.edit(this.token, task['_id'], task).subscribe(
         response =>{
@@ -155,6 +142,26 @@ export class MyTasksComponent implements OnInit {
       }
     );
   }
+
+  freeTask(){
+    this.hideContextMenu();
+    if(confirm('¿Esta seguro/a que quiere liberar la tarea para que otro agente la tome?')){
+      this.taskInContext.status = 'No comenzada';
+      this.taskInContext.userWork = null;
+      this._workService.edit(this.token, this.taskInContext._id, this.taskInContext).subscribe(
+        response =>{
+            if(response.work){
+              this.getTasks();
+            }
+        },
+        error =>{
+            console.error(error);
+        }
+      );
+  
+    }
+  }
+
 
   changeDate(val:string){
     return moment(val, 'YYYY-MM-DD HH:mm').format('DD-MM-YYYY');

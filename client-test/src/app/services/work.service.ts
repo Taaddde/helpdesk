@@ -75,6 +75,43 @@ export class workService{
                             .map(res => res.json())
     }
 
+    getFreeList(token, id){
+
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+          });
+
+          let options = new RequestOptions({headers: headers});
+          return this._http.get(this.url+'work/list-free/'+id, options)
+                            .map(res => res.json())
+    }
+
+    getCount(token, id){
+
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+          });
+
+          let options = new RequestOptions({headers: headers});
+          return this._http.get(this.url+'work/count/'+id, options)
+                            .map(res => res.json())
+    }
+
+
+    getCalendar(token, id){
+
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+          });
+
+          let options = new RequestOptions({headers: headers});
+          return this._http.get(this.url+'work/calendar/'+id, options)
+                            .map(res => res.json())
+    }
+
     getOne(token, id){
         this.httpOptions.headers =
             this.httpOptions.headers.set('Authorization', token);

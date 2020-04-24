@@ -179,7 +179,6 @@ var decoded = jwt_decode(req.headers.authorization);
                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado El bloque de texto'});
             }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({textblock:textblockUpdated});
             }
         }
@@ -202,7 +201,6 @@ var decoded = jwt_decode(req.headers.authorization);
                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado El bloque de texto'});
             }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({textblock:textblockUpdated});
             }
         }
@@ -266,9 +264,8 @@ function uploadFiles(req, res){
                     }
                 }
             });
-    
+     
     }else{
-        logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Solicitud de '+req.params.id}});
                 res.status(200).send({message: 'No ha subido ninguna imagen'});
     }
 }
@@ -323,7 +320,6 @@ async function uploadFile(req, res){
         logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
         res.status(200).send({message:'Adjuntos subidos correctamente'});
     }else{
-        logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Solicitud de '+req.params.id}});
                 res.status(200).send({message: 'No ha subido ninguna imagen'});
     }
 }

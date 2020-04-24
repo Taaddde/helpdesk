@@ -1,5 +1,6 @@
 'use strict'
 var Work = require('../models/work');
+var Team = require('../models/team');
 
 //Sistema de log
 var logger = require('../services/logger');
@@ -52,6 +53,7 @@ function save(req, res){
         let repeatParams = params[2];
         let daysRepeat = [];
         let limitDay = workParam.dateLimit;
+        var works = new Array();
 
         if(repeatParams['lun']){
             daysRepeat.push(1);
@@ -89,7 +91,7 @@ function save(req, res){
                         if(err){
                             console.log('Hubo un error al crear una tarea')
                         }else{
-                            console.log('Se generó la tarea ');
+                            works.push(workStored);
                         }
                     });
                 });    
@@ -99,12 +101,12 @@ function save(req, res){
         }
 
 
-        console.log(now.daysInMonth());
         res.status(200).send({work:true})
 
 
     }else{
         //UNA VEZ
+        let workToSend;
         work.name = workParam.name;
         work.desc = workParam.desc;
         work.createdBy = workParam.createdBy;
@@ -127,7 +129,7 @@ function save(req, res){
             }else{
                 if(!workStored){
                     logger.warn({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
-                res.status(404).send({work: 'La tarea no ha sido guardado'})
+                    res.status(404).send({work: 'La tarea no ha sido guardado'})
                 }else{
                     logger.info({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                     res.status(200).send({work:workStored})
@@ -170,7 +172,7 @@ function getList(req, res){
         {path:'teamWork',select:['name','image']},
     ];
     // poner userWork:ObjectId(id)
-    Work.find({status:{$ne:'Finalizado'}}).sort('dateCreated').populate(populateQuery).exec(function(err, works){
+    Work.find({status:{$ne:'Finalizado'},userWork:ObjectId(id)}).sort('dateCreated').populate(populateQuery).exec(function(err, works){
         if(err){
             logger.error({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({work: 'Error del servidor en la peticion'})
@@ -195,7 +197,7 @@ function getFinishList(req, res){
         {path:'teamWork',select:['name','image']},
     ];
     // poner userWork:ObjectId(id)
-    Work.find({status:{$eq:'Finalizado'}}).sort('dateCreated').populate(populateQuery).exec(function(err, works){
+    Work.find({status:{$eq:'Finalizado'},userWork:ObjectId(id)}).sort('dateCreated').populate(populateQuery).exec(function(err, works){
         if(err){
             logger.error({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({work: 'Error del servidor en la peticion'})
@@ -209,6 +211,86 @@ function getFinishList(req, res){
         }
     });
 }
+
+function getFreeList(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+    var functionName = 'getList';
+    var userId = req.params.id;
+
+
+    Team.find({users:userId}).exec(function(err, teams){
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            res.status(500).send({message: 'Error del servidor en la peticion'})
+        }else{
+            if(!teams){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                res.status(404).send({message: 'No hay tickets'})
+            }else{
+                var populateQuery = [
+                    {path:'createdBy',select:['name','surname','image']},
+                    {path:'userWork',select:['name','surname','image']},
+                    {path:'teamWork',select:['name','image']},
+                ];
+
+                Work.find({teamWork:teams, $or:[{userWork:null}, {userWork:undefined}]}).sort('dateCreated').populate(populateQuery).exec(function(err, works){
+                    if(err){
+                        logger.error({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                            res.status(500).send({work: 'Error del servidor en la peticion'})
+                    }else{
+                        if(!works){
+                            logger.warn({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                            res.status(404).send({work: 'No hay works'})
+                        }else{
+                            res.status(200).send({works: works});
+                        }
+                    }
+                });
+
+            }
+        }
+    });
+
+
+
+}
+
+
+function getDateWork(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+    var functionName = 'getDateWork';
+    let userId = req.params.id
+
+    let query =[
+        // First Stage
+        {
+          $match : {  userWork: ObjectId(userId), status:{$ne:'Finalizada'} }
+        },
+        // Second Stage
+        {
+          $project : {
+             _id : 1,
+             dateLimit:1,
+             name:1
+            },
+        },
+       ]
+
+    Work.aggregate(query, (err, works) =>{
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                res.status(500).send({message: 'Error del servidor en la peticion',err:err});
+        }else{
+            if(!works){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                res.status(404).send({message: 'El ticket no existe'});
+            }else{
+                res.status(200).send({works:works});
+            }
+        }
+    });
+}
+
 
 
 function update(req, res){
@@ -255,10 +337,41 @@ var decoded = jwt_decode(req.headers.authorization);
     });
 }
 
+function getCountFreeWorks(req,res){
+    var decoded = jwt_decode(req.headers.authorization);
+    var functionName = 'getCountFreeWorks';
+    var userId = req.params.id;
+
+    Team.find({users:userId}).exec(function(err, teams){
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            res.status(500).send({message: 'Error del servidor en la peticion'})
+        }else{
+            if(!teams){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                res.status(404).send({message: 'No hay tickets'})
+            }else{
+                Work.countDocuments({teamWork:teams, $or:[{userWork:null}, {userWork:undefined}]}, function(err, count) {
+                    if(err){
+                        logger.error({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                        res.status(500).send({work: 'Error en la petición'});
+                    }else{
+                        res.status(200).send({count:count});
+                    }
+                })
+            }
+        }
+    });
+    
+}
+
 module.exports = {
     getOne,
     getList,
     getFinishList,
+    getFreeList,
+    getDateWork,
+    getCountFreeWorks,
 
     save,
     update,

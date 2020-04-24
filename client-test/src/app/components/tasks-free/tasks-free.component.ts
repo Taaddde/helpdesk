@@ -16,10 +16,8 @@ declare var $: any;
 export class TasksFreeComponent implements OnInit {
 
 
-  public taskFinished: Work[];
-  public taskRevert: Work[];
+  public taskFree: Work[];
   public taskInContext: Work;
-
 
   public identity;
   public token;
@@ -34,8 +32,7 @@ export class TasksFreeComponent implements OnInit {
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
 
-    this.taskFinished= new Array<Work>();
-    this.taskFinished= new Array<Work>();
+    this.taskFree= new Array<Work>();
     this.taskInContext = new Work('','','','','','','','','','',false,'','')
 
   }
@@ -45,12 +42,12 @@ export class TasksFreeComponent implements OnInit {
   }
 
   getTasks(){
-    this.taskFinished= new Array<Work>();
+    this.taskFree= new Array<Work>();
 
-    this._workService.getFinishList(this.token, this.identity['_id']).subscribe(
+    this._workService.getFreeList(this.token, this.identity['_id']).subscribe(
       response =>{
           if(response.works){
-            this.taskFinished = response.works;
+            this.taskFree = response.works;
           }
       },
       error =>{
@@ -86,10 +83,18 @@ export class TasksFreeComponent implements OnInit {
 
   }
 
-  revertTask(){
+  showModalTask(task: Work){
+    this.hideContextMenu();
+    this.taskInContext = task;
+    $("#task-detail").modal("show");
+
+  }
+
+
+  takeTask(){
     this.hideContextMenu();
     this.taskInContext.status = 'No comenzada';
-
+    this.taskInContext.userWork = this.identity['_id'];
     this._workService.edit(this.token, this.taskInContext._id, this.taskInContext).subscribe(
       response =>{
           if(response.work){

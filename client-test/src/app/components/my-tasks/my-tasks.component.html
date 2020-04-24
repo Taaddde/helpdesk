@@ -12,7 +12,7 @@
                         #uninitiated="cdkDropList"
                         [cdkDropListData]="taskUninitiated"
                         [cdkDropListConnectedTo]="[inProgress, wait, postponed]"
-                        (cdkDropListDropped)="onDrop($event)"
+                        (cdkDropListDropped)="onDrop($event, 'No comenzada')"
                     >
                         <div class="card task-uninitiated task" 
                         *ngFor="let task of taskUninitiated"
@@ -49,7 +49,7 @@
                         #inProgress="cdkDropList"
                         [cdkDropListData]="taskInProgress"
                         [cdkDropListConnectedTo]="[uninitiated, wait, postponed]"
-                        (cdkDropListDropped)="onDrop($event)"
+                        (cdkDropListDropped)="onDrop($event, 'En curso')"
                     >
                         <div class="card task-inprogress task"
                         *ngFor="let task of taskInProgress"
@@ -84,7 +84,7 @@
                         #wait="cdkDropList"
                         [cdkDropListData]="taskWait"
                         [cdkDropListConnectedTo]="[uninitiated, inProgress, postponed]"
-                        (cdkDropListDropped)="onDrop($event)"
+                        (cdkDropListDropped)="onDrop($event, 'A la espera')"
                     >
                         
         
@@ -123,7 +123,7 @@
                         #postponed="cdkDropList"
                         [cdkDropListData]="taskPostponed"
                         [cdkDropListConnectedTo]="[uninitiated, inProgress, wait]"
-                        (cdkDropListDropped)="onDrop($event)"
+                        (cdkDropListDropped)="onDrop($event, 'Aplazada')"
                     >
                         <div class="card task-postponed task"
                         *ngFor="let task of taskPostponed"
@@ -151,6 +151,7 @@
 
 <div class="dropdown-menu dropdown-menu-sm" id="context-menu">
     <a class="dropdown-item" (click)="showModal()">Ver detalle</a>
+    <a class="dropdown-item" (click)="freeTask()" >Liberar tarea</a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" (click)="finishTask()" >Finalizar tarea</a>
 </div>
@@ -174,6 +175,10 @@
                         <div class="input-group input-group-sm" *ngIf="taskInContext.userWork">
                             <div class="input-group-prepend"><span class="input-group-text">Agente responsable</span></div>
                             <input type="text" class="form-control" readonly [(ngModel)]='taskInContext.userWork["name"]' />
+                        </div>
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend"><span class="input-group-text">Creado por</span></div>
+                            <input type="text" class="form-control" readonly [(ngModel)]='taskInContext.createdBy["name"]' />
                         </div>
                         <hr />
                         <div class="input-group input-group-sm">

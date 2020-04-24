@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -49,11 +50,10 @@ import { NewsComponent } from './components/news/news.component';
 import { SectorNewComponent } from './components/sector-new/sector-new.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { TasksComponent } from './components/tasks/tasks.component';
-import {DragDropModule} from '@angular/cdk/drag-drop';
 import { MyTasksComponent } from './components/my-tasks/my-tasks.component';
-import { TasksFreeComponent } from './components/tasks-free/tasks-free.component'
+import { TasksFreeComponent } from './components/tasks-free/tasks-free.component';
+import { TasksFinishedComponent } from './components/tasks-finished/tasks-finished.component'
 
-export var options: Partial<IConfig> | (() => Partial<IConfig>);
 
 @NgModule({
   declarations: [
@@ -94,7 +94,8 @@ export var options: Partial<IConfig> | (() => Partial<IConfig>);
     ChatComponent,
     TasksComponent,
     MyTasksComponent,
-    TasksFreeComponent
+    TasksFreeComponent,
+    TasksFinishedComponent
   ],
   imports: [
     BrowserModule,
@@ -106,7 +107,6 @@ export var options: Partial<IConfig> | (() => Partial<IConfig>);
     FullCalendarModule,
     NgxSpinnerModule,
     BrowserAnimationsModule,
-    NgxMaskModule.forRoot(options),
     DragDropModule,
   ],
   providers: [

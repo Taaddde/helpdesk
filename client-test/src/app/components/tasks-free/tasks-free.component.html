@@ -2,14 +2,14 @@
     <div class="col">
         <div class="card">
             <div class="card-header">
-                <h4>Finalizadas</h4>
+                <h4>Libres</h4>
             </div>
             <div class="card-body"
             >
                 <div class="row">
-                    <div class="col-3" *ngFor="let task of taskFinished"  
+                    <div class="col-3" *ngFor="let task of taskFree"  
                     >
-                        <div class="card task-finished task" 
+                        <div class="card task-free task"  (click)="showModalTask(task)"
                         (contextmenu)="onRightClick($event, task)"
                         >
                             <div class="card-body">
@@ -35,7 +35,7 @@
 <div class="dropdown-menu dropdown-menu-sm" id="context-menu">
     <a class="dropdown-item" (click)="showModal()">Ver detalle</a>
     <div class="dropdown-divider"></div>
-    <a class="dropdown-item" (click)="revertTask()" >Devolver a tarea pendiente</a>
+    <a class="dropdown-item" (click)="takeTask()" >Tomar tarea</a>
 </div>
 
 
@@ -54,9 +54,13 @@
                             <div class="input-group-prepend"><span class="input-group-text">Equipo responsable</span></div>
                             <input type="text" class="form-control" readonly [(ngModel)]='taskInContext.teamWork["name"]' />
                         </div>
-                        <div class="input-group input-group-sm">
+                        <div class="input-group input-group-sm" *ngIf="taskInContext.userWork">
                             <div class="input-group-prepend"><span class="input-group-text">Agente responsable</span></div>
                             <input type="text" class="form-control" readonly [(ngModel)]='taskInContext.userWork["name"]' />
+                        </div>
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend"><span class="input-group-text">Creado por</span></div>
+                            <input type="text" class="form-control" readonly [(ngModel)]='taskInContext.createdBy["name"]' />
                         </div>
                         <hr />
                         <div class="input-group input-group-sm">
@@ -82,7 +86,10 @@
                         <input type="text" class="form-control" readonly [(ngModel)]='taskInContext.tag' />
                     </div>
                 </div>
-            <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Cerrar</button></div>
+            <div class="modal-footer">
+                <button class="btn btn-light" type="button" data-dismiss="modal">Cerrar</button>
+                <button class="btn btn-dark dark" type="button" data-dismiss="modal" (click)="takeTask()">Tomar</button>
+            </div>
         </div>
     </div>
 </div>

@@ -10,6 +10,9 @@ var api = express.Router();
 api.get('/one/:id', md_auth.ensureAuth, controller.getOne);
 api.get('/list/:id', md_auth.ensureAuth, controller.getList);
 api.get('/list-finish/:id', md_auth.ensureAuth, controller.getFinishList);
+api.get('/list-free/:id', md_auth.ensureAuth, controller.getFreeList);
+api.get('/calendar/:id', md_auth.ensureAuth, controller.getDateWork);
+api.get('/count/:id', md_auth.ensureAuth, controller.getCountFreeWorks);
 
 //ABM
 api.post('/add',md_auth.ensureAuth, controller.save);

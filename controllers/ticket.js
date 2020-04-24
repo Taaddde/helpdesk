@@ -171,7 +171,7 @@ function getCountTickets(req, res){
 }
 
 function getDateTickets(req, res){
-var decoded = jwt_decode(req.headers.authorization);
+    var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getDateTickets';
     let userId = req.params.userId
 
@@ -1031,7 +1031,6 @@ function checkClose(req, res){
                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 res.status(404).send({message: 'No se ha encontrado el ticket'});
             }else{
-                logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({tickets:ticketUpdated});
             }
         }

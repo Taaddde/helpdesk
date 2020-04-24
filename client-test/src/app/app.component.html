@@ -168,7 +168,7 @@
                                             <a *ngIf="identity['changedMode']" class="dropdown-item" role="presentation" (click)="changeToAgent()">
                                                 <i class="fas fa-exchange-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Modo agente
                                             </a>
-                                            <a class="dropdown-item" role="presentation" >
+                                            <a *ngIf="identity['role'] == 'ROLE_REQUESTER'" class="dropdown-item" role="presentation" target="_blank" href="../assets/docs/Manual de usuario - Mesa de ayuda.pdf">
                                                 <i class="fas fa-book fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Manual de uso
                                             </a>
                                             <a class="dropdown-item" role="presentation" (click)="showModal()">

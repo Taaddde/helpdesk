@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { GLOBAL } from 'src/app/services/global';
 import { userService } from 'src/app/services/user.service';
 import * as moment from 'moment';
@@ -22,6 +22,7 @@ declare var $: any;
 export class TasksComponent implements OnInit {
 
   @ViewChild(MessageComponent, {static:false}) message: MessageComponent;
+  @ViewChild(MyTasksComponent, {static:false}) myTasks: MyTasksComponent;
 
   public identity;
   public token;
@@ -45,6 +46,7 @@ export class TasksComponent implements OnInit {
   }
 
   public repeat: string;
+  public countFree: number;
 
   constructor(
     private _userService: userService,
@@ -58,16 +60,31 @@ export class TasksComponent implements OnInit {
     this.state = 'my-tasks';
 
     this.message = new MessageComponent()
+    this.myTasks = new MyTasksComponent(_userService, _workService);
 
-    this.task = new Work('','','',this.identity['_id'],'',undefined,'','','','',false,'No comenzada','Normal');
+    this.task = new Work('','','',this.identity['_id'],'',null,'','','','',false,'No comenzada','Normal');
     this.repeat = 'false';
 
     this.teamName = '';
     this.agentName = '';
+    this.countFree = 0;
   }
 
   ngOnInit() {
-    this.getTeams()
+    this.getTeams();
+    this.getCount();
+  }
+  
+  getCount(){
+    this._workService.getCount(this.token, this.identity['_id']).subscribe(
+      response =>{
+          if(response.count){
+            this.countFree = response.count;
+          }
+      },
+      error =>{
+          console.error(error);
+    });
   }
 
   getTeams(){
@@ -83,7 +100,7 @@ export class TasksComponent implements OnInit {
   }
 
   getAgents(team: Team){
-    this.task.userWork = undefined;
+    this.task.userWork = null;
     this.agentName = 'Agente responsable'
     this.task.teamWork = team._id;
     this.teamName = team.name;
@@ -111,30 +128,38 @@ export class TasksComponent implements OnInit {
     $("#task-new").modal("show");
   }
 
+  
+
   onSubmit(){
-    if(this.task.name != '' && this.task.desc != '' && this.task.teamWork != '' && this.task.dateLimit != '' && this.task.dateWork != ''){
-      this._workService.add(this.token, this.task, this.repeat, this.dayOfWeek).subscribe(
-        response =>{
-            if(response.work){
-              this.task = new Work('','','',this.identity['_id'],'','','','','','',false,'No comenzada','Normal');
-              this.dayOfWeek = {
-                lun: false,
-                mar: false,
-                mie: false,
-                jue: false,
-                vie: false,
-                sab: false
-              };
-              this.repeat = 'false';
-              this.teamName = '';
-              this.agentName = '';
-              $("#task-new").modal("hide");
-              this.message.success('Completado', 'Tarea creada con éxito.');
-            }
-        },
-        error =>{
-            console.error(error);
-      });
+    if(this.task.name != '' && this.task.desc != '' && this.task.teamWork != '' && this.task.dateLimit != '' && (this.task.dateWork != '' || this.repeat == 'true')){
+      if(moment(this.task.dateLimit).isSameOrAfter((moment().format("YYYY-MM-DD")))){
+        this._workService.add(this.token, this.task, this.repeat, this.dayOfWeek).subscribe(
+          response =>{
+              if(response.work){
+                this.task = new Work('','','',this.identity['_id'],'','','','','','',false,'No comenzada','Normal');
+                this.dayOfWeek = {
+                  lun: false,
+                  mar: false,
+                  mie: false,
+                  jue: false,
+                  vie: false,
+                  sab: false
+                };
+                this.repeat = 'false';
+                this.teamName = '';
+                this.agentName = '';
+                $("#task-new").modal("hide");
+                this.message.success('Completado', 'Tarea creada con éxito.');
+                this.myTasks.getTasks();
+              }
+          },
+          error =>{
+              console.error(error);
+        });
+      }else{
+        this.message.error('Incongruencia de fechas', 'No es posible seleccionar una fecha límite menor al día de hoy')
+      }
+     
       
     }else{
       this.message.error('Faltan datos', 'Completa todos los campos que contengan (*)')
