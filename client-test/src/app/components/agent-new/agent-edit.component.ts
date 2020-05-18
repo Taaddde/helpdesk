@@ -46,6 +46,7 @@ export class AgentEditComponent implements OnInit {
   ngOnInit() {
     this.getUser();
     this.getSectors();
+    console.log(this.identity['role'])
   }
 
   getUser(){

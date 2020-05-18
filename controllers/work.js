@@ -25,11 +25,11 @@ function getOne(req, res){
     ];
     Work.findById(workId, (err, work) =>{
         if(err){
-            logger.error({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({work: 'Error del servidor en la peticion'});
         }else{
             if(!work){
-                logger.warn({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 res.status(404).send({work: 'La tarea no existe'});
             }else{
                 
@@ -124,14 +124,14 @@ function save(req, res){
         work.save((err, workStored) =>{
             if(err){
                 console.log(err)
-                logger.error({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({work: err})
             }else{
                 if(!workStored){
-                    logger.warn({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                    logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                     res.status(404).send({work: 'La tarea no ha sido guardado'})
                 }else{
-                    logger.info({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                    logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                     res.status(200).send({work:workStored})
                 }
             }
@@ -174,11 +174,11 @@ function getList(req, res){
     // poner userWork:ObjectId(id)
     Work.find({status:{$ne:'Finalizado'},userWork:ObjectId(id)}).sort('dateCreated').populate(populateQuery).exec(function(err, works){
         if(err){
-            logger.error({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({work: 'Error del servidor en la peticion'})
         }else{
             if(!works){
-                logger.warn({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 res.status(404).send({work: 'No hay works'})
             }else{
                 res.status(200).send({works: works});
@@ -199,11 +199,11 @@ function getFinishList(req, res){
     // poner userWork:ObjectId(id)
     Work.find({status:{$eq:'Finalizado'},userWork:ObjectId(id)}).sort('dateCreated').populate(populateQuery).exec(function(err, works){
         if(err){
-            logger.error({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({work: 'Error del servidor en la peticion'})
         }else{
             if(!works){
-                logger.warn({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 res.status(404).send({work: 'No hay works'})
             }else{
                 res.status(200).send({works: works});
@@ -235,11 +235,11 @@ function getFreeList(req, res){
 
                 Work.find({teamWork:teams, $or:[{userWork:null}, {userWork:undefined}]}).sort('dateCreated').populate(populateQuery).exec(function(err, works){
                     if(err){
-                        logger.error({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                        logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                             res.status(500).send({work: 'Error del servidor en la peticion'})
                     }else{
                         if(!works){
-                            logger.warn({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                            logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                             res.status(404).send({work: 'No hay works'})
                         }else{
                             res.status(200).send({works: works});
@@ -302,14 +302,14 @@ function update(req, res){
     //workId = work buscado, update = datos nuevos a actualizar
     Work.findByIdAndUpdate(workId, update, (err, workUpdated) =>{
         if(err){
-            logger.error({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({work: 'Error del servidor en la petición'});
         }else{
             if(!workUpdated){
-                logger.warn({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 res.status(404).send({work: 'No se ha encontrado La tarea'});
             }else{
-              logger.info({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({work:workUpdated});
             }
         }
@@ -323,14 +323,14 @@ var decoded = jwt_decode(req.headers.authorization);
 
     Work.findByIdAndRemove(workId, (err, workRemoved) =>{
         if(err){
-            logger.error({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
             res.status(500).send({work: 'Error en la petición'});
         }else{
             if(!workRemoved){
-                logger.warn({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 res.status(404).send({work: 'No se ha encontrado La tarea'});
             }else{
-                logger.info({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({work: workRemoved});
             }
         }
@@ -353,7 +353,7 @@ function getCountFreeWorks(req,res){
             }else{
                 Work.countDocuments({teamWork:teams, $or:[{userWork:null}, {userWork:undefined}]}, function(err, count) {
                     if(err){
-                        logger.error({work:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                        logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                         res.status(500).send({work: 'Error en la petición'});
                     }else{
                         res.status(200).send({count:count});

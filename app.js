@@ -21,6 +21,7 @@ var sector_routes = require('./routes/sector');
 var chat_routes = require('./routes/chat');
 var message_routes = require('./routes/message');
 var work_routes = require('./routes/work');
+var workobservation_routes = require('./routes/workobservation');
 
 
 
@@ -53,6 +54,7 @@ app.use('/api/sector', sector_routes);
 app.use('/api/chat', chat_routes);
 app.use('/api/message', message_routes);
 app.use('/api/work', work_routes);
+app.use('/api/workobservation', workobservation_routes);
 
 
 app.get('*', function(req, res, next){

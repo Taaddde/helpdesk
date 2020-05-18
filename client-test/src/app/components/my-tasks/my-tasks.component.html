@@ -151,8 +151,9 @@
 
 <div class="dropdown-menu dropdown-menu-sm" id="context-menu">
     <a class="dropdown-item" (click)="showModal()">Ver detalle</a>
-    <a class="dropdown-item" (click)="freeTask()" >Liberar tarea</a>
+    <a class="dropdown-item" (click)="comments.getComments(taskInContext);showModalComments()">Ver comentarios</a>
     <div class="dropdown-divider"></div>
+    <a class="dropdown-item" (click)="freeTask()" >Liberar tarea</a>
     <a class="dropdown-item" (click)="finishTask()" >Finalizar tarea</a>
 </div>
 
@@ -212,3 +213,5 @@
         </div>
     </div>
 </div>
+
+<app-task-comments #comments></app-task-comments>

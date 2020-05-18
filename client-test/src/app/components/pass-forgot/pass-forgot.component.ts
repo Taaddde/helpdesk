@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import {Router, ActivatedRoute, Params} from '@angular/router'
 import {GLOBAL} from '../../services/global';
@@ -12,7 +12,7 @@ declare var $: any;
   templateUrl: './pass-forgot.component.html',
   providers:[userService]
 })
-export class PassForgotComponent {
+export class PassForgotComponent implements OnInit {
 
   public forgotUserName: string
   public alertMessage;
@@ -27,6 +27,10 @@ export class PassForgotComponent {
     this.alertMessage = '';
     this.url = GLOBAL.url;  
     this.forgotUserName = '';  
+   }
+
+   ngOnInit(){
+     console.log('Activo')
    }
 
 

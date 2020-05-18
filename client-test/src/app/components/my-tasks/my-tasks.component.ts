@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop'
+import { Component, OnInit} from '@angular/core';
+import {CdkDragDrop, transferArrayItem} from '@angular/cdk/drag-drop'
 import { workService } from 'src/app/services/work.service';
 import { userService } from 'src/app/services/user.service';
 import { Work } from 'src/app/models/work';
@@ -15,8 +15,6 @@ declare var $: any;
 
 })
 export class MyTasksComponent implements OnInit {
-
-  
 
   public taskUninitiated: Work[];
   public taskInProgress: Work[];
@@ -174,5 +172,13 @@ export class MyTasksComponent implements OnInit {
     $("#task-detail").modal("show");
 
   }
+
+  showModalComments(){
+    this.hideContextMenu();
+
+    $("#task-comments").modal("show");
+
+  }
+
 
 }

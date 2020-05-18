@@ -449,7 +449,7 @@
                         </a>    
                       </span>  
 
-                      <button class="btn btn-primary float-right" [disabled]="identity['_id'] != ticket.requester['_id'] && !isCc" type="submit">
+                      <button class="btn btn-primary float-right" [disabled]="ticket.status == 'Cerrado'" type="submit">
                         <i class="fa fa-paper-plane"></i>
                       </button>
 

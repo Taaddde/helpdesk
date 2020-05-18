@@ -52,7 +52,8 @@ import { ChatComponent } from './components/chat/chat.component';
 import { TasksComponent } from './components/tasks/tasks.component';
 import { MyTasksComponent } from './components/my-tasks/my-tasks.component';
 import { TasksFreeComponent } from './components/tasks-free/tasks-free.component';
-import { TasksFinishedComponent } from './components/tasks-finished/tasks-finished.component'
+import { TasksFinishedComponent } from './components/tasks-finished/tasks-finished.component';
+import { TaskCommentsComponent } from './components/task-comments/task-comments.component'
 
 
 @NgModule({
@@ -95,7 +96,8 @@ import { TasksFinishedComponent } from './components/tasks-finished/tasks-finish
     TasksComponent,
     MyTasksComponent,
     TasksFreeComponent,
-    TasksFinishedComponent
+    TasksFinishedComponent,
+    TaskCommentsComponent
   ],
   imports: [
     BrowserModule,

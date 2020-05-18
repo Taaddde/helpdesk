@@ -1,0 +1,78 @@
+<div role="dialog" tabindex="-1" id="task-comments" class="modal fade">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{task.name}}</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+            <div class="modal-body">
+                <div class="card panel-community">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" style="margin-bottom:6px;">
+                            <div class="media">
+                                <div></div>
+                                <div class="media-body">
+                                    <div class="media" style="overflow:visible;" *ngFor="let comment of comments">
+                                        <div >
+                                            <img *ngIf="comment.user['image'] == 'null'" class="rounded-circle mr-2" style="width: 25px; height:25px;" src="../../../assets/img/system/user-placeholder.png" />
+                                            <img *ngIf="comment.user['image'] != 'null'" class="rounded-circle mr-2" style="width: 25px; height:25px;" src="{{url+'user/image/'+comment.user['image']}}" />
+                                        </div>
+                                        <div class="media-body" style="overflow:visible;">
+                                            <div class="row" >
+                                                <div class="col-md-12" >
+                                                    <p>
+                                                        <a>{{comment.user['name']}} {{comment.user['surname']}}:</a> 
+                                                        {{comment.text}}
+                                                        <br />
+                                                        <small class="text-muted">
+                                                            {{convertDate(comment.date)}}
+                                                        </small>
+                                                        
+                                                        <span *ngFor="let file of comment.files">
+                                                            <a  class="float-right" target="blank" href="{{url+'workobservation/file/'+file}}">
+                                                                <i class="fa fa-paperclip"></i>
+                                                            </a>
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card" style="margin-top: 10px;">
+                            <div class="card-body">
+                                <form  #loginForm="ngForm" (ngSubmit)="onSubmit()">
+                                    <div class="form-group" style="margin-bottom: 2px;">
+                                        <textarea class="form-control" id="text" #text (change)="newComment.text = text.value"></textarea>
+                                    </div>
+                                    <div class="text-right">
+                                        <label class="d-inline" style="margin-bottom: 0px;margin-top: 0;margin-right: 10px;">
+                                            <i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 7px;"></i>
+                                            <input type="file" multiple class="d-none" (change)="fileChangeEvent($event)" />
+                                            <span *ngIf="filesToUpload">
+                                                +{{filesToUpload.length}}
+                                            </span>
+                                        </label>
+                                        <span *ngIf="filesToUpload"  style="margin-bottom: 0px;margin-top: 3px;margin-right: 10px;">
+                                            <a class="btn btn-danger" style="margin-left: 8px; color: white;margin-bottom: 8px; margin-top: 0px;" (click)=cleanAttach()>
+                                                <i class="fa fa-trash"></i>
+                                            </a>    
+                                        </span>
+                                        <button class="btn btn-primary" type="submit" style="margin-right: 0px;margin-bottom: 0px;margin-left: 0px;">
+                                            <i class="fa fa-location-arrow"></i>
+                                        </button>
+                                    </div>
+    
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

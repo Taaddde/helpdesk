@@ -14,15 +14,6 @@
                             <option value="100">100</option>
                         </select>
                     </label>
-                    <button style="margin-left: 70px;" 
-                    data-toggle="modal" data-target="#filter" type="button"
-                    [className]="(filter['sub'] == null || filter['sub'] == '') && (filter['status'] == null || filter['status'] == '') && filter['requester'] == null && filter['agent'] == null ? 'btn btn-dark dark' : 'btn btn-dark dark-selected'">
-                        <i class="fa fa-filter"></i>
-                    </button>
-                    <button 
-                        *ngIf="identity['role'] != 'ROLE_REQUESTER' && this.groupTicket.length > 1" 
-                        class="btn btn-dark dark" type="button" style="margin-left: 5px;"
-                        (click)="unify()">Unificar</button>
                 </div>
 
 
@@ -35,7 +26,21 @@
                         <label class="form-check-label" for="ref">TICKETS DEL SECTOR</label></div>
                 </div>
             </div>
-        </div>
+    </div>
+    <div class="row">
+        <div class="col text-nowrap">
+                  <button
+                  data-toggle="modal" data-target="#filter" type="button"
+                  [className]="(filter['sub'] == null || filter['sub'] == '') && (filter['status'] == null || filter['status'] == '') && filter['requester'] == null && filter['agent'] == null ? 'btn btn-dark dark' : 'btn btn-dark dark-selected'">
+                      <i class="fa fa-filter"></i>
+                  </button>
+                  <button 
+                      *ngIf="identity['role'] != 'ROLE_REQUESTER' && this.groupTicket.length > 1" 
+                      class="btn btn-dark dark" type="button" style="margin-left: 5px;"
+                      (click)="unify()">Unificar</button>
+          </div>
+
+    </div>
       <div class="table-responsive table mt-2" id="dataTable">
           <table class="table dataTable my-0" id="dataTable">
               <thead>

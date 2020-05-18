@@ -17,12 +17,12 @@ exports.ensureAuth = function(req, res, next){
         payload = jwt.decode(token, secret);
 
         if(payload.exp <= moment().unix()){
-            logger.error({autenticate:{module:'autenticate/ensureAuth', msg: payload.userName+' Token expirado'}});
+            logger.error({message:{module:'autenticate/ensureAuth', msg: payload.userName+' Token expirado'}});
             return res.status(401).send({message: 'El token a expirado'});
         }
     }catch(ex){
         if(payload){
-            logger.error({autenticate:{module:'autenticate/ensureAuth', msg: payload.userName+' Token no valido'}});
+            logger.error({message:{module:'autenticate/ensureAuth', msg: payload.userName+' Token no valido'}});
         }
         return res.status(404).send({message: 'Token no valido'});
     }
