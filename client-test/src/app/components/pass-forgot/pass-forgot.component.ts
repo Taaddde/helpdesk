@@ -30,7 +30,6 @@ export class PassForgotComponent implements OnInit {
    }
 
    ngOnInit(){
-     console.log('Activo')
    }
 
 

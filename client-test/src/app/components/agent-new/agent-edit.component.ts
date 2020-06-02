@@ -37,7 +37,7 @@ export class AgentEditComponent implements OnInit {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
-    this.user = new User('','','','','','','',false,'','','','', false,'');
+    this.user = new User('','','','','','','',false,'','','','', false,'', true);
     this.isAdm = false;
     this.isUser = false;
     this.alertMessage = '';
@@ -127,8 +127,7 @@ export class AgentEditComponent implements OnInit {
       if(this.user.password == ''){
         delete this.user.password;
       }
-  
-  
+    
       this._userService.edit(this.token, this.user).subscribe(
         response =>{
             if(!response.user){

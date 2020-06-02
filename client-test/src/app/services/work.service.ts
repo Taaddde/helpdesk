@@ -63,6 +63,20 @@ export class workService{
                             .map(res => res.json())
     }
 
+    getListPaged(token, page, perPage, query, userId){
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+        var q = [];
+        for (var p in query) {
+            if (query.hasOwnProperty(p)) {
+                q.push(encodeURIComponent(p) + "=" + encodeURIComponent(query[p]));
+            }
+        }
+        return this._httpClient.get<any>(this.url+'work/listPaged/'+page+'/'+perPage+'/'+userId+'/?'+q.join('&'), this.httpOptions);
+    }
+
+
     getFinishList(token, id){
 
         let headers = new Headers({
@@ -87,6 +101,18 @@ export class workService{
                             .map(res => res.json())
     }
 
+    getFreeCount(token, id){
+
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+          });
+
+          let options = new RequestOptions({headers: headers});
+          return this._http.get(this.url+'work/free-count/'+id, options)
+                            .map(res => res.json())
+    }
+
     getCount(token, id){
 
         let headers = new Headers({
@@ -98,6 +124,7 @@ export class workService{
           return this._http.get(this.url+'work/count/'+id, options)
                             .map(res => res.json())
     }
+
 
 
     getCalendar(token, id){

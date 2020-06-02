@@ -2,9 +2,50 @@
 <div class="card">
     <div class="card-body">
         <div class="row">
-            <div class="col-md-8 col-lg-8 col-xl-8">
-                <h1 style="font-family: Nunito, sans-serif; text-align: center;" *ngIf="identity['company']">Panel principal - {{identity['company']['name']}}</h1>
-                <h1 style="font-family: Nunito, sans-serif; text-align: center;" *ngIf="!identity['company']">Panel principal</h1>            
+            <div class="col" *ngIf="!identity['company']">
+                <h1 style="font-family: Nunito, sans-serif; text-align: center;" >Panel principal</h1>            
+            </div>
+            <div *ngIf="identity['company']" class="col-sm-12 col-md-4 col-lg-4 col-xl-4 offset-lg-0 offset-xl-0">
+                <a [routerLink]="['/tasks']">
+                    <div class="card shadow border-left-warning py-2">
+                        <div class="card-body">
+                            <div class="row align-items-center no-gutters">
+                                <div class="col mr-2">
+                                    <div class="text-uppercase text-warning font-weight-bold text-xs mb-1">
+                                        <span>TUS TAREAS</span>
+                                    </div>
+                                    <div class="text-dark font-weight-bold h5 mb-0">
+                                        <span *ngIf="tasks">{{tasks}}</span>
+                                        <span *ngIf="!tasks">0</span>
+                                    </div>
+                                </div>
+                                <div class="col-auto"><i class="fas fa-tasks fa-2x text-gray-300"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="col-sm-12 col-md-4 col-lg-4 col-xl-4 offset-lg-0 offset-xl-0" >
+                <a [routerLink]="['/tasks']">
+                    <div class="card shadow border-left-info py-2">
+                        <div class="card-body">
+                            <div class="row align-items-center no-gutters">
+                                <div class="col mr-2">
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>TAREAS SIN AGENTE</span>
+                                    </div>
+                                    <div class="text-dark font-weight-bold h5 mb-0">
+                                        <span *ngIf="tasksFree">{{tasksFree}}</span>
+                                        <span *ngIf="!tasksFree">0</span>
+
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-auto"><i class="fas fa-tasks fa-2x text-gray-300"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
             </div>
             <div class="col-sm-12 col-md-4" *ngIf="identity['role'] != 'ROLE_REQUESTER'">
                 <a [routerLink]="['/calendar']">
@@ -92,6 +133,7 @@
                         <th>Asunto</th>
                         <th>Estado</th>
                         <th>Fecha</th>
+                        <th>Novedad</th>
                     </tr>
                 </thead>
                 <tbody *ngFor="let ticket of tickets">
@@ -106,7 +148,8 @@
                         </td>
                         <td class="text-nowrap text-truncate text-break" data-title="Asunto" ><p class="body-cell" style="font-size: 14px;" title="{{ticket.sub}}" ng-bind="ticket.sub">{{ticket.sub}}</p></td>
                         <td data-title="Estado">{{ticket.status}}</td>
-                        <td data-title="Fecha">{{ticket.createDate}}</td>
+                        <td data-title="Fecha">{{changeDate(ticket.createDate)}}</td>
+                        <td data-title="Novedad">{{changeDate(ticket.lastActivity)}}</td>
                     </tr>
                 </tbody>
                 <tfoot>
@@ -116,6 +159,7 @@
                         <td><strong>Asunto</strong></td>
                         <td><strong>Estado</strong></td>
                         <td><strong>Fecha</strong></td>
+                        <td><strong>Novedad</strong></td>
                     </tr>
                 </tfoot>
             </table>

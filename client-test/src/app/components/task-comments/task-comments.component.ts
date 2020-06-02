@@ -36,7 +36,7 @@ export class TaskCommentsComponent implements OnInit {
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
 
-    this.task = new Work('','','',this.identity['_id'],'',null,'','','','',false,'No comenzada','Normal');
+    this.task = new Work('','','',this.identity['_id'],'',null,'','','','',false,'No comenzada',false,'Normal',undefined);
     this.newComment = new WorkObservation('','','',this.identity['_id'],'',null,false);
   }
 
@@ -100,5 +100,10 @@ export class TaskCommentsComponent implements OnInit {
     }
 
   }
+
+  cleanAttach(){
+    this.filesToUpload = undefined;
+  }
+
 
 }

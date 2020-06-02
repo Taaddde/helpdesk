@@ -32,7 +32,7 @@ export class PassResetComponent implements OnInit {
     this.alertMessage = '';
     this.confirmPass = '';
     this.url = GLOBAL.url;
-    this.user = new User('','','','','','','',false,'','','','', false,'');
+    this.user = new User('','','','','','','',false,'','','','', false,'', true);
     
    }
 

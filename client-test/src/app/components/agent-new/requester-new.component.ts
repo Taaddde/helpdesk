@@ -39,7 +39,7 @@ export class RequesterNewComponent implements OnInit {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
-    this.user = new User('','','','','','','',false,'ROLE_REQUESTER','','null','',false,'');
+    this.user = new User('','','','','','','',false,'ROLE_REQUESTER','','null','',false,'', true);
     this.isAdm = false;
     this.alertMessage = '';
     this.isReq = true;

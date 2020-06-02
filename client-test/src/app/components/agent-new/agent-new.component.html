@@ -53,6 +53,7 @@
                     <div class="form-check" *ngIf="user.role != 'ROLE_REQUESTER'"><input class="form-check-input" type="checkbox" [disabled]="identity['role'] != 'ROLE_ADMIN'" id="formCheck-1" name="isAdm" [(ngModel)]="isAdm" /><label class="form-check-label" for="formCheck-1">Administrador</label></div>
                     <div class="form-check"><input class="form-check-input" [disabled]="(identity['role'] != 'ROLE_AGENT' || user.role == 'ROLE_ADMIN') && identity['role'] != 'ROLE_ADMIN' && !isUser" type="checkbox" id="formCheck-2" #receiveMail="ngModel" name="receiveMail" [(ngModel)]="user.receiveMail" /><label class="form-check-label" for="formCheck-2">Recibir notificaciones al correo electronico</label></div>
                     <div class="form-check"><input class="form-check-input" type="checkbox" [disabled]="identity['role'] != 'ROLE_ADMIN'" id="formCheck-3" name="sectorRef" [(ngModel)]="user.sectorRef" /><label class="form-check-label" for="formCheck-3">Referente</label></div>
+                    <div class="form-check"><input class="form-check-input" [disabled]="(identity['role'] != 'ROLE_AGENT' || user.role == 'ROLE_ADMIN') && identity['role'] != 'ROLE_ADMIN' && !isUser" type="checkbox" id="formCheck-infoview" #receiveMail="ngModel" name="receiveMail" [(ngModel)]="user.infoView" /><label class="form-check-label" for="formCheck-infoview">Visualizar mensajes de información en tickets</label></div>
 
                 </div>
                 <div class="col card-profile">

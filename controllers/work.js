@@ -83,15 +83,16 @@ function save(req, res){
         }
 
         var workToSave = new Work();
+
         while (now.isBefore(limitDay)) {
 
             if(daysRepeat.includes(now.weekday())){
-                workToSave = saveWork(workParam, now.format('YYYY-MM-DD')).then(async data =>{
-                    await data.save((err, workStored) => {
+                workToSave = saveWork(workParam, now.format('YYYY-MM-DD')).then( data =>{
+                     data.save((err, workStored) => {
                         if(err){
                             console.log('Hubo un error al crear una tarea')
                         }else{
-                            works.push(workStored);
+                            works.push(workStored._id);
                         }
                     });
                 });    
@@ -99,9 +100,8 @@ function save(req, res){
 
             now.add(1, 'day');
         }
+        res.status(200).send({work:works})
 
-
-        res.status(200).send({work:true})
 
 
     }else{
@@ -112,12 +112,13 @@ function save(req, res){
         work.createdBy = workParam.createdBy;
         work.userWork = workParam.userWork;
         work.teamWork = workParam.teamWork;
-        work.dateCreated = moment().locale('es').format("YY-MMM-DD HH:mm");
+        work.dateCreated = moment().locale('es').format("YYYY-MMM-DD HH:mm");
         work.dateWork = workParam.dateWork;
         work.dateLimit = workParam.dateLimit;
         work.tag = workParam.tag;
         work.editable = workParam.editable;
         work.status = workParam.status;
+        work.free = workParam.free;
         work.priority = workParam.priority;
     
     
@@ -291,7 +292,85 @@ function getDateWork(req, res){
     });
 }
 
+function getListPaged(req, res){
+    var functionName = 'getListPaged';
+    var decoded = jwt_decode(req.headers.authorization);
+    var populateQuery = [
+        {path:'teamWork',select:['name','image']},
+        {path:'userWork',select:['name','surname','image']}, 
+        {path:'createdBy',select:['name','surname','image']}, 
+    ];
 
+    if(req.params.page){
+        var page = req.params.page;
+    }else{
+        var page = 1;
+    }
+    var perPage = req.params.perPage;
+
+
+    var query = req.query;
+    var sort = {dateCreated:-1}
+    var _ids;
+    var userId = req.params.userId;
+
+
+
+    //Parche por errores del http
+    if(query['name']){
+        query['name'] = { "$regex": query['name'], "$options": "i" }
+    }
+
+    if(query['tag']){
+        query['tag'] = { "$regex": query['tag'], "$options": "i" }
+    }
+
+    if(query['free'] == 'true'){
+        Team.find({users:userId}).exec(function(err, teams){
+            if(err){
+                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                res.status(500).send({message: 'Error del servidor en la peticion'})
+            }else{
+                if(!teams){
+                    logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                    res.status(404).send({message: 'No hay tickets'})
+                }else{
+                    query['teamWork'] = {$in:teams};
+                    Work.paginate(query,{page:page, limit:perPage, populate:populateQuery, sort:sort}, function(err, works){
+                        if(err){
+                            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                            console.log(err)
+                            res.status(500).send({message: err})
+                        }else{
+                            if(!works){
+                                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                                res.status(404).send({message: 'No hay items'})
+                            }else{
+                                res.status(200).send({works:works});
+                            }
+                        }
+                    });
+                }
+            }
+        });    
+    }else{
+        Work.paginate(query,{page:page, limit:perPage, populate:populateQuery, sort:sort}, function(err, works){
+            if(err){
+                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                console.log(err)
+                res.status(500).send({message: err})
+            }else{
+                if(!works){
+                    logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                    res.status(404).send({message: 'No hay items'})
+                }else{
+                    res.status(200).send({works:works});
+                }
+            }
+        });    
+    }
+
+}
 
 function update(req, res){
     var decoded = jwt_decode(req.headers.authorization);
@@ -337,6 +416,94 @@ var decoded = jwt_decode(req.headers.authorization);
     });
 }
 
+async function uploadFile(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+    var functionName = 'uploadFile';
+    var wo = req.params.id;
+    var file_name = 'No subido';
+
+    if(req.files && req.files.file){
+        if(req.files.file.length > 1){
+            req.files.file.forEach(async e => {
+                var file_path = e.path;
+                var file_split = file_path.split('\\'); //eliminar y recortar las barras del path
+                var file_name = file_split[2]; // [ 'uploads', 'users', 'pWgu0s-hHBgJl-5w1RSPS5G7.jpg' ]
+        
+                var ext_split = file_name.split('\.');
+                var file_ext = ext_split [1]; //Comprueba si es un jpg [ 'j5HRZbfL7qgOgp2YRQ3F0ub8', 'jpg' ]
+        
+                Work.findByIdAndUpdate(wo, {$push: {files: file_name}}, (err, workUpdated) =>{
+                    if(err){
+                        logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                        res.status(500).send({message: 'Error al actualizar el usuario'});
+                    }else{
+                        if(!workUpdated){
+                            logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                            res.status(404).send({message: 'No se ha podido actualizar el usuario'});
+                        }
+                    }
+                });
+            });    
+        }else{
+            var file_path = req.files.file.path;
+            var file_split = file_path.split('\\'); //eliminar y recortar las barras del path
+            var file_name = file_split[2]; // [ 'uploads', 'users', 'pWgu0s-hHBgJl-5w1RSPS5G7.jpg' ]
+    
+            var ext_split = file_name.split('\.');
+            var file_ext = ext_split [1]; //Comprueba si es un jpg [ 'j5HRZbfL7qgOgp2YRQ3F0ub8', 'jpg' ]
+            Work.findByIdAndUpdate(wo, {$push: {files: file_name}}, (err, workUpdated) =>{
+                if(err){
+                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                    res.status(500).send({message: 'Error al actualizar el usuario'});
+                }else{
+                    if(!workUpdated){
+                        logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                        res.status(404).send({message: 'No se ha podido actualizar el usuario'});
+                    }
+                }
+            });
+        }
+        logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+        res.status(200).send({message:'Adjuntos subidos correctamente'});
+    }else{
+        res.status(400).send({message: 'No ha subido ninguna imagen'});
+    }
+}
+
+function getFile(req, res){
+    var file = req.params.fileName;
+    var pathFile = './uploads/attachs/'+file;
+
+    fs.exists(pathFile, function(exists){
+        if(exists){
+            res.sendFile(path.resolve(pathFile));
+        }else{
+            res.status(200).send({message: 'No existe el archivo...'});
+        }
+    });
+}
+
+function getCountWorks(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+    var functionName = 'getCountWorks';
+
+    let userId = req.params.id;
+
+    Work.countDocuments({userWork: userId,status:{$ne:'Libre'},status:{$ne:'Finalizado'}}, function(err, c){
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            res.status(500).send({message: 'Error del servidor en la peticion'})
+        }else{
+            if(!c){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                res.status(404).send({message: 'No hay items'})
+            }else{
+                res.status(200).send({count:c})
+            }
+        }
+    })
+}
+
 function getCountFreeWorks(req,res){
     var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getCountFreeWorks';
@@ -371,7 +538,14 @@ module.exports = {
     getFinishList,
     getFreeList,
     getDateWork,
+    getListPaged,
+
     getCountFreeWorks,
+    getCountWorks,
+
+
+    uploadFile,
+    getFile,
 
     save,
     update,

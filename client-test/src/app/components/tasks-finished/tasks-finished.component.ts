@@ -4,56 +4,125 @@ import { userService } from 'src/app/services/user.service';
 import { Work } from 'src/app/models/work';
 import { GLOBAL } from 'src/app/services/global';
 import * as moment from 'moment';
+import { User } from 'src/app/models/user';
+import { Team } from 'src/app/models/team';
+import { teamService } from 'src/app/services/team.service';
+
 declare var $: any;
 
 @Component({
   selector: 'app-tasks-finished',
-  templateUrl: './tasks-finished.component.html',
-  styleUrls: ['../my-tasks/my-tasks.component.scss'],
-  providers: [userService, workService]
+  templateUrl: '../tasks-free/tasks-free.component.html',
+  styleUrls: ['../../styles/list.scss'],
+  providers: [userService, workService, teamService]
 })
 export class TasksFinishedComponent implements OnInit {
 
-  public taskFinished: Work[];
-  public taskRevert: Work[];
+  public taskFree: Work[];
   public taskInContext: Work;
-
 
   public identity;
   public token;
   public url: string;
 
+  public limit: number;
+  public page: number;
+  public nextPage: boolean;
+  public prevPage: boolean;
+  public totalDocs: number;
+  public totalPages: number;
+  public pagingCounter: number;
+
+
+  public users: User[];
+  public teams: Team[];
+
+  public query: any;
+
+  public takeTicketDesc: string;
 
   constructor(
     private _userService: userService,
     private _workService: workService,
+    private _teamService: teamService,
   ) { 
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
 
-    this.taskFinished= new Array<Work>();
-    this.taskFinished= new Array<Work>();
-    this.taskInContext = new Work('','','','','','','','','','',false,'','')
+    this.taskFree= new Array<Work>();
+    this.taskInContext = new Work('','','','','','','','','','',false,'',false,'',undefined)
 
+
+    this.limit= 10;
+    this.page= 1;
+    this.nextPage = true;
+    this.prevPage= false;
+    this.totalDocs= null;
+    this.totalPages= 1;
+    this.pagingCounter = 1;
+
+    this.takeTicketDesc = 'Devolver a pendiente'
+
+    this.query = {
+      userWork:this.identity['_id'],
+      status: 'Finalizado'
+    }
   }
 
   ngOnInit() {
-    this.getTasks()
+    this.getTasks();
+    this.getUsers();
+    this.getTeams();
   }
 
   getTasks(){
-    this.taskFinished= new Array<Work>();
+    this.taskFree= new Array<Work>();
 
-    this._workService.getFinishList(this.token, this.identity['_id']).subscribe(
+    this._workService.getListPaged(this.token, this.page, this.limit, this.query, this.identity['_id']).subscribe(
       response =>{
           if(response.works){
-            this.taskFinished = response.works;
+            this.taskFree = response.works.docs;
+            this.limit = response.works.limit;
+            this.nextPage = response.works.nextPage;
+            this.prevPage = response.works.prevPage;
+            this.totalDocs = response.works.totalDocs;
+            this.totalPages = response.works.totalPages;
+            this.pagingCounter = response.works.pagingCounter;
           }
       },
       error =>{
           console.error(error);
-    });
+      }
+    );
+  }
+
+  getUsers(){
+    this._userService.getListAgents(this.token, this.identity['company']['_id']).subscribe(
+      response =>{
+          if(response.users){
+            this.users = response.users;
+          }
+      },
+      error =>{
+          console.error(error);
+      }
+    );
+
+  }
+
+  getTeams(){
+    this._teamService.getList(this.token, this.identity['company']['_id']).subscribe(
+      response =>{
+          if(response.teams){
+            this.teams = response.teams;
+          }
+      },
+      error =>{
+          console.error(error);
+      }
+    );
+
   }
 
   onRightClick(e, task: Work){
@@ -76,6 +145,10 @@ export class TasksFinishedComponent implements OnInit {
     return moment(val, 'YYYY-MM-DD HH:mm').format('DD-MM-YYYY');
   }
 
+  changeCreatedDate(val:string){
+    return moment(val, 'YYYY-MMM-DD HH:mm').format('DD-MM-YYYY');
+  }
+
 
   showModal(){
     this.hideContextMenu();
@@ -84,10 +157,18 @@ export class TasksFinishedComponent implements OnInit {
 
   }
 
-  revertTask(){
+  showModalTask(task: Work){
     this.hideContextMenu();
-    this.taskInContext.status = 'No comenzada';
+    this.taskInContext = task;
+    $("#task-detail").modal("show");
 
+  }
+
+
+  takeTask(){
+    this.taskInContext.status = 'No comenzada';
+    this.taskInContext.userWork = this.identity['_id'];
+    this.taskInContext.free = false;
     this._workService.edit(this.token, this.taskInContext._id, this.taskInContext).subscribe(
       response =>{
           if(response.work){
@@ -100,11 +181,63 @@ export class TasksFinishedComponent implements OnInit {
     );
   }
 
-  showModalTask(task: Work){
-    this.hideContextMenu();
-    this.taskInContext = task;
-    $("#task-detail").modal("show");
+  isLastPage(){
+    if(this.totalDocs < this.pagingCounter+this.limit){
+      return this.totalDocs;
+    }else{
+      return this.pagingCounter+this.limit-1;
+    }
+  }
 
+  goTo(page: number){
+    this.page = page;
+    this.getTasks();
+  }
+
+  set(item, option){
+    switch (option) {
+      case 'createdBy':
+        this.query['createdBy'] = item['_id'];
+        $('#createdByName').val(item['name']+' '+item['surname']);
+  
+        break;
+      case 'team':
+        this.query['teamWork'] = item['_id'];
+        $('#teamName').val(item['name']);
+  
+        break;
+      default:
+        break;
+    }
+  }
+
+  deleteFilter(val){
+    switch (val) {
+      case 'createdBy':
+        this.query['createdBy'] = null;
+        $('#createdByName').val('');
+
+        break;
+      case 'name':
+        this.query['name'] = '';
+          break;
+      case 'tag':
+        this.query['tag'] = '';
+       break;
+    
+      default:
+        break;
+    }
+
+  }
+
+  filterArguments(){
+    if(this.query['name'] == ''){
+      this.query['name'] = null;
+    }
+
+    $("#filter").modal("hide");
+    this.getTasks();
   }
 
 

@@ -51,6 +51,8 @@
                       <th>Agente</th>
                       <th>Estado</th>
                       <th>Fecha</th>
+                      <th>Novedad</th>
+
                   </tr>
               </thead>
               <tbody *ngFor="let ticket of tickets" [className]="ticket.status == 'Cerrado' ? 'closed' : ''">
@@ -74,6 +76,8 @@
                       <td data-title="Agente"  *ngIf="!ticket.agent"></td>
                       <td data-title="Estado" >{{ticket.status}}</td>
                       <td data-title="Fecha" >{{changeDate(ticket.createDate)}}</td>
+                      <td data-title="Novedad" >{{changeDate(ticket.lastActivity)}}</td>
+
                   </tr>
               </tbody>
               <tfoot>
@@ -84,6 +88,8 @@
                       <td><strong>Agente</strong></td>
                       <td><strong>Estado</strong></td>
                       <td><strong>Fecha</strong></td>
+                      <td><strong>Novedad</strong></td>
+
                   </tr>
               </tfoot>
           </table>
@@ -122,6 +128,17 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
+                    <div class="input-group fg">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text filter" style="padding-left: 31px;">Número</span></div>
+                            <input type="number" class="form-control" [(ngModel)]="filter['numTicket']" name="numTicket" />
+                        <div class="input-group-append">
+                            <button class="btn btn-danger" (click)="deleteFilter('numTicket')" type="button">
+                                <i class="fa fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
                     <div class="input-group fg" *ngIf="identity['role'] != 'ROLE_REQUESTER'">
                         <div class="input-group-prepend">
                             <div class="dropdown btn-group" role="group">
@@ -146,6 +163,9 @@
                             </button>
                         </div>
                     </div>
+
+                    
+
                     <div class="input-group fg" >
                         <div class="input-group-prepend">
                             <div class="dropdown btn-group" role="group">
@@ -198,6 +218,8 @@
                             </button>
                         </div>
                     </div>
+
+                    
                 </div>
             </div>
             <div class="modal-footer">

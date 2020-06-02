@@ -13,7 +13,8 @@ export class Work{
         public tag: string,
         public editable: boolean,
         public status: string,
+        public free: boolean,
         public priority: string,
-
+        public files: [string],
     ){}
 }

@@ -5,7 +5,7 @@
               <div class="container title-container" style="padding-right: 0;padding-left: 0;">
                   <div class="text-center title"><label style="margin-left: 13px;font-size: 24px;"><strong>Información del ticket</strong></label></div>
               </div>
-              <div class="card-body info-card">
+              <div class="card-body info-card" >
                   <ul class="list-group">
                       <li class="list-group-item"><span>Número: </span><span><strong>#{{ticket.numTicket}}</strong></span></li>
                       <li class="list-group-item"><span>Creación: </span><span><strong>{{changeDate(ticket.createDate)}}</strong></span></li>
@@ -223,6 +223,10 @@
               <strong>{{ticket.sub}}</strong>
             </h6>
             <a *ngIf="(identity['role'] == 'ROLE_REQUESTER' || ticket.agent) && prev" [routerLink]="['/ticket-gestion', prev._id]" class="float-left" ><i class="fa fa-arrow-circle-left adjunt" style="margin-left: 6px;"></i></a>
+            <a class="float-left" (click)="changeInfo()">
+              <i class="fa fa-info-circle enabled" *ngIf="info == 'true'" style="margin-left: 8px;"></i>
+              <i class="fa fa-info-circle disabled" *ngIf="info == 'false'" style="margin-left: 8px;"></i>
+            </a>
             <a *ngIf="(identity['role'] == 'ROLE_REQUESTER' || ticket.agent) && next" [routerLink]="['/ticket-gestion', next._id]" class="float-right" ><i class="fa fa-arrow-circle-right adjunt" style="margin-left: 6px;"></i></a>
         </div>
 
@@ -240,6 +244,7 @@
             userId={{textblock.user._id}}
             date={{textblock.createDate}}
             files={{textblock.files}}
+            info={{info}}
             (deleteMessage)="deleteMessage()"
             (refresh)="getChat()"
             (errorMessage)="errorMessage()"

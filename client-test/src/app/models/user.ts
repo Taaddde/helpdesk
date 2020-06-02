@@ -16,6 +16,8 @@ export class User{
         public image: string,
         public company: string,
         public receiveMail: boolean,
-        public passToken: string
+        public passToken: string,
+
+        public infoView: boolean
     ){}
 }

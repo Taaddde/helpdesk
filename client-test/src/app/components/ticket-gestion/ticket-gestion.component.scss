@@ -67,6 +67,17 @@
     padding-top: 5px;
   }
   
+  .disabled {
+    cursor: pointer;
+    font-size: 20px;
+    color: red;
+  }
+
+  .enabled{
+    cursor: pointer;
+    font-size: 20px;
+    color: green;
+  }
 
   .img-requester{
     width: 50px;

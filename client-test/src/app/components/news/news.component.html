@@ -2,38 +2,50 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="border: 1px solid #018dda">
             <div class="modal-header" style="background-color: #018dda;color: rgb(255,255,255);">
-                <h4 class="modal-title">¡Novedades! - Versión 1.1.8 (22/04/2020)</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                <h4 class="modal-title">¡Novedades! - Versión 1.2.6 (29/05/2020)</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
             <div class="modal-body">
                 <span *ngIf="identity['role'] != 'ROLE_REQUESTER'">
 
                 </span>
                 <div>
-                    <h4><strong>CHAT ONLINE</strong></h4>
-                    <p>Se integró el chat online al sistema, el cual permitirá hacer consultas espontáneas a las áreas de soporte.
-                        Podrán acceder a dicho chat clickeando en el botón 
-                        <button class='btn btn-primary btn-lg border rounded-circle dark' type="button" >
-                            <i class="fa fa-envelope"></i>
-                        </button>
-                        ubicado abajo a la derecha de la pantalla.
-                    </p>
-                </div>
-                <div>
-                    <h4><strong>MANUAL DE USUARIO</strong></h4>
-                    <p>Se añadió un acceso directo al manual de usuario en el menú ubicado arriba a la derecha de la pantalla.</p>
-                </div>
-                <div *ngIf="identity['role'] != 'ROLE_REQUESTER'">
-                    <h4><i class="fas fa-ticket-alt    "></i><strong>TAREAS</strong></h4>
-                    <p>
-                        Se añadió el módulo de tareas al sistema, accediendo en el botón 
-                        <a class="btn btn-dark btn-sm dark" type="button" ><i class="fas fa-tasks fa-lg"></i> </a>
-                        ubicado en la barra superior.
-                    </p>
+                    <h4><strong>NUEVAS FUNCIONALIDADES</strong></h4>
+                    <ul style="list-style-type: inherit;">
+                        <li style="font-size: 15px;">
+                            La lista de tickets cuenta con la columna de la fecha de la última novedad que hubo en ella.
+                        </li>
+                        <li style="font-size: 15px;">
+                            La lista de tickets puede filtrarse por número.
+                        </li>
+                        <li style="font-size: 15px;">
+                            Opción de ocultar los mensajes de información dentro del chat de un ticket. 
+                            ( <i class="fa fa-info-circle" style="color: red;"></i> )
+                            configurable dentro de las opciones de perfil.
+                        </li>
+                        <li *ngIf="identity['role'] != 'ROLE_REQUESTER'" style="font-size: 15px;">
+                            <i class="fas fa-ticket-alt"></i>
+                            <span> Las tareas tomadas y libres se visualizaran en el panel principal.</span>
+                        </li>
+                        <li *ngIf="identity['role'] != 'ROLE_REQUESTER'" style="font-size: 15px;">
+                            <i class="fas fa-ticket-alt"></i>
+                            <span> Listas de tareas libres y finalizadas se visualizan en forma de lista, con opciones de filtro.</span>
+                        </li>
+                        <li *ngIf="identity['role'] != 'ROLE_REQUESTER'" style="font-size: 15px;">
+                            <i class="fas fa-ticket-alt"></i>
+                            <span> Opción de añadir comentarios y adjuntos a las tareas, dando click derecho en una tarea tomada y seleccionando "Ver comentarios".</span>
+                        </li>
+
+                    </ul>
                 </div>
                 <div>
                     <h4><strong>FIX</strong></h4>
                     <ul style="list-style-type: inherit;">
-                        <li style="font-size: 15px;">Se solucionó un problema el cual no permitía enviar emojis cuando se estaba dentro de un ticket.</li>
-                        <li *ngIf="identity['role'] != 'ROLE_REQUESTER'" style="font-size: 15px;"><i class="fas fa-ticket-alt    "></i> Se cambió la vista del botón de "nuevo ticket" para que también encaje el botón de tareas.</li>
+                        <li style="font-size: 15px;">
+                            Se centró el texto de panel principal.
+                        </li>
+                        <li *ngIf="identity['role'] != 'ROLE_REQUESTER'" style="font-size: 15px;">
+                            <i class="fas fa-ticket-alt"></i> 
+                            <span> Las fechas de la lista te tickets sin agente ahora se visualiza en formato "DD-MM-YYYY HH:mm".</span>
+                        </li>
                     </ul>
                 </div>
             </div>

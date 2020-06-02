@@ -1,34 +1,161 @@
 <div class="row" (click)="hideContextMenu()">
-    <div class="col">
-        <div class="card">
-            <div class="card-header">
-                <h4>Libres</h4>
+</div>
+
+
+<div class="card shadow">
+    <div class="card-header py-3">
+        <p class="text-primary m-0 font-weight-bold">Lista de tareas</p>
+    </div>
+    <div class="card-body">
+      <div class="row">
+          <div class="col text-nowrap">
+                    <button
+                    data-toggle="modal" data-target="#filter" type="button"
+                    [className]="query != {} ? 'btn btn-dark dark' : 'btn btn-dark dark-selected'">
+                        <i class="fa fa-filter"></i>
+                    </button>
             </div>
-            <div class="card-body"
-            >
-                <div class="row">
-                    <div class="col-3" *ngFor="let task of taskFree"  
-                    >
-                        <div class="card task-free task"  (click)="showModalTask(task)"
-                        (contextmenu)="onRightClick($event, task)"
-                        >
-                            <div class="card-body">
-                                <h5 class="task-title">
-                                    <i *ngIf="task.priority == 'Urgente'" class="fa fa-exclamation-circle" style="color: rgb(255,0,0);"></i>
-                                    <strong>{{task.name}}</strong>
-                                </h5>
-                                <p class="task-desc">{{task.desc}}</p>
-                                <span class="task-desc text-muted">{{changeDate(task.dateWork)}}</span>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
+  
+      </div>
+        <div class="table-responsive table mt-2" id="dataTable">
+            <table class="table dataTable my-0" id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Tarea</th>
+                        <th>Autor</th>
+                        <th>Etiqueta</th>
+                        <th>Prioridad</th>
+                        <th>Creación</th>
+                        <th>Límite</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let task of taskFree">
+                    <tr (click)="showModalTask(task)" class="select" >
+                        <td data-title="Tarea" >{{task.name}}</td>
+                        <td data-title="Autor" >
+                          <img *ngIf="task.createdBy['image'] != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+task.createdBy['image']}}" />
+                          <img *ngIf="task.createdBy['image'] == 'null'" class="rounded-circle mr-2" width="30" height="30" src="../../../assets/img/system/user-placeholder.png" />
+                          {{task.createdBy['name']}}
+                          <span> </span>
+                          {{task.createdBy['surname']}}
+                        </td>
+                        <td data-title="Etiqueta" >{{task.tag}}</td>
+                        <td data-title="Prioridad">
+                            {{task.priority}}
+                        </td>
+                        <td data-title="Creación" >{{changeCreatedDate(task.dateCreated)}}</td>
+                        <td data-title="Límite" >{{changeDate(task.dateLimit)}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+            <div class="col-md-6 align-self-center">
+                <p id="dataTable_info" class="dataTables_info">Mostrando {{pagingCounter}} a {{isLastPage()}} de {{totalDocs}}</p>
+            </div>
+            <div class="col-md-6">
+                <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                    <ul class="pagination">
+                        <li class="page-item"><a class="page-link" *ngIf="prevPage != null" (click)='goTo(1)'><span>«</span></a></li>
+                        <li class="page-item"><a class="page-link" *ngIf="prevPage != null" (click)='goTo(page-1)' >{{prevPage}}</a></li>
+                        <li class="page-item active"><a class="page-link">{{page}}</a></li>
+                        <li class="page-item"><a class="page-link" *ngIf="nextPage != null" (click)='goTo(page+1)' >{{nextPage}}</a></li>
+                        <li class="page-item"><a class="page-link" *ngIf="nextPage != null" (click)='goTo(totalPages)' ><span>»</span></a></li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>
-</div>
+  </div>
+  
+  <app-message></app-message>
+  
+  <div role="dialog" tabindex="-1" class="modal fade" id="filter">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h4 class="modal-title">
+                      Filtro
+                  </h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <div class="form-group">
+                      <div class="input-group fg">
+                          <div class="input-group-prepend">
+                              <div class="dropdown btn-group" role="group">
+                                  <button class="btn btn-dark dark dropdown-toggle filter" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      <span>Autor</span>
+                                  </button>        
+                                  <div class="dropdown-menu" role="menu" style="width: 200px;" >
+                                    <a class="dropdown-item" *ngFor="let user of users" (click)="set(user, 'createdBy')">
+                                        {{user.name+' '+user.surname}}
+                                    </a>    
+                                  </div>
+                              </div>
+                          </div>
+                          <input type="text" class="form-control" id="createdByName" readonly />
+                          <div class="input-group-append">
+                              <button class="btn btn-danger" (click)="deleteFilter('createdBy')" type="button">
+                                  <i class="fa fa-trash-alt"></i>
+                              </button>
+                          </div>
+                      </div>
+                      <div class="input-group fg">
+                        <div class="input-group-prepend">
+                            <div class="dropdown btn-group" role="group">
+                                <button class="btn btn-dark dark dropdown-toggle filter" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span>Equipo</span>
+                                </button>        
+                                <div class="dropdown-menu" role="menu" style="width: 200px;" >
+                                  <a class="dropdown-item" *ngFor="let team of teams" (click)="set(team, 'team')">
+                                      {{team.name}}
+                                  </a>    
+                                </div>
+                            </div>
+                        </div>
+                        <input type="text" class="form-control" id="teamName" readonly />
+                        <div class="input-group-append">
+                            <button class="btn btn-danger" (click)="deleteFilter('team')" type="button">
+                                <i class="fa fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                      <div class="input-group fg">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text filter" style="padding-left: 31px;">Etiqueta</span>
+                        </div>
+                        <input type="text" class="form-control" [(ngModel)]="query['tag']" name="tag" />
+                        <div class="input-group-append">
+                            <button class="btn btn-danger" (click)="deleteFilter('tag')" type="button">
+                                <i class="fa fa-trash-alt"></i>
+                            </button>
+                        </div>
+                  </div>
+
+                      <div class="input-group fg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text filter" style="padding-left: 31px;">Tarea</span>
+                            </div>
+                            <input type="text" class="form-control" [(ngModel)]="query['name']" name="name" />
+                            <div class="input-group-append">
+                                <button class="btn btn-danger" (click)="deleteFilter('name')" type="button">
+                                    <i class="fa fa-trash-alt"></i>
+                                </button>
+                            </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn btn-light" type="button" data-dismiss="modal">Cerrar</button>
+                  <button class="btn btn-dark dark" type="button" (click)="filterArguments()">Filtrar</button>
+              </div>
+          </div>
+      </div>
+  </div>
+  
 
 
 
@@ -88,7 +215,7 @@
                 </div>
             <div class="modal-footer">
                 <button class="btn btn-light" type="button" data-dismiss="modal">Cerrar</button>
-                <button class="btn btn-dark dark" type="button" data-dismiss="modal" (click)="takeTask()">Tomar</button>
+                <button class="btn btn-dark dark" type="button" data-dismiss="modal" (click)="takeTask()">{{takeTicketDesc}}</button>
             </div>
         </div>
     </div>

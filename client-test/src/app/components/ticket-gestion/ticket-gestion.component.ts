@@ -59,6 +59,8 @@ export class TicketGestionComponent implements OnInit {
 
   public emojis: boolean;
 
+  public info: string;
+
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
@@ -88,6 +90,8 @@ export class TicketGestionComponent implements OnInit {
 
     this.stat = '';
 
+    this.info = 'true';
+
     this.message = new MessageComponent()
 
     this.ticket = new Ticket('','',null,'','','','','','','',null,'',[''],'','','',[''],null,null,'');
@@ -100,6 +104,16 @@ export class TicketGestionComponent implements OnInit {
     this.getTicket();
     this.getHashtags(); 
     this.getCompanies();
+    this.checkInfo();
+  }
+
+  checkInfo(){
+    console.log(this.identity['infoView'])
+    if(this.identity['infoView'] != false){
+      this.info = 'true';
+    }else{
+      this.info = 'false';
+    }
   }
 
   ngAfterViewInit(){
@@ -124,6 +138,15 @@ export class TicketGestionComponent implements OnInit {
           }
       }
     );
+  }
+
+  changeInfo(){
+    if(this.info == 'false'){
+      this.info = 'true';
+    }else{
+      this.info = 'false';
+    }
+    this.getChat();
   }
 
   getPrevNext(num, status){

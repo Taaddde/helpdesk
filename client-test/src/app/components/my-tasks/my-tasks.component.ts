@@ -41,7 +41,7 @@ export class MyTasksComponent implements OnInit {
     this.taskInProgress= new Array<Work>();
     this.taskWait= new Array<Work>();
     this.taskPostponed= new Array<Work>();
-    this.taskInContext = new Work('','','','','','','','','','',false,'','')
+    this.taskInContext = new Work('','','','','','','','','','',false,'',false,'',undefined)
   }
 
   ngOnInit() {
@@ -144,7 +144,8 @@ export class MyTasksComponent implements OnInit {
   freeTask(){
     this.hideContextMenu();
     if(confirm('¿Esta seguro/a que quiere liberar la tarea para que otro agente la tome?')){
-      this.taskInContext.status = 'No comenzada';
+      this.taskInContext.status = 'Libre';
+      this.taskInContext.free = true;
       this.taskInContext.userWork = null;
       this._workService.edit(this.token, this.taskInContext._id, this.taskInContext).subscribe(
         response =>{

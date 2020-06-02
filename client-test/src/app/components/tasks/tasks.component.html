@@ -18,9 +18,15 @@
     </li>
 </ul>
 <div class="tab-content" id="myTabContent">
-<div class="tab-pane fade show active" id="mytasks" role="tabpanel" aria-labelledby="mytasks-tab"><app-my-tasks (comments)="prueba($event)" #myTasks *ngIf="state == 'my-tasks'"></app-my-tasks></div>
-<div class="tab-pane fade" id="freetasks" role="tabpanel" aria-labelledby="freetasks-tab"><app-tasks-free *ngIf="state == 'tasks-free'"></app-tasks-free></div>
-<div class="tab-pane fade" id="finishedtasks" role="tabpanel" aria-labelledby="finishedtasks-tab"><app-tasks-finished *ngIf="state == 'tasks-finished'"></app-tasks-finished></div>
+<div class="tab-pane fade show active" id="mytasks" role="tabpanel" aria-labelledby="mytasks-tab">
+  <app-my-tasks #myTasks *ngIf="state == 'my-tasks'"></app-my-tasks>
+</div>
+<div class="tab-pane fade" id="freetasks" role="tabpanel" aria-labelledby="freetasks-tab">
+  <app-tasks-free *ngIf="state == 'tasks-free'"></app-tasks-free>
+</div>
+<div class="tab-pane fade" id="finishedtasks" role="tabpanel" aria-labelledby="finishedtasks-tab">
+  <app-tasks-finished *ngIf="state == 'tasks-finished'"></app-tasks-finished>
+</div>
 </div>
 
 

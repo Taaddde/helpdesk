@@ -19,7 +19,8 @@ var UserSchema = Schema({
     passToken: {type: String, default:null},
     passTokenExp: {type: String, default:'2000-01-01'},
     news: {type: Boolean, default:true},
-    deleted: {type: Boolean, default:false}
+    deleted: {type: Boolean, default:false},
+    infoView: {type: Boolean, default:false},
 });
 
 module.exports = mongoose.model('User', UserSchema);

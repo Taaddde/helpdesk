@@ -72,7 +72,7 @@ export class TicketNewComponent implements OnInit {
 
     this.ticket = new Ticket('','',null,'',null,null,'','','',null,null,'',[null],'',this.identity['company']['_id'],'',[''],null,null,'');
     this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false);
-    this.nreq = new User('','','','','','','',false,'ROLE_REQUESTER','','null','',false,'');
+    this.nreq = new User('','','','','','','',false,'ROLE_REQUESTER','','null','',false,'', true);
     this.message = new MessageComponent();
    }
 
@@ -145,7 +145,7 @@ export class TicketNewComponent implements OnInit {
 
 
   createRequester(){
-    this.nreq = new User('','','','','','','',false,'ROLE_REQUESTER','','null','',false,'');
+    this.nreq = new User('','','','','','','',false,'ROLE_REQUESTER','','null','',false,'', true);
   }
 
 

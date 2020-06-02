@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, AfterViewInit } from '@angular/core';
 import { GLOBAL } from 'src/app/services/global';
 import { userService } from 'src/app/services/user.service';
 import * as moment from 'moment';
@@ -8,7 +8,7 @@ import { User } from 'src/app/models/user';
 import { teamService } from 'src/app/services/team.service';
 import { workService } from 'src/app/services/work.service';
 import { MessageComponent } from '../message/message.component';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { MyTasksComponent } from '../my-tasks/my-tasks.component';
 declare var $: any;
 
@@ -53,6 +53,7 @@ export class TasksComponent implements OnInit {
     private _teamService: teamService,
     private _workService: workService,
     private _router: Router,
+    private _route: ActivatedRoute,
   ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
@@ -62,7 +63,7 @@ export class TasksComponent implements OnInit {
     this.message = new MessageComponent()
     this.myTasks = new MyTasksComponent(_userService, _workService);
 
-    this.task = new Work('','','',this.identity['_id'],'',null,'','','','',false,'No comenzada','Normal');
+    this.task = new Work('','','',this.identity['_id'],'',null,'','','','',false,'No comenzada',true,'Normal',undefined);
     this.repeat = 'false';
 
     this.teamName = '';
@@ -70,13 +71,13 @@ export class TasksComponent implements OnInit {
     this.countFree = 0;
   }
 
-  ngOnInit() {
+  ngOnInit(){
     this.getTeams();
     this.getCount();
   }
   
   getCount(){
-    this._workService.getCount(this.token, this.identity['_id']).subscribe(
+    this._workService.getFreeCount(this.token, this.identity['_id']).subscribe(
       response =>{
           if(response.count){
             this.countFree = response.count;
@@ -117,6 +118,7 @@ export class TasksComponent implements OnInit {
 
   selectAgent(agent: User){
     this.task.userWork = agent._id;
+    this.task.free = false;
     this.agentName = agent.name;
   }
 
@@ -128,15 +130,25 @@ export class TasksComponent implements OnInit {
     $("#task-new").modal("show");
   }
 
-  
-
   onSubmit(){
     if(this.task.name != '' && this.task.desc != '' && this.task.teamWork != '' && this.task.dateLimit != '' && (this.task.dateWork != '' || this.repeat == 'true')){
       if(moment(this.task.dateLimit).isSameOrAfter((moment().format("YYYY-MM-DD")))){
+
+        if(this.task.userWork != ''){
+          this.task.status = 'No comenzada'
+        }else{
+          this.task.status = 'Libre'
+        }
+
         this._workService.add(this.token, this.task, this.repeat, this.dayOfWeek).subscribe(
           response =>{
               if(response.work){
-                this.task = new Work('','','',this.identity['_id'],'','','','','','',false,'No comenzada','Normal');
+                console.log(response.work)
+
+
+
+
+                this.task = new Work('','','',this.identity['_id'],'','','','','','',false,'No comenzada',true,'Normal',undefined);
                 this.dayOfWeek = {
                   lun: false,
                   mar: false,

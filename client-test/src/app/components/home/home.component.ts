@@ -7,13 +7,14 @@ import { ticketService } from '../../services/ticket.service';
 import * as moment from "moment"
 import { Ticket } from 'src/app/models/ticket';
 import { Observable } from 'rxjs';
+import { workService } from 'src/app/services/work.service';
 
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['../../styles/list.scss'],
-  providers: [userService, ticketService]
+  providers: [userService, ticketService, workService]
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
@@ -27,7 +28,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     public close: number;
     public status: string;
 
-   public refresh;
+    public tasksFree: number;
+    public tasks: number;
+
+    public refresh;
 
     public tickets: Ticket[];
     public limit: number;
@@ -44,7 +48,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private _route: ActivatedRoute,
     private _router: Router,
     private _userService: userService,
-    private _ticketService: ticketService
+    private _ticketService: ticketService,
+    private _workService: workService
   ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
@@ -70,6 +75,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getCountTickets();
     if(this.identity['role'] != 'ROLE_REQUESTER'){
+      this.getTaskCount();
       this.getStatusCalendar();
       this.getTeamTickets();
       this.refresh = Observable.interval(15000).subscribe((val) => { 
@@ -84,8 +90,36 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+  changeDate(val:string){
+    return moment(val, 'YYYY-MM-DD HH:mm').format('DD-MM-YYYY HH:mm');
+  }
+
   ngOnDestroy() {
     this.refresh.unsubscribe();
+  }
+
+  getTaskCount(){
+    this._workService.getFreeCount(this.token, this.identity['_id']).subscribe(
+      response =>{
+          if(response.count){
+            this.tasksFree = response.count;
+          }
+      },
+      error =>{
+          console.error(error);
+    });
+
+    this._workService.getCount(this.token, this.identity['_id']).subscribe(
+      response =>{
+          if(response.count){
+            this.tasks = response.count;
+
+          }
+      },
+      error =>{
+          console.error(error);
+    });
+
   }
 
   getCountTickets(){

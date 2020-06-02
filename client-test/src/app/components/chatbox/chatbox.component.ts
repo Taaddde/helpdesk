@@ -23,6 +23,7 @@ export class ChatboxComponent implements AfterViewInit {
   @Input() date: string;
   @Input() type: string;
   @Input() files: string;
+  @Input() info: string;
 
   @Output() deleteMessage = new EventEmitter<string>();
   @Output() errorMessage = new EventEmitter<string>();
@@ -45,7 +46,8 @@ export class ChatboxComponent implements AfterViewInit {
 
   ngOnInit(){
     this.date = moment(this.date, "YYYY-MM-DD HH:mm").format("DD-MM-YYYY HH:mm");
-    this.groupFiles = this.files.split(',')
+    this.groupFiles = this.files.split(',');
+
   }
 
   ngAfterViewInit() {
@@ -72,7 +74,11 @@ export class ChatboxComponent implements AfterViewInit {
         tmp = {card:true, chatbox:true};
         break;
       case 'INFO':
-        tmp = {card:true, chatinfo:true};
+        if(this.info == 'true'){
+          tmp = {card:true, chatinfo:true};
+        }else{
+          tmp = {diplaynone:true};
+        }
         break;
       case 'REQUEST':
         tmp = {card:true, chatbox:true, 'ml-auto':true};
@@ -81,7 +87,6 @@ export class ChatboxComponent implements AfterViewInit {
         alert('Hubo un problema con la conversación del ticket, por favor reportarlo al administrador');
         break;
     }
-
     return tmp;
   }
 

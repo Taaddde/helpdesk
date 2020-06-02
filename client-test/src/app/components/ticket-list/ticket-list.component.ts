@@ -69,12 +69,7 @@ export class TicketListComponent implements OnInit {
     this.pagingCounter = 1;
 
 
-    this.filter = {
-      sub:null,
-      requester:null,
-      agent:null,
-      status:null
-    }
+    this.filter = {}
 
     this.agentFilter = '';
     this.requesterFilter = '';
@@ -336,6 +331,7 @@ export class TicketListComponent implements OnInit {
         this.filter['agent'] = item['_id'];
         $('#agentname').val(item['name']+' '+item['surname']);  
         break;
+        
       case 'status':
         this.filter['status'] = item;
         $('#statusname').val(item);  
@@ -366,6 +362,9 @@ export class TicketListComponent implements OnInit {
         break;
       case 'sub':
         this.filter['sub'] = '';
+          break;
+      case 'numTicket':
+        this.filter['numTicket'] = null;
           break;
       default:
         break;

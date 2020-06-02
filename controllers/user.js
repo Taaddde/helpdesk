@@ -40,6 +40,7 @@ function saveUser(req, res){
     user.receiveMail = params.receiveMail;
     user.sectorRef = params.sectorRef;
     user.sector = params.sector;
+    user.infoView = params.infoView;
 
     User.findOne({userName:user.userName}, (err, userCheck) =>{
         if(err){
@@ -104,6 +105,12 @@ var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'updateUser';
     var update = req.body;
 
+    var populateQuery = [
+        {path:'company',select:['name','email','image','mailSender']},
+        {path:'sector',select:['name','email']}
+    ];
+
+
     User.findOne({_id: ObjectId(userId),userName:update.userName}, (err, userCheck) =>{
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
@@ -118,17 +125,17 @@ var decoded = jwt_decode(req.headers.authorization);
                             User.findByIdAndUpdate(userId, update, (err, userUpdated) =>{
                                 if(err){
                                     logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
-                            res.status(500).send({message: 'Error en el servidor al actualizar el usuario'});
+                                    res.status(500).send({message: 'Error en el servidor al actualizar el usuario'});
                                 }else{
                                     if(!userUpdated){
                                         logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
-                            res.status(404).send({message: 'No se ha podido encontrado el usuario'});
+                                        res.status(404).send({message: 'No se ha podido encontrado el usuario'});
                                     }else{
                                       logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
-                            res.status(200).send({user: userUpdated});
+                                        res.status(200).send({user: userUpdated});
                                     }
                                 }
-                            });
+                            }).populate(populateQuery);
                     });
                 }else{
                     User.findByIdAndUpdate(userId, update, (err, userUpdated) =>{
@@ -144,7 +151,7 @@ var decoded = jwt_decode(req.headers.authorization);
                             res.status(200).send({user: userUpdated,message: 'actualizado sin pasar por bcrypt'});
                             }
                         }
-                    });
+                    }).populate(populateQuery);
                 }            
             }else{
                 User.findOne({userName:update.userName}, (err, userNameCheck) =>{
@@ -171,7 +178,7 @@ var decoded = jwt_decode(req.headers.authorization);
                                                     res.status(200).send({user: userUpdated});
                                                 }
                                             }
-                                        });
+                                        }).populate(populateQuery);
                                 });
                             }else{
                                 User.findByIdAndUpdate(userId, update, (err, userUpdated) =>{
@@ -187,7 +194,7 @@ var decoded = jwt_decode(req.headers.authorization);
                                             res.status(200).send({user: userUpdated,message: 'actualizado sin pasar por bcrypt'});
                                         }
                                     }
-                                });
+                                }).populate(populateQuery);
                             }            
                             }else{
                             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Nombre de usuario no disponible'}});

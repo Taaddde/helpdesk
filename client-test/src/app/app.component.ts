@@ -53,8 +53,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private _route: ActivatedRoute,
     private _router: Router
   ){
-    this.user = new User('','','','','','','',false,'ROLE_REQUESTER','','','', false,'');
-    this.user_register = new User('','','','','','','',false,'ROLE_REQUESTER','','','', false,'');
+    this.user = new User('','','','','','','',false,'ROLE_REQUESTER','','','', false,'', true);
+    this.user_register = new User('','','','','','','',false,'ROLE_REQUESTER','','','', false,'', true);
     this.url=GLOBAL.url;
     this.alertMessage = '';
     this.notifications = '';
@@ -218,7 +218,7 @@ export class AppComponent implements OnInit, OnDestroy {
             // Crear elemento en el localstorage para tener el usuario en sesion
           //Como si fuera una session
           localStorage.setItem('identity', JSON.stringify(identity));
-
+          
 
           // Conseguir el token para enviarselo a cada peticion http
           this._userService.login(this.user, 'true').subscribe(
@@ -232,9 +232,8 @@ export class AppComponent implements OnInit, OnDestroy {
               }else{
                 // Crear elemento en el localstorage para tener el token en sesion
                 localStorage.setItem('token', token);
-                this.user = new User('','','','','','','',false,'ROLE_REQUESTER','','','', false,'');
+                this.user = new User('','','','','','','',false,'ROLE_REQUESTER','','','', false,'', true);
                 //this._router.navigate(['/home']);
-                console.log(window.location.hostname+':3977/home')
                 window.location.href='http://'+window.location.hostname+':'+window.location.port+'/home'
               }
             },
