@@ -53,7 +53,8 @@ import { TasksComponent } from './components/tasks/tasks.component';
 import { MyTasksComponent } from './components/my-tasks/my-tasks.component';
 import { TasksFreeComponent } from './components/tasks-free/tasks-free.component';
 import { TasksFinishedComponent } from './components/tasks-finished/tasks-finished.component';
-import { TaskCommentsComponent } from './components/task-comments/task-comments.component'
+import { TaskCommentsComponent } from './components/task-comments/task-comments.component';
+import { RegisterUserComponent } from './components/register-user/register-user.component'
 
 
 @NgModule({
@@ -97,7 +98,8 @@ import { TaskCommentsComponent } from './components/task-comments/task-comments.
     MyTasksComponent,
     TasksFreeComponent,
     TasksFinishedComponent,
-    TaskCommentsComponent
+    TaskCommentsComponent,
+    RegisterUserComponent
   ],
   imports: [
     BrowserModule,

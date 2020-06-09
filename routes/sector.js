@@ -8,7 +8,7 @@ var api = express.Router();
 
 //CONSULTAS
 api.get('/sector/:id', md_auth.ensureAuth, controller.getSector);
-api.get('/sectors', md_auth.ensureAuth, controller.getSectors);
+api.get('/sectors', controller.getSectors);
 api.get('/for-name/:name', md_auth.ensureAuth, controller.getSectorsForName);
 api.get('/sectorsPaged/:page/:perPage', md_auth.ensureAuth, controller.getListPaged);
 

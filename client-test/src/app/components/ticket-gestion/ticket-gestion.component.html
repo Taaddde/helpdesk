@@ -199,7 +199,7 @@
                                 <span>Poner en copia</span>
                             </button>        
                             <div class="dropdown-menu" >
-                                <input type="text" class="form-control form-control dropdown-search-input" placeholder="Buscar.." (keyup)="filterCc()" [(ngModel)]="ccFilter" name="ccFilter"/>                         
+                                <input id="ccinput" type="text" class="form-control form-control dropdown-search-input" placeholder="Buscar.." (keyup)="filterCc()" [(ngModel)]="ccFilter" name="ccFilter"/>                         
                                 <span *ngIf="keyPress">
                                     <a class="dropdown-item dark" *ngFor="let cc of ccList" (click)="setCc(cc)">
                                         {{cc.name+' '+cc.surname}}
@@ -424,10 +424,10 @@
                         </a>    
                       </span>  
                       <div class="dropdown d-inline float-right">
-                        <button class="btn btn-dark dropdown-toggle dark" [disabled]="identity['company']['_id'] != ticket.company['_id'] || ticket.status == 'Cerrado'" data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
+                        <button [ngClass]="getStatusClass(ticket.status)" [disabled]="identity['company']['_id'] != ticket.company['_id'] || ticket.status == 'Cerrado'" data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
                           {{ticket.status}}
                         </button>
-                          <div role="menu" class="dropdown-menu">
+                          <div role="menu" class="dropdown-menu" >
                               <a role="presentation" class="dropdown-item dark" *ngIf="ticket.status != 'Pendiente'" (click)="setStatus('Pendiente')">
                                   Pendiente
                               </a>
@@ -463,7 +463,7 @@
                       </button>
 
                       <div class="dropdown d-inline float-right">
-                        <button class="btn btn-dark dropdown-toggle dark" disabled data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
+                        <button [ngClass]="getStatusClass(ticket.status)" disabled data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
                           {{ticket.status}}
                         </button>
                       </div>

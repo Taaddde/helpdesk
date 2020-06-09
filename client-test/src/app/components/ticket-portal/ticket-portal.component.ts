@@ -96,6 +96,7 @@ export class TicketPortalComponent implements OnInit {
     this.getCompanies();
   }
 
+
   getCompanies(){
     this._companyService.getList(this.token).subscribe(
       response =>{

@@ -53,8 +53,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private _route: ActivatedRoute,
     private _router: Router
   ){
-    this.user = new User('','','','','','','',false,'ROLE_REQUESTER','','','', false,'', true);
-    this.user_register = new User('','','','','','','',false,'ROLE_REQUESTER','','','', false,'', true);
+    this.user = new User('',undefined,'','',undefined,'','','','',false,'ROLE_REQUESTER','','','', false,'', true, true);
+    this.user_register = new User('',undefined,'','',undefined,'','','','',false,'ROLE_REQUESTER','','','', false,'', true, true);
     this.url=GLOBAL.url;
     this.alertMessage = '';
     this.notifications = '';
@@ -232,7 +232,7 @@ export class AppComponent implements OnInit, OnDestroy {
               }else{
                 // Crear elemento en el localstorage para tener el token en sesion
                 localStorage.setItem('token', token);
-                this.user = new User('','','','','','','',false,'ROLE_REQUESTER','','','', false,'', true);
+                this.user = new User('',undefined,'','',undefined,'','','','',false,'ROLE_REQUESTER','','','', false,'', true, true);
                 //this._router.navigate(['/home']);
                 window.location.href='http://'+window.location.hostname+':'+window.location.port+'/home'
               }

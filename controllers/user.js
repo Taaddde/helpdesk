@@ -23,14 +23,15 @@ const ObjectId = mongoose.Types.ObjectId;
 
 
 function saveUser(req, res){
-    var decoded = jwt_decode(req.headers.authorization);
     var user = new User();
     var functionName = 'saveUser';
 
 
     var params = req.body;
+    user.num = params.num;
     user.name = params.name;
     user.surname = params.surname;
+    user.dni = params.dni;
     user.userName = params.userName;
     user.email = params.email;
     user.sign = params.sign;
@@ -41,10 +42,11 @@ function saveUser(req, res){
     user.sectorRef = params.sectorRef;
     user.sector = params.sector;
     user.infoView = params.infoView;
+    user.approved = true;
 
     User.findOne({userName:user.userName}, (err, userCheck) =>{
         if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: params.userName+' ('+req.ip+') '+err}});
             res.status(500).send({message: err});
             console.log(err)
         }else{
@@ -53,20 +55,20 @@ function saveUser(req, res){
                     //encriptar y guardar
                     bcrypt.hash(params.password, null, null, function(err, hash){
                         
-                        if(user.name != null && user.surname != null && user.userName != null && user.email != null){
+                        if(user.name != null && user.surname != null && user.email != null){
                             user.password = hash;
                             //Guardar user
                             user.save((err, userStore) => {
                                 if(err){
-                                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: params.userName+' ('+req.ip+') '+err}});
                                     res.status(500).send({message:err});
                                     console.log(err)
                                 }else{
                                    if(!userStore){
-                                    logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                                    logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: params.userName+' ('+req.ip+') Objeto no encontrado'}});
                                     res.status(404).send({message:'No se ha encontrado el usuario'});
                                    }else{
-                                  logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                                  logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: params.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                                     res.status(200).send({user:userStore});
                                    }
                                 }
@@ -78,21 +80,21 @@ function saveUser(req, res){
                 }else{
                     user.save((err, userStore) => {
                         if(err){
-                            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: params.userName+' ('+req.ip+') '+err}});
                             res.status(500).send({message:'Error en el servidor al guardar el usuario'});
                         }else{
                            if(!userStore){
-                            logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                            logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: params.userName+' ('+req.ip+') Objeto no encontrado'}});
                             res.status(404).send({message:'No se ha encontrado el usuario'});
                            }else{
-                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: params.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                             res.status(200).send({user:userStore});
                            }
                         }
                     });
                 }            
             }else{
-                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Nombre de usuario no disponible'}});
+                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: params.userName+' ('+req.ip+') Nombre de usuario no disponible'}});
                 res.status(400).send({message: 'Nombre de usuario no disponible'});
             }
         }
@@ -266,8 +268,7 @@ function getNews(req, res){
                 }
             }
         })
-    }
-    
+}
 
 function getUsers(req, res){
     var decoded = jwt_decode(req.headers.authorization);
@@ -277,7 +278,7 @@ function getUsers(req, res){
 
 
     if(!role){
-        User.find({company:company, deleted:false}).sort('name').exec(function(err, users){
+        User.find({company:company, deleted:false, approved:true}).sort('name').exec(function(err, users){
             if(err){
                 logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+getUsers.name, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -296,10 +297,10 @@ function getUsers(req, res){
         if(role == 'ROLE_AGENT' || role == 'ROLE_ADMIN'){
             let query;
             if(company == 'null'){
-                query = {$or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}], deleted:false}
+                query = {$or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}], deleted:false, approved:true}
 
             }else{
-                query = {$or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}], deleted:false,company:company}
+                query = {$or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}], deleted:false, approved:true, company:company}
             }
             User.find(query).sort('name').exec(function(err, users){
                 if(err){
@@ -317,7 +318,8 @@ function getUsers(req, res){
                 }
             });
         }else{
-            let query = {$or:[{role:'ROLE_REQUESTER'},{company:{$ne:company}}], deleted:false};
+            let query = {$or:[{role:'ROLE_REQUESTER'},{company:{$ne:company}}], deleted:false, approved:true};
+            query['approved'] = true;
             User.find(query).sort('surname').exec(function(err, users){
                 if(err){
                     logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
@@ -344,7 +346,7 @@ function getUsersForName(req, res){
     var company = req.params.company;
     var functionName = 'getUsersForName';
 
-    User.find({company:ObjectId(company), deleted:false,$or:[{name:{ "$regex": name, "$options": "i" }},{surname:{ "$regex": name, "$options": "i" }}]}).sort('name').exec(function(err, users){
+    User.find({company:ObjectId(company), deleted:false, approved:true, $or:[{name:{ "$regex": name, "$options": "i" }},{surname:{ "$regex": name, "$options": "i" }}]}).sort('name').exec(function(err, users){
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -366,7 +368,7 @@ function getReqForName(req, res){
     var name = req.params.name;
     var functionName = 'getReqForName';
 
-    User.find({role:'ROLE_REQUESTER', deleted:false ,$or:[{name:{ "$regex": name, "$options": "i" }},{surname:{ "$regex": name, "$options": "i" }}]}).sort('name').exec(function(err, users){
+    User.find({role:'ROLE_REQUESTER', deleted:false, approved:true ,$or:[{name:{ "$regex": name, "$options": "i" }},{surname:{ "$regex": name, "$options": "i" }}]}).sort('name').exec(function(err, users){
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -395,7 +397,7 @@ function loginUser(req, res){
         {path:'sector',select:['name','email']}
     ];
 
-    User.findOne({userName: userName.toLowerCase(), deleted:false}, (err, user) => {
+    User.findOne({userName: userName.toLowerCase(), deleted:false, approved:true}, (err, user) => {
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: userName+' ('+req.ip+') '+err}});
                 console.log(err)
@@ -445,7 +447,7 @@ var decoded = jwt_decode(req.headers.authorization);
         var ext_split = file_name.split('\.');
         var file_ext = ext_split [1]; //Comprueba si es un jpg [ 'j5HRZbfL7qgOgp2YRQ3F0ub8', 'jpg' ]
 
-        if(file_ext == 'png' || file_ext == 'jpg' || file_ext == 'gif'){
+        if(file_ext == 'png' || file_ext == 'jpg' || file_ext == 'gif' || file_ext == 'jpeg'){
 
             User.findByIdAndUpdate(userId, {image: file_name}, (err, userUpdated) =>{
                 if(err){
@@ -466,7 +468,6 @@ var decoded = jwt_decode(req.headers.authorization);
                 res.status(200).send({message: 'Extension de archivo no valido'});
         }
 
-        console.log(ext_split);
     }else{
         logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Solicitud de '+req.params.id}});
                 res.status(200).send({message: 'No ha subido ninguna imagen'});

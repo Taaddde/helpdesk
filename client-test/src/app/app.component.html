@@ -1,5 +1,7 @@
 <app-pass-forgot></app-pass-forgot>
 <app-message></app-message>
+<app-register-user></app-register-user>
+
 
 <div class="login-dark form-login" *ngIf="!identity && !reset">
     <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
@@ -15,6 +17,9 @@
         <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Ingresar</button></div>
         <a class="forgot" role="button" data-toggle="modal" data-target="#passforgot">
             ¿Olvidaste la contraseña?
+        </a>
+        <a class="forgot" role="button" data-toggle="modal" data-target="#register">
+            Registrarse
         </a>
 
 
@@ -65,7 +70,7 @@
                         <div class="container-fluid" >
                             <form *ngIf="identity['role'] != 'ROLE_REQUESTER'" class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                                 <div class="input-group">
-                                    <input ng-blur="valSearch = ''" (input)="globalSearch($event.target.value)" class="bg-light form-control border-0 small" type="text" placeholder="Buscador global...">
+                                    <input id="globalsearch" ng-blur="valSearch = ''" (input)="globalSearch($event.target.value)" class="bg-light form-control border-0 small" type="text" placeholder="Buscador global...">
                                     <div role="menu" *ngIf="searched" [className]="searched ? 'dropdown-menu show' : 'dropdown-menu'" class="dropdown-menu">
                                         <a role="presentation" class="dropdown-item" *ngIf="searched['users']" [routerLink]="['/search/user',valSearch]">
                                             Agentes  
@@ -206,7 +211,6 @@
 <app-ticket-portal *ngIf="identity"></app-ticket-portal>
 <app-news *ngIf="identity"></app-news>
 <app-chat *ngIf="chat" (showChat)="showChat()" ></app-chat>
-
 <ngx-spinner
     bdOpacity = 0.2
     bdColor = "rgba(30,40,51,0.56)"

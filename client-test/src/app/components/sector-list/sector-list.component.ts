@@ -68,7 +68,7 @@ export class SectorListComponent implements OnInit {
   }
 
   getSectors(){
-        this._sectorService.getList(this.token).subscribe(
+        this._sectorService.getList().subscribe(
           response =>{
               if(!response.sectors){
                 //this._router.navigate(['/']);

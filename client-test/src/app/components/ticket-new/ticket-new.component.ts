@@ -72,7 +72,7 @@ export class TicketNewComponent implements OnInit {
 
     this.ticket = new Ticket('','',null,'',null,null,'','','',null,null,'',[null],'',this.identity['company']['_id'],'',[''],null,null,'');
     this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false);
-    this.nreq = new User('','','','','','','',false,'ROLE_REQUESTER','','null','',false,'', true);
+    this.nreq = new User('',undefined,'','',undefined,'','','','',false,'ROLE_REQUESTER','','null','',false,'', true, true);
     this.message = new MessageComponent();
    }
 
@@ -126,7 +126,7 @@ export class TicketNewComponent implements OnInit {
   }
 
   getSectors(){
-    this._sectorService.getList(this.token).subscribe(
+    this._sectorService.getList().subscribe(
       response =>{
           if(response.sectors){
             this.sectors = response.sectors;
@@ -145,7 +145,7 @@ export class TicketNewComponent implements OnInit {
 
 
   createRequester(){
-    this.nreq = new User('','','','','','','',false,'ROLE_REQUESTER','','null','',false,'', true);
+    this.nreq = new User('',undefined,'','',undefined,'','','','',false,'ROLE_REQUESTER','','null','',false,'', true, true);
   }
 
 

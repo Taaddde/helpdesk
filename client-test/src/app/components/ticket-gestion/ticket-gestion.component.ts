@@ -185,6 +185,8 @@ export class TicketGestionComponent implements OnInit {
             this._router.navigate(['/']);
           }else{
             this.newInfo(this.identity['name']+' '+this.identity['surname']+' puso en copia a '+val.name+' '+val.surname+' en este ticket')
+            $('#ccinput').val('');
+            this.ccFilter = '';
             this.getTicket();
           }
       },
@@ -288,6 +290,23 @@ export class TicketGestionComponent implements OnInit {
         }
       );
     }
+  }
+
+  getStatusClass(val){
+    console.log(val)
+    var tmp;
+    switch(val){
+      case 'Finalizado':
+        tmp = {btn:true, 'btn-dark':true, 'dropdown-toggle':true, finish:true};
+        break;
+      case 'Pendiente':
+        tmp = {btn:true, 'btn-dark':true, 'dropdown-toggle':true, pending:true};
+        break;
+      default:
+        tmp = {btn:true, 'btn-dark':true, 'dropdown-toggle':true, dark:true};
+        break;
+    }
+    return tmp;
   }
 
   cleanAttach(){

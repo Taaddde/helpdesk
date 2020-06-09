@@ -39,7 +39,7 @@ export class RequesterNewComponent implements OnInit {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
-    this.user = new User('','','','','','','',false,'ROLE_REQUESTER','','null','',false,'', true);
+    this.user = new User('',undefined,'','',undefined,'','','','',false,'ROLE_REQUESTER','','null','',false,'', true, true);
     this.isAdm = false;
     this.alertMessage = '';
     this.isReq = true;
@@ -58,7 +58,7 @@ export class RequesterNewComponent implements OnInit {
   }
 
   getSectors(){
-    this._sectorService.getList(this.token).subscribe(
+    this._sectorService.getList().subscribe(
       response =>{
           if(response.sectors){
             this.sectors = response.sectors;

@@ -1,0 +1,49 @@
+<div role="dialog" tabindex="-1" class="modal fade" id="register">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 1px solid #018dda">
+            <div class="modal-header" style="background-color: #018dda;color: rgb(255,255,255);">
+                <h4 class="modal-title">Registrarse</h4>
+            </div>
+            <form name="my-form" #formregister="ngForm" (ngSubmit)="register()">
+                <div class="modal-body">
+                    <p>
+                        La solicitud será enviada para su aprobación. Una vez aprobada se le notificará vía mail y podrá ingresar al sistema.
+                    </p>
+
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" class="form-control input" 
+                        #name="ngModel" name="name" [(ngModel)]="user.name" required/>
+
+                        <label>Apellido</label>
+                        <input type="text" class="form-control input"
+                        #name="ngModel" name="name" [(ngModel)]="user.surname" required/>
+
+                        <label>Email</label>
+                        <input type="text" class="form-control input" 
+                        #name="ngModel" name="name" [(ngModel)]="user.email" required/>
+
+                        <label>Sector</label>
+                        <select class="custom-select" (change)="setSector($event.target.value)" required>
+                            <option selected>Seleccionar sector</option>
+                            <option *ngFor="let sector of sectors" [value]="sector._id">{{sector.name}}</option>
+                        </select>
+                        <label>Constraseña</label>
+                        <input placeholder="Ingrese la contraseña" 
+                        #password="ngModel" name="password" [(ngModel)]="user.password" 
+                        required type="password" class="form-control" />
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                  <button data-dismiss="modal" class="btn btn-light" type="button">
+                    Cancelar
+                  </button>
+                  <button class="btn btn-success" type="submit">
+                    Aceptar
+                  </button>
+                </div>
+            </form>
+    </div>
+  </div>
+</div>

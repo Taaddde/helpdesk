@@ -2,8 +2,11 @@ export class User{
 
     constructor(
         public _id: string,
+        public num: Number,
         public name: string,
         public surname: string,
+        public dni: Number,
+
         public userName: string,
         public password: string,
         public email: string,
@@ -18,6 +21,7 @@ export class User{
         public receiveMail: boolean,
         public passToken: string,
 
-        public infoView: boolean
+        public infoView: boolean,
+        public approved: boolean
     ){}
 }

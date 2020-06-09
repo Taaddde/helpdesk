@@ -4,8 +4,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema; //Para crear documentos en la coleccion
 
 var UserSchema = Schema({
+    num: Number,
     name: String,
     surname: String,
+    dni: Number,
     userName: String,
     password: String,
     email: String,
@@ -21,6 +23,7 @@ var UserSchema = Schema({
     news: {type: Boolean, default:true},
     deleted: {type: Boolean, default:false},
     infoView: {type: Boolean, default:false},
+    approved: {type: Boolean, default:true},
 });
 
 module.exports = mongoose.model('User', UserSchema);

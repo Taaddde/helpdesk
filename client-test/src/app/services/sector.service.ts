@@ -49,10 +49,7 @@ export class sectorService{
 
     }
 
-    getList(token){
-        this.httpOptions.headers =
-            this.httpOptions.headers.set('Authorization', token);
-
+    getList(){
         return this._httpClient.get<any>(this.url+'sector/sectors', this.httpOptions);
     }
 

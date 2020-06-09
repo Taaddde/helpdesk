@@ -38,7 +38,7 @@ export class AgentNewComponent implements OnInit {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.url = GLOBAL.url;
-    this.user = new User('','','','','','','',false,'','','null',this.identity['company']['_id'],false,'', true);
+    this.user = new User('',undefined,'','',undefined,'','','','',false,'','','null',this.identity['company']['_id'],false,'', true, true);
     this.isAdm = false;
     this.isUser = true;
     this.alertMessage = '';
@@ -54,7 +54,7 @@ export class AgentNewComponent implements OnInit {
   }
 
   getSectors(){
-    this._sectorService.getList(this.token).subscribe(
+    this._sectorService.getList().subscribe(
       response =>{
           if(response.sectors){
             this.sectors = response.sectors;

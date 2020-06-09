@@ -25,7 +25,7 @@ api.post('/image/:id',[md_auth.ensureAuth, md_upload], userController.uploadImag
 api.get('/image/:imageFile', userController.getImageFile);
 
 //ABM
-api.post('/add', md_auth.ensureAuth, userController.saveUser);
+api.post('/add', userController.saveUser);
 api.put('/update/:id', md_auth.ensureAuth, userController.updateUser);
 api.delete('/delete/:id', md_auth.ensureAuth, userController.deleteUser);
 api.put('/unify/:userOrigin/:userDest', md_auth.ensureAuth, userController.unifyUser);
