@@ -142,6 +142,10 @@ export class TasksFreeComponent implements OnInit {
     return moment(val, 'YYYY-MM-DD HH:mm').format('DD-MM-YYYY');
   }
 
+  changeWorkDate(val:string){
+    return moment(val, 'YYYY-MM-DD').format('DD-MM-YYYY');
+  }
+
   changeCreatedDate(val:string){
     return moment(val, 'YYYY-MMM-DD HH:mm').format('DD-MM-YYYY');
   }

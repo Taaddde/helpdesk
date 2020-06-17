@@ -25,8 +25,7 @@
                         <th>Autor</th>
                         <th>Etiqueta</th>
                         <th>Prioridad</th>
-                        <th>Creación</th>
-                        <th>Límite</th>
+                        <th>Fecha de realización</th>
                     </tr>
                 </thead>
                 <tbody *ngFor="let task of taskFree">
@@ -43,8 +42,7 @@
                         <td data-title="Prioridad">
                             {{task.priority}}
                         </td>
-                        <td data-title="Creación" >{{changeCreatedDate(task.dateCreated)}}</td>
-                        <td data-title="Límite" >{{changeDate(task.dateLimit)}}</td>
+                        <td data-title="Fecha de realización" >{{changeWorkDate(task.dateWork)}}</td>
                     </tr>
                 </tbody>
             </table>

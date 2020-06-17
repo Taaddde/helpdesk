@@ -108,7 +108,6 @@ export class TicketGestionComponent implements OnInit {
   }
 
   checkInfo(){
-    console.log(this.identity['infoView'])
     if(this.identity['infoView'] != false){
       this.info = 'true';
     }else{
@@ -185,8 +184,6 @@ export class TicketGestionComponent implements OnInit {
             this._router.navigate(['/']);
           }else{
             this.newInfo(this.identity['name']+' '+this.identity['surname']+' puso en copia a '+val.name+' '+val.surname+' en este ticket')
-            $('#ccinput').val('');
-            this.ccFilter = '';
             this.getTicket();
           }
       },
@@ -290,23 +287,6 @@ export class TicketGestionComponent implements OnInit {
         }
       );
     }
-  }
-
-  getStatusClass(val){
-    console.log(val)
-    var tmp;
-    switch(val){
-      case 'Finalizado':
-        tmp = {btn:true, 'btn-dark':true, 'dropdown-toggle':true, finish:true};
-        break;
-      case 'Pendiente':
-        tmp = {btn:true, 'btn-dark':true, 'dropdown-toggle':true, pending:true};
-        break;
-      default:
-        tmp = {btn:true, 'btn-dark':true, 'dropdown-toggle':true, dark:true};
-        break;
-    }
-    return tmp;
   }
 
   cleanAttach(){
@@ -538,9 +518,9 @@ export class TicketGestionComponent implements OnInit {
     }
   }
 
-  calculateClasses(status: string){
-    var tmp = null;
-    switch(status){
+  calculateClasses(){
+    var tmp = {};
+    switch(this.ticket.status){
       case 'Pendiente':
         tmp = {pending:true};
         break;
@@ -556,6 +536,9 @@ export class TicketGestionComponent implements OnInit {
       default:
         break;
     }
+    tmp['btn'] = true;
+    tmp['btn-dark'] = true;
+    tmp['dropdown-toggle'] = true;
     return tmp;
   }
 

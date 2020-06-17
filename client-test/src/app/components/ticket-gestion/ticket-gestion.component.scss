@@ -73,18 +73,6 @@
     color: red;
   }
 
-  .finish{
-    background-color: green !important;
-  }
-
-  .pending{
-    background-color: orangered !important;
-  }
-
-  .close{
-    background-color: gray !important;
-  }
-
   .enabled{
     cursor: pointer;
     font-size: 20px;
@@ -109,11 +97,11 @@
 }
 
 .pending{
-  background-color: #277ecd;
+  background-color: #f7813e;
 }
 
 .finish{
-  background-color: #31d02e;
+  background-color: #10e00c;
 }
 
 .closer{

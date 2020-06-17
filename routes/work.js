@@ -17,6 +17,7 @@ api.get('/list-free/:id', md_auth.ensureAuth, controller.getFreeList);
 api.get('/calendar/:id', md_auth.ensureAuth, controller.getDateWork);
 api.get('/free-count/:id', md_auth.ensureAuth, controller.getCountFreeWorks);
 api.get('/count/:id', md_auth.ensureAuth, controller.getCountWorks);
+api.get('/similar-count/:tag/:name/:desc', md_auth.ensureAuth, controller.getCountSimilars);
 api.get('/listPaged/:page/:perPage/:userId/*', md_auth.ensureAuth, controller.getListPaged);
 
 //Archivos
@@ -27,5 +28,6 @@ api.get('/file/:fileName', controller.getFile);
 api.post('/add',md_auth.ensureAuth, controller.save);
 api.put('/update/:id', md_auth.ensureAuth, controller.update);
 api.delete('/delete/:id', md_auth.ensureAuth, controller.remove);
+api.delete('/deleteMany/:tag/:name/:desc', md_auth.ensureAuth, controller.removeMany);
 
 module.exports = api;

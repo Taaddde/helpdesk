@@ -51,6 +51,14 @@ export class workService{
 
     }
 
+    deleteMany(token, tag, name, desc){
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.delete<any>(this.url+'work/deleteMany/'+tag+'/'+name+'/'+desc, this.httpOptions);
+
+    }
+
     getList(token, id){
 
         let headers = new Headers({
@@ -122,6 +130,18 @@ export class workService{
 
           let options = new RequestOptions({headers: headers});
           return this._http.get(this.url+'work/count/'+id, options)
+                            .map(res => res.json())
+    }
+
+    getCountSimilars(token, tag, name, desc){
+
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+          });
+
+          let options = new RequestOptions({headers: headers});
+          return this._http.get(this.url+'work/similar-count/'+tag+'/'+name+'/'+desc, options)
                             .map(res => res.json())
     }
 

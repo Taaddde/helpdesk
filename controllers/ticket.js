@@ -88,13 +88,48 @@ function getPrevNextOfRequester(req, res){
     let updateNext = {numTicket: {$gt: numTicket}, $or:[{requester:requesterId},{cc:requesterId}]};
     let updatePrev = {numTicket: {$lt: numTicket}, $or:[{requester:requesterId},{cc:requesterId}]};
 
-    if(status == 'Pendiente'){
-        updateNext['status'] = 'Pendiente';
-        updatePrev['status'] = 'Pendiente';
-
+    if(status == 'Pendiente' || status == 'Abierto'){
+        updateNext['$or'] = [
+            {
+                status:'Pendiente', 
+                $or:[{requester:requesterId},{cc:requesterId}]
+            }, 
+            {
+                status:'Abierto',
+                $or:[{requester:requesterId},{cc:requesterId}]
+            }
+        ]
+        updatePrev['$or'] = [
+            {
+                status:'Pendiente', 
+                $or:[{requester:requesterId},{cc:requesterId}]
+            }, 
+            {
+                status:'Abierto',
+                $or:[{requester:requesterId},{cc:requesterId}]
+            }
+        ]
     }else{
-        updateNext['$or'] = [{status:'Finalizado'}, {status:'Cerrado'}];
-        updatePrev['$or'] = [{status:'Finalizado'}, {status:'Cerrado'}];
+        updateNext['$or'] = [
+            {
+                status:'Finalizado', 
+                $or:[{requester:requesterId},{cc:requesterId}]
+            }, 
+            {
+                status:'Cerrado',
+                $or:[{requester:requesterId},{cc:requesterId}]
+            }
+        ];
+        updatePrev['$or'] = [
+            {
+                status:'Finalizado',
+                $or:[{requester:requesterId},{cc:requesterId}]
+            }, 
+            {
+                status:'Cerrado',
+                $or:[{requester:requesterId},{cc:requesterId}]
+            }
+        ];
     }
 
     Ticket.findOne(updateNext, (err, nextTicket) =>{

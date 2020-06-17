@@ -70,6 +70,11 @@ export class TasksFinishedComponent implements OnInit {
     }
   }
 
+
+  changeWorkDate(val:string){
+    return moment(val, 'YYYY-MM-DD').format('DD-MM-YYYY');
+  }
+
   ngOnInit() {
     this.getTasks();
     this.getUsers();

@@ -21,6 +21,11 @@ export class MyTasksComponent implements OnInit {
   public taskWait: Work[];
   public taskPostponed: Work[];
 
+  public countUninitiated: Number;
+  public countInProgress: Number;
+  public countWait: Number;
+  public countPostponed: Number;
+
   public taskInContext: Work;
 
   public identity;
@@ -42,12 +47,78 @@ export class MyTasksComponent implements OnInit {
     this.taskWait= new Array<Work>();
     this.taskPostponed= new Array<Work>();
     this.taskInContext = new Work('','','','','','','','','','',false,'',false,'',undefined)
+
+    this.countUninitiated = this.countInProgress = this.countPostponed = this.countWait = 3;
   }
 
   ngOnInit() {
     this.getTasks();
   }
 
+  intoList(listCount, count){
+    return count > listCount;
+  }
+
+  moreList(count){
+    return count+3;
+  }
+
+  areMore(list: Array<Work>, count){
+    return count < list.length;
+  }
+
+  cancelTask(){
+    this._workService.getCountSimilars(this.token, this.taskInContext.tag, this.taskInContext.name, this.taskInContext.desc).subscribe(
+      response =>{
+          if(response){
+            if(response.count > 1){
+              if(confirm('Hay un total de '+response.count+' tareas iguales a esta. ¿Desea cancelarlas todas?')){
+                this._workService.deleteMany(this.token, this.taskInContext.tag, this.taskInContext.name, this.taskInContext.desc).subscribe(
+                  response =>{
+                      if(response){
+                        this.hideContextMenu();
+                        this.getTasks();
+                      }
+                    },
+                    error =>{
+                      console.error(error);
+                  }
+                );  
+              }else{
+                if(confirm('¿Eliminar únicamente esta tarea?')){
+                  this._workService.delete(this.token, this.taskInContext._id).subscribe(
+                    response =>{
+                        if(response){
+                          this.hideContextMenu();
+                          this.getTasks();
+                        }
+                      },
+                      error =>{
+                        console.error(error);
+                    }
+                  );
+                }
+              }
+            }else{
+              this._workService.delete(this.token, this.taskInContext._id).subscribe(
+                response =>{
+                    if(response){
+                      this.hideContextMenu();
+                      this.getTasks();
+                    }
+                  },
+                  error =>{
+                    console.error(error);
+                }
+              );
+            }
+          }
+      },
+      error =>{
+          console.error(error);
+      }
+    );  
+  }
 
   getTasks(){
     this.taskUninitiated = new Array<Work>();

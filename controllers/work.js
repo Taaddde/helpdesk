@@ -173,7 +173,7 @@ function getList(req, res){
         {path:'teamWork',select:['name','image']},
     ];
     // poner userWork:ObjectId(id)
-    Work.find({status:{$ne:'Finalizado'},userWork:ObjectId(id)}).sort('dateCreated').populate(populateQuery).exec(function(err, works){
+    Work.find({status:{$ne:'Finalizado'},userWork:ObjectId(id)}).sort('dateWork').populate(populateQuery).exec(function(err, works){
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({work: 'Error del servidor en la peticion'})
@@ -310,7 +310,12 @@ function getListPaged(req, res){
 
 
     var query = req.query;
-    var sort = {dateCreated:-1}
+    var sort = {dateWork:-1}
+
+    if(query['free'] == 'true'){
+       sort = {dateWork:1}
+    }
+
     var _ids;
     var userId = req.params.userId;
 
@@ -415,6 +420,30 @@ var decoded = jwt_decode(req.headers.authorization);
         }
     });
 }
+
+function removeMany(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+    var functionName = 'removeMany';
+    let tag = req.params.tag;
+    let name = req.params.name;
+    let desc = req.params.desc;
+    
+    Work.remove({tag:tag, name:name, desc:desc, status:{$ne:'Finalizado'}}, (err, workRemoved) =>{
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            res.status(500).send({work: 'Error en la petición'});
+        }else{
+            if(!workRemoved){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                res.status(404).send({work: 'No se ha encontrado La tarea'});
+            }else{
+                logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({work: workRemoved});
+            }
+        }
+    });
+}
+    
 
 async function uploadFile(req, res){
     var decoded = jwt_decode(req.headers.authorization);
@@ -532,6 +561,29 @@ function getCountFreeWorks(req,res){
     
 }
 
+function getCountSimilars(req,res){
+    var decoded = jwt_decode(req.headers.authorization);
+    var functionName = 'getTagAndNameWorks';
+    let tag = req.params.tag;
+    let name = req.params.name;
+    let desc = req.params.desc;
+    console.log(tag, name, desc)
+
+    Work.countDocuments({tag:tag, name:name, desc:desc, status:{$ne:'Finalizado'}}, function(err, c){
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            res.status(500).send({message: 'Error del servidor en la peticion'})
+        }else{
+            if(!c){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                res.status(404).send({message: 'No hay items'})
+            }else{
+                res.status(200).send({count:c})
+            }
+        }
+    })
+}
+
 module.exports = {
     getOne,
     getList,
@@ -542,12 +594,13 @@ module.exports = {
 
     getCountFreeWorks,
     getCountWorks,
-
+    getCountSimilars,
 
     uploadFile,
     getFile,
 
     save,
     update,
-    remove
+    remove,
+    removeMany
 };

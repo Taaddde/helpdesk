@@ -6,7 +6,7 @@
                     <h5>No comenzada</h5>
                 </div>
                 <div class="card-body" style="padding:0.5rem">
-                
+
                     <div class="container task-container"
                         cdkDropList
                         #uninitiated="cdkDropList"
@@ -14,24 +14,30 @@
                         [cdkDropListConnectedTo]="[inProgress, wait, postponed]"
                         (cdkDropListDropped)="onDrop($event, 'No comenzada')"
                     >
-                        <div class="card task-uninitiated task" 
-                        *ngFor="let task of taskUninitiated"
-                        cdkDrag
-                        (contextmenu)="onRightClick($event, task)"
-                        >
-                            <div class="card-body">
-                                <h5 class="task-title">
-                                    <i *ngIf="task.priority == 'Urgente'" class="fa fa-exclamation-circle" style="color: rgb(255,0,0);"></i>
-                                    <strong>{{task.name}}</strong>
-                                </h5>
-                                <p class="task-desc">{{task.desc}}</p>
-                                <span class="task-desc text-muted">{{changeDate(task.dateWork)}}</span>
+
+
+                        <span *ngFor="let task of taskUninitiated;let indice=index">
+                            <div class="card task-uninitiated task" 
+                            cdkDrag
+                            (contextmenu)="onRightClick($event, task)"
+                            *ngIf="intoList(indice, countUninitiated)"
+                            >
+                                <div class="card-body" >
+                                    <h5 class="task-title">
+                                        <i *ngIf="task.priority == 'Urgente'" class="fa fa-exclamation-circle" style="color: rgb(255,0,0);"></i>
+                                        <strong>{{task.name}}</strong>
+                                    </h5>
+                                    <p class="task-desc">{{task.desc}}</p>
+                                    <span class="task-desc text-muted">{{changeDate(task.dateWork)}}</span>
+                                </div>
                             </div>
+                        </span>
 
-
-                            
+                        <div class="card task-plus task" 
+                        *ngIf="areMore(taskUninitiated, countUninitiated)"
+                        (click)="countUninitiated = moreList(countUninitiated)">
+                            <div class="card-body text-center"><i class="fa fa-plus"></i></div>
                         </div>
-
                     </div>
 
                 </div>
@@ -51,22 +57,31 @@
                         [cdkDropListConnectedTo]="[uninitiated, wait, postponed]"
                         (cdkDropListDropped)="onDrop($event, 'En curso')"
                     >
-                        <div class="card task-inprogress task"
-                        *ngFor="let task of taskInProgress"
-                        cdkDrag
-                        (contextmenu)="onRightClick($event, task)"
-                        >
 
-                        <div class="card-body">
-                            <h5 class="task-title">
-                                <i *ngIf="task.priority == 'Urgente'" class="fa fa-exclamation-circle" style="color: rgb(255,0,0);"></i>
-                                <strong>{{task.name}}</strong>
-                            </h5>
-                            <p class="task-desc">{{task.desc}}</p>
-                            <span class="task-desc text-muted">{{changeDate(task.dateWork)}}</span>
-                        </div>                            </div>
-                
-                    </div>
+                    <span *ngFor="let task of taskInProgress;let indice=index">
+                        <div class="card task-inprogress task"
+                            cdkDrag
+                            (contextmenu)="onRightClick($event, task)"
+                            *ngIf="intoList(indice, countInProgress)"
+                            >
+                                <div class="card-body">
+                                    <h5 class="task-title">
+                                        <i *ngIf="task.priority == 'Urgente'" class="fa fa-exclamation-circle" style="color: rgb(255,0,0);"></i>
+                                        <strong>{{task.name}}</strong>
+                                    </h5>
+                                    <p class="task-desc">{{task.desc}}</p>
+                                    <span class="task-desc text-muted">{{changeDate(task.dateWork)}}</span>
+                                </div>
+                            </div>
+                        </span>
+                        
+
+                        <div class="card task-plus task" 
+                        *ngIf="areMore(taskInProgress, countInProgress)"
+                        (click)="countInProgress = moreList(countInProgress)">
+                            <div class="card-body text-center"><i class="fa fa-plus"></i></div>
+                        </div>
+                </div>
 
 
                 </div>
@@ -87,10 +102,10 @@
                         (cdkDropListDropped)="onDrop($event, 'A la espera')"
                     >
                         
-        
+                    <span *ngFor="let task of taskWait;let indice=index">
                         <div class="card task-wait task" 
-                        *ngFor="let task of taskWait"
-                        cdkDrag (contextmenu)="onRightClick($event, task)">
+                        cdkDrag (contextmenu)="onRightClick($event, task)"
+                        *ngIf="intoList(indice, countWait)">
                             <div class="card-body">
                                 <h5 class="task-title">
                                     <i *ngIf="task.priority == 'Urgente'" class="fa fa-exclamation-circle" style="color: rgb(255,0,0);"></i>
@@ -99,15 +114,15 @@
                                 <p class="task-desc">{{task.desc}}</p>
                                 <span class="task-desc text-muted">{{changeDate(task.dateWork)}}</span>
                             </div>
-                        
-                    
                         </div>
+                    </span>
 
-                    
+                    <div class="card task-plus task" 
+                        *ngIf="areMore(taskWait, countWait)"
+                        (click)="countWait = moreList(countWait)">
+                            <div class="card-body text-center"><i class="fa fa-plus"></i></div>
+                        </div>
                     </div>
-
-
-
                 </div>
             </div>
         </div>
@@ -125,11 +140,12 @@
                         [cdkDropListConnectedTo]="[uninitiated, inProgress, wait]"
                         (cdkDropListDropped)="onDrop($event, 'Aplazada')"
                     >
+
+                    <span *ngFor="let task of taskPostponed;let indice=index">
                         <div class="card task-postponed task"
-                        *ngFor="let task of taskPostponed"
                         cdkDrag
                         (contextmenu)="onRightClick($event, task)"
-                        >
+                        *ngIf="intoList(indice, countPostponed)">
                         
                             <div class="card-body">
                                 <h5 class="task-title">
@@ -140,7 +156,15 @@
                                 <span class="task-desc text-muted">{{changeDate(task.dateWork)}}</span>
                             </div>
                         </div>
+                    </span>
+
+                    <div class="card task-plus task" 
+                        *ngIf="areMore(taskPostponed, countPostponed)"
+                        (click)="countPostponed = moreList(countPostponed)">
+                            <div class="card-body text-center"><i class="fa fa-plus"></i></div>
                     </div>
+
+                </div>
                 </div>
             </div>
         </div>
@@ -154,6 +178,7 @@
     <a class="dropdown-item" (click)="comments.getComments(taskInContext);showModalComments()">Ver comentarios</a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" (click)="freeTask()" >Liberar tarea</a>
+    <a class="dropdown-item" *ngIf="taskInContext.createdBy['_id'] == identity['_id']" (click)="cancelTask()" >Cancelar tarea</a>
     <a class="dropdown-item" (click)="finishTask()" >Finalizar tarea</a>
 </div>
 

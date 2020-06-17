@@ -131,7 +131,7 @@ export class TasksComponent implements OnInit {
   }
 
   onSubmit(){
-    if(this.task.name != '' && this.task.desc != '' && this.task.teamWork != '' && this.task.dateLimit != '' && (this.task.dateWork != '' || this.repeat == 'true')){
+    if(this.task.name != '' && this.task.tag != '' && this.task.desc != '' && this.task.teamWork != '' && this.task.dateLimit != '' && (this.task.dateWork != '' || this.repeat == 'true')){
       if(moment(this.task.dateLimit).isSameOrAfter((moment().format("YYYY-MM-DD")))){
 
         if(this.task.userWork != ''){
@@ -143,11 +143,6 @@ export class TasksComponent implements OnInit {
         this._workService.add(this.token, this.task, this.repeat, this.dayOfWeek).subscribe(
           response =>{
               if(response.work){
-                console.log(response.work)
-
-
-
-
                 this.task = new Work('','','',this.identity['_id'],'','','','','','',false,'No comenzada',true,'Normal',undefined);
                 this.dayOfWeek = {
                   lun: false,
