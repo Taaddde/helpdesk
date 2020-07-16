@@ -30,5 +30,6 @@ api.put('/read-agent/:id', md_auth.ensureAuth, textblockController.readAgent);
 api.put('/read-requester/:id', md_auth.ensureAuth, textblockController.readRequest);
 api.put('/update/:id', md_auth.ensureAuth, textblockController.updateTextBlock);
 api.delete('/delete/:id', md_auth.ensureAuth, textblockController.deletetextblock);
+api.delete('/admin-delete/:id', md_auth.ensureAuth, textblockController.adminRemove);
 
 module.exports = api;

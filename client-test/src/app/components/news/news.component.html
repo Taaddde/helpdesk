@@ -2,49 +2,25 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="border: 1px solid #018dda">
             <div class="modal-header" style="background-color: #018dda;color: rgb(255,255,255);">
-                <h4 class="modal-title">¡Novedades! - Versión 1.2.6 (29/05/2020)</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                <h4 class="modal-title">¡Novedades! - Versión 1.3.3 (16/07/2020)</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
             <div class="modal-body">
-                <span *ngIf="identity['role'] != 'ROLE_REQUESTER'">
-
-                </span>
-                <div>
-                    <h4><strong>NUEVAS FUNCIONALIDADES</strong></h4>
-                    <ul style="list-style-type: inherit;">
-                        <li style="font-size: 15px;">
-                            La lista de tickets cuenta con la columna de la fecha de la última novedad que hubo en ella.
-                        </li>
-                        <li style="font-size: 15px;">
-                            La lista de tickets puede filtrarse por número.
-                        </li>
-                        <li style="font-size: 15px;">
-                            Opción de ocultar los mensajes de información dentro del chat de un ticket. 
-                            ( <i class="fa fa-info-circle" style="color: red;"></i> )
-                            configurable dentro de las opciones de perfil.
-                        </li>
-                        <li *ngIf="identity['role'] != 'ROLE_REQUESTER'" style="font-size: 15px;">
-                            <i class="fas fa-ticket-alt"></i>
-                            <span> Las tareas tomadas y libres se visualizaran en el panel principal.</span>
-                        </li>
-                        <li *ngIf="identity['role'] != 'ROLE_REQUESTER'" style="font-size: 15px;">
-                            <i class="fas fa-ticket-alt"></i>
-                            <span> Listas de tareas libres y finalizadas se visualizan en forma de lista, con opciones de filtro.</span>
-                        </li>
-                        <li *ngIf="identity['role'] != 'ROLE_REQUESTER'" style="font-size: 15px;">
-                            <i class="fas fa-ticket-alt"></i>
-                            <span> Opción de añadir comentarios y adjuntos a las tareas, dando click derecho en una tarea tomada y seleccionando "Ver comentarios".</span>
-                        </li>
-
-                    </ul>
-                </div>
                 <div>
                     <h4><strong>FIX</strong></h4>
                     <ul style="list-style-type: inherit;">
                         <li style="font-size: 15px;">
-                            Se centró el texto de panel principal.
+                            Se alargó el tiempo de refresco de notificaciones, para que el sistema no este constantemente cargando.
                         </li>
-                        <li *ngIf="identity['role'] != 'ROLE_REQUESTER'" style="font-size: 15px;">
-                            <i class="fas fa-ticket-alt"></i> 
-                            <span> Las fechas de la lista te tickets sin agente ahora se visualiza en formato "DD-MM-YYYY HH:mm".</span>
+                        <li style="font-size: 15px;">
+                            Se solucionó un error, el cual no filtraba correctamente los tickets si se utilizaba la opción de mostrar más por página.
+                        </li>
+                    </ul>
+                </div>
+
+                <div *ngIf="identity['role'] != 'ROLE_REQUESTER'">
+                    <h4><strong>FIX PARA AGENTES</strong></h4>
+                    <ul style="list-style-type: inherit;">
+                        <li style="font-size: 15px;">
+                            Se solucionó un error el cual, si un agente/equipo tomaba un ticket, y el solicitante nunca actualizó los datos del mismo, si realiza una actualización (ejemplo: nuevo mensaje), el ticket volvía a no tener responsable cargado.
                         </li>
                     </ul>
                 </div>

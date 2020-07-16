@@ -11,7 +11,6 @@ const ObjectId = mongoose.Types.ObjectId;
 
 
 function getSectors(req, res){
-    console.log('Hola')
     Sector.find({}).sort('name').exec((err, sectors) =>{
         if(err){
             res.status(500).send({message: 'Error del servidor en la peticion'});

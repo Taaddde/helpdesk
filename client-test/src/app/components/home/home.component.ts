@@ -78,13 +78,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.getTaskCount();
       this.getStatusCalendar();
       this.getTeamTickets();
-      this.refresh = Observable.interval(15000).subscribe((val) => { 
+      this.refresh = Observable.interval(60000).subscribe((val) => { 
         this.getCountTickets();
         this.getStatusCalendar();
         this.getTeamTickets();  
       });  
     }else{
-      this.refresh = Observable.interval(15000).subscribe((val) => { 
+      this.refresh = Observable.interval(120000).subscribe((val) => { 
         this.getCountTickets();
       });  
     }

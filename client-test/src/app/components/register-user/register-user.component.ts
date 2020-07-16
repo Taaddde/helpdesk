@@ -28,11 +28,11 @@ export class RegisterUserComponent implements OnInit {
   } 
 
   ngOnInit() {
-    this.getSectors()
+    //this.getSectors()
   }
 
   getSectors(){
-    this._sectorService.getList().subscribe(
+    this._sectorService.getList('false').subscribe(
       response =>{
           if(response.sectors){
             this.sectors = response.sectors;

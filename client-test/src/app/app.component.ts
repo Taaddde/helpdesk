@@ -78,7 +78,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.getChatNotifications();
 
 
-        this.sub = Observable.interval(15000).subscribe((val) => { 
+        this.sub = Observable.interval(60000).subscribe((val) => { 
           this.getMessages();
           this.getChatNotifications();
         });
@@ -88,7 +88,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.getMessagesReq();
         this.getReqChatNotifications();
 
-        this.sub = Observable.interval(15000).subscribe((val) => { 
+        this.sub = Observable.interval(120000).subscribe((val) => { 
           this.getMessagesReq();
           this.getReqChatNotifications();
         });
@@ -259,6 +259,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this._router.navigate(['/']);
   }
+  
   globalSearch(val:string){
     if(val.length >= 3){
       this.valSearch = val;

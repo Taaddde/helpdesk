@@ -79,7 +79,7 @@ var decoded = jwt_decode(req.headers.authorization);
                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 res.status(404).send({message: 'El bloque de texto no ha sido guardado'})
             }else{
-              //logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({textblock:textblockStored})
             }
         }
@@ -237,6 +237,21 @@ var decoded = jwt_decode(req.headers.authorization);
     });
 }
 
+function adminRemove(req, res){
+    var textblockId = req.params.id;
+    TextBlock.findByIdAndRemove(textblockId, (err, textblockRemoved) =>{
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            if(!textblockRemoved){
+                res.status(404).send({message: 'No se ha encontrado El bloque de texto'});
+            }else{
+                res.status(200).send({textblock: textblockRemoved});
+            }
+        }
+    });
+}
+
 function uploadFiles(req, res){
     var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'uploadFile';
@@ -252,6 +267,7 @@ function uploadFiles(req, res){
     
             TextBlock.findByIdAndUpdate(tbId, {$push: {files: file_name}}, (err, textblockUpdated) =>{
                 if(err){
+                    console.log(err);
                     logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                     res.status(500).send({message: 'Error al actualizar el usuario'});
                 }else{
@@ -288,6 +304,7 @@ async function uploadFile(req, res){
         
                 TextBlock.findByIdAndUpdate(tbId, {$push: {files: file_name}}, (err, textblockUpdated) =>{
                     if(err){
+                        console.log(err);
                         logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                         res.status(500).send({message: 'Error al actualizar el usuario'});
                     }else{
@@ -387,6 +404,7 @@ module.exports = {
     saveTextBlock,
     updateTextBlock,
     deletetextblock,
+    adminRemove,
     readAgent,
     readRequest,
 

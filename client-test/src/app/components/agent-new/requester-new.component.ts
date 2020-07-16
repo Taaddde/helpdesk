@@ -58,7 +58,7 @@ export class RequesterNewComponent implements OnInit {
   }
 
   getSectors(){
-    this._sectorService.getList().subscribe(
+    this._sectorService.getList(this.token).subscribe(
       response =>{
           if(response.sectors){
             this.sectors = response.sectors;

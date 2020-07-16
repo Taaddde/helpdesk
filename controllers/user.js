@@ -278,7 +278,7 @@ function getUsers(req, res){
 
 
     if(!role){
-        User.find({company:company, deleted:false, approved:true}).sort('name').exec(function(err, users){
+        User.find({company:company, deleted:false}).sort('name').exec(function(err, users){
             if(err){
                 logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+getUsers.name, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -297,10 +297,10 @@ function getUsers(req, res){
         if(role == 'ROLE_AGENT' || role == 'ROLE_ADMIN'){
             let query;
             if(company == 'null'){
-                query = {$or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}], deleted:false, approved:true}
+                query = {$or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}], deleted:false}
 
             }else{
-                query = {$or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}], deleted:false, approved:true, company:company}
+                query = {$or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}], deleted:false, company:company}
             }
             User.find(query).sort('name').exec(function(err, users){
                 if(err){
@@ -318,8 +318,7 @@ function getUsers(req, res){
                 }
             });
         }else{
-            let query = {$or:[{role:'ROLE_REQUESTER'},{company:{$ne:company}}], deleted:false, approved:true};
-            query['approved'] = true;
+            let query = {$or:[{role:'ROLE_REQUESTER'},{company:{$ne:company}}], deleted:false};
             User.find(query).sort('surname').exec(function(err, users){
                 if(err){
                     logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
@@ -346,7 +345,7 @@ function getUsersForName(req, res){
     var company = req.params.company;
     var functionName = 'getUsersForName';
 
-    User.find({company:ObjectId(company), deleted:false, approved:true, $or:[{name:{ "$regex": name, "$options": "i" }},{surname:{ "$regex": name, "$options": "i" }}]}).sort('name').exec(function(err, users){
+    User.find({company:ObjectId(company), deleted:false, $or:[{name:{ "$regex": name, "$options": "i" }},{surname:{ "$regex": name, "$options": "i" }}]}).sort('name').exec(function(err, users){
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -368,7 +367,7 @@ function getReqForName(req, res){
     var name = req.params.name;
     var functionName = 'getReqForName';
 
-    User.find({role:'ROLE_REQUESTER', deleted:false, approved:true ,$or:[{name:{ "$regex": name, "$options": "i" }},{surname:{ "$regex": name, "$options": "i" }}]}).sort('name').exec(function(err, users){
+    User.find({role:'ROLE_REQUESTER', deleted:false ,$or:[{name:{ "$regex": name, "$options": "i" }},{surname:{ "$regex": name, "$options": "i" }}]}).sort('name').exec(function(err, users){
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -397,7 +396,7 @@ function loginUser(req, res){
         {path:'sector',select:['name','email']}
     ];
 
-    User.findOne({userName: userName.toLowerCase(), deleted:false, approved:true}, (err, user) => {
+    User.findOne({userName: userName.toLowerCase(), deleted:false}, (err, user) => {
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: userName+' ('+req.ip+') '+err}});
                 console.log(err)

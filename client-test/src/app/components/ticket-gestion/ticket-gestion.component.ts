@@ -653,7 +653,9 @@ export class TicketGestionComponent implements OnInit {
 
     if(this.textblock.text != ''){
       if(this.identity['role'] == 'ROLE_REQUESTER'){
-        this.textblock.type = 'REQUEST'
+        this.textblock.type = 'REQUEST';
+        delete this.ticket.agent;
+        delete this.ticket.team;
       }else{
         this.textblock.read = true;
         if(this.isPrivate){
