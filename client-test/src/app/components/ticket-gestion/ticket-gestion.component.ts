@@ -120,7 +120,7 @@ export class TicketGestionComponent implements OnInit {
   }
 
   getCc(){
-    this._userService.getListReq(this.token, this.ticket.company['_id']).subscribe(
+    this._userService.getList(this.token).subscribe(
       response =>{
           if(!response.users){
             this._router.navigate(['/']);

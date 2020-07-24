@@ -87,7 +87,7 @@ export class userService{
         this.httpOptions.headers =
             this.httpOptions.headers.set('Authorization', token);
 
-        return this._httpClient.get<any>(this.url+'user/users', this.httpOptions);
+        return this._httpClient.get<any>(this.url+'user/all-users', this.httpOptions);
     }
 
     getForName(token, company, name){
