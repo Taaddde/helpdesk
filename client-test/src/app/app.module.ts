@@ -6,7 +6,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { AppComponent } from './app.component';
 import {FullCalendarModule} from 'primeng/fullcalendar';
 import { NgxMaskModule, IConfig } from 'ngx-mask'
@@ -112,6 +112,10 @@ import { RegisterUserComponent } from './components/register-user/register-user.
     NgxSpinnerModule,
     BrowserAnimationsModule,
     DragDropModule,
+    MatSnackBarModule
+  ],
+  exports:[
+    MatSnackBarModule
   ],
   providers: [
     appRoutingProviders,

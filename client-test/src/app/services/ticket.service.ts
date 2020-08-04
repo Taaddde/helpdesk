@@ -29,7 +29,6 @@ export class ticketService{
         let params = JSON.stringify(ticket);
         this.httpOptions.headers =
         this.httpOptions.headers.set('Authorization', token);
-        console.log(ticket)
 
         return this._httpClient.post<any>(this.url+'ticket/add', params, this.httpOptions);
     }

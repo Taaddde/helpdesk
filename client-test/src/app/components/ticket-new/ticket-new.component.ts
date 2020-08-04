@@ -14,6 +14,7 @@ import { uploadService } from '../../services/upload.service';
 import { MessageComponent } from '../message/message.component';
 import { Sector } from 'src/app/models/sector';
 import { sectorService } from 'src/app/services/sector.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 declare var $: any;
 
@@ -60,7 +61,8 @@ export class TicketNewComponent implements OnInit {
     private _teamService: teamService,
     private _textblockService: textblockService,
     private _uploadService: uploadService,
-    private _sectorService: sectorService
+    private _sectorService: sectorService,
+    private snackBar: MatSnackBar,
   ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
@@ -123,6 +125,12 @@ export class TicketNewComponent implements OnInit {
 
   setSector(value){
     this.nreq.sector = value;
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+        duration: 5000,
+    });
   }
 
   getSectors(){
@@ -240,7 +248,8 @@ export class TicketNewComponent implements OnInit {
                                   }
                               );
                           }
-                          this._router.navigate(['/ticket-gestion',response.textblock.ticket]);       
+                          this.openSnackBar('Ticket creado con éxito', 'Cerrar')
+                          this._router.navigate(['/ticket-gestion',response.textblock.ticket]);    
                         }
                       },
                       error =>{

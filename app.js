@@ -22,6 +22,10 @@ var chat_routes = require('./routes/chat');
 var message_routes = require('./routes/message');
 var work_routes = require('./routes/work');
 var workobservation_routes = require('./routes/workobservation');
+var deposit_routes = require('./routes/deposit');
+var item_routes = require('./routes/item');
+var stock_routes = require('./routes/stock');
+var movim_routes = require('./routes/movim');
 
 
 
@@ -55,6 +59,10 @@ app.use('/api/chat', chat_routes);
 app.use('/api/message', message_routes);
 app.use('/api/work', work_routes);
 app.use('/api/workobservation', workobservation_routes);
+app.use('/api/deposit', deposit_routes);
+app.use('/api/item', item_routes);
+app.use('/api/stock', stock_routes);
+app.use('/api/movim', movim_routes);
 
 
 app.get('*', function(req, res, next){

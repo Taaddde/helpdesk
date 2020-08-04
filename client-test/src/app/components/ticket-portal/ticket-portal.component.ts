@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 
 import {Router, ActivatedRoute, Params} from '@angular/router'
 import {GLOBAL} from '../../services/global';
@@ -17,6 +17,8 @@ import { TextBlock } from '../../models/textblock';
 import { uploadService } from '../../services/upload.service';
 import * as moment from "moment"
 import { Observable, Subscription } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MessageComponent } from '../message/message.component';
 
 
 declare var $: any;
@@ -27,6 +29,8 @@ declare var $: any;
   styleUrls: ['./ticket-portal.component.scss'],
   providers:[userService, uploadService, ticketService, textblockService, companyService, typeTicketService, subTypeTicketService]
 })
+
+
 export class TicketPortalComponent implements OnInit {
   public identity;
   public token;
@@ -56,6 +60,7 @@ export class TicketPortalComponent implements OnInit {
 
   public emojis: boolean;
   
+  @ViewChild(MessageComponent, {static:false}) message: MessageComponent;
 
   //Asigna un valor a una propiedad
   constructor(
@@ -66,14 +71,13 @@ export class TicketPortalComponent implements OnInit {
     private _ticketService: ticketService,
     private _textblockService: textblockService,
     private _uploadService: uploadService,
-
+    private snackBar: MatSnackBar,
     private _route: ActivatedRoute,
     private _router: Router
   ){
     this.url=GLOBAL.url;
     this.token = _userService.getToken();
     this.identity = _userService.getIdentity();
-
     this.companyName = 'Departamento';
     this.typeName = 'Tipo';
     this.subTypeName = 'Sub-tipo';
@@ -86,7 +90,8 @@ export class TicketPortalComponent implements OnInit {
     this.tb = new TextBlock('','',this.identity['_id'],'','','REQUEST',[''],false);
 
     this.allChecked = false;
-  
+      this.message = new MessageComponent();
+
     this.emojis = false;
   } 
 
@@ -171,7 +176,7 @@ export class TicketPortalComponent implements OnInit {
     this.typeName = 'Tipo';
     this.subTypeName = 'Subtipo';
     this.selectedSubtype = new SubTypeTicket('','','',null,'',[null],null,false,'','','',null);
-
+    this.openSnackBar('Ticket creado con éxito', 'Cerrar')
   }
 
   clickType(val:TypeTicket){
@@ -266,6 +271,12 @@ export class TicketPortalComponent implements OnInit {
     this.filesToUpload = undefined;
   }
 
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+        duration: 5000,
+    });
+  }
+
   onSubmit(){
     if(this.selectedSubtype.requireAttach && this.filesToUpload == undefined){
       alert('La solicitud requiere de un adjunto obligatorio')
@@ -304,6 +315,7 @@ export class TicketPortalComponent implements OnInit {
                         this._uploadService.makeFileRequest(this.url+'textblock/file/'+response.textblock._id, [], this.filesToUpload, this.token, 'file');
                     }
                       this.cancelTicket();
+                      this.openSnackBar('Ticket creado con éxito', 'Cerrar')
                       this._router.navigate(['/ticket-gestion',link]);
                     }
                 },
