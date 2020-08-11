@@ -1,0 +1,169 @@
+<h1 matDialogTitle>{{data.title}}</h1>
+  <form (ngSubmit)="submit()">
+  <div fxLayout="row wrap" fxLayout.lt-sm="column">
+    <!-- <div fxFlex="50"  class="pr-1">
+      <mat-form-field class="full-width">
+        <input type="text"
+               placeholder="Paciente"
+               aria-label="Text"
+               matInput
+               [(ngModel)]='paciente' [name]='paciente'
+               (input)="filtrado($event.target.value, 'pacientes')"
+               [matAutocomplete]="autoPaciente">
+        <mat-autocomplete #autoPaciente="matAutocomplete">
+          <mat-option 
+          *ngFor="let paciente of pacientesFiltrados" 
+          [value]="paciente.nombre+' '+paciente.apellido"
+          (click)="carpeta.paciente = paciente._id">
+            {{paciente.nombre}} {{paciente.apellido}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div> -->
+
+
+    <mat-card-content >
+        <div class="mb-1">
+          <p>Multiple</p>
+          <input type="file" ng2FileSelect [uploader]="uploader" multiple  /><br/>
+        </div>
+  
+        <div class="mb-1">
+          <div ng2FileDrop
+          [ngClass]="{'dz-file-over': hasBaseDropZoneOver}"
+          (fileOver)="fileOverBase($event)"
+          [uploader]="uploader"
+          class="fileupload-drop-zone mb-24">
+          Soltar archivos aquí
+          </div>
+        </div>
+  
+        <table class="default-table mat-box-shadow mb-24" style="width: 100%">
+          <thead>
+          <tr>
+              <th width="20%">Nombre</th>
+              <th>Tipo</th>
+              <th width="35%">Fecha desde</th>
+              <th width="35%">Fecha hasta</th>
+              <th>Tamaño</th>
+              <th>Progreso</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+          </tr>
+          </thead>
+          <tbody *ngIf="uploader.queue.length; else tableNoData">
+          <tr *ngFor="let item of uploader.queue">
+              <td>{{ item?.file?.name }}</td>
+                <td>
+                    <mat-form-field>
+                        <mat-label>Seleccionar tipo</mat-label>
+                        <mat-select (selectionChange)="setType($event.value, item)">
+                          <mat-option>Seleccionar...</mat-option>
+                          <mat-option value="Pedido formal">Pedido formal</mat-option>
+                          <mat-option value="Evolucion">Evolución</mat-option>
+                          <mat-option value="Concentimiento">Concentimiento</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                </td>
+                <td>
+                        <input 
+                        matInput 
+                        [matDatepicker]="fechaDoc"
+                        (dateChange)="setDate($event.target.value, item, 'desde')" disabled>
+                        <mat-datepicker-toggle matSuffix [for]="fechaDoc"></mat-datepicker-toggle>
+                        <mat-datepicker #fechaDoc disabled="false"></mat-datepicker>
+                </td>
+                <td>
+                      <input 
+                      matInput 
+                      [matDatepicker]="fechaHasta"
+                      (dateChange)="setDate($event.target.value, item, 'hasta')" disabled>
+                      <mat-datepicker-toggle matSuffix [for]="fechaHasta"></mat-datepicker-toggle>
+                      <mat-datepicker #fechaHasta disabled="false"></mat-datepicker >
+                </td>
+                
+              <td nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+              <td>
+                  <div class="progress" style="margin-bottom: 0;">
+                      <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                      <mat-progress-bar
+                        class=""
+                        color="primary"
+                        mode="determinate"
+                        [value]="item.progress">
+                      </mat-progress-bar>
+                  </div>
+              </td>
+              <td class="">
+                  <mat-icon *ngIf="item.isSuccess" color="primary">check</mat-icon>
+                  <mat-icon *ngIf="item.isCancel" color="accent">cancel</mat-icon>
+                  <mat-icon *ngIf="item.isError" color="warn">error</mat-icon>
+              </td>
+              <td nowrap>
+                  <button 
+                  mat-raised-button
+                  color="primary"
+                  class="mx-4"
+                  (click)="item.upload()"
+                  [disabled]="item.isReady || item.isUploading || item.isSuccess">Subir</button>
+                  <button 
+                  mat-raised-button
+                  color="accent"
+                  class="mx-4"
+                  (click)="item.cancel()"
+                  [disabled]="!item.isUploading">Cancelar</button>
+  
+                  <button 
+                  mat-raised-button
+                  color="warn"
+                  class="mx-4"
+                  (click)="item.remove()">Remover</button>
+              </td>
+          </tr>
+          </tbody>
+          <ng-template #tableNoData>
+            <p [ngStyle]="{padding: '0 1.2rem'}">Cola de descarga vacía</p>
+          </ng-template>
+      </table>
+  
+  
+        <div>
+          <p>Progreso de subida:</p>
+          <div class="progress mb-1" >
+              <mat-progress-bar
+                class=""
+                color="primary"
+                mode="determinate"
+                [value]="uploader.progress">
+              </mat-progress-bar>
+          </div>
+  
+        <button 
+        mat-raised-button
+        color="primary"
+        class="mx-4"
+        (click)="uploader.uploadAll()"
+        [disabled]="!uploader.getNotUploadedItems().length">Subir todo</button>
+  
+        <button 
+        mat-raised-button
+        color="accent"
+        class="mx-4"
+        (click)="uploader.cancelAll()"
+        [disabled]="!uploader.isUploading">Cancelar todo</button>
+  
+        <button 
+        mat-raised-button
+        color="warn"
+        class="mx-4"
+        (click)="uploader.clearQueue()"
+        [disabled]="!uploader.queue.length">Remover todo</button>
+      </div>
+    </mat-card-content>
+  
+
+    <div fxFlex="100" class="mt-1">
+      <button mat-button color="warn" type="button" (click)="dialogRef.close(false)">Volver</button>
+    </div>
+  </div>
+</form>

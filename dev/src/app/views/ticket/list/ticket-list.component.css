@@ -1,0 +1,11 @@
+.body-cell {
+    width: 8em;
+    margin: 0 0 2em 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.sesion-container{
+    height: 150px;
+    overflow-y: auto;
+}

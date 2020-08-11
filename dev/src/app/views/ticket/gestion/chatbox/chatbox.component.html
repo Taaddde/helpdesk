@@ -1,0 +1,35 @@
+<div [ngClass]="getCardClass()">
+    <div [ngClass]="getContainerClass()" style="padding-right: 0;padding-left: 0;">
+        <div class="user-date" style="margin-top: 4px;">
+            <label *ngIf="type != 'INFO'" style="margin-left: 13px;">{{user}}</label>
+            <label *ngIf="type == 'INFO'" style="margin-left: 13px;">Información</label>
+            <div class="dropdown float-right" style="margin-top:-7px;" *ngIf="userId == identity['_id'] && type != 'INFO'">
+                <button class="btn btn-sm" 
+                        data-toggle="dropdown" 
+                        aria-expanded="false" 
+                        type="button"
+                        >
+                    <i class="fas fa-ellipsis-v option"></i>
+                </button>
+                <div role="menu" class="dropdown-menu">
+                    <a role="presentation" class="dropdown-item" (click)="delete()">
+                        Eliminar
+                    </a>
+                </div>
+            </div>
+            <label class="float-right" style="margin-right: 15px;">{{date}}</label>
+        </div>
+    </div>
+    <div [ngClass]="getCardBodyClass()">
+        <p class="card-text" [innerHTML]="text"></p>
+        <hr *ngIf="sign != '' && type != 'INFO'" >
+        <p *ngIf="sign != '' && type != 'INFO'" class="card-text" [innerHTML]="sign"></p>
+        <div class="text-right" *ngIf="files">
+            <span *ngFor="let file of groupFiles">
+                <a target="blank" href="{{url+'textblock/file/'+file}}">
+                    <i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 5px;"></i>
+                </a>    
+            </span>
+        </div>
+    </div>
+</div>

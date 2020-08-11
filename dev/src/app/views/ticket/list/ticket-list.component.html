@@ -1,0 +1,112 @@
+<mat-card class="card shadow">
+  <div class="card-body">
+      <div class="row">
+        
+          <div class="col-md-6 text-nowrap">
+              <div id="dataTable_length" class="dataTables_length">
+                  <label>Mostrar 
+                      <select class="form-control form-control-sm custom-select custom-select-sm" (change)="changeLimit($event.target.value)">
+                            <option value="10"selected>10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </label>
+                </div>
+
+
+            </div>
+            
+            <div class="col-md-6">
+                <div class="text-md-right dataTables_filter" id="dataTable_filter" *ngIf="identity['sectorRef']==true">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="ref" (change)="refCheck($event)" />
+                        <label class="form-check-label" for="ref">TICKETS DEL SECTOR</label></div>
+                </div>
+            </div>
+    </div>
+    <div class="row" style="margin-bottom: 5px;">
+        <div class="col text-nowrap">
+                  <button
+                  data-toggle="modal" data-target="#filter" type="button"
+                  [className]="(filter['sub'] == null || filter['sub'] == '') && (filter['status'] == null || filter['status'] == '') && filter['requester'] == null && filter['agent'] == null ? 'btn btn-dark dark' : 'btn btn-dark dark-selected'">
+                      <i class="fa fa-filter"></i>
+                  </button>
+                  <button 
+                      *ngIf="identity['role'] != 'ROLE_REQUESTER' && this.groupTicket.length > 1" 
+                      class="btn btn-dark dark" type="button" style="margin-left: 5px;"
+                      (click)="unify()">Unificar</button>
+          </div>
+
+    </div>
+      <div class="table-responsive table " id="dataTable">
+          <table class="table table-hover table-sm" id="dataTable">
+              <thead>
+                  <tr>
+                      <th>Número</th>
+                      <th>Solicitante</th>
+                      <th>Asunto</th>
+                      <th>Agente</th>
+                      <th>Estado</th>
+                      <th>Fecha</th>
+                      <th>Novedad</th>
+
+                  </tr>
+              </thead>
+              <tbody *ngFor="let ticket of tickets" [className]="ticket.status == 'Cerrado' ? 'closed' : ''">
+                  <tr [className]="isInGroup(ticket) && identity['role'] != 'ROLE_REQUESTER' ? 'selected' : 'select'" (click)="selectTicket($event, ticket)" >
+                      <td data-title="Numero" >{{ticket.numTicket}}</td>
+                      <td data-title="Solicitante" >
+                        <img *ngIf="ticket.requester && ticket.requester.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+ticket.requester.image}}" />
+                        <img *ngIf="!ticket.requester || ticket.requester.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="assets/images/system/user-placeholder.png" />
+                        {{ticket.requester.name}}
+                        <span> </span>
+                        {{ticket.requester.surname}}
+                      </td>
+                      <td class="text-nowrap text-truncate text-break" data-title="Asunto" ><p class="body-cell" style="font-size: 14px;" title="{{ticket.sub}}" ng-bind="ticket.sub">{{ticket.sub}}</p></td>
+                      <td data-title="Agente"  *ngIf="ticket.agent">
+                          <img *ngIf="ticket.agent.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+ticket.agent.image}}" />
+                          <img *ngIf="ticket.agent.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="assets/images/system/user-placeholder.png" />
+                          {{ticket.agent.name}}
+                          <span> </span>
+                          {{ticket.agent.surname}}
+                      </td>
+                      <td data-title="Agente"  *ngIf="!ticket.agent"></td>
+                      <td data-title="Estado" >{{ticket.status}}</td>
+                      <td data-title="Fecha" >{{changeDate(ticket.createDate)}}</td>
+                      <td data-title="Novedad" >{{changeDate(ticket.lastActivity)}}</td>
+
+                  </tr>
+              </tbody>
+              <tfoot>
+                  <tr>
+                      <td><strong>Numero</strong></td>
+                      <td><strong>Solicitante</strong></td>
+                      <td><strong>Asunto</strong></td>
+                      <td><strong>Agente</strong></td>
+                      <td><strong>Estado</strong></td>
+                      <td><strong>Fecha</strong></td>
+                      <td><strong>Novedad</strong></td>
+
+                  </tr>
+              </tfoot>
+          </table>
+      </div>
+      <div class="row">
+          <div class="col-md-6 align-self-center">
+              <p id="dataTable_info" class="dataTables_info">Mostrando {{pagingCounter}} a {{isLastPage()}} de {{totalDocs}}</p>
+          </div>
+          <div class="col-md-6">
+              <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                  <ul class="pagination">
+                      <li class="page-item"><a class="page-link" *ngIf="prevPage != null" [routerLink]="['/ticket/list',1,limit]" [queryParams]="query"><span>«</span></a></li>
+                      <li class="page-item"><a class="page-link" *ngIf="prevPage != null" [routerLink]="['/ticket/list',prevPage,limit]" [queryParams]="query">{{prevPage}}</a></li>
+                      <li class="page-item active"><a class="page-link">{{page}}</a></li>
+                      <li class="page-item"><a class="page-link" *ngIf="nextPage != null" [routerLink]="['/ticket/list',nextPage,limit]" [queryParams]="query">{{nextPage}}</a></li>
+                      <li class="page-item"><a class="page-link" *ngIf="nextPage != null" [routerLink]="['/ticket/list',totalPages,limit]" [queryParams]="query"><span>»</span></a></li>
+                  </ul>
+              </nav>
+          </div>
+      </div>
+  </div>
+</mat-card>

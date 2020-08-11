@@ -1,0 +1,129 @@
+#ticket-dates {
+    height: 440px;
+    overflow-y: scroll;
+}
+  
+@media (max-width: 992px) {
+    #ticket-dates {
+        border-bottom: 1px solid rgb(115,115,115);
+    }
+}
+
+.info-card {
+    width: 100%;
+    padding-top: 0;
+  }
+  
+  .container.title-container {
+    margin-bottom: 0;
+  }
+  
+  
+  .title {
+    width: 100%;
+  }
+  
+  .card-body.card-req-tickets {
+    height: 250px;
+    overflow-y: scroll;
+  }
+  
+  .chatbox-scroll {
+    overflow-y: scroll;
+    max-height: 300px;
+  }
+  
+  .card.chatbox {
+    max-width: 80%;
+    min-height: 30%;
+    border: 1px solid #1e2833;
+    margin: 10px;
+  }
+  
+  .adjunt {
+    cursor: pointer;
+    font-size: 20px;
+    color: rgb(121,121,255);
+  }
+  
+  .chatinfo {
+    border: 1px solid #1e2833;
+    margin: 10px;
+  }
+  
+  .chat-header {
+    height: 30px;
+    display: flex;
+    background-color: #1e2833;
+    color: white;
+  }
+  
+  #chat-textbox {
+    width: 100%;
+    min-height: 100px;
+  }
+  
+  .container {
+    padding-top: 5px;
+  }
+  
+  .disabled {
+    cursor: pointer;
+    font-size: 20px;
+    color: red;
+  }
+
+  .enabled{
+    cursor: pointer;
+    font-size: 20px;
+    color: green;
+  }
+
+  .img-requester{
+    width: 50px;
+    height: 50px;
+  }
+.img-agent-team{
+  width: 30px;
+  height: 30px;
+}
+
+.status-buble{
+  color: rgb(255,255,255);
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+
+.pending{
+  background-color: #f7813e;
+}
+
+.finish{
+  background-color: #10e00c;
+}
+
+.closer{
+  background-color: #929292;
+}
+
+.open{
+  background-color: #47b8b8;
+}
+
+.privatechattext {
+  background-color: #676767;
+  color: white;
+}
+
+li{
+  padding-top: 9px;
+  padding-bottom: 9px;
+}
+
+mat-card{
+    padding-left: 10px;
+}
+
+

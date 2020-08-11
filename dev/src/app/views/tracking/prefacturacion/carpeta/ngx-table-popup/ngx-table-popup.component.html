@@ -1,0 +1,109 @@
+<h1 matDialogTitle>{{data.title}}</h1>
+  <form (ngSubmit)="submit()">
+  <div fxLayout="row wrap" fxLayout.lt-sm="column">
+    <div fxFlex="50"  class="pr-1">
+      <mat-form-field class="full-width">
+        <input type="text"
+               placeholder="Paciente"
+               aria-label="Text"
+               matInput
+               [(ngModel)]='paciente' [name]='paciente'
+               (input)="filtrado($event.target.value, 'pacientes')"
+               [matAutocomplete]="autoPaciente">
+        <mat-autocomplete #autoPaciente="matAutocomplete">
+          <mat-option 
+          *ngFor="let paciente of pacientesFiltrados" 
+          [value]="paciente.nombre+' '+paciente.apellido"
+          (click)="carpeta.paciente = paciente._id">
+            {{paciente.nombre}} {{paciente.apellido}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+
+    <div fxFlex="50"  class="pr-1">
+      <mat-form-field class="full-width">
+        <input type="text"
+               placeholder="Mes"
+               aria-label="Text"
+               matInput
+               [(ngModel)]='carpeta.mes' [name]='carpeta.mes'
+               (input)="filtrado($event.target.value, 'meses')"
+               [matAutocomplete]="autoMes">
+        <mat-autocomplete #autoMes="matAutocomplete">
+          <mat-option 
+          *ngFor="let mes of mesesFiltrados"
+          [value]="mes"
+          (click)="carpeta.mes = mes">
+            {{mes}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+
+
+    <div fxFlex="50"  class="pr-1">
+      <mat-form-field class="full-width">
+        <input type="text"
+               placeholder="Año"
+               aria-label="Text"
+               matInput
+               [(ngModel)]='carpeta.ano' [name]='carpeta.ano'>
+      </mat-form-field>
+    </div>
+
+    <div fxFlex="50"  class="pr-1">
+      <mat-form-field class="full-width">
+        <mat-label>Vigencia desde</mat-label>
+        <input 
+        matInput 
+        [matDatepicker]="vigenciaDesde"
+        [(ngModel)]="carpeta.validez_desde"
+        name="validez_desde"
+        (dateChange)="setDate($event.target.value, 'desde')">
+        <mat-datepicker-toggle matSuffix [for]="vigenciaDesde"></mat-datepicker-toggle>
+        <mat-datepicker #vigenciaDesde></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div fxFlex="50"  class="pr-1">
+      <mat-form-field class="full-width">
+        <mat-label>Vigencia hasta</mat-label>
+        <input 
+        matInput 
+        [matDatepicker]="vigenciaHasta"
+        [(ngModel)]="carpeta.validez_hasta"
+        name="validez_hasta"
+        (dateChange)="setDate($event.target.value, 'hasta')">
+        <mat-datepicker-toggle matSuffix [for]="vigenciaHasta"></mat-datepicker-toggle>
+        <mat-datepicker #vigenciaHasta></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div fxFlex="50"  class="pr-1">
+      <mat-form-field class="full-width">
+        <input type="text"
+               placeholder="Obra social"
+               aria-label="Text"
+               matInput
+               [(ngModel)]='prestador' [name]='prestador'
+               (input)="filtrado($event.target.value, 'prestadores')"
+               [matAutocomplete]="autoOs">
+        <mat-autocomplete #autoOs="matAutocomplete">
+          <mat-option 
+          *ngFor="let prestador of prestadoresFiltrados" 
+          [value]="prestador.nombre"
+          (click)="carpeta.prestador = prestador._id">
+            {{prestador.nombre}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+
+    <div fxFlex="100" class="mt-1">
+      <button mat-raised-button color="primary">Guardar</button>
+      <span fxFlex></span>
+      <button mat-button color="warn" type="button" (click)="dialogRef.close(false)">Cancelar</button>
+    </div>
+  </div>
+  </form>

@@ -1,0 +1,61 @@
+  <button style="margin: 5px" mat-raised-button title="Exportar a EXCEL" color="primary" (click)="exportExcel()">
+    <mat-icon aria-hidden="false">file_download</mat-icon>
+  </button>
+  <mat-form-field class="margin-333" style="width: 100%">
+  <input 
+  matInput 
+  placeholder="Filtrar por todas las columnas" 
+  value=""
+  (keyup)='updateFilter($event)'>
+</mat-form-field>
+<div class="mat-box-shadow margin-333">
+    <ngx-datatable class="material bg-white" 
+    [columnMode]="'flex'"  
+    [headerHeight]="40"
+    [footerHeight]="50" 
+    [rowHeight]="50"
+    [limit]="7"
+    [rows]="rows"
+    [columns]="columns"
+    (activate)="openPopUp($event)">
+    
+    </ngx-datatable>
+</div>
+
+
+
+
+<div style="display: none;" class="table-responsive" id="export-excel">
+  <table class="table table-striped">
+      <thead>
+          <tr>
+              <th>#</th>
+              <th>REQUERIMIENTO</th>
+              <th>DESCRIPCIÓN</th>
+              <th>MÓDULO</th>
+              <th>ESTADO CLIENTE</th>
+              <th>ESTADO TS</th>
+              <th>AMBIENTE</th>
+              <th>ANTIGÜEDAD<br /></th>
+              <th>TIPO</th>
+              <th>CRITICIDAD</th>
+              <th>INFO</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let req of requests_excel">
+              <td data-title="#">{{req.num}}</td>
+              <td data-title="REQUERIMIENTO">{{req.req}}</td>
+              <td data-title="DESCRIPCIÓN">{{req.desc}}</td>
+              <td data-title="MÓDULO">{{req.module}}</td>
+              <td data-title="ESTADO CLIENTE">{{req.statusClient}}</td>
+              <td data-title="ESTADO TS">{{req.statusEnterprise}}</td>
+              <td data-title="AMBIENTE">{{req.environment}}</td>
+              <td data-title="ANTIGÜEDAD">{{req.old}}</td>
+              <td data-title="TIPO">{{req.type}}</td>
+              <td data-title="CRITICIDAD">{{req.priority}}</td>
+              <td data-title="INFO">{{req.obs}}</td>
+          </tr>
+      </tbody>
+  </table>
+</div>

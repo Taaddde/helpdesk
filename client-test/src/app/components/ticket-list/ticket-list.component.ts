@@ -161,7 +161,6 @@ export class TicketListComponent implements OnInit {
     })
   }
 
-
   getRequesters(){
     this._userService.getListReq(this.token, this.identity['company']['_id']).subscribe(
       response =>{

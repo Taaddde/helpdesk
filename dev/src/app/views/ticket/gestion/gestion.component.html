@@ -1,0 +1,443 @@
+<mat-card>
+  
+<div class="row" id="ticket">
+  <div class="col-md-5 col-lg-5 col-xl-4 text-break" id="ticket-dates">
+      <div class="row" id="info">
+          <div class="card info-card">
+              <div class="container title-container" style="padding-right: 0;padding-left: 0;">
+                  <div class="text-center title"><label style="margin-left: 13px;font-size: 24px;"><strong>Información del ticket</strong></label></div>
+              </div>
+              <div class="card-body info-card" >
+                  <ul class="list-group">
+                      <li class="list-group-item"><span>Número: </span><span><strong>#{{ticket.numTicket}}</strong></span></li>
+                      <li class="list-group-item"><span>Creación: </span><span><strong>{{changeDate(ticket.createDate)}}</strong></span></li>
+                      <li class="list-group-item"><span>Actualizado: </span><span><strong>{{changeDate(ticket.lastActivity)}}</strong></span></li>
+                      <li class="list-group-item">
+                          <span>Prioridad: </span>
+                          <span *ngIf="identity['company']">
+                            <div class="dropdown d-inline" *ngIf="identity['company']['_id'] == ticket.company['_id'] && ticket.status != 'Cerrado'">
+                              <button class="btn btn-dark dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
+                                {{ticket.priority}}
+                            </button>
+                              <div role="menu" class="dropdown-menu">
+                                    <a role="presentation" class="dropdown-item dark" *ngIf="ticket.priority != 'Urgente'" (click)="setPriority('Urgente')">
+                                      Urgente
+                                    </a>
+                                    <a role="presentation" class="dropdown-item dark" *ngIf="ticket.priority != 'Normal'" (click)="setPriority('Normal')">
+                                      Normal
+                                    </a>
+                                </div>
+                          </div>
+                          <span *ngIf="identity['company']['_id'] != ticket.company['_id'] || ticket.status == 'Cerrado'"><strong>{{ticket.priority}}</strong></span>
+
+                          </span>
+                          <span *ngIf="!identity['company']">
+                              <strong>{{ticket.priority}}</strong>
+                          </span>
+  
+                      </li>
+                      <li class="list-group-item">
+                        <span>
+                          Tipo: 
+                        </span>
+                        <span>
+                          <strong *ngIf="ticket.subTypeTicket">
+                            {{ticket.subTypeTicket['typeTicket']['name']}}
+                          </strong>
+                        </span>
+                      </li>
+                      <li class="list-group-item">
+                        <span>
+                          Subtipo: 
+                        </span>
+                        <span>
+                          <strong *ngIf="ticket.subTypeTicket">
+                            {{ticket.subTypeTicket['name']}}
+                          </strong>
+                        </span>
+                      </li>
+                      <li class="list-group-item"><span>Fuente: </span><span><strong>{{ticket.source}}</strong></span></li>
+                      <li class="list-group-item"><span>Fecha estimada de solución: <span><strong>{{ticket.resolveDate}}</strong></span> </span>
+                        <span *ngFor="let tag of ticket.tags">
+                          <strong>{{tag.name}}<span>;</span></strong>
+                        </span>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+      <div class="row" id="requester">
+          <div class="card info-card">
+              <div class="container title-container" style="padding-right: 0;padding-left: 0;">
+                  <div class="text-center title"><label style="margin-left: 13px;font-size: 24px;"><strong>Solicitante</strong></label></div>
+              </div>
+              <div class="card-body info-card">
+                  <ul class="list-group">
+                      <li class="list-group-item">
+                          <div class="row">
+                              <div class="col-xl-3">
+                                <img *ngIf="ticket.requester['image'] == 'null'" class="img-requester" src="assets/images/system/user-placeholder.png" />
+                                <img *ngIf="ticket.requester['image'] != 'null'" class="img-requester" src="{{url+'user/image/'+ticket.requester['image']}}" />
+                              </div>
+                              <div class="col-xl-8 align-self-center" *ngIf="ticket.requester">
+                                  <div class="row">
+                                      <div class="col"><span><strong>{{ticket.requester['name']+' '+ticket.requester['surname']}}</strong></span></div>
+                                  </div>
+                                  <div class="row" *ngIf="ticket.requester['sector']">
+                                    <div class="col"><span><em>{{ticket.requester['sector']['name']}}</em></span></div>
+                                  </div>
+                              </div>
+                          </div>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+      <div class="row" id="responsibility">
+          <div class="card info-card">
+              <div class="container title-container">
+                  <div class="text-center title"><label style="margin-left: 13px;font-size: 24px;"><strong>Responsabilidad</strong></label></div>
+              </div>
+              <div class="card-body info-card">
+                  <ul class="list-group">
+
+                      <li class="list-group-item"><span style="font-size: 18px;"><strong>Departamento</strong></span>
+                        <span *ngIf="identity['company']">
+                          <div class="dropdown d-inline float-right" *ngIf="identity['company']['_id'] == ticket.company['_id'] && ticket.status != 'Cerrado'">
+                            <button class="btn btn-dark dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button">
+                                Cambiar
+                              </button>
+                            <div role="menu" class="dropdown-menu">
+                              <a role="presentation" class="dropdown-item dark" *ngFor="let company of companies" (click)="selectCompany(company._id, company.name)">
+                                  {{company.name}}
+                              </a>
+                            </div>
+                          </div>
+
+                        </span>
+                      <div style="margin-bottom: 25px;"></div>
+                      <img *ngIf="!ticket.company || ticket.company['image'] == 'null'" class="rounded-circle img-agent-team" src="assets/images/system/company-placeholder.png" />
+                      <img *ngIf="ticket.company && ticket.company['image'] != 'null'" class="rounded-circle img-agent-team" src="{{url+'company/image/'+ticket.company['image']}}" />
+
+                      <p *ngIf="!ticket.company" class="d-inline" style="margin-left: 10px;"><strong>Sin departamento</strong></p>
+                      <p *ngIf="ticket.company" class="d-inline" style="margin-left: 10px;"><strong>{{ticket.company['name']}}</strong></p>
+                      <hr />
+                        
+                      <span style="font-size: 18px;"><strong>Equipo</strong></span>
+
+                      <span *ngIf="identity['company']">
+                        <div class="dropdown d-inline float-right" *ngIf="identity['company']['_id'] == ticket.company['_id'] && ticket.status != 'Cerrado'">
+                          <button class="btn btn-dark dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button">
+                              Cambiar
+                            </button>
+                          <div role="menu" class="dropdown-menu">
+                            <a role="presentation" class="dropdown-item dark" *ngFor="let team of teams" (click)="selectTeam(team._id, team.name)">
+                                {{team.name}}
+                            </a>
+                        </div>
+                        </div>
+
+                      </span>
+
+                          <div style="margin-bottom: 25px;"></div>
+                          <img *ngIf="!ticket.team || ticket.team['image'] == 'null'" class="rounded-circle img-agent-team" src="assets/images/system/team-placeholder.png" />
+                          <img *ngIf="ticket.team && ticket.team['image'] != 'null'" class="rounded-circle img-agent-team" src="{{url+'team/image/'+ticket.team['image']}}" />
+
+                          <p *ngIf="!ticket.team" class="d-inline" style="margin-left: 10px;"><strong>Sin equipo</strong></p>
+                          <p *ngIf="ticket.team" class="d-inline" style="margin-left: 10px;"><strong>{{ticket.team['name']}}</strong></p>
+                          <hr />
+                          <span style="font-size: 18px;"><strong>Agente</strong></span>
+                          <span *ngIf="identity['company']">
+                            <div class="dropdown d-inline float-right" *ngIf="identity['company']['_id'] == ticket.company['_id'] && ticket.status != 'Cerrado'">
+                              <button class="btn btn-dark dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button">
+                                Cambiar
+                              </button>
+                                <div role="menu" class="dropdown-menu">
+                                  <a role="presentation" class="dropdown-item dark" *ngFor="let agent of agents" (click)="selectAgent(agent._id, agent.name, agent.surname)">
+                                      {{agent.name+' '+agent.surname}}
+                                  </a>
+                                </div>
+                            </div>
+  
+                          </span>
+                          <div style="margin-bottom: 25px;"></div>
+                          <img *ngIf="!ticket.agent || ticket.agent['image'] == 'null'" class="rounded-circle img-agent-team" src="assets/images/system/user-placeholder.png" />
+                          <img *ngIf="ticket.agent && ticket.agent['image'] != 'null'" class="rounded-circle img-agent-team" src="{{url+'user/image/'+ticket.agent['image']}}" />
+                          
+                          <p *ngIf="ticket.agent" class="d-inline" style="margin-left: 10px;"><strong>{{ticket.agent['name']+' '+ticket.agent['surname']}}</strong></p>
+                          <p *ngIf="!ticket.agent" class="d-inline" style="margin-left: 10px;"><strong>Sin agente</strong></p>
+                          
+                          <span *ngIf="identity['company']">
+                            <div style="margin-top: 10px;" *ngIf="identity['company']['_id'] == ticket.company['_id']">
+                              <span>Fecha estimada de solución  </span>
+                              <input type="date" style="margin-right: 5px;" #resolveDate="ngModel" name="resolveDate" [(ngModel)]="ticket.resolveDate"  (change)="selectResolveDate()"/>
+                            </div>  
+                          </span>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+      <div class="row" id="cc">
+        <div class="card info-card">
+            <div class="container title-container">
+                <div class="text-center title"><label style="margin-left: 13px;font-size: 24px;"><strong>En copia</strong></label></div>
+            </div>
+            <div class="card-body info-card">
+                <ul class="list-group" >
+                  <span *ngIf="ticket.cc && getLenght(ticket.cc) != 0">
+                      <li class="list-group-item" *ngFor="let user of ticket.cc">
+                          <img *ngIf="user.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+user.image}}" />
+                          <img *ngIf="user.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="assets/images/system/user-placeholder.png" />
+                          <span>{{user.name}} {{user.surname}}</span>
+                          <button *ngIf="ticket.status != 'Cerrado'" class="btn btn-danger float-right" type="button" (click)="deleteCc(user)">
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </li>    
+                  </span>
+                    <li class="list-group-item text-center" *ngIf="ticket.status != 'Cerrado'">
+                        <div class="dropdown d-inline" >
+                            <button class="btn btn-dark dark dropdown-toggle" (click)="getCc()" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span>Poner en copia</span>
+                            </button>        
+                            <div class="dropdown-menu" >
+                                <input type="text" class="form-control form-control dropdown-search-input" placeholder="Buscar.." (keyup)="filterCc()" [(ngModel)]="ccFilter" name="ccFilter"/>                         
+                                <span *ngIf="keyPress">
+                                    <a class="dropdown-item dark" *ngFor="let cc of ccList" (click)="setCc(cc)">
+                                        {{cc.name+' '+cc.surname}}
+                                    </a>
+                                </span>
+                            </div>
+                        </div>  
+                    </li>
+                </ul>
+            </div>
+        </div>
+      </div>
+
+  </div>
+  <div class="col-md-6 col-lg-7 col-xl-8">
+      <div class="container text-center">
+            <input type="text" *ngIf="editSub" name="sub" [(ngModel)]="subMod" />
+            <input style="margin-left: 3px;" type="button" class="btn btn-dark dark" *ngIf="editSub" value="Aceptar" (click)="editTicketSub()">
+            <input style="margin-left: 3px;" type="button" class="btn btn-danger" *ngIf="editSub" value="Cancelar" (click)="editSub = false">
+            <h6 *ngIf="!editSub" class="d-inline" (click)="subToEdit(ticket.sub)">
+              <strong>{{ticket.sub}}</strong>
+            </h6>
+            <a *ngIf="(identity['role'] == 'ROLE_REQUESTER' || ticket.agent) && prev" [routerLink]="['/ticket-gestion', prev._id]" class="float-left" >
+              <i class="fa fa-arrow-circle-left adjunt" style="margin-left: 6px;"></i>
+            </a>
+            <a class="float-left" (click)="changeInfo()">
+              <i class="fa fa-info-circle enabled" *ngIf="info == 'true'" style="margin-left: 8px;"></i>
+              <i class="fa fa-info-circle disabled" *ngIf="info == 'false'" style="margin-left: 8px;"></i>
+            </a>
+            <a *ngIf="(identity['role'] == 'ROLE_REQUESTER' || ticket.agent) && next" [routerLink]="['/ticket-gestion', next._id]" class="float-right" >
+              <i class="fa fa-arrow-circle-right adjunt" style="margin-left: 6px;"></i>
+            </a>
+        </div>
+
+
+
+
+      <div class="row">
+          <div class="col chatbox-scroll" id="chatbox-scroll">
+            <!-- <app-chatbox *ngFor="let textblock of chat"
+            _id={{textblock._id}}
+            text={{textblock.text}}
+            sign={{textblock.user.sign}}
+            type={{textblock.type}}
+            user={{textblock.user.name+space+textblock.user.surname}}
+            userId={{textblock.user._id}}
+            date={{textblock.createDate}}
+            files={{textblock.files}}
+            info={{info}}
+            (deleteMessage)="deleteMessage()"
+            (refresh)="getChat()"
+            (errorMessage)="errorMessage()"
+            ></app-chatbox> -->
+          </div>
+          <span></span>
+      </div>
+
+
+
+      <div class="row" style="margin-top: 10px;" *ngIf="emojis">
+        <div class="col" id="chat-text">
+            <div class="container">
+                <div>
+                  <a (click)="addEmoji('😃')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/smiling-face-with-open-mouth_1f603.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('😄')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/smiling-face-with-open-mouth-and-smiling-eyes_1f604.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('😁')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/grinning-face-with-smiling-eyes_1f601.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('😆')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/smiling-face-with-open-mouth-and-tightly-closed-eyes_1f606.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('😅')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/smiling-face-with-open-mouth-and-cold-sweat_1f605.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('😂')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/face-with-tears-of-joy_1f602.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('😉')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/winking-face_1f609.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('😊')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/smiling-face-with-smiling-eyes_1f60a.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('😜')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/face-with-stuck-out-tongue-and-winking-eye_1f61c.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('😝')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/face-with-stuck-out-tongue-and-tightly-closed-eyes_1f61d.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('😐')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/neutral-face_1f610.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('😪')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/sleepy-face_1f62a.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('😎')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/smiling-face-with-sunglasses_1f60e.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('😲')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/astonished-face_1f632.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('😓')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/face-with-cold-sweat_1f613.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('😩')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/weary-face_1f629.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('😠')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/angry-face_1f620.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('👌')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/ok-hand-sign_1f44c.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('👍')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/thumbs-up-sign_1f44d.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('👎')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/thumbs-down-sign_1f44e.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('👏')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/clapping-hands-sign_1f44f.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('🙌')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/person-raising-both-hands-in-celebration_1f64c.png" width="30px" style="margin-right: 3px;"/></a>
+                  <a (click)="addEmoji('🙏')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/person-with-folded-hands_1f64f.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('👀')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/eyes_1f440.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('☠️')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/skull-and-crossbones_2620.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('🙈')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/see-no-evil-monkey_1f648.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('🙉')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/hear-no-evil-monkey_1f649.png" width="30px" style="margin-right: 3px;" /></a>
+                  <a (click)="addEmoji('🙊')"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/speak-no-evil-monkey_1f64a.png" width="30px" style="margin-right: 3px;" /></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+      <div class="row" style="margin-top: 10px;">
+          <div class="col" id="chat-text" [ngClass]="{privatechattext:isPrivate}">
+              <form #form="ngForm" (ngSubmit)="onSubmit()">
+                <div class="container">
+                      <div class="row">
+                          <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('bold');" style="margin-right: 4px;padding-right: 7px; padding-left: 7px"><i class="fa fa-bold"></i></button>
+
+                          <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('italic');" style="margin-right: 4px; padding-right: 9px; padding-left: 9px"><i class="fa fa-italic"></i></button>
+                          
+                          <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('underline');" style="margin-right: 4px; padding-right: 8px; padding-left: 8px"><i class="fa fa-underline"></i></button>
+                          
+                          <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('createlink', false, prompt('Ingresa la URL:', 'http://'))" style="margin-right: 4px; padding-right: 7px; padding-left: 7px"><i class="fa fa-link"></i></button>
+                          
+                          <div style="min-height:30px;display:inline;border-left:1px solid gray; margin-right:9px;margin-left:5px"></div>
+                          
+                          <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('insertUnorderedList')" style="margin-right: 4px; padding-right: 7px; padding-left: 7px"><i class="fa fa-list-ul"></i></button>
+                          
+                          <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('insertOrderedList')" style="margin-right: 4px; padding-right: 7px; padding-left: 7px"><i class="fa fa-list-ol"></i></button>
+                          
+                          <div style="min-height:30px;display:inline;border-left:1px solid gray; margin-right:9px;margin-left:5px"></div>
+                          
+                          <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('justifyLeft')" style="margin-right: 4px; padding-right: 7px; padding-left: 7px"><i class="fa fa-align-left"></i></button>
+                          
+                          <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('justifyCenter')" style="margin-right: 4px; padding-right: 7px; padding-left: 7px"><i class="fa fa-align-center"></i></button>
+                          
+                          <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('justifyRight')" style="margin-right: 4px; padding-right: 7px; padding-left: 7px"><i class="fa fa-align-right"></i></button>
+                          
+                          <div style="min-height:30px;display:inline;border-left:1px solid gray; margin-right:9px;margin-left:5px"></div>
+                          
+                          <button class="btn btn-dark btn-sm" type="button" (click)="showEmojis()" style="margin-right: 4px; padding-right: 7px; padding-left: 7px"><img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/smiling-face-with-open-mouth_1f603.png" width="20px"/></button>
+
+                      </div>
+                      <div class="row" style="margin-top: 8px;" *ngIf="identity['company']">
+                          <div id="editable" contentEditable="true"
+                          
+                          (input)="textblock.text = $event.target.innerHTML"
+                          (paste)="pastePicture($event)">
+                          </div>
+                      </div>
+
+                      <div class="row" style="margin-top: 8px;" *ngIf="!identity['company']">
+                          <div id="editable" [contentEditable]="identity['_id'] == ticket.requester['_id'] || isCc"
+                          (input)="textblock.text = $event.target.innerHTML"
+                          (paste)="pastePicture($event)">
+                        </div>
+                      </div>
+                      
+                      <script src="../../../assets/scripts/chatbox.js"></script>
+                </div>
+                <div class="container" id="options-container">
+                    <span *ngIf="identity['company']">
+                      <button class="btn btn-primary float-right" [disabled]="identity['company']['_id'] != ticket.company['_id'] || ticket.status == 'Cerrado'" type="submit">
+                        <i class="fa fa-paper-plane"></i>
+                      </button>
+                      <input type="checkbox" [disabled]="identity['company']['_id'] != ticket.company['_id']" name="isPrivate" [(ngModel)]="isPrivate" />      
+                      <span style="margin-left: 5px;margin-right: 5px;">Privado</span><span>|</span>
+                      <div class="dropdown d-inline" id="hashtag">
+                          <button class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">
+                              <i class="fa fa-hashtag adjunt"></i>
+                          </button>
+                          
+                          <div role="menu" class="dropdown-menu" *ngIf="identity['company']['_id'] == ticket.company['_id']" >
+                            <span *ngIf="responses">
+                              <span *ngIf="getLenght(responses) != 0">
+                                <a role="presentation" class="dropdown-item" *ngFor="let resp of responses" (click)="selectHashtag(resp.resp)">
+                                    {{resp.hashtag}}
+                                </a>
+                              </span>
+                              <span *ngIf="getLenght(responses) == 0" class="card" style="padding: 5px;border: 1px solid gray;">
+                                No tenes ningúna respuesta rápida configurada
+                              </span>  
+                            </span>
+                          </div>
+    
+    
+                      </div>
+                      <label class="d-inline" style="margin-left: 10px;margin-bottom: 0px;margin-top: 0;">
+                        <i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 5px;"></i>
+                        <input type="file" multiple class="d-none" [disabled]="identity['company']['_id'] != ticket.company['_id']" (change)="fileChangeEvent($event)" />
+                        <span *ngIf="filesToUpload">
+                            +{{filesToUpload.length}}
+                        </span>
+                      </label>
+                      <span *ngIf="filesToUpload">
+                        <a class="btn btn-danger" style="margin-left: 8px; color: white;margin-bottom: 8px; margin-top: 0px;" (click)=cleanAttach()>
+                          <i class="fa fa-trash"></i>
+                        </a>    
+                      </span>  
+                      <div class="dropdown d-inline float-right">
+                        <button [ngClass]="calculateClasses()" [disabled]="identity['company']['_id'] != ticket.company['_id'] || ticket.status == 'Cerrado'" data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
+                          {{ticket.status}}
+                        </button>
+                          <div role="menu" class="dropdown-menu">
+                              <a role="presentation" class="dropdown-item dark" *ngIf="ticket.status != 'Pendiente'" (click)="setStatus('Pendiente')">
+                                  Pendiente
+                              </a>
+                              <a role="presentation" class="dropdown-item dark" *ngIf="ticket.status != 'Finalizado'" (click)="checkWorkTime('Finalizado')">
+                                  Finalizado
+                              </a>
+                              <!-- <a role="presentation" class="dropdown-item" *ngIf="ticket.status != 'Cerrado'" (click)="checkWorkTime('Cerrado')">
+                                  Cerrado
+                              </a> -->
+                          </div>
+                      </div>
+                    </span>
+                    <span *ngIf="!identity['company']">
+                      <label class="d-inline" style="margin-bottom: 0px;margin-top: 0;">
+                        <i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 5px;"></i>
+                        <input type="file" multiple class="d-none" (change)="fileChangeEvent($event)" />
+                        <span *ngIf="filesToUpload">
+                            +{{filesToUpload.length}}
+                        </span>
+                      </label>
+                      <span *ngIf="filesToUpload">
+                        <a class="btn btn-danger" style="margin-left: 8px; color: white;margin-bottom: 8px; margin-top: 0px;" (click)=cleanAttach()>
+                          <i class="fa fa-trash"></i>
+                        </a>    
+                      </span>  
+
+                      <button class="btn btn-primary float-right" [disabled]="ticket.status == 'Cerrado'" type="submit">
+                        <i class="fa fa-paper-plane"></i>
+                      </button>
+
+                      <button class="btn btn-danger float-right" title="Reabrir el ticket" *ngIf="ticket.status == 'Finalizado' && identity['_id'] == ticket.requester['_id']" type="button" style="margin-right: 15px;" (click)="cancelFinish()">
+                        <i class="fa fa-unlock"></i>
+                      </button>
+
+                      <div class="dropdown d-inline float-right">
+                        <button class="btn btn-dark dropdown-toggle dark" disabled data-toggle="dropdown" aria-expanded="false" type="button" style="margin-right: 15px;">
+                          {{ticket.status}}
+                        </button>
+                      </div>
+
+                      
+
+                    </span>
+              </div>
+            </form>
+          </div>
+      </div>
+  </div>
+</div>
+</mat-card>
