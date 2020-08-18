@@ -1,11 +1,11 @@
 import { Injectable, Pipe } from '@angular/core';
 import 'rxjs/add/operator/map';
 import {GLOBAL} from './global'; // Hecho a mano
-import {Work} from '../models/work';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {Http, Headers, RequestOptions} from '@angular/http';
+import { Work } from 'app/shared/models/helpdesk/work';
 
-
+ 
 
 //Inyeccion de dependencias
 @Injectable()

@@ -20,6 +20,6 @@ export class Ticket{
         public cc: [string],
         public workTime: number,
         public realWorkTime: number,
-        public obsWorkTime: string
+        public obsWorkTime: string,
     ){}
 }

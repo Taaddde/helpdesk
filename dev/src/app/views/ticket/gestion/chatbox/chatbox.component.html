@@ -27,7 +27,26 @@
         <div class="text-right" *ngIf="files">
             <span *ngFor="let file of groupFiles">
                 <a target="blank" href="{{url+'textblock/file/'+file}}">
-                    <i class="fa fa-paperclip adjunt" style="font-size: 23px;padding-top: 5px;"></i>
+
+                    <i class="fas fa-file-word adjunt adjunt-icon"
+                        *ngIf="checkExt(file) && checkExt(file) == 'docx' || checkExt(file) == 'odt'"></i>
+
+                    <i class="fas fa-file-excel adjunt adjunt-icon"
+                        *ngIf="checkExt(file) && (checkExt(file) == 'xlsx' || checkExt(file) == 'xls')"></i>
+
+                    <i class="fas fa-file-pdf adjunt adjunt-icon"
+                        *ngIf="checkExt(file) && checkExt(file) == 'pdf'"></i>
+
+                    <i class="fas fa-file-image adjunt adjunt-icon"
+                        *ngIf="checkExt(file) && (checkExt(file) == 'jpge' || checkExt(file) == 'jpg' || checkExt(file) == 'jpeg' || checkExt(file) == 'png' || checkExt(file) == 'tiff' || checkExt(file) == 'tif')"></i>
+
+                    <i class="fas fa-file-archive adjunt adjunt-icon"
+                    *ngIf="checkExt(file) && (checkExt(file) == 'zip' || checkExt(file) == 'rar')"></i>
+
+                    <i class="fas fa-envelope adjunt adjunt-icon"
+                        *ngIf="checkExt(file) && checkExt(file) == 'msg'"></i>
+
+                    <i *ngIf="!checkExt(file)" class="fas fa-file adjunt adjunt-icon"></i>
                 </a>    
             </span>
         </div>

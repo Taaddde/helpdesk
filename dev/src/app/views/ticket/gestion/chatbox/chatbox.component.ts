@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, AfterViewInit, Output, EventEmitter } from '@angular/core';
-import {GLOBAL} from '../../services/global'
+import {GLOBAL} from 'app/shared/services/helpdesk/global'
 import * as moment from 'moment';
-import { userService } from 'src/app/services/user.service';
-import { textblockService } from 'src/app/services/textblock.service';
+import { userService } from 'app/shared/services/helpdesk/user.service';
+import { textblockService } from 'app/shared/services/helpdesk/textblock.service';
 
 declare var $: any;
 
@@ -62,6 +62,36 @@ export class ChatboxComponent implements AfterViewInit {
     container.scrollTop = container.scrollHeight;
  }
 
+
+  checkExt(url){
+    let data: string = url;
+    let ext = data.split('\.')[1];
+    if(
+      ext != 'pdf' && 
+
+      ext != 'xlsx' && 
+      ext != 'xls' && 
+
+      ext != 'msg' && 
+
+      ext != 'docx' &&
+      ext != 'odt' &&
+
+      ext != 'rar' && 
+      ext != 'zip' && 
+
+      ext != 'png' && 
+      ext != 'jpge' && 
+      ext != 'jpeg' && 
+      ext != 'jpg' && 
+      ext != 'tif' && 
+      ext != 'tiff'
+    ){
+      return false;
+    }else{
+      return ext;
+    }
+  }
 
 
   getCardClass(){

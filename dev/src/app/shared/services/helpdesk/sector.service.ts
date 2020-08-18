@@ -1,8 +1,8 @@
 import { Injectable, Pipe } from '@angular/core';
 import 'rxjs/add/operator/map';
 import {GLOBAL} from './global'; // Hecho a mano
-import {Sector} from '../models/sector';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Sector } from 'app/shared/models/helpdesk/sector';
 
 
 //Inyeccion de dependencias

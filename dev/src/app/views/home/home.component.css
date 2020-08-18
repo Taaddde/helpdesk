@@ -1,0 +1,29 @@
+.closed{
+    background-color: #F1F1F1;
+    font-style: italic;
+}
+
+.select:hover{
+    background-color: #018dda;
+    color: white;
+}
+
+.selected{
+    background-color: #001570;
+    color: white;
+} 
+
+.fg{
+    margin-top: 5px;
+}
+
+.filter {
+    width: 120px;
+  }
+
+  .body-cell {
+    width: 20em;
+    margin: 0 0 2em 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }

@@ -34,6 +34,7 @@ function saveUser(req, res){
     user.dni = params.dni;
     user.userName = params.userName;
     user.email = params.email;
+    user.phone = params.phone;
     user.sign = params.sign;
     user.role = params.role;
     user.image = 'null';

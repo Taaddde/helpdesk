@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AppConfirmService } from '../../../shared/services/app-confirm/app-confirm.service';
 import { AppLoaderService } from '../../../shared/services/app-loader/app-loader.service';
@@ -10,6 +10,7 @@ import { ticketService } from 'app/shared/services/helpdesk/ticket.service';
 import { Ticket } from 'app/shared/models/helpdesk/ticket';
 import { User } from 'app/shared/models/helpdesk/user';
 import { GLOBAL } from 'app/shared/services/helpdesk/global';
+import { FilterComponent } from './filtro/filter.component';
 
 declare var $: any;
 
@@ -35,15 +36,6 @@ export class TicketListComponent implements OnInit {
 
   public query: any;
 
-  public filter: any;
-  public allRequesters: User[];
-  public allAgents: User[];
-  public keyPress: boolean;
-  public requesters: User[];
-  public agents: User[];
-  public requesterFilter: string;
-  public agentFilter: string;
-
   public groupTicket: number[];
 
   public tickets: Ticket[];
@@ -62,10 +54,6 @@ export class TicketListComponent implements OnInit {
     this.identity = _userService.getIdentity();
     this.url = GLOBAL.url;
 
-    this.filter = {}
-
-    this.agentFilter = '';
-    this.requesterFilter = '';
     this.groupTicket = new Array<number>();
   }
 
@@ -138,7 +126,7 @@ export class TicketListComponent implements OnInit {
 
         this._ticketService.getSectorPaginatedList(this.token, this.page, this.limit, query, sector).subscribe(
           response =>{
-              if(!response.tickets){
+              if(response.tickets){
                 this.tickets = response.tickets.docs;
                 this.limit = response.tickets.limit;
                 this.nextPage = response.tickets.nextPage;
@@ -157,48 +145,6 @@ export class TicketListComponent implements OnInit {
     })
   }
 
-  getRequesters(){
-    this._userService.getListReq(this.token, this.identity['company']['_id']).subscribe(
-      response =>{
-          if(!response.users){
-            //this._router.navigate(['/']);
-          }else{
-            this.allRequesters = response.users;
-            this.requesters = response.users;
-          }
-      },
-      error =>{
-        this.openSnackBar(error.message, 'Cerrar');
-      }
-    );
-  }
-
-  getAgents(){
-    let i;
-    if(this.identity['company']){
-      i = this.identity['company']['_id'];
-    }else{
-      i = 'null';
-    }
-    this._userService.getListAgents(this.token, i).subscribe(
-      response =>{
-
-          if(!response.users){
-            //this._router.navigate(['/']);
-          }else{
-            this.allAgents = response.users
-            this.agents = response.users;
-          }
-      },
-      error =>{
-        this.openSnackBar(error.message, 'Cerrar');
-
-      }
-    );
-
-  }
-
-
   isLastPage(){
     if(this.totalDocs < this.pagingCounter+this.limit){
       return this.totalDocs;
@@ -209,7 +155,7 @@ export class TicketListComponent implements OnInit {
 
   changeLimit(val: number){
     this.limit = val;
-    this._router.navigate(['/ticket',this.page,this.limit], { queryParams: this.filter });
+    this._router.navigate(['/ticket',this.page,this.limit], { queryParams: this.query });
   }
 
   changeDate(val:string){
@@ -261,116 +207,6 @@ export class TicketListComponent implements OnInit {
       })
   }
 
-  focus(val){
-    this.keyPress = false;
-    if(val == 'r'){
-      setTimeout(() => 
-      {
-        document.getElementById("searchrequester").focus();
-      },
-      1);
-
-    }else{
-      setTimeout(() => 
-      {
-        document.getElementById("searchagent").focus();
-      },
-      1);
-
-    }
-  }
-
-  filterRequester(){
-    if(this.requesterFilter.length >= 3){
-      this.keyPress = true;
-    }else{
-      this.keyPress = false;
-    }
-
-    this.requesters = this.allRequesters.filter(requester =>{
-      return (requester['name']+requester['surname']).toLowerCase().includes(this.requesterFilter.toString().toLowerCase());
-    })
-  }
-
-  filterAgent(){
-    if(this.agentFilter.length >= 3){
-      this.keyPress = true;
-    }else{
-      this.keyPress = false;
-    }
-
-    this.agents = this.allAgents.filter(agent =>{
-      return (agent['name']+agent['surname']).toLowerCase().includes(this.agentFilter.toString().toLowerCase());
-    })
-  }
-
-  filterArguments(){
-    if(this.filter['sub'] == ''){
-      this.filter['sub'] = null;
-    }
-    if(this.identity['role'] == 'ROLE_REQUESTER'){
-      this.filter['requester'] = this.identity['_id'];
-    }
-    this._router.navigate(['/ticket',1,10], { queryParams: this.filter });
-
-    $("#filter").modal("hide");      
-
-  }
-
-  set(item, option){
-    switch (option) {
-      case 'requester':
-        this.requesterFilter = '';
-        this.filter['requester'] = item['_id'];
-        $('#requestername').val(item['name']+' '+item['surname']);
-  
-        break;
-      case 'agent':
-        this.requesterFilter = '';
-        this.filter['agent'] = item['_id'];
-        $('#agentname').val(item['name']+' '+item['surname']);  
-        break;
-        
-      case 'status':
-        this.filter['status'] = item;
-        $('#statusname').val(item);  
-
-        break;
-      
-      default:
-        break;
-    }
-  }
-
-  deleteFilter(val){
-    switch (val) {
-      case 'requester':
-        this.filter['requester'] = null;
-        $('#requestername').val('');
-
-        break;
-      case 'agent':
-        this.filter['agent'] = null;
-        $('#agentname').val('');
-
-        break;
-      case 'status':
-        this.filter['status'] = null;
-        $('#statusname').val('');
-
-        break;
-      case 'sub':
-        this.filter['sub'] = '';
-          break;
-      case 'numTicket':
-        this.filter['numTicket'] = null;
-          break;
-      default:
-        break;
-    }
-
-  }
-
   getQuery(){
     this._route.queryParams.forEach((query: Params) =>{
       return query;
@@ -383,6 +219,25 @@ export class TicketListComponent implements OnInit {
     }else{
       this.getTickets();
     }
+  }
+
+  openPopUp() {
+    let title = 'Filtro de tickets';
+    this.loader.open();
+    let dialogRef: MatDialogRef<any> = this.dialog.open(FilterComponent, {
+      width: '720px',
+      disableClose: false,
+      data: { title:title }
+    })
+    dialogRef.afterClosed()
+      .subscribe(res => {
+        if(res) {
+          
+          this._router.navigate(['ticket/list',1,10], { queryParams: res });
+        }
+        this.loader.close();
+
+      })
   }
 
 

@@ -18,13 +18,14 @@ import { textblockService } from 'app/shared/services/helpdesk/textblock.service
 import { uploadService } from 'app/shared/services/helpdesk/upload.service';
 import { responseService } from 'app/shared/services/helpdesk/response.service';
 import { companyService } from 'app/shared/services/helpdesk/company.service';
+import { FormControl } from '@angular/forms';
 
 declare var $: any;
 
 @Component({
   selector: 'app-ticket-gestion',
   templateUrl: './gestion.component.html',
-  styleUrls: ['./gestion.component.css'],
+  styleUrls: ['./gestion.component.css',],
   providers: [userService, ticketService, teamService, textblockService, uploadService, responseService, companyService]
 })
 export class TicketGestionComponent implements OnInit {
@@ -33,9 +34,6 @@ export class TicketGestionComponent implements OnInit {
     public reqTickets: [Ticket];
     public textblock: TextBlock;
     public responses: Response[];
-    public ccList: User[];
-    public allCcList: User[];
-    public ccFilter: string;
     public chat: TextBlock[];
     public companies: Company[];
     public identity;
@@ -49,7 +47,12 @@ export class TicketGestionComponent implements OnInit {
     public isCc: boolean;
     public space: string;
 
-    public keyPress: boolean;
+
+    public lock: boolean;
+
+    public ccList: User[];
+    public allCcList: User[];
+    public ccFilter: string;
 
     public next: Ticket;
     public prev: Ticket;
@@ -84,8 +87,6 @@ export class TicketGestionComponent implements OnInit {
     this.isPrivate = false;
     this.space = ' ';
 
-    this.keyPress = false;
-
     this.ccList = [];
     this.allCcList = [];
     this.ccFilter = '';
@@ -106,6 +107,7 @@ export class TicketGestionComponent implements OnInit {
     this.getHashtags(); 
     this.getCompanies();
     this.checkInfo();
+    this.getCc();
   }
 
   checkInfo(){
@@ -129,9 +131,7 @@ export class TicketGestionComponent implements OnInit {
   getCc(){
     this._userService.getList(this.token).subscribe(
       response =>{
-          if(!response.users){
-            this._router.navigate(['/']);
-          }else{
+          if(response.users){
             this.allCcList = response.users;
           }
       },
@@ -163,12 +163,6 @@ export class TicketGestionComponent implements OnInit {
   }
 
   filterCc(){
-    if(this.ccFilter.length >= 3){
-      this.keyPress = true;
-    } else{
-      this.keyPress = false;
-    }
-
     this.ccList = this.allCcList.filter(cc =>{
       return (cc['name']+cc['surname']).toLowerCase().includes(this.ccFilter.toString().toLowerCase());
     })
@@ -358,13 +352,13 @@ export class TicketGestionComponent implements OnInit {
       this._ticketService.getOne(this.token, id).subscribe(
         response => {
           this.ticket = response.ticket;
+          console.log(this.ticket)
           this.getChat();
           this.getPrevNext(response.ticket['numTicket'], response.ticket['status']);
           this.getTeams(response.ticket.company['_id']);
           if(response.ticket.team){
             this.agents = response.ticket.team.users;
           }
-          //this.getReqTickets(response.ticket.requester);
 
           if(this.ticket.cc){
             let cc = this.ticket.cc.map(function(user) {
@@ -376,8 +370,6 @@ export class TicketGestionComponent implements OnInit {
             }
     
           }
-
-          
       },
         error => {
           this.openSnackBar(error.message, 'Cerrar');
@@ -749,6 +741,6 @@ export class TicketGestionComponent implements OnInit {
 
   public filesToUpload: Array<File>;
   public fileChangeEvent(fileInput:any){
-      this.filesToUpload = <Array<File>>fileInput.target.files;
+    this.filesToUpload = <Array<File>>fileInput.target.files;
   }
 }

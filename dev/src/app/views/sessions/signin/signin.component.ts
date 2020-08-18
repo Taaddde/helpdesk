@@ -62,7 +62,7 @@ export class SigninComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   signin() {
-    let user = new User('','','','','','','','');
+    let user = new User('',null ,'','',null,'','','',null,'', false,'','','','',false,'',false,true);
     user.userName = this.signinForm.value['userName'];
     user.password = this.signinForm.value['password'];
 
@@ -93,8 +93,8 @@ export class SigninComponent implements OnInit, AfterViewInit, OnDestroy {
               }else{
                 // Crear elemento en el localstorage para tener el token en sesion
                 localStorage.setItem('token', token);
-                user = new User('','','','','','','','');
-                this.router.navigateByUrl('/tracking/analytics');
+                user = new User('',null ,'','',null,'','','', null,'', false,'','','','',false,'',false,true);
+                this.router.navigateByUrl('/home');
                 //window.location.href='http://'+window.location.hostname+':'+window.location.port+'/home'
               }
             },

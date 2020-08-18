@@ -11,6 +11,7 @@ var UserSchema = Schema({
     userName: String,
     password: String,
     email: String,
+    phone: {type: Number, default:null},
     role: {type: String, default:'ROLE_USER'},
     sector: {type: Schema.ObjectId, ref:'Sector'},
     sectorRef: {type: Boolean, default:false},

@@ -1,0 +1,52 @@
+<h1 matDialogTitle>{{data.title}}</h1>
+
+<mat-card class="p-0">
+  <mat-card-content>
+    <form>
+      <div fxLayout="row wrap" fxLayout.lt-sm="column">
+        <div fxFlex="50"  class="pr-1">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Número</mat-label>
+            <input matInput type="number" name="numTicket" [(ngModel)]="filter['numTicket']">
+          </mat-form-field>
+        </div>
+        <div fxFlex="50"  class="pr-1">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Asunto</mat-label>
+            <input matInput type="text" name="sub" [(ngModel)]="filter['sub']">
+          </mat-form-field>
+        </div>
+        <div fxFlex="50"  class="pr-1">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Solicitante</mat-label>
+            <mat-select>
+              <mat-option (click)="deleteFilter('requester')"></mat-option>
+              <mat-option [value]="requester.name+' '+requester.surname" (click)="set(requester, 'requester')" *ngFor="let requester of requesters">{{requester.name}} {{requester.surname}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div fxFlex="50"  class="pr-1">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Agente</mat-label>
+            <mat-select>
+              <mat-option (click)="deleteFilter('agent')"></mat-option>
+              <mat-option [value]="agent.name+' '+agent.surname" (click)="set(agent, 'agent')" *ngFor="let agent of agents">{{agent.name}} {{agent.surname}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100"  class="pr-1">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Estado</mat-label>
+            <mat-select>
+              <mat-option (click)="deleteFilter('status')"></mat-option>
+              <mat-option [value]="'Pendiente'" (click)="set('Pendiente', 'status')">Pendiente</mat-option>
+              <mat-option [value]="'Finalizado'" (click)="set('Finalizado', 'status')">Finalizado</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+    <button mat-raised-button (click)="sendQuery()" color="primary">Filtrar</button>        
+
+  </mat-card-content>
+</mat-card>

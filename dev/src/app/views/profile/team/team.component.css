@@ -1,0 +1,31 @@
+.img-profile{
+    width: 100%;
+}
+
+.card-profile{
+    margin-top: 20px;
+}
+
+.text-chat{
+    overflow-x: auto;
+}
+
+.acept{
+    margin-right: 15px;
+}
+
+.active{
+    background-color: #2D9DF1;
+    color: white;
+}
+
+.newimg {
+    display: none;
+}
+  
+  
+
+.required{
+    color: red;
+    font-weight: bold;
+}

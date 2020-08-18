@@ -1,0 +1,164 @@
+<ng-container *ngIf="identity['role'] != 'ROLE_REQUESTER'; then agentContent else requesterContent"></ng-container>
+
+<ng-template #agentContent >
+    <mat-card style="padding: 10px;">
+        <mat-card-content>
+            <div class="row">
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 offset-lg-0 offset-xl-0">
+                    <a (click)="redirecTo('P')">
+                        <div class="card shadow border-left-warning py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div class="text-uppercase text-warning font-weight-bold text-xs mb-1"><span>TUS TICKETS</span></div>
+                                        <div class="text-dark font-weight-bold h2 mb-0">
+                                            <span>{{pending}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto"><i class="fas fa-comments fa-2x text-gray-300"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 offset-lg-0 offset-xl-0">
+                    <a [routerLink]="['/ticket/list/1',10]" [queryParams]="{status: 'Abierto'}">
+                        <div class="card shadow border-left-info py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div class="text-uppercase text-info font-weight-bold text-xs mb-1"><span>TICKETS SIN EQUIPO</span></div>
+                                        <div class="text-dark font-weight-bold h2 mb-0"><span>{{open}}</span></div>
+                                    </div>
+                                    <div class="col-auto"><i class="fas fa-comments fa-2x text-gray-300"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 offset-lg-0 offset-xl-0">
+                    <a (click)="redirecTo('F')" >
+                        <div class="card shadow border-left-success py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div class="text-uppercase text-success font-weight-bold text-xs mb-1"><span>TICKETS RESUELTOS</span></div>
+                                        <div class="text-dark font-weight-bold h2 mb-0"><span>{{finish+close}}</span></div>
+                                    </div>
+                                    <div class="col-auto"><i class="fas fa-comments fa-2x text-gray-300"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <hr/>
+
+        <div class="card" style="border: 1px solid #A5A5A5;padding-top: 10px;">
+            <div class="card-header text-center">
+                <h3>Tickets sin agente</h3>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive table mt-2" id="dataTable">
+                    <table class="table dataTable my-0" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>Numero</th>
+                                <th>Solicitante</th>
+                                <th>Asunto</th>
+                                <th>Estado</th>
+                                <th>Fecha</th>
+                                <th>Novedad</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngFor="let ticket of tickets">
+                            <tr class="select" [routerLink]="['/ticket/gestion',ticket._id]">
+                                <td data-title="Numero">{{ticket.numTicket}}</td>
+                                <td data-title="Solicitante">
+                                <img *ngIf="ticket.requester && ticket.requester.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+ticket.requester.image}}" />
+                                <img *ngIf="!ticket.requester || ticket.requester.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="assets/images/system/user-placeholder.png" />
+                                {{ticket.requester.name}}
+                                <span> </span>
+                                {{ticket.requester.surname}}
+                                </td>
+                                <td class="text-nowrap text-truncate text-break" data-title="Asunto" ><p class="body-cell" style="font-size: 14px;" title="{{ticket.sub}}" ng-bind="ticket.sub">{{ticket.sub}}</p></td>
+                                <td data-title="Estado">{{ticket.status}}</td>
+                                <td data-title="Fecha">{{changeDate(ticket.createDate)}}</td>
+                                <td data-title="Novedad">{{changeDate(ticket.lastActivity)}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 align-self-center">
+                        <p id="dataTable_info" class="dataTables_info">Mostrando {{pagingCounter}} a {{isLastPage()}} de {{totalDocs}}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                            <ul class="pagination">
+                                <li class="page-item"><a class="page-link" *ngIf="prevPage != null" (click)="paginate(1)"><span>«</span></a></li>
+                                <li class="page-item"><a class="page-link" *ngIf="prevPage != null" (click)="paginate(prevPage)">{{prevPage}}</a></li>
+                                <li class="page-item active"><a class="page-link">{{page}}</a></li>
+                                <li class="page-item"><a class="page-link" *ngIf="nextPage != null" (click)="paginate(nextPage)">{{nextPage}}</a></li>
+                                <li class="page-item"><a class="page-link" *ngIf="nextPage != null" (click)="paginate(totalPages)"><span>»</span></a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </mat-card-content>
+    </mat-card>
+    
+    
+</ng-template>
+
+
+
+
+
+
+<ng-template #requesterContent >
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 offset-lg-0 offset-xl-0">
+                    <a (click)="redirecTo('P')">
+                        <div class="card shadow border-left-warning py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div class="text-uppercase text-warning font-weight-bold text-xs mb-1"><span>TUS TICKETS</span></div>
+                                        <div class="text-dark font-weight-bold h5 mb-0">
+                                            <span>{{pending+open}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 offset-lg-0 offset-xl-0">
+                    <a (click)="redirecTo('F')" >
+                        <div class="card shadow border-left-success py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div class="text-uppercase text-success font-weight-bold text-xs mb-1"><span>TICKETS RESUELTOS</span></div>
+                                        <div class="text-dark font-weight-bold h5 mb-0"><span>{{finish+close}}</span></div>
+                                    </div>
+                                    <div class="col-auto"><i class="fas fa-comments fa-2x text-gray-300"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>        
+</ng-template>

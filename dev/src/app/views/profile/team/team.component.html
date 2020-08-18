@@ -1,0 +1,105 @@
+<div fxLayout="row wrap" *ngIf="!isNew">
+  <div fxFlex="100"  fxFlex.gt-md="300px" fxFlex.gt-sm="100">
+    <mat-card class="profile-sidebar mb-1 pb-0">
+      <div *ngIf="team.image == 'null'" class="propic text-center">   
+        <img src="assets/images/system/team-placeholder.png">
+        <button *ngIf="isAdmin" (click)="openAttachment()" mat-mini-fab color="accent" style="position: relative; left: -50px;top: 50px;">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+      <div *ngIf="team.image != 'null'" class="propic text-center">
+        <img src="{{url+'team/image/'+team.image}}" >
+        <button *ngIf="isAdmin" (click)="openAttachment()" mat-mini-fab color="accent" style="position: relative; left: -50px;top: 50px;">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+      <input id="attachment" type="file" accept="image/*" style="display: none;" (change)="fileChangeEvent($event)"/>
+
+      <div class="profile-title text-center mb-1">
+        <div class="main-title">{{team.name}}</div>
+        <div class="subtitle mb-05">
+          <span>{{team.company['name']}}</span>
+        </div>
+        <div class="subtitle mb-05">
+          <span>Alta: {{team.createDate}}</span>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+<!-- Profile Views -->
+  <div fxFlex="100" fxFlex.gt-sm="100" fxFlex.gt-md="calc(100% - 300px)">
+    <mat-card class="p-0">
+        <mat-card-content class="mt-1">
+          <div class="form-row agent-system">
+            <div class="col-xl-5 offset-xl-0">
+                <div class="table-responsive table" id="dataTable">
+                    <table class="table dataTable" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>Agentes fuera del equipo</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngFor="let user of usersOutTeam">
+                            <tr [className]="selectedOut == user._id ? 'active' : ''" (click)="selectOut(user._id)">
+                                <td >
+                                    <img *ngIf="user.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+user.image}}" />
+                                    <img *ngIf="user.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="assets/images/system/user-placeholder.png" />
+                                    {{user.surname}} {{user.name}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>             
+            </div>
+            <div class="col-xl-2">
+                <div role="group" class="btn-group-vertical d-block">
+                    <a *ngIf="identity['role'] == 'ROLE_ADMIN'" class="btn btn-primary dark" role="button" (click)="include()">&gt;&gt;</a>
+                    <a *ngIf="identity['role'] == 'ROLE_ADMIN'" class="btn btn-primary dark" role="button" (click)="exclude()">&lt;&lt;</a>
+                </div>
+            </div>
+            <div class="col-xl-5 offset-xl-0">
+              <table class="table dataTable my-0" id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Agentes dentro del equipo</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let user of usersInTeam">
+                    <tr [className]="selectedIn == user._id ? 'active' : ''" (click)="selectIn(user._id)">
+                        <td >
+                            <img *ngIf="user.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+user.image}}" />
+                            <img *ngIf="user.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="assets/images/system/user-placeholder.png" />
+                            {{user.surname}} {{user.name}}
+                        </td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+        </div>
+
+            <!-- <button mat-raised-button color="primary" (click)="editteam()">Guardar</button> -->
+        </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<div *ngIf="isNew" fxLayout="row wrap">
+  <div fxFlex="100" fxFlex.gt-sm="100" fxFlex.gt-md="calc(100% - 300px)">
+    <mat-card class="p-0">
+      <mat-card-content class="mt-1">
+          <form>
+            <mat-form-field class="full-width">
+              <input
+              matInput
+              name="name"
+              type="text"
+              placeholder="Nombre"
+              [(ngModel)]="team.name">
+            </mat-form-field>
+          </form>
+          <button mat-raised-button color="primary" (click)="onSubmit()">Guardar</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,4 +1,5 @@
 import { Injectable, Pipe } from '@angular/core';
+import 'rxjs/add/operator/map';
 import {GLOBAL} from './global'; // Hecho a mano
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
@@ -10,6 +11,8 @@ export class userService{
     public url: string; //url del api
     public identity;
     public token;
+    public chat;
+
     public httpOptions = {
         headers: new HttpHeaders({
           'Content-Type':  'application/json',
@@ -53,6 +56,14 @@ export class userService{
 
     }
 
+    unify(token, origin, destiny){
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.put<any>(this.url+'user/unify/'+origin+'/'+destiny, {}, this.httpOptions);
+
+    }
+
     delete(token, id){
         this.httpOptions.headers =
         this.httpOptions.headers.set('Authorization', token);
@@ -76,21 +87,49 @@ export class userService{
         this.httpOptions.headers =
             this.httpOptions.headers.set('Authorization', token);
 
-        return this._httpClient.get<any>(this.url+'user/list', this.httpOptions);
+        return this._httpClient.get<any>(this.url+'user/all-users', this.httpOptions);
     }
 
-    getForName(token, name){
+    getForName(token, company, name){
         this.httpOptions.headers =
             this.httpOptions.headers.set('Authorization', token);
 
-        return this._httpClient.get<any>(this.url+'user/for-name/'+name, this.httpOptions);
+        return this._httpClient.get<any>(this.url+'user/for-name/'+company+'/'+name, this.httpOptions);
+    }
+
+    getReqForName(token, name){
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'user/req-for-name/'+name, this.httpOptions);
+    }
+
+    getListAgents(token, company:string){
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'user/users/'+company+'/ROLE_AGENT', this.httpOptions);
+    }
+
+    getListReq(token, company){
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'user/users/'+company+'/ROLE_REQUESTER', this.httpOptions);
     }
 
     getOne(token, id){
         this.httpOptions.headers =
             this.httpOptions.headers.set('Authorization', token);
 
-        return this._httpClient.get<any>(this.url+'user/one/'+id, this.httpOptions);
+        return this._httpClient.get<any>(this.url+'user/user/'+id, this.httpOptions);
+    }
+
+    getNews(token, id){
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'user/news/'+id, this.httpOptions);
     }
 
     getIdentity(){
@@ -104,6 +143,17 @@ export class userService{
         return this.identity;
     }
 
+    getChat(){
+        let chat = JSON.parse(localStorage.getItem('chat'));
+        if(chat != "undefined"){
+            this.chat = chat;
+        }else{
+            this.chat = null;
+        }
+
+        return this.chat;
+    }
+
     getToken(){
         let token = localStorage.getItem('token');
 
@@ -114,19 +164,5 @@ export class userService{
         }
 
         return this.token;
-    }
-
-    getListReq(token, company){
-        this.httpOptions.headers =
-            this.httpOptions.headers.set('Authorization', token);
-
-        return this._httpClient.get<any>(this.url+'user/users/'+company+'/ROLE_REQUESTER', this.httpOptions);
-    }
-
-    getListAgents(token, company:string){
-        this.httpOptions.headers =
-            this.httpOptions.headers.set('Authorization', token);
-
-        return this._httpClient.get<any>(this.url+'user/users/'+company+'/ROLE_AGENT', this.httpOptions);
     }
 }

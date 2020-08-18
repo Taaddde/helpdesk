@@ -17,7 +17,7 @@ function getTicket(req, res){
 var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getTicket';
     var populateQuery = [
-        {path:'requester',select:['name','surname','image','email','receiveMail','sector'], populate:{path: 'sector'}},
+        {path:'requester',select:['name','surname','image','email','receiveMail','sector', 'phone'], populate:{path: 'sector'}},
         {path:'agent',select:['name','surname','image','email','receiveMail']},
         {path:'team',select:['users','name','image'], populate:{path: 'users', model: 'User',select:['name','surname','image']}},
         {path:'company',select:['name','email','image','mailSender']},

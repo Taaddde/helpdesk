@@ -17,19 +17,24 @@ import { SharedModule } from '../../shared/shared.module';
 import { TicketRoutes } from './ticket.routing';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {MatExpansionModule} from '@angular/material/expansion';
-
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatSelectModule} from '@angular/material/select';
 
 //Componentes
 
 import { TicketListComponent } from '../ticket/list/ticket-list.component';
 import { TicketGestionComponent } from './gestion/gestion.component';
+import { ChatboxComponent } from './gestion/chatbox/chatbox.component';
+import { FilterComponent } from './list/filtro/filter.component';
 
 @NgModule({
   imports: [
     FormsModule,
     CommonModule,
+    MatSelectModule,
     ReactiveFormsModule,
     FlexLayoutModule,
+    MatAutocompleteModule,
     MatExpansionModule,
     MatDialogModule,
     MatTooltipModule,
@@ -42,7 +47,7 @@ import { TicketGestionComponent } from './gestion/gestion.component';
     MatDividerModule,
     RouterModule.forChild(TicketRoutes)
   ],
-  declarations: [TicketListComponent, TicketGestionComponent],
+  declarations: [TicketListComponent, TicketGestionComponent, ChatboxComponent, FilterComponent],
   entryComponents: [],
 
 })

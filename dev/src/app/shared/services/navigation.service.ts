@@ -83,6 +83,26 @@ export class NavigationService {
       ]
     },
     {
+      name: "Tickets",
+      type: "dropDown",
+      tooltip: "Tickets",
+      icon: "chat",
+      state: "ticket",
+      role: 'ROLE_ADMIN',
+      sub: [
+        { 
+          name: "Pendientes", state: "list/1/10", 
+          query:{status:'Pendiente', agent:this.identity['_id']}
+        },
+        { 
+          name: "Finalizados", state: "list/1/10", 
+          query:{status:'Finalizado', agent:this.identity['_id']}
+        },
+        { name: "Abiertos", state: "list/1/10", query:{status:'Abierto'}},
+        { name: "Todos", state: "list/1/10"},
+      ]
+    },
+    {
       name: "Configuración",
       type: "dropDown",
       tooltip: "Configuración",
@@ -98,6 +118,49 @@ export class NavigationService {
             { name: "Agentes", state: "home" },
             { name: "Solicitantes", state: "home"},
             { name: "Equipo", state: "home" },
+          ]
+        },
+        { 
+          name: "Grupos",
+          type: "dropDown",
+          icon: "group",   
+          state: "group",
+          role: "ROLE_ADMIN",
+          sub: [
+            { name: "Sector", state: "home" },
+            { name: "Departamento", state: "home", role: "ROLE_ADMIN"}
+          ]
+        },
+        { 
+          name: "Depósito",
+          type: "dropDown",
+          icon: "group",   
+          state: "group",
+          sub: [
+            { name: "Articulos", state: "home" },
+            { name: "Depósitos", state: "home" },
+          ]
+        },
+
+        { name: "Tipo/Subtipo de ticket", state: "home"},
+      ]
+    },
+    {
+      name: "Configuración",
+      type: "dropDown",
+      tooltip: "Configuración",
+      icon: "settings",
+      state: "",
+      role: "ROLE_ADMIN",
+      sub: [
+        { 
+          name: "Usuarios",
+          type: "dropDown",
+          state: "user",
+          sub: [
+            { name: "Agentes", state: "list/agent" },
+            { name: "Solicitantes", state: "list/requester"},
+            { name: "Equipo", state: "list/team" },
           ]
         },
         { 

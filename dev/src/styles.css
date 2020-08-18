@@ -2,3 +2,65 @@
 
 
 
+/* You can add global styles to this file, and also import other style files */
+/* @import '../node_modules/primeicons/primeicons.css';
+@import '../node_modules/primeng/resources/themes/nova-dark/theme.css';
+@import '../node_modules/primeng/resources/primeng.min.css';
+@import '../node_modules/fullcalendar/dist/fullcalendar.css';
+@import '../node_modules/fullcalendar/dist/fullcalendar.print.css'; */
+
+
+body{
+    background-image: url('./assets/img/solid-blue-wp.jpg');
+    background: radial-gradient(circle at 50% 100%, #dcdfe0, #abadae);;
+    height: 500px;
+}
+
+.dark{
+    background-color: #018aca;
+    color: white !important;
+}
+
+a.dark{
+    color: white;
+}  
+
+a, tr{
+    cursor: pointer;
+}
+
+.dark:hover{
+    background-color: #001570;
+}
+
+.dark-selected{
+    background-color: #001570;
+}
+
+.olddark{
+    background-color: #1e2833;
+}
+
+a.olddark{
+    color: white;
+}  
+
+.olddark:hover{
+    background-color: #545e69;
+}
+
+
+.editable {
+    width: 100%;
+    min-height: 80px;
+    border: 1px solid gray;
+    color: black;
+    border-radius: 10px;
+  }
+
+ img {
+    max-width: 100%;
+    height: auto;
+  }  
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

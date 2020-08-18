@@ -66,7 +66,7 @@ var decoded = jwt_decode(req.headers.authorization);
                 res.status(200).send({team});
             }
         }
-    });
+    }).populate('company');
 }
 
 function saveTeam(req, res){

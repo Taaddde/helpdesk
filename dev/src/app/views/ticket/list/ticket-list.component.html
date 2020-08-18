@@ -28,8 +28,8 @@
     <div class="row" style="margin-bottom: 5px;">
         <div class="col text-nowrap">
                   <button
-                  data-toggle="modal" data-target="#filter" type="button"
-                  [className]="(filter['sub'] == null || filter['sub'] == '') && (filter['status'] == null || filter['status'] == '') && filter['requester'] == null && filter['agent'] == null ? 'btn btn-dark dark' : 'btn btn-dark dark-selected'">
+                  (click)="openPopUp()" type="button"
+                  class="btn btn-dark dark'">
                       <i class="fa fa-filter"></i>
                   </button>
                   <button 

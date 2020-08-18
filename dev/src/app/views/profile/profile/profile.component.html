@@ -1,0 +1,189 @@
+<div fxLayout="row wrap">
+  <div fxFlex="100" fxFlex.gt-md="300px" fxFlex.gt-sm="50" *ngIf="!isNew">
+    <mat-card class="profile-sidebar mb-1 pb-0">
+      <div *ngIf="user.image == 'null'" class="propic text-center">   
+        <img src="assets/images/system/user-placeholder.png">
+        <button *ngIf="isAdmin || isUser" (click)="openAttachment()" mat-mini-fab color="accent" style="position: relative; left: -50px;top: 50px;">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+      <div *ngIf="user.image != 'null'" class="propic text-center">
+        <img src="{{url+'user/image/'+user.image}}" >
+        <button *ngIf="isAdmin || isUser" (click)="openAttachment()" mat-mini-fab color="accent" style="position: relative; left: -50px;top: 50px;">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+      <input id="attachment" type="file" accept="image/*" style="display: none;" (change)="fileChangeEvent($event)"/>
+
+      <div class="profile-title text-center mb-1">
+        <div class="main-title">{{user.surname}}, {{user.name}}</div>
+        <div class="subtitle mb-05">
+          <span *ngIf="user.sector">{{user.sector['name']}}</span>
+          <mat-form-field appearance="fill" class="full-width" *ngIf="isAdmin">
+            <mat-label>Cambiar sector</mat-label>
+            <mat-select>
+              <mat-option
+                [value]="sector"
+                (click)="setSector(sector._id)" 
+                *ngFor="let sector of sectors">{{sector.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>  
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="default">
+      <mat-card-title>Información de contacto</mat-card-title>
+      <mat-card-content class="pt-0">
+        <mat-list>
+          <mat-list-item><mat-icon class="mr-1">email</mat-icon>
+            <span *ngIf="user.email != ''"> {{user.email}} </span>
+            <span *ngIf="user.email == ''"> - </span>
+          </mat-list-item>
+          <mat-list-item><mat-icon class="mr-1">phone</mat-icon>
+            <span *ngIf="user.phone != null"> {{user.phone}} </span>
+            <span *ngIf="!user.phone || user.phone == null"> - </span>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+<!-- Profile Views -->
+  <div fxFlex="100" fxFlex.gt-sm="{{isNew == true ? 100: 50}}" fxFlex.gt-md="calc(100% - 300px)">
+    <mat-card class="p-0">
+      <mat-tab-group>
+        <mat-tab label="Datos personales">
+          <mat-card-content class="mt-1">
+              <form>
+                <mat-form-field class="full-width">
+                  <input
+                  matInput
+                  name="dni"
+                  type="number"
+                  placeholder="DNI"
+                  [readonly]="!isAdmin && !isUser"
+                  [(ngModel)]="user.dni">
+                </mat-form-field>
+                <mat-form-field class="full-width">
+                    <input
+                    matInput
+                    type="number"
+                    name="legajo"
+                    placeholder="Legajo" 
+                    [readonly]="!isAdmin && !isUser"
+                    [(ngModel)]="user.num">
+                </mat-form-field>
+                <mat-form-field class="full-width">
+                  <input
+                  matInput
+                  type="text"
+                  name="email"
+                  placeholder="Email" 
+                  [readonly]="!isAdmin && !isUser"
+                  [(ngModel)]="user.email">
+                </mat-form-field>
+                <mat-form-field class="full-width">
+                  <input
+                  matInput
+                  type="number"
+                  name="phone"
+                  placeholder="Teléfono" 
+                  [readonly]="!isAdmin && !isUser"
+                  [(ngModel)]="user.phone">
+                </mat-form-field>
+              </form>
+              <button mat-raised-button color="primary" (click)="editUser()">Guardar</button>
+          </mat-card-content>
+        </mat-tab>
+        <mat-tab label="Datos de sistema">
+          <mat-card-content class="mt-1">
+            <form>
+              <mat-form-field class="full-width">
+                <input
+                matInput
+                name="userName"
+                type="text"
+                placeholder="Nombre de usuario"
+                [readonly]="identity['role'] != 'ROLE_ADMIN'"
+                [(ngModel)]="user.userName">
+              </mat-form-field>
+              <mat-checkbox 
+                *ngIf="!isNew"
+                (change)="changeAdm($event.checked)"
+                [checked]="user.role == 'ROLE_ADMIN'"
+                [color]="'primary'"
+                [disabled]="!isAdmin">Administrador
+              </mat-checkbox>
+              <br>
+              <mat-checkbox 
+                [(ngModel)]="user.receiveMail"
+                [color]="'primary'"
+                name="receiveMail" 
+                [disabled]="!isAdmin && !isUser">Recibir notificaciones al correo electrónico
+              </mat-checkbox>
+              <br>
+              <mat-checkbox 
+                [(ngModel)]="user.sectorRef"
+                [color]="'primary'"
+                name="sectorRef" 
+                [disabled]="!isAdmin">Referente
+              </mat-checkbox>
+              <br>
+              <mat-checkbox 
+                [(ngModel)]="user.infoView"
+                [color]="'primary'"
+                name="infoView" 
+                [disabled]="!isAdmin && !isUser">Visualizar mensajes de información de tickets
+              </mat-checkbox>
+            </form>
+            <button mat-raised-button color="primary" (click)="editUser()">Guardar</button>
+          </mat-card-content>
+        </mat-tab>
+        <mat-tab label="Contraseña">
+          <mat-card-content class="mt-1">
+            <form>
+              <mat-form-field class="full-width">
+                <input
+                matInput
+                type="password"
+                name="contraseña_anterior"
+                placeholder="Contraseña actual"
+                [readonly]="!isUser"
+                [(ngModel)]="user.password">
+              </mat-form-field>
+              <mat-form-field class="full-width" *ngIf="!isNew">
+                <input
+                matInput
+                type="password"
+                name="contraseña_nueva"
+                placeholder="Nueva contraseña"
+                [readonly]="!isAdmin && !isUser"
+                [(ngModel)]="password.new">
+              </mat-form-field>
+              <mat-form-field class="full-width" *ngIf="!isNew">
+                <input
+                matInput
+                type="password"
+                name="contraseña_confirmar"
+                placeholder="Confirmar contraseña nueva"
+                [readonly]="!isAdmin && !isUser"
+                [(ngModel)]="password.confirm">
+              </mat-form-field>
+            </form>
+            <button mat-raised-button color="primary" (click)="editUser()">Guardar</button>
+
+          </mat-card-content>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card>
+  </div>
+</div>
+
+
+
+
+
+
+

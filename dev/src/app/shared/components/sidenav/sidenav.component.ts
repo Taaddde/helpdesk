@@ -16,7 +16,6 @@ export class SidenavComponent {
   }
 
   authGuard(){
-    console.log('Mi ROL:', this.identity['role'])
     this.menuItems.forEach(e1 => {
       //Saca 1 nivel
       if(e1.role && e1.role != this.identity['role'] ){

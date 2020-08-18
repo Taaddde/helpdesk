@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AdminLayoutComponent } from './shared/components/layouts/admin-layout/admin-layout.component';
 import { AuthLayoutComponent } from './shared/components/layouts/auth-layout/auth-layout.component';
 import { AuthGuard } from './shared/guards/auth.guard';
+import { HomeComponent } from './views/home/home.component';
 
 export const rootRouterConfig: Routes = [
   { 
@@ -27,9 +28,9 @@ export const rootRouterConfig: Routes = [
     children: [
       
       {
-        path: 'tracking', 
-        loadChildren: () => import('./views/tracking/tracking.module').then(m => m.AppTrackingModule), 
-        data: { title: 'Tracking', breadcrumb: 'TRACKING'}
+        path: 'home', 
+        component: HomeComponent, 
+        data: { title: 'Principal', breadcrumb: 'PRINCIPAL'}
       },
       { 
         path: 'analytics', 
@@ -37,7 +38,11 @@ export const rootRouterConfig: Routes = [
         data: { title: 'Analytics', breadcrumb: 'ANALYTICS'}
       },
 
-
+      { 
+        path: 'user', 
+        loadChildren: () => import('./views/profile/user.module').then(m => m.AppUserModule),
+        data: { title: 'Usuarios', breadcrumb: 'USUARIOS'}
+      },
 
       { 
         path: 'ticket', 
