@@ -2,9 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatRadioModule } from '@angular/material/radio';
 
 import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -12,6 +14,9 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatDividerModule} from '@angular/material/divider';
 import { MatTabsModule } from '@angular/material/tabs';
+
+import {MatExpansionModule} from '@angular/material/expansion';
+
 import { MatListModule } from '@angular/material/list';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SharedPipesModule } from 'app/shared/pipes/shared-pipes.module';
@@ -22,16 +27,16 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SharedModule } from 'app/shared/shared.module';
 import { FormsModule } from '@angular/forms';
+import { SettingsRoutes } from './settings.routing';
+import { SectorListComponent } from './list/sector-list.component';
+import { SectorComponent } from './sector/sector.component';
+import { CompanyProfileComponent } from './company/company.component';
+import { TypesTicketComponent } from './type-subtype tickets/type.component';
+import {  SubTypeEditComponent } from './type-subtype tickets/subtype/subtype-edit.component';
+import { QuillModule } from 'ngx-quill';
+import { SubTypeNewComponent } from './type-subtype tickets/subtype/subtype-new.component';
+import { TypePopupComponent } from './type-subtype tickets/type/type-popup.component';
 
-
-import { UserRoutes } from './user.routing';
-import { UserProfileComponent } from './profile/profile.component';
-import { RequesterListComponent } from './list/requester-list.component';
-import { AgentListComponent } from './list/agent-list.component';
-import { TeamListComponent } from './list/team-list.component';
-import { TeamProfileComponent } from './team/team.component';
-import { NewUserComponent } from './profile/new.component';
-import { NewTeamComponent } from './team/new.component';
 
 
 @NgModule({
@@ -39,9 +44,14 @@ import { NewTeamComponent } from './team/new.component';
     CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
+    QuillModule,
     FormsModule,
     MatDividerModule,
+    MatSortModule,
+    MatExpansionModule,
     MatSelectModule,
+    MatPaginatorModule,
+    MatTableModule,
     SharedModule,
     MatListModule,
     MatTooltipModule,
@@ -50,15 +60,14 @@ import { NewTeamComponent } from './team/new.component';
     MatCardModule,
     MatSlideToggleModule,
     MatCheckboxModule,
-    MatRadioModule,
     MatTabsModule,
     MatInputModule,
     FlexLayoutModule,
     NgxDatatableModule,
     SharedPipesModule,
-    RouterModule.forChild(UserRoutes)
+    RouterModule.forChild(SettingsRoutes)
   ],
-  declarations: [UserProfileComponent, RequesterListComponent, AgentListComponent, TeamListComponent, TeamProfileComponent, NewUserComponent, NewTeamComponent],
+  declarations: [SectorListComponent, SectorComponent, TypePopupComponent, CompanyProfileComponent, TypesTicketComponent, SubTypeEditComponent, SubTypeNewComponent],
   entryComponents: []
 })
-export class AppUserModule { }
+export class AppSettingsModule { }

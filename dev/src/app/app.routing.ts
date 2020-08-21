@@ -45,6 +45,12 @@ export const rootRouterConfig: Routes = [
       },
 
       { 
+        path: 'settings', 
+        loadChildren: () => import('./views/settings/settings.module').then(m => m.AppSettingsModule),
+        data: { title: 'Configuración', breadcrumb: 'CONFIGURACIÓN'}
+      },
+
+      { 
         path: 'ticket', 
         loadChildren: () => import('./views/ticket/ticket.module').then(m => m.TicketModule),
         data: { title: 'Ticket', breadcrumb: 'TICKET'}

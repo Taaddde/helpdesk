@@ -1,0 +1,126 @@
+<div fxLayout="row wrap">
+
+  <!-- Profile Views -->
+  <div fxFlex="100">
+    <mat-card class="p-0">
+      <mat-tab-group>
+        <mat-tab label="General">
+          <mat-card-content class="mt-1">
+              <form>
+                <mat-form-field class="full-width">
+                  <input
+                  matInput
+                  name="name"
+                  type="text"
+                  placeholder="Nombre"
+                  [readonly]="!isAdmin"
+                  [(ngModel)]="subtype.name">
+                </mat-form-field>
+                <mat-form-field appearance="fill" class="full-width">
+                  <mat-label *ngIf="subtype.team">{{subtype.team['name']}}</mat-label>
+                  <mat-label *ngIf="!subtype.team">Sin equipo</mat-label>
+                  <mat-select>
+                    <mat-option
+                      [value]="team._id"
+                      (click)="setTeam(team._id)" 
+                      *ngFor="let team of teams">{{team.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field class="full-width">
+                  <input
+                  matInput
+                  name="desc"
+                  type="text"
+                  placeholder="Descripción"
+                  [readonly]="!isAdmin"
+                  [(ngModel)]="subtype.desc">
+                </mat-form-field>
+                <mat-checkbox 
+                [(ngModel)]="subtype.requireAttach"
+                [color]="'primary'"
+                name="requireAttach" 
+                [disabled]="!isAdmin">Requiere adjunto
+                <!-- <mat-form-field class="full-width">
+                  <input
+                  matInput
+                  name="attachDesc"
+                  type="text"
+                  placeholder="Descripción de adjunto"
+                  [readonly]="!isAdmin"
+                  [(ngModel)]="subtype.attachDesc">
+                </mat-form-field> -->
+              </mat-checkbox>
+              </form>
+              <button mat-raised-button color="primary" (click)="submit()">Guardar</button>
+          </mat-card-content>
+        </mat-tab>
+        <mat-tab label="Validaciones" [disabled]="subtype._id == ''">
+          <mat-card-content class="mt-1">
+            <div class="form-group">
+              <div class="table-responsive">
+                  <table class="table">
+                      <thead>
+                          <tr>
+                              <th>Descripción</th>
+                              <th *ngIf="isAdmin">Editar</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let c of subtype.checks">
+                              <td>
+                                {{c}}
+                              </td>
+                              <td class="text-center" *ngIf="isAdmin">
+                                <button mat-icon-button (click)="deleteCheck(c)" matTooltip="Eliminar validación" color="warn"><mat-icon mat-list-icon>delete</mat-icon></button>
+                              </td>
+                          </tr>
+                      </tbody>
+                      <tfoot *ngIf="isAdmin">
+                          <tr>
+                              <td>
+                                  <input 
+                                  type="text" 
+                                  class="form-control form-control-lg" 
+                                  placeholder="Ingrese una validación" 
+                                  [(ngModel)]="check"
+                                  name="check"
+                                  required 
+                                />                    
+                              </td>
+                              <td class="text-center">
+                                <button mat-icon-button (click)="addCheck()" matTooltip="Agregar" color="primary"><mat-icon mat-list-icon>add</mat-icon></button>
+                              </td>
+                          </tr>
+                      </tfoot>
+                  </table>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-tab>
+        <mat-tab label="Autocompletado">
+          <mat-card-content class="mt-1">
+            <form>
+              <mat-form-field class="full-width">
+                <input
+                matInput
+                name="sub"
+                type="text"
+                placeholder="Asunto"
+                [readonly]="!isAdmin"
+                [(ngModel)]="subtype.autoSub">
+              </mat-form-field>
+              <mat-card-content class="p-0">
+                <quill-editor 
+                theme="snow" 
+                name="autoDesc"
+                [(ngModel)]="subtype.autoDesc"></quill-editor>
+              </mat-card-content>
+            </form>
+            <button mat-raised-button color="primary" (click)="submit()">Guardar</button>
+          </mat-card-content>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card>
+  </div>
+</div>  

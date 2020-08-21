@@ -1,8 +1,8 @@
 import { Injectable, Pipe } from '@angular/core';
 import 'rxjs/add/operator/map';
 import {GLOBAL} from './global'; // Hecho a mano
-import {SubTypeTicket} from '../models/subtypeticket';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { SubTypeTicket } from 'app/shared/models/helpdesk/subtypeticket';
 
 
 //Inyeccion de dependencias

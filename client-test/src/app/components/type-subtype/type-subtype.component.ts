@@ -223,7 +223,6 @@ export class TypeSubtypeComponent implements OnInit {
 
   setValidation(val: SubTypeTicket){
     this.subtypeSelected = val;
-    console.log(this.subtypeSelected)
     if(val.workTime != null){
       this.checkWt = true;
     }else{

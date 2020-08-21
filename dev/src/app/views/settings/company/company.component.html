@@ -1,0 +1,117 @@
+<div fxLayout="row wrap">
+  <div fxFlex="100" fxFlex.gt-md="300px" fxFlex.gt-sm="50">
+    <mat-card class="profile-sidebar mb-1 pb-0">
+      <div *ngIf="company.image == 'null'" class="propic text-center">   
+        <img src="assets/images/system/company-placeholder.png">
+        <button (click)="openAttachment()" mat-mini-fab color="accent" style="position: relative; left: -50px;top: 50px;">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+      <div *ngIf="company.image != 'null'" class="propic text-center">
+        <img src="{{url+'company/image/'+company.image}}" >
+        <button (click)="openAttachment()" mat-mini-fab color="accent" style="position: relative; left: -50px;top: 50px;">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+      <input id="attachment" type="file" accept="image/*" style="display: none;" (change)="fileChangeEvent($event)"/>
+
+      <div class="profile-title text-center mb-1" style="margin-top: 20px;">
+        <div class="main-title">{{company.name}}</div>
+      </div>
+    </mat-card>
+  </div>
+
+<!-- Profile Views -->
+  <div fxFlex="100" fxFlex.gt-sm="100" fxFlex.gt-md="calc(100% - 300px)">
+    <mat-card class="p-0">
+      <mat-tab-group>
+        <mat-tab label="Información">
+          <mat-card-content class="mt-1">
+              <form>
+                <mat-form-field class="full-width">
+                  <input
+                  matInput
+                  name="name"
+                  type="text"
+                  placeholder="Nombre"
+                  [readonly]="!isAdmin"
+                  [(ngModel)]="company.name">
+                </mat-form-field>
+                <mat-form-field class="full-width">
+                  <input
+                  matInput
+                  name="email"
+                  type="text"
+                  placeholder="Email"
+                  [readonly]="!isAdmin"
+                  [(ngModel)]="company.email">
+                </mat-form-field>
+              </form>
+              <button mat-raised-button color="primary" (click)="editCompany()">Guardar</button>
+          </mat-card-content>
+        </mat-tab>
+        <mat-tab label="Servidor de correo">
+          <mat-card-content class="mt-1">
+            <form>
+              <mat-checkbox 
+                [(ngModel)]="company.mailSender"
+                [color]="'primary'"
+                name="mailSender" 
+                [disabled]="!isAdmin">Habilitar envío de correos electrónicos
+              </mat-checkbox>
+              <mat-form-field class="full-width" *ngIf="company.mailSender">
+                <input
+                matInput
+                name="name"
+                type="password"
+                placeholder="Contraseña"
+                [readonly]="!isAdmin"
+                [(ngModel)]="company.password">
+              </mat-form-field>
+            </form>
+            <button mat-raised-button color="primary" (click)="editCompany()">Guardar</button>
+          </mat-card-content>
+        </mat-tab>
+        <mat-tab label="Chat online">
+          <mat-card-content class="mt-1">
+            <form>
+              <mat-checkbox 
+                [(ngModel)]="company.chat"
+                [color]="'primary'"
+                name="chat" 
+                [disabled]="!isAdmin">Habilitar envío de correos electrónicos
+              </mat-checkbox>
+              <mat-form-field class="full-width" *ngIf="company.chat">
+                <input
+                matInput
+                name="chatScheduleFrom"
+                type="text"
+                placeholder="08:30"
+                [readonly]="!isAdmin"
+                [(ngModel)]="company.chatScheduleFrom">
+              </mat-form-field>
+              <mat-form-field class="full-width" *ngIf="company.chat">
+                <input
+                matInput
+                name="chatScheduleTo"
+                type="text"
+                placeholder="18:00"
+                [readonly]="!isAdmin"
+                [(ngModel)]="company.chatScheduleTo">
+              </mat-form-field>
+            </form>
+            <button mat-raised-button color="primary" (click)="editCompany()">Guardar</button>
+
+          </mat-card-content>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card>
+  </div>
+</div>
+
+
+
+
+
+
+

@@ -37,6 +37,20 @@ export class NavigationService {
 
   iconMenu: IMenuItem[] = [
     {
+      name: "Nuevo ticket",
+      type: "icon",
+      tooltip: "Nuevo ticket",
+      icon: "local_activity",
+      state: "home",
+    },
+    {
+      name: "Nueva tarea",
+      type: "icon",
+      tooltip: "Tarea",
+      icon: "view_list",
+      state: "home",
+    },
+    {
       name: "Principal",
       type: "link",
       tooltip: "Principal",
@@ -167,11 +181,11 @@ export class NavigationService {
           name: "Grupos",
           type: "dropDown",
           icon: "group",   
-          state: "group",
+          state: "settings",
           role: "ROLE_ADMIN",
           sub: [
-            { name: "Sector", state: "home" },
-            { name: "Departamento", state: "home", role: "ROLE_ADMIN"}
+            { name: "Sector", state: "list/sector" },
+            { name: "Departamento", state: "company", role: "ROLE_ADMIN"}
           ]
         },
         { 
@@ -185,7 +199,7 @@ export class NavigationService {
           ]
         },
 
-        { name: "Tipo/Subtipo de ticket", state: "home"},
+        { name: "Tipo/Subtipo de ticket", state: "settings/ticket/types"},
       ]
     },
   ];
@@ -561,7 +575,7 @@ export class NavigationService {
 
   // Icon menu TITLE at the very top of navigation.
   // This title will appear if any icon type item is present in menu.
-  iconTypeMenuTitle: string = "Frequently Accessed";
+  iconTypeMenuTitle: string = "";
   // sets iconMenu as default;
   menuItems = new BehaviorSubject<IMenuItem[]>(this.iconMenu);
   // navigation component has subscribed to this Observable
