@@ -54,7 +54,19 @@ export const rootRouterConfig: Routes = [
         path: 'ticket', 
         loadChildren: () => import('./views/ticket/ticket.module').then(m => m.TicketModule),
         data: { title: 'Ticket', breadcrumb: 'TICKET'}
-      }
+      },
+
+      { 
+        path: 'calendar', 
+        loadChildren: () => import('./views/app-calendar/app-calendar.module').then(m => m.AppCalendarModule),
+        data: { title: 'Calendario', breadcrumb: 'CALENDARIO'}
+      },
+
+      { 
+        path: 'todo', 
+        loadChildren: () => import('./views/todo/todo.module').then(m => m.TodoModule),
+        data: { title: 'Tareas', breadcrumb: 'TAREAS'}
+      },
     ]
   },
   { 

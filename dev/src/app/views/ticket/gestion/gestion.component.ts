@@ -61,6 +61,8 @@ export class TicketGestionComponent implements OnInit {
 
     public emojis: boolean;
 
+    public config: any;
+
     public info: string;
 
   constructor(
@@ -100,6 +102,8 @@ export class TicketGestionComponent implements OnInit {
     this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false);
 
     this.emojis = false;
+
+    this.config = GLOBAL.richTextModule;
   }
 
   ngOnInit() {
@@ -116,10 +120,6 @@ export class TicketGestionComponent implements OnInit {
     }else{
       this.info = 'false';
     }
-  }
-
-  ngAfterViewInit(){
-    document.getElementById("editable").focus();
   }
 
   openSnackBar(message: string, action: string) {

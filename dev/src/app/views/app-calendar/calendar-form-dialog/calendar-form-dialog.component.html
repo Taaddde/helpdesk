@@ -1,0 +1,118 @@
+<div class="event-dialog-wrapper">
+  <mat-toolbar matDialogTitle class="mat-primary m-0">
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="title dialog-title">{{dialogTitle}}</span>
+      <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+
+  <div mat-dialog-content class="p-1 m-0">
+
+    <form  class="event-form" fxFlex>
+      <div fxLayout="row wrap" fxLayout.lt-sm="column">
+
+          
+
+          <mat-form-field fxFlex class="full-width">
+            <input 
+            matInput 
+            name="title" 
+            [(ngModel)]="event.title"
+            placeholder="Titulo" 
+            required>
+          </mat-form-field>
+          <span fxFlex="16px"></span>
+
+          <mat-form-field fxFlex class="full-width">
+            <mat-label>Privacidad</mat-label>
+            <mat-select [(ngModel)]="event.type" name="type">
+              <mat-option value="Privado">Privado</mat-option>
+              <mat-option value="Público">Público</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="full-width" *ngIf="event.type == 'Público'" fxLayout="row" fxLayout.lt-sm="column" fxFlex="100">
+            <mat-label>Equipo</mat-label>
+            <mat-select [(ngModel)]="event.team" name="team">
+              <mat-option *ngFor="let team of teams" [value]="team._id">{{team.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        <div fxLayout="row" fxLayout.lt-sm="column" fxFlex="100">
+          <compact-picker fxFlex [(color)]="event.color.primary" [control]="compactControl"></compact-picker>
+          <span fxFlex="16px"></span>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-sm="column" fxFlex="100" style="margin-top: 20px;">
+          <mat-form-field fxFlex>
+            <input 
+            matInput 
+            [matDatepicker]="startDateDP" 
+            placeholder="Desde" 
+            name="startDate" 
+            [(ngModel)]="event.start">
+            <mat-datepicker-toggle matSuffix [for]="startDateDP"></mat-datepicker-toggle>
+            <mat-datepicker #startDateDP></mat-datepicker>
+          </mat-form-field>
+          <span fxFlex="16px"></span>
+
+          <mat-form-field fxFlex>
+            <input 
+            matInput 
+            [matDatepicker]="endDateDP" 
+            placeholder="Hasta" 
+            name="endDate" 
+            [(ngModel)]="event.end">
+            <mat-datepicker-toggle matSuffix [for]="endDateDP"></mat-datepicker-toggle>
+            <mat-datepicker #endDateDP></mat-datepicker>
+          </mat-form-field>
+        </div>
+        
+
+        <div fxLayout="column" fxFlex="100">
+          <mat-form-field>
+            <input 
+            matInput 
+            name="location" 
+            [(ngModel)]="event.meta.location"
+            placeholder="Lugar">
+          </mat-form-field>
+
+          <mat-form-field>
+            <textarea 
+            matInput 
+            name="notes"
+            [(ngModel)]="event.meta.notes"
+            placeholder="Notas" 
+            max-rows="4">
+            </textarea>
+          </mat-form-field>
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+  <div mat-dialog-actions class="m-0 p-1" fxLayout="row" fxLayoutAlign="space-between center">
+
+    <button 
+    mat-raised-button 
+    color="primary" 
+    (click)="dialogRef.close({action: 'save', event: event})" 
+    aria-label="SAVE">
+    Save
+    </button>
+
+    <button 
+    *ngIf="action ==='edit'" 
+    mat-icon-button color="warn" 
+    (click)="dialogRef.close({action: 'delete'})" 
+    aria-label="Delete"
+    matTooltip="Delete">
+      <mat-icon>delete</mat-icon>
+    </button>
+    
+  </div>
+</div>

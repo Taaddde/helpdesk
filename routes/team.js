@@ -13,6 +13,7 @@ api.get('/team/:id', md_auth.ensureAuth, teamController.getTeam);
 api.get('/teams/:company', md_auth.ensureAuth, teamController.getTeams);
 api.get('/agents/:id/:company', md_auth.ensureAuth, teamController.getAgentsInTeam);
 api.get('/for-name/:company/:name', md_auth.ensureAuth, teamController.getTeamsForName);
+api.get('/for-user/:id', md_auth.ensureAuth, teamController.getTeamsOfUser);
 
 //Imagenes
 api.post('/image/:id',[md_auth.ensureAuth, md_upload], teamController.uploadImage);

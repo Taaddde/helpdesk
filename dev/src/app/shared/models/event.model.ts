@@ -31,6 +31,9 @@ export class EgretCalendarEvent implements CalendarEvent {
     location: string,
     notes: string
   };
+  type?: string;
+  user?: string;
+  team?: string
 
   constructor(data?) {
     data = data || {};
@@ -54,5 +57,8 @@ export class EgretCalendarEvent implements CalendarEvent {
       location: data.meta && data.meta.location || '',
       notes: data.meta && data.meta.notes || ''
     };
+    this.type = data.type;
+    this.user = data.user;
+    this.team = data.team;
   }
 }

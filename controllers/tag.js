@@ -28,13 +28,13 @@ var decoded = jwt_decode(req.headers.authorization);
 }
 
 function saveTag(req, res){
-var decoded = jwt_decode(req.headers.authorization);
+    var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'consaveTagtroller';
     var tag = new Tag();
 
     var params = req.body;
-
     tag.name = params.name;
+    tag.company = params.company;
 
     tag.save((err, tagStored) =>{
         if(err){
@@ -53,44 +53,21 @@ var decoded = jwt_decode(req.headers.authorization);
 }
 
 
-function getTags(req, res){
-var decoded = jwt_decode(req.headers.authorization);
-    var functionName = 'getTags';
-    Tag.find({}).sort('name').exec(function(err, tags){
+function getList(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+    var functionName = 'getList';
+    let query = req.query;
+    Tag.find(query).sort('name').exec(function(err, list){
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
         }else{
-            if(!tags){
+            if(!list){
                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 res.status(404).send({message: 'No hay etiquetas'})
             }else{
-                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
-                res.status(200).send({
-                    tags: tags
-                });
-            }
-        }
-    });
-}
-
-function getTagsForName(req, res){
-var decoded = jwt_decode(req.headers.authorization);
-    var functionName = 'getTagsForName';
-    var name = req.params.name;
-    Tag.find({name: { "$regex": name, "$options": "i" }}).sort('name').exec(function(err, tags){
-        if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
-                res.status(500).send({message: 'Error del servidor en la peticion'})
-        }else{
-            if(!tags){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
-                res.status(404).send({message: 'No hay etiquetas'})
-            }else{
-                          logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
-                res.status(200).send({
-                    tags: tags
-                });
+                logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                res.status(200).send({tags: list});
             }
         }
     });
@@ -142,8 +119,7 @@ var decoded = jwt_decode(req.headers.authorization);
 
 module.exports = {
     getTag,
-    getTagsForName,
-    getTags,
+    getList,
 
     saveTag,
     updateTag,

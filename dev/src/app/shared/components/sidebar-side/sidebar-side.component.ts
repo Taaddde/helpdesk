@@ -5,6 +5,7 @@ import { Subscription } from "rxjs";
 import { ILayoutConf, LayoutService } from "app/shared/services/layout.service";
 import { JwtAuthService } from "app/shared/services/auth/jwt-auth.service";
 import { GLOBAL } from "app/shared/services/helpdesk/global";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-sidebar-side",
@@ -24,7 +25,9 @@ export class SidebarSideComponent implements OnInit, OnDestroy, AfterViewInit {
     private navService: NavigationService,
     public themeService: ThemeService,
     private layout: LayoutService,
-    public jwtAuth: JwtAuthService
+    public jwtAuth: JwtAuthService,
+    private router: Router,
+
   ) {
     this.url = GLOBAL.url;
   }
@@ -59,5 +62,12 @@ export class SidebarSideComponent implements OnInit, OnDestroy, AfterViewInit {
             sidebarCompactToggle: true
           });
     }
+  }
+
+  signOut(){
+    localStorage.removeItem('identity');
+    localStorage.removeItem('token');
+    
+    this.router.navigate(['/']);
   }
 }

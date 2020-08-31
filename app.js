@@ -26,6 +26,8 @@ var deposit_routes = require('./routes/deposit');
 var item_routes = require('./routes/item');
 var stock_routes = require('./routes/stock');
 var movim_routes = require('./routes/movim');
+var calendarEvent_routes = require('./routes/calendarEvent');
+var todo_routes = require('./routes/todo');
 
 
 
@@ -63,6 +65,8 @@ app.use('/api/deposit', deposit_routes);
 app.use('/api/item', item_routes);
 app.use('/api/stock', stock_routes);
 app.use('/api/movim', movim_routes);
+app.use('/api/calendar-event', calendarEvent_routes);
+app.use('/api/todo', todo_routes);
 
 
 app.get('*', function(req, res, next){

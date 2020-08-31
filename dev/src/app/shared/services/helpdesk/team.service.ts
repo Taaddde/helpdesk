@@ -75,6 +75,13 @@ export class teamService{
         return this._httpClient.get<any>(this.url+'team/teams/'+company, this.httpOptions);
     }
 
+    getTeamsOfUser(token, id){
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.get<any>(this.url+'team/for-user/'+id, this.httpOptions);
+    }
+
     getAgentsList(token, id, company:string){
         this.httpOptions.headers =
             this.httpOptions.headers.set('Authorization', token);

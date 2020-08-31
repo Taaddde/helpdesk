@@ -19,6 +19,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatSelectModule} from '@angular/material/select';
+import { QuillModule } from 'ngx-quill';
 
 //Componentes
 
@@ -38,6 +39,7 @@ import { FilterComponent } from './list/filtro/filter.component';
     MatExpansionModule,
     MatDialogModule,
     MatTooltipModule,
+    QuillModule,
     SharedModule,
     MatInputModule,
     MatFormFieldModule,

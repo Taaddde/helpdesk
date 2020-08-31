@@ -49,6 +49,7 @@ var decoded = jwt_decode(req.headers.authorization);
     }).populate(populateQuery);
 }
 
+
 function getTeam(req, res){
 var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getTeam';
@@ -99,7 +100,7 @@ var decoded = jwt_decode(req.headers.authorization);
 }
 
 function getTeams(req, res){
-var decoded = jwt_decode(req.headers.authorization);
+    var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getTeams';
     var populateQuery = [
         {path:'users', model:'User', select:['name','surname','image']},
@@ -121,6 +122,26 @@ var decoded = jwt_decode(req.headers.authorization);
                 res.status(200).send({
                     teams: teams
                 });
+            }
+        }
+    });
+}
+
+function getTeamsOfUser(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+    var functionName = 'getTeamsOfUser';
+    var id = req.params.id;
+
+    Team.find({users:id}).exec(function(err, teams){
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            res.status(500).send({message: 'Error del servidor en la peticion'})
+        }else{
+            if(!teams){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                res.status(404).send({message: 'No hay equipos'})
+            }else{
+                res.status(200).send({teams: teams});
             }
         }
     });
@@ -322,6 +343,7 @@ module.exports = {
     getTeams,
     getTeamsForName,
     getAgentsInTeam,
+    getTeamsOfUser,
 
     saveTeam,
     updateTeam,

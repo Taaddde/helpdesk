@@ -1,0 +1,20 @@
+<mat-dialog-content>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <mat-form-field>
+          <input #tagInput matInput placeholder="Nueva etiqueta" required 
+          (keyup.enter)="addTag(tagInput.value);tagInput.value=''" />
+        </mat-form-field>
+        <button color="primary" mat-raised-button (click)="addTag(tagInput.value);tagInput.value=''">Añadir</button>
+      </div>
+      
+      <div fxLayout="column" fxLayoutGap="16px" style="margin-top: 20px;">
+        <div fxLayout="row" fxLayoutAlign="space-between center"
+        *ngFor="let tag of tags; let i = index;">
+          <span>{{tag.name}}</span>
+          <button color="warn" *ngIf="identity['role'] != 'ROLE_ADMIN'" mat-raised-button (click)="deleteTag(tag)">Eliminar</button>
+        </div>
+      </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>

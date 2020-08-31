@@ -1,8 +1,8 @@
 import { Injectable, Pipe } from '@angular/core';
 import 'rxjs/add/operator/map';
 import {GLOBAL} from './global'; // Hecho a mano
-import {Tag} from '../models/tag';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Tag } from 'app/shared/models/helpdesk/tag';
 
 
 //Inyeccion de dependencias
@@ -49,11 +49,14 @@ export class tagService{
 
     }
 
-    getList(token){
+    getList(token, query){
         this.httpOptions.headers =
             this.httpOptions.headers.set('Authorization', token);
-
-        return this._httpClient.get<any>(this.url+'tag/tags', this.httpOptions);
+            let options = {
+                headers: this.httpOptions.headers,
+                params: query
+            };
+        return this._httpClient.get<any>(this.url+'tag/list', options);
     }
 
     getOne(token, id){

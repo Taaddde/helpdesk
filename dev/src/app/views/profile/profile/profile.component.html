@@ -194,6 +194,39 @@
 
           </mat-card-content>
         </mat-tab>
+        <mat-tab label="Respuestas automáticas" *ngIf="isUser">
+          <mat-card-content class="mt-1">
+            <form>
+              <mat-form-field class="full-width">
+                <input
+                matInput
+                type="text"
+                name="hashtag"
+                placeholder="Nombre" 
+                [(ngModel)]="newResponse.hashtag">
+              </mat-form-field>
+              <mat-form-field class="full-width">
+                <input
+                matInput
+                type="text"
+                name="resp"
+                placeholder="Respuesta" 
+                [(ngModel)]="newResponse.resp">
+              </mat-form-field>
+              <button mat-raised-button color="primary" (click)="saveResponse()">Añadir</button>
+            </form>
+              <ngx-datatable class="material bg-white"
+              [columnMode]="'flex'"  
+              [headerHeight]="40"
+              [footerHeight]="50" 
+              [rowHeight]="50"
+              [limit]="5" 
+              [rows]="responses"
+              [columns]="responseColumns"
+              (activate)="deleteResponse($event)">
+              </ngx-datatable>
+          </mat-card-content>
+        </mat-tab>
       </mat-tab-group>
     </mat-card>
   </div>

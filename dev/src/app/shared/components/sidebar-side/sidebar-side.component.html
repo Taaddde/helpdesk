@@ -31,6 +31,7 @@
                 class="text-muted"
                 mat-icon-button 
                 mat-xs-button
+                matTooltip="Opciones"
                 [matMenuTriggerFor]="appUserMenu">
                     <mat-icon>settings</mat-icon>
                 </button>
@@ -38,34 +39,18 @@
                 class="text-muted"
                 mat-icon-button 
                 mat-xs-button
-                matTooltip="Inbox"
-                routerLink="/inbox">
-                  <mat-icon>email</mat-icon>
-                </button>
-                <button 
-                class="text-muted"
-                mat-icon-button 
-                mat-xs-button
-                matTooltip="Sign Out"
-                routerLink="/sessions/signin">
-                    <mat-icon>exit_to_app</mat-icon>
+                matTooltip="Calendario"
+                routerLink="/calendar">
+                  <mat-icon>date_range</mat-icon>
                 </button>
                 <mat-menu #appUserMenu="matMenu">
-                    <button mat-menu-item routerLink="/profile/overview">
+                    <button mat-menu-item [routerLink]="['/user/profile', identity['_id']]">
                         <mat-icon>account_box</mat-icon>
-                        <span>Profile</span>
+                        <span>Perfil</span>
                     </button>
-                    <button mat-menu-item routerLink="/profile/settings">
-                        <mat-icon>settings</mat-icon>
-                        <span>Account Settings</span>
-                    </button>
-                    <button mat-menu-item routerLink="/calendar">
-                        <mat-icon>date_range</mat-icon>
-                        <span>Calendar</span>
-                    </button>
-                    <button mat-menu-item (click)="jwtAuth.signout()">
+                    <button mat-menu-item (click)="signOut()">
                         <mat-icon>exit_to_app</mat-icon>
-                        <span>Sign out</span>
+                        <span>Desconectar</span>
                     </button>
                     </mat-menu>
                 </div> 

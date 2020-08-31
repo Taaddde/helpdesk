@@ -1,0 +1,183 @@
+<mat-toolbar>
+  <button mat-icon-button routerLink="/todo/list">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <mat-checkbox
+    style="margin-left: 16px; font-size: 14px;"
+    [checked]="todo.done"
+    (change)="toggleDone()"
+  >
+    <span>
+      {{ todo.done ? "Marcar como no realizado" : "Marcar como realizado" }}
+    </span>
+  </mat-checkbox>
+
+  <div fxLayout="row" fxFlex="1 1 0%" fxLayoutAlign="end center">
+    <button mat-icon-button *ngIf="todo.team" [matMenuTriggerFor]="users" matTooltip="Añadir responsable">
+      <mat-icon>person_add</mat-icon>
+    </button>
+    <mat-menu #users="matMenu" [xPosition]="'before'">
+      <button
+        style="text-transform: capitalize;"
+        mat-menu-item
+        *ngFor="let agent of agents"
+        (click)="setAgent(agent)"
+      >
+        {{ agent.name }} {{ agent.surname }}
+      </button>
+    </mat-menu>
+
+    <button
+      mat-icon-button
+      (click)="toggleRead()"
+      matTooltip="{{ todo.usersWhoRead?.includes(identity['_id']) ? 'Marcar como no leído' : 'Marcar como leído' }}"
+    >
+      <mat-icon>{{ todo.usersWhoRead?.includes(identity['_id']) ? "drafts" : "markunread" }}</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      (click)="toggleImportant()"
+      matTooltip="{{
+        todo.important ? 'Marcar como no importante' : 'Marcar como importante'
+      }}"
+    >
+      <mat-icon
+        [ngClass]="{
+          'fill-color-warn': todo?.important
+        }"
+        >{{ todo.important ? "error" : "error_outline" }}</mat-icon
+      >
+    </button>
+    <button
+      mat-icon-button
+      matTooltip="{{ todo.starred ? 'Remover de favoritos' : 'Marcar como favorito' }}"
+      (click)="toggleStar()"
+    >
+      <mat-icon
+        [ngClass]="{
+          'fill-color-accent': todo?.starred
+        }"
+        >{{ todo.starred ? "star" : "star_outline" }}</mat-icon
+      >
+    </button>
+
+    <button
+      mat-icon-button
+      matTooltip="Etiquetas"
+      (click)="openTagManaginDialogue()"
+    >
+      <mat-icon>library_add</mat-icon>
+    </button>
+    <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Añadir etiqueta">
+      <mat-icon>label</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu" [xPosition]="'before'">
+      <button
+        style="text-transform: capitalize;"
+        mat-menu-item
+        *ngFor="let tag of tagList"
+        (click)="updateTodoTag(tag)"
+      >
+        {{ tag.name }}
+      </button>
+    </mat-menu>
+
+    <button mat-icon-button matTooltip="Eliminar" (click)="deleteTodo()">
+      <mat-icon>delete_outline</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
+
+<div style="margin: 20px 0px 0px 16px;">
+  <mat-chip-list #chipListTag>
+    <div *ngFor="let tag of todo?.tags">
+      <mat-chip
+        fxLayout="row"
+        fxLayoutAlign="center center"
+        [selectable]="true"
+        [removable]="true"
+        (removed)="removeTagFromTodo(tag)"
+      >
+        <span><mat-icon style="font-size: 18px;">label</mat-icon>{{ tag.name }}</span>
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+    </div>
+  </mat-chip-list>
+
+  <mat-chip-list #chipListAgent>
+    <div *ngFor="let agent of agentsIn">
+      <mat-chip
+        fxLayout="row"
+        fxLayoutAlign="center center"
+        [selectable]="true"
+        [removable]="true"
+        (removed)="deleteAgent(agent)"
+      >
+        <span><mat-icon style="font-size: 18px;">person</mat-icon>{{ agent.name }} {{ agent.surname }}</span>
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+    </div>
+  </mat-chip-list>
+</div>
+ 
+<!-- input fields for title and notes -->
+<form
+  fxLayout="column"
+  fxLayoutGap="8px"
+  style="padding: 0px 16px;margin-top: 20px;"
+  (ngSubmit)="saveTodo()"
+>
+  <mat-form-field>
+    <input [(ngModel)]="todo.title" type="text" name="title" matInput placeholder="Título" required />
+  </mat-form-field>
+
+  <mat-form-field>
+    <textarea
+      [(ngModel)]="todo.note" name="note"
+      matInput
+      placeholder="Nota"
+      matTextareaAutosize
+      
+    ></textarea>
+  </mat-form-field>
+
+  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="50px">
+    <mat-form-field>
+      <input
+        [(ngModel)]="todo.startDate" name="startDate"
+        matInput
+        [matDatepicker]="picker"
+        placeholder="Fecha de inicio"
+        required
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        [(ngModel)]="todo.dueDate" name="dueDate"
+        matInput
+        [matDatepicker]="picker2"
+        placeholder="Fecha de vencimiento"
+        required
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+      <mat-datepicker #picker2></mat-datepicker>
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="start center">
+    <mat-form-field fxFlex>
+      <mat-label>Equipo</mat-label>
+        <mat-select [(ngModel)]="teamName" name="teamName">
+          <mat-option>{{teamName}}</mat-option>
+          <mat-option *ngFor="let team of teams" [value]="team.name" (click)="setTeam(team)">{{team.name}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+    <button type="button" mat-button routerLink="/todo/list">Cancelar</button>
+    <button color="primary" mat-raised-button>Guardar</button>
+  </div>
+</form>

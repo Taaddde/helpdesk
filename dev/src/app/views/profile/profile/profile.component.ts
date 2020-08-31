@@ -8,11 +8,14 @@ import { sectorService } from 'app/shared/services/helpdesk/sector.service';
 import { Sector } from 'app/shared/models/helpdesk/sector';
 import { GLOBAL } from 'app/shared/services/helpdesk/global';
 import { uploadService } from 'app/shared/services/helpdesk/upload.service';
+import { responseService } from 'app/shared/services/helpdesk/response.service';
+import { Response } from 'app/shared/models/helpdesk/response';
+import { AppConfirmService } from 'app/shared/services/app-confirm/app-confirm.service';
 
 @Component({
   selector: 'app-user-profile',
   templateUrl: './profile.component.html',
-  providers: [userService, sectorService, uploadService]
+  providers: [userService, sectorService, uploadService, responseService]
 })
 export class UserProfileComponent implements OnInit {
 
@@ -29,11 +32,17 @@ export class UserProfileComponent implements OnInit {
   public password;
 
   public sectors: Sector[];
+  public responseColumns = [];
+  public responses = [];
+
+  public newResponse: Response;
 
   constructor(
     private _userService: userService,
     private _sectorService: sectorService,
+    private confirmService: AppConfirmService,
     private _uploadService: uploadService,
+    private _responseService: responseService,
     private _route: ActivatedRoute,
     private snackBar: MatSnackBar,
   ) {
@@ -41,6 +50,7 @@ export class UserProfileComponent implements OnInit {
     this.identity = _userService.getIdentity();
     this.url = GLOBAL.url;
     this.user = new User('',null ,'','',null,'','','',null,'', false,'','','','',false,'',false,true);
+    this.newResponse = new Response('','','','');
     this.isAdmin = false;
     this.isUser = false;
     this.isNew = false;
@@ -53,6 +63,8 @@ export class UserProfileComponent implements OnInit {
   ngOnInit() {
     this.getUser();
     this.getSectors();
+    this.getColumns();
+    this.getResponses();
   }
 
   getUser(){
@@ -92,9 +104,81 @@ export class UserProfileComponent implements OnInit {
     );
   }
 
+  getResponses(){
+    this._responseService.getList(this.token, this.identity['_id']).subscribe(
+      response =>{
+          if(response.responses){
+            this.responses = response.responses;
+          }
+      },
+      error =>{
+          this.openSnackBar(error.message, 'Cerrar');
+      }
+    );
+  }
+
+  saveResponse(){
+    if(this.newResponse.hashtag != '' && this.newResponse.resp != ''){
+      this.newResponse.user = this.identity['_id'];
+      this.newResponse.hashtag = '#'+this.newResponse.hashtag.replace(' ', '');
+      this._responseService.add(this.token, this.newResponse).subscribe(
+        response =>{
+            if(response.response){
+              this.openSnackBar('Respuesta automática añadida', 'Cerrar');
+              this.getResponses();
+              this.newResponse.hashtag = '';
+              this.newResponse.resp = '';
+            }
+        },
+        error =>{
+            this.openSnackBar(error.message, 'Cerrar');
+        }
+      );
+    }else{
+      this.openSnackBar('Faltan campos para completar', 'Cerrar');
+    }
+  }
+
+  deleteResponse(event){
+    if(event.type != 'click')
+      return;
+
+    this.confirmService.confirm({message: "¿Estas seguro que quieres eliminar "+event.row['hashtag']+"?"})
+      .subscribe(res => {
+        if (res) {
+          this._responseService.delete(this.token, event.row['_id']).subscribe(
+            response =>{
+                if(response.response){
+                  this.getResponses();
+                  this.openSnackBar('Respuesta automática eliminada', 'Cerrar');
+                }
+            },
+            error =>{
+                this.openSnackBar(error.message, 'Cerrar');
+            }
+          );
+        }
+      })
+  }
+
   setSector(val){
     this.user.sector = val;
     this.editUser();
+  }
+
+  getColumns(){
+    this.responseColumns = [
+      {
+        prop: 'hashtag',
+        name: 'Nombre',
+        flexGrow: 1
+      },
+      {
+        prop: 'resp',
+        name: 'Respuesta',
+        flexGrow: 4
+      },
+    ];
   }
 
   editUser(){

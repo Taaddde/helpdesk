@@ -1,5 +1,6 @@
 export interface TodoItem {
     id?: number;
+    _id?: string;
     title?: string;
     note?: string;
     important?: boolean;
@@ -9,8 +10,10 @@ export interface TodoItem {
     selected?: boolean;
     startDate?: string;
     dueDate?: string;
-
-    tag?: number[];
+    tags?: string[];
+    team?: string;
+    users?: string[];
+    usersWhoRead? : string[];
 }
 
 export interface TagItem {

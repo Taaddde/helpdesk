@@ -155,7 +155,7 @@ export class TicketListComponent implements OnInit {
 
   changeLimit(val: number){
     this.limit = val;
-    this._router.navigate(['/ticket',this.page,this.limit], { queryParams: this.query });
+    this._router.navigate(['/ticket/list',this.page,this.limit], { queryParams: this.query });
   }
 
   changeDate(val:string){
@@ -233,7 +233,7 @@ export class TicketListComponent implements OnInit {
       .subscribe(res => {
         if(res) {
           
-          this._router.navigate(['ticket/list',1,10], { queryParams: res });
+          this._router.navigate(['ticket/list',1,this.limit], { queryParams: res });
         }
         this.loader.close();
 

@@ -44,11 +44,11 @@ export class NavigationService {
       state: "home",
     },
     {
-      name: "Nueva tarea",
+      name: "Tareas",
       type: "icon",
       tooltip: "Tarea",
       icon: "view_list",
-      state: "home",
+      state: "todo/list",
     },
     {
       name: "Principal",

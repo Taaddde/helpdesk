@@ -302,8 +302,8 @@
       <div class="row" style="margin-top: 10px;">
           <div class="col" id="chat-text" [ngClass]="{privatechattext:isPrivate}">
               <form #form="ngForm" (ngSubmit)="onSubmit()">
-                <div class="container">
-                      <div class="row">
+                <div class="container" style="border: 1px solid #4e5257">
+                      <!-- <div class="row">
                           <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('bold');" style="margin-right: 4px;padding-right: 7px; padding-left: 7px"><i class="fa fa-bold"></i></button>
 
                           <button class="btn btn-dark btn-sm" type="button" onclick="document.execCommand('italic');" style="margin-right: 4px; padding-right: 9px; padding-left: 9px"><i class="fa fa-italic"></i></button>
@@ -331,6 +331,8 @@
                           <button class="btn btn-dark btn-sm" type="button" (click)="showEmojis()" style="margin-right: 4px; padding-right: 7px; padding-left: 7px"><img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/whatsapp/238/smiling-face-with-open-mouth_1f603.png" width="20px"/></button>
 
                       </div>
+
+
                       <div class="row" style="margin-top: 8px;" *ngIf="identity['company']">
                           <div id="editable" contentEditable="true"
                           
@@ -344,8 +346,18 @@
                           (input)="textblock.text = $event.target.innerHTML"
                           (paste)="pastePicture($event)">
                         </div>
-                      </div>
+                      </div> -->
                       
+
+                      <mat-card-content class="p-0" >
+                        <quill-editor
+                        theme="snow" 
+                        placeholder="Escribe aqui tu mensaje"
+                        [modules]="config"
+                        name="autoDesc"
+                        [(ngModel)]="textblock.text"></quill-editor>
+                      </mat-card-content>
+
                       <script src="../../../assets/scripts/chatbox.js"></script>
                 </div>
                 <div class="container" id="options-container">
