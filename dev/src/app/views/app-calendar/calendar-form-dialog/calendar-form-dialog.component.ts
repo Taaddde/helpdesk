@@ -7,6 +7,8 @@ import { ColorPickerControl, ColorsTable } from '@iplab/ngx-color-picker';
 import { teamService } from 'app/shared/services/helpdesk/team.service';
 import { userService } from 'app/shared/services/helpdesk/user.service';
 import { Team } from 'app/shared/models/helpdesk/team';
+import { APP_DATE_FORMATS, AppDateAdapter } from 'app/shared/services/date-adapter';
+import { MAT_DATE_FORMATS, DateAdapter } from '@angular/material/core';
 
 interface DialogData {
   event?: CalendarEvent,
@@ -18,7 +20,11 @@ interface DialogData {
   selector: 'app-calendar-form-dialog',
   templateUrl: './calendar-form-dialog.component.html',
   styleUrls: ['./calendar-form-dialog.component.scss'],
-  providers: [teamService]
+  providers: [
+    {provide: DateAdapter, useClass: AppDateAdapter},
+    {provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS},
+    teamService
+  ]
 
 })
 export class CalendarFormDialogComponent implements OnInit {

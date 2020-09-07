@@ -618,11 +618,13 @@ function saveTicket(req, res){
         ticket.resolveDate = params.resolveDate;
         ticket.subTypeTicket = params.subTypeTicket;
         ticket.workTime = params.workTime;
-    
+        //ticket.cc = params.cc
+
         ticket.save((err, ticketStored) =>{
             if(err){
                 logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: err})
+                console.log(err)
             }else{
                 if(!ticketStored){
                     logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
@@ -760,6 +762,38 @@ function getListPaged(req, res){
     }
 
     Ticket.paginate(query,{page:page, limit:perPage, populate:populateQuery, sort:sort}, function(err, tickets){
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            console.log(err)
+            res.status(500).send({message: err})
+        }else{
+            if(!tickets){
+                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                res.status(404).send({message: 'No hay items'})
+            }else{
+                res.status(200).send({
+                    tickets:tickets
+                });
+            }
+        }
+    });
+}
+
+function getList(req, res){
+    var functionName = 'getList';
+    var decoded = jwt_decode(req.headers.authorization);
+    var populateQuery = [
+        {path:'requester',select:['name','surname','image']},
+        {path:'agent',select:['name','surname','image']}, 
+    ];
+
+    var query = req.query;
+    var sort = {numTicket:-1}
+    if(query['sub']){
+        query['sub'] = { "$regex": query['sub'], "$options": "i" }
+    }
+
+    Ticket.find(query).populate(populateQuery).sort(sort).exec(function(err, tickets){
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
             console.log(err)
@@ -1502,6 +1536,7 @@ module.exports = {
     getTicketReports,
     getDateTickets,
     getTeamTickets,
+    getList,
     
     getTimeWork,
     getTypeTimeWork,

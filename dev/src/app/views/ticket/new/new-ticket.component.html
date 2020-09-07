@@ -1,0 +1,248 @@
+<mat-card class="p-0">
+  <mat-card-content>
+    <mat-horizontal-stepper [linear]="true">
+      <mat-step *ngIf="identity['role'] != 'ROLE_REQUESTER'" [stepControl]="requesterControl">
+        <ng-template matStepLabel>Solicitante</ng-template>
+        <form fxFlex>
+          <div fxLayout="row wrap" fxLayout.lt-sm="column">
+              <mat-form-field fxFlex class="full-width">
+                <input type="text"
+                        placeholder="Buscar solicitante"
+                        aria-label="Text"
+                        matInput
+                        (input)="filterRequester($event.target.value)" 
+                        [matAutocomplete]="autoReq">
+                <mat-autocomplete #autoReq="matAutocomplete">
+                  <mat-option 
+                  *ngFor="let requester of requesters"
+                  [value]="requester.name+' '+requester.surname"
+                  (click)="setRequester(requester)">
+                    {{requester.name+' '+requester.surname}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              <span fxFlex="16px"></span>
+              <div fxFlex class="full-width">
+                <div class="col-xl-5">
+                  <img *ngIf="!requester || requester.image == 'null'" style="width: 150px;height: 150px;" src="assets/images/system/user-placeholder.png" />
+                  <img *ngIf="requester && requester.image != 'null'" style="width: 150px;height: 150px;" src="{{url+'user/image/'+requester.image}}" />
+                </div>
+                <div class="col-xl-6 align-self-center"  *ngIf="requester && requester._id != ''">
+                    <div class="form-row">
+                        <div class="col"><span><strong>{{requester.name}} {{requester.surname}}</strong></span></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col"><span><em>{{requester.email}}</em></span></div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col"><span><em>{{requester.phone}}</em></span></div>
+                    </div>
+                </div>
+              </div>    
+          </div>
+        </form>
+        <div>
+          <button mat-raised-button color="primary" [disabled]="!requester" matStepperNext>Siguiente</button>
+        </div>
+      </mat-step>
+      <mat-step *ngIf="identity['role'] == 'ROLE_REQUESTER'" [stepControl]="typeControl">
+        <ng-template matStepLabel>Tipo de ticket</ng-template>
+
+        <form fxFlex [formGroup]="typeControl">
+          <div fxLayout="row wrap" fxLayout.lt-sm="column">
+            <mat-form-field fxFlex class="full-width">
+              <mat-label>Departamento</mat-label>
+              <mat-select>
+                <mat-option
+                  [value]="company"
+                  (click)="setCompany(company)" 
+                  *ngFor="let company of companies">{{company.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row wrap" fxLayout.lt-sm="column">
+            <mat-form-field fxFlex class="full-width" *ngIf="types">
+              <mat-label>Tipo</mat-label>
+              <mat-select>
+                <mat-option
+                  [value]="type"
+                  (click)="setType(type)" 
+                  *ngFor="let type of types">{{type.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <span fxFlex="16px"></span>
+            <mat-form-field fxFlex class="full-width" *ngIf="subTypes">
+              <mat-label>Sub-tipo</mat-label>
+              <mat-select>
+                <mat-option
+                  [value]="subtype"
+                  (click)="setSubType(subtype)" 
+                  *ngFor="let subtype of subTypes">{{subtype.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+            
+          <div fxLayout="row">
+            <button mat-raised-button color="primary" [disabled]="typeControl.invalid" matStepperNext>Siguiente</button>
+          </div>
+        </form>
+      </mat-step>
+      <!-- <mat-step *ngIf="identity['role'] == 'ROLE_REQUESTER' && getLenght(typeControl.controls['subtype']?.value?.checks) != 0" [stepControl]="typeControl">
+        <ng-template matStepLabel>Validaciones</ng-template>
+        <form fxFlex>
+          <div fxLayout="row wrap" fxLayout.lt-sm="column">
+            <section>
+              <mat-checkbox *ngFor="let check of typeControl.controls['subtype']?.value?.checks">{{check}}</mat-checkbox>
+            </section>
+          </div>
+          <div fxLayout="row">
+            <button mat-raised-button color="accent" matStepperPrevious>Anterior</button>
+            <span fxFlex="8px"></span>
+            <button mat-raised-button color="primary" [disabled]="descriptionControl.invalid" matStepperNext>Siguiente</button>
+          </div>
+        </form>
+      </mat-step> -->
+      <mat-step [stepControl]="descriptionControl">
+        <ng-template matStepLabel>Asunto y descripción</ng-template>
+        <form fxFlex [formGroup]="descriptionControl">
+          <div fxLayout="row wrap" fxLayout.lt-sm="column">
+              <mat-form-field fxFlex class="full-width" >
+                <input type="text"
+                      placeholder="Asunto"
+                      aria-label="Text"
+                      formControlName="sub"
+                      matInput> 
+              </mat-form-field>
+              <span fxFlex="16px"></span>
+              <mat-checkbox 
+              fxFlex class="full-width"
+              [color]="'primary'"
+              formControlName="important"
+              name="sectorRef">Es urgente
+              </mat-checkbox>
+              
+              <span fxFlex="16px"></span>
+              <div fxFlex *ngIf="!descriptionControl.controls['files'].value">
+                <label class="butt" matTooltip="Añadir adjuntos al ticket">
+                  <i class="fas fa-paperclip fa-lg  "></i>
+                  <br>
+                  Adjuntar
+                  <input type="file" 
+                        multiple class="d-none" 
+                        (change)="fileChangeEvent($event)" />
+                </label>
+              </div>
+
+              <div fxFlex *ngIf="descriptionControl.controls['files'].value">
+                <label class="butt-trash" (click)="resetFiles()" matTooltip="Eliminar los adjuntos añadidos al ticket">
+                  <i class="fas fa-trash fa-lg  "></i>
+                  <br>
+                  +{{getLenght(descriptionControl.controls['files'].value)}}
+                </label>
+              </div>
+          </div>
+          <div fxLayout="row wrap" fxLayout.lt-sm="column">
+            <mat-card-content fxFlex class="p-0" >
+              <quill-editor
+              theme="snow" 
+              placeholder="Escribe aqui tu mensaje"
+              [modules]="config"
+              name="autoDesc"
+              formControlName="text"></quill-editor>
+            </mat-card-content>
+          </div>
+          <div fxLayout="row">
+            <button mat-raised-button color="accent" matStepperPrevious>Anterior</button>
+            <span fxFlex="8px"></span>
+            <button mat-raised-button color="primary" [disabled]="descriptionControl.invalid" matStepperNext>Siguiente</button>
+          </div>
+        </form>
+        
+      </mat-step>
+      <mat-step *ngIf="identity['role'] != 'ROLE_REQUESTER'" [stepControl]="respControl">
+        <ng-template matStepLabel>Responsables</ng-template>
+
+        <form fxFlex [formGroup]="respControl">
+          <div fxLayout="row wrap" fxLayout.lt-sm="column">
+            <mat-form-field fxFlex class="full-width">
+              <mat-label>Equipo</mat-label>
+              <mat-select>
+                <mat-option
+                  [value]="team"
+                  (click)="setTeam(team)" 
+                  *ngFor="let team of teams">{{team.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <span fxFlex="16px"></span>
+            <mat-form-field fxFlex class="full-width" *ngIf="agents">
+              <mat-label>Agente</mat-label>
+              <mat-select>
+                <mat-option
+                  [value]="agent"
+                  (click)="setAgent(agent)" 
+                  *ngFor="let agent of agents">{{agent.name}} {{agent.surname}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+            
+          <div fxLayout="row">
+            <button mat-raised-button color="accent" matStepperPrevious>Anterior</button>
+            <span fxFlex="8px"></span>
+            <button mat-raised-button color="primary" (click)="submit()" matStepperNext>Crear ticket</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step *ngIf="identity['role'] == 'ROLE_REQUESTER'" [stepControl]="">
+        <ng-template matStepLabel>En copia</ng-template>
+
+        <form fxFlex>
+          <div fxLayout="row wrap" fxLayout.lt-sm="column">
+            <mat-form-field class="full-width">
+              <input type="text"
+                     placeholder="Buscar persona"
+                     aria-label="Text"
+                     matInput
+                     (input)="filterCc()" 
+                     [(ngModel)]="ccFilter"
+                     name="ccFilter"
+                     [matAutocomplete]="autoCC">
+              <mat-autocomplete #autoCC="matAutocomplete">
+                <mat-option 
+                *ngFor="let cc of ccList"
+                (click)="setCc(cc)">
+                  {{cc.name+' '+cc.surname}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row wrap" fxLayout.lt-sm="column">
+            <ul class="list-group full-width" >
+              <span *ngIf="getLenght(cc) != 0">
+                  <li class="list-group-item" *ngFor="let user of cc">
+                      <img *ngIf="user.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+user.image}}" />
+                      <img *ngIf="user.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="assets/images/system/user-placeholder.png" />
+                      <span>{{user.name}} {{user.surname}}</span>
+                      <button class="btn btn-danger float-right" type="button" (click)="deleteCc(user)">
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </li>    
+              </span>
+            </ul>
+          </div>
+            
+          <div fxLayout="row">
+            <button mat-raised-button color="accent" matStepperPrevious>Anterior</button>
+            <span fxFlex="8px"></span>
+            <button mat-raised-button color="primary" (click)="submit()" matStepperNext>Crear ticket</button>
+          </div>
+        </form>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </mat-card-content>
+</mat-card>

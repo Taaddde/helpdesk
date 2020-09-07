@@ -352,7 +352,6 @@ export class TicketGestionComponent implements OnInit {
       this._ticketService.getOne(this.token, id).subscribe(
         response => {
           this.ticket = response.ticket;
-          console.log(this.ticket)
           this.getChat();
           this.getPrevNext(response.ticket['numTicket'], response.ticket['status']);
           this.getTeams(response.ticket.company['_id']);

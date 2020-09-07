@@ -194,7 +194,7 @@
 
           </mat-card-content>
         </mat-tab>
-        <mat-tab label="Respuestas automáticas" *ngIf="isUser">
+        <mat-tab label="Respuestas automáticas" *ngIf="isUser && identity['role'] != 'ROLE_REQUESTER'">
           <mat-card-content class="mt-1">
             <form>
               <mat-form-field class="full-width">

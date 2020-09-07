@@ -11,12 +11,12 @@
   </button>
   
   <!-- Search form -->
-  <!-- <div fxFlex fxHide.lt-sm="true" class="search-bar">
-    <form class="top-search-form">
+  <div fxFlex fxHide.lt-sm="true" class="search-bar">
+    <!-- <form class="top-search-form">
       <mat-icon role="img">search</mat-icon>
       <input autofocus="true" placeholder="Search" type="text" />
-    </form>
-  </div> -->
+    </form> -->
+  </div> 
 
   <span fxFlex></span>
   <!-- Language Switcher -->
@@ -32,8 +32,7 @@
 </mat-menu> -->
 
 
-  <!-- <egret-search-input-over placeholder="Country (e.g. US)" resultPage="/search">
-  </egret-search-input-over> -->
+  <egret-search-input-over *ngIf="identity['role'] != 'ROLE_REQUESTER'" placeholder="Tickets" resultPage="/search"></egret-search-input-over>
   <!-- Open "views/search-view/result-page.component" to understand how to subscribe to input field value -->
 
   <!-- Notification toggle button -->

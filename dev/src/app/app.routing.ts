@@ -67,6 +67,12 @@ export const rootRouterConfig: Routes = [
         loadChildren: () => import('./views/todo/todo.module').then(m => m.TodoModule),
         data: { title: 'Tareas', breadcrumb: 'TAREAS'}
       },
+
+      { 
+        path: 'search', 
+        loadChildren: () => import('./views/search-view/search-view.module').then(m => m.SearchViewModule),
+        data: { title: 'Busqueda', breadcrumb: 'BUSQUEDA'}
+      },
     ]
   },
   { 

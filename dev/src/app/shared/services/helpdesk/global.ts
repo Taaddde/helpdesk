@@ -6,14 +6,13 @@ export var GLOBAL = {
     richTextModule: {
         toolbar:  [
           ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-  
+          ['image'],
           [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
           [{ 'list': 'ordered'}, { 'list': 'bullet' }],
   
   
           [{ 'font': [] }],
           [{ 'align': [] }],
-  
           ['clean'] 
         ]
     }

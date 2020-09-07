@@ -100,13 +100,6 @@ export class ticketService{
         return this._httpClient.get<any>(this.url+'ticket/calendar/'+id, this.httpOptions);
     }
 
-    getPaginatedList(token, page, perPage, company, status, userId){
-        this.httpOptions.headers =
-            this.httpOptions.headers.set('Authorization', token);
-
-        return this._httpClient.get<any>(this.url+'ticket/ticketsPaged/'+page+'&'+perPage+'&'+company+'&'+status+'&'+userId, this.httpOptions);
-    }
-
     getList(token, page, perPage, query, company, requester){
         this.httpOptions.headers =
             this.httpOptions.headers.set('Authorization', token);
@@ -126,6 +119,17 @@ export class ticketService{
                 t = t+'&requester='+requester
             }
         return this._httpClient.get<any>(this.url+'ticket/listPaged/'+page+'/'+perPage+'/?'+q.join('&')+t, this.httpOptions);
+    }
+
+    getUnpaginateList(token,query){
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+
+            let options = {
+                headers: this.httpOptions.headers,
+                params: query
+            };
+        return this._httpClient.get<any>(this.url+'ticket/unpaginate-list/', options);
     }
 
     getSectorPaginatedList(token, page, perPage, query, sector){
@@ -164,21 +168,6 @@ export class ticketService{
         return this._httpClient.get<any>(this.url+'ticket/ticket/'+id, this.httpOptions);
     }
 
-    getForNumber(token, i: number){
-
-        this.httpOptions.headers =
-        this.httpOptions.headers.set('Authorization', token);
-
-        return this._httpClient.get<any>(this.url+'ticket/for-number/'+i, this.httpOptions);
-    }
-
-    getForName(token, company, name){
-        this.httpOptions.headers =
-        this.httpOptions.headers.set('Authorization', token);
-
-        return this._httpClient.get<any>(this.url+'ticket/for-name/'+company+'/'+name, this.httpOptions);
-    }
-
     getPrevNext(token, userId, numTicket, status, role){
         this.httpOptions.headers =
         this.httpOptions.headers.set('Authorization', token);
@@ -188,8 +177,6 @@ export class ticketService{
             return this._httpClient.get<any>(this.url+'ticket/prev-next/agent/'+status+'/'+numTicket+'/'+userId, this.httpOptions);
         }
     }
-
-
 
     getForUser(token, id: string){
         this.httpOptions.headers =
