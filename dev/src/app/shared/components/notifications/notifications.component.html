@@ -1,11 +1,17 @@
 <div class="text-center mat-bg-primary pt-1 pb-1">
-  <h6 class="m-0">Notifications</h6>
+  <mat-icon class="mr-1" style="float: left; cursor:pointer; " color="link" (click)="closePanel()">arrow_backs</mat-icon>
+  <h6 class="m-0">Notificaciones</h6>
 </div>
 <mat-nav-list class="notification-list" role="list">
   <!-- Notification item -->
-  <mat-list-item *ngFor="let n of notifications" class="notific-item" role="listitem" routerLinkActive="open">
-    <mat-icon [color]="n.color" class="notific-icon mr-1">{{n.icon}}</mat-icon>
-    <a [routerLink]="[n.route || '/dashboard']">
+  <mat-list-item *ngFor="let n of notifications" (mouseover)="n['on'] = true" (mouseleave)="n['on'] = false" class="notific-item" role="listitem" routerLinkActive="open">
+    <mat-icon *ngIf="!n['on']" [color]="n.color" class="notific-icon mr-1">
+      {{n.icon}}
+    </mat-icon>
+    <mat-icon *ngIf="n['on']" (click)="deleteNotification(n)" color="warn" class="notific-icon mr-1">
+      delete
+    </mat-icon>
+    <a (click)="redirectTo(n.route)">
       <div class="mat-list-text">
         <h4 class="message">{{n.message}}</h4>
         <small class="time text-muted">{{n.time}}</small>
@@ -13,6 +19,6 @@
     </a>
   </mat-list-item>
 </mat-nav-list>
-<div class="text-center mt-1" *ngIf="notifications.length">
-  <small><a href="#" (click)="clearAll($event)">Clear all notifications</a></small>
+<div class="text-center mt-1" *ngIf="notifications">
+  <small><a href="#" (click)="clearAll($event)">Limpiar notificaciones</a></small>
 </div>

@@ -36,6 +36,7 @@ export class NewTicketComponent implements OnInit {
   public ticket: Ticket;
   public text: TextBlock;
   public requester: User;
+  public subType: SubTypeTicket;
 
   public requesters: User[];
   public agents: User[];
@@ -209,6 +210,7 @@ export class NewTicketComponent implements OnInit {
   }
 
   setSubType(subtype: SubTypeTicket){
+    this.subType = subtype;
     this.typeControl.controls['subtype'].setValue(subtype._id);
 
     this.descriptionControl.controls['sub'].setValue(null);
@@ -311,8 +313,9 @@ export class NewTicketComponent implements OnInit {
              this._textBlockService.add(this.token, this.text).subscribe(
                  response =>{
                    if(response.textblock){
-                     if(this.descriptionControl.controls['files'].value != undefined){
-                      this._uploadService.makeFileRequest(this.url+'textblock/file/'+response.textblock._id, [], this.descriptionControl.controls['files'].value, this.token, 'file')
+                     if(this.descriptionControl.controls['files'].value != undefined && this.descriptionControl.controls['files'].value != null){
+                       let fileToUpload = this.descriptionControl.controls['files'].value.files;
+                      this._uploadService.makeFileRequest(this.url+'textblock/file/'+response.textblock._id, [], fileToUpload, this.token, 'file')
                       .then(
                           result =>{
                             this.loader.close()
@@ -343,6 +346,22 @@ export class NewTicketComponent implements OnInit {
     );
   }
 
+  isInvalid(){
+    if(this.descriptionControl.invalid){
+      return true;
+    }else{
+      if(!this.subType.autoChange){
+        return false;
+      }else{
+        if(this.descriptionControl.controls['text'].value == this.subType.autoDesc && this.descriptionControl.controls['sub'].value == this.subType.autoSub){
+          return true;
+        }else{
+          return false;
+        }
+      }
+    }
+  }
+
 
   public fileChangeEvent(fileInput:any){
     this.descriptionControl.controls['files'].setValue(<Array<File>>fileInput.target.files);
@@ -367,7 +386,7 @@ export class NewTicketComponent implements OnInit {
     }
   }
 
-  deleteCc(val: User){
+  public deleteCc(val: User){
     if(this.cc.indexOf(val) != -1){
       this.cc.splice(this.cc.indexOf(val), 1);
     }

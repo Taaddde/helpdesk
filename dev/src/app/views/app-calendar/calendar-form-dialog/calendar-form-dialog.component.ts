@@ -9,6 +9,7 @@ import { userService } from 'app/shared/services/helpdesk/user.service';
 import { Team } from 'app/shared/models/helpdesk/team';
 import { APP_DATE_FORMATS, AppDateAdapter } from 'app/shared/services/date-adapter';
 import { MAT_DATE_FORMATS, DateAdapter } from '@angular/material/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface DialogData {
   event?: CalendarEvent,
@@ -44,7 +45,8 @@ export class CalendarFormDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private data: DialogData,
     private formBuilder: FormBuilder,
     private _teamService: teamService,
-    private _userService: userService
+    private _userService: userService,
+    private snackBar: MatSnackBar,
   ) {
     this.token = _userService.getToken();
     this.identity = _userService.getIdentity();
@@ -98,8 +100,17 @@ export class CalendarFormDialogComponent implements OnInit {
   }
 
   send(){
-    this.dialogRef.close(this.event)
+    if(this.event.title != '' && (this.event.type == 'Privado' || (this.event.type == 'Público' && this.event['team']))){
+      this.dialogRef.close(this.event)
+    }else{
+      this.openSnackBar('Faltan completar datos', 'Cerrar');
+    }
   }
  
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 10000,
+    });
+  }
 
 }

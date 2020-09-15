@@ -5,7 +5,9 @@
   </button>
   <mat-menu #menu="matMenu">
     <button (click)="onTodoOptionSelected($event)" mat-menu-item>Todo</button>
-    <button (click)="onTodoOptionSelected($event)" mat-menu-item>Mios</button>
+    <button (click)="onTodoOptionSelected($event)" mat-menu-item>Todo - Pendientes</button>
+    <button (click)="onTodoOptionSelected($event)" mat-menu-item>Todo - Realizados</button>
+    <button (click)="onTodoOptionSelected($event)" mat-menu-item>Todo - Mios</button>
     <button (click)="onTodoOptionSelected($event)" mat-menu-item>Realizado</button>
     <button (click)="onTodoOptionSelected($event)" mat-menu-item>No realizado</button>
     <button (click)="onTodoOptionSelected($event)" mat-menu-item>Leído</button>
@@ -61,7 +63,7 @@
     fxLayout="row"
     fxLayoutAlign="center center"
   >
-    Cargando...
+    No hay tareas para mostrar
   </div>
   <div
     [ngClass]="{'todo-box': true, 'readed': todo.usersWhoRead?.includes(identity['_id']), 'done': todo.done}"
@@ -82,7 +84,7 @@
         fxFlex="1 1 0%"
         routerLink="/todo/list/{{ todo?._id }}"
       >
-        <span>{{ todo?.title }}</span>
+        <span><strong>{{ todo?.title }}</strong> | {{changeDate(todo?.startDate)}}</span>
         <span>{{ todo?.note }}</span>
 
         <mat-chip-list #chipList>

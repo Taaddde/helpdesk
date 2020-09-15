@@ -4,8 +4,8 @@
             
             <!-- App Logo -->
             <div class="branding">
-                <img src="assets/images/system/logo.png" alt="" class="app-logo">
-                <span class="app-logo-text">HSJD</span>
+                <img src="assets/images/system/gestor-logo.png" alt="" class="app-logo">
+                <span class="app-logo-text">{{appName}}</span>
                 
                 <span style="margin: auto" *ngIf="layoutConf.sidebarStyle !== 'compact'"></span>
                 <div 
@@ -22,8 +22,12 @@
                 <img *ngIf="!identity.image || identity.image == 'null'" src="assets/images/system/user-placeholder.png" class="mat-elevation-z1" alt="">
                 </div>
                 <span class="app-user-name mb-05">
-                <mat-icon class="icon-xs text-muted">lock</mat-icon> 
-                {{identity['name']}} {{identity['surname']}}
+                    <mat-icon class="icon-xs text-muted">lock</mat-icon> 
+                    {{identity['name']}} {{identity['surname']}}
+                </span>
+                <span class="app-user-name mb-05" *ngIf="identity['company']">
+                    <mat-icon class="icon-xs text-muted">group</mat-icon> 
+                    {{identity['company']['name']}}
                 </span>
                 <!-- Small buttons -->
                  <div class="app-user-controls">
@@ -47,6 +51,11 @@
                     <button mat-menu-item [routerLink]="['/user/profile', identity['_id']]">
                         <mat-icon>account_box</mat-icon>
                         <span>Perfil</span>
+                    </button>
+                    <button mat-menu-item (click)="changeTo(identity['role'])">
+                        <mat-icon>group</mat-icon>
+                        <span *ngIf="identity['role'] != 'ROLE_REQUESTER'">Modo solicitante</span>
+                        <span *ngIf="identity['changedMode']">Modo agente</span>
                     </button>
                     <button mat-menu-item (click)="signOut()">
                         <mat-icon>exit_to_app</mat-icon>

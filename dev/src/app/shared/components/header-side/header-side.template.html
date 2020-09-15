@@ -32,20 +32,35 @@
 </mat-menu> -->
 
 
-  <egret-search-input-over *ngIf="identity['role'] != 'ROLE_REQUESTER'" placeholder="Tickets" resultPage="/search"></egret-search-input-over>
+  <egret-search-input-over *ngIf="identity['role'] != 'ROLE_REQUESTER'" placeholder="Buscar tickets por asunto | @ Busca solicitantes, #: Busca número, *: Busca chat" resultPage="/search"></egret-search-input-over>
   <!-- Open "views/search-view/result-page.component" to understand how to subscribe to input field value -->
 
-  <!-- Notification toggle button -->
-  <!-- <button
+
+  <!-- Tour toggle button -->
+  <button
+    *ngIf="tourSteps"
+    id="tour"
     mat-icon-button
-    matTooltip="Notifications"
+    (click)="startTour()"
+    matTooltip="Ayuda"
+    class="topbar-button-right">
+    <mat-icon>help_outline</mat-icon>
+  </button>
+
+
+  <!-- Notification toggle button -->
+  <button
+    mat-icon-button
+    matTooltip="Notificaciones"
     (click)="toggleNotific()"
     [style.overflow]="'visible'"
     class="topbar-button-right"
   >
     <mat-icon>notifications</mat-icon>
-    <span class="notification-number mat-bg-warn">3</span>
-  </button> -->
+    <span class="notification-number mat-bg-warn" *ngIf="count != 0">
+      {{count}}
+    </span>
+  </button>
   <!-- Top left user menu -->
   <button
     mat-icon-button
@@ -62,11 +77,12 @@
       <mat-icon>account_box</mat-icon>
       <span>Perfil</span>
     </button>
-    <!-- <button mat-menu-item [routerLink]="['/profile/settings']">
-      <mat-icon>settings</mat-icon>
-      <span>Account Settings</span>
+    <button mat-menu-item (click)="changeTo(identity['role'])">
+      <mat-icon>group</mat-icon>
+      <span *ngIf="identity['role'] != 'ROLE_REQUESTER'">Modo solicitante</span>
+      <span *ngIf="identity['changedMode']">Modo agente</span>
     </button>
-    <button mat-menu-item>
+    <!-- <button mat-menu-item>
       <mat-icon>notifications_off</mat-icon>
       <span>Disable alerts</span>
     </button> -->

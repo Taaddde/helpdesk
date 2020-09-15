@@ -43,7 +43,7 @@ export class SubTypeNewComponent implements OnInit {
   ) {
     this.token = _userService.getToken();
     this.identity = _userService.getIdentity();
-    this.subtype = new SubTypeTicket('','','',null,'',[],null,false,'','','',null);
+    this.subtype = new SubTypeTicket('','','',null,'',[],null,false,'','','',false, null);
     this.check = '';
    }
 
@@ -84,7 +84,7 @@ export class SubTypeNewComponent implements OnInit {
         response =>{
             if(response.subTypeTicket){
                 this.openSnackBar('Subtipo creado', 'Cerrar');
-                this._router.navigate(['/settings/ticket/subtype', response.subTypeTicket._id]);
+                this._router.navigate(['/settings/ticket/types']);
             }
         },
         error =>{

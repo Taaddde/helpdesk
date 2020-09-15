@@ -22,6 +22,7 @@ import {MatSelectModule} from '@angular/material/select';
 import { QuillModule } from 'ngx-quill';
 import { MatStepperModule } from '@angular/material/stepper';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 //Componentes
 
@@ -37,6 +38,7 @@ import { userService } from 'app/shared/services/helpdesk/user.service';
   imports: [
     FormsModule,
     CommonModule,
+    MaterialFileInputModule,
     MatStepperModule,
     MatSelectModule,
     ReactiveFormsModule,

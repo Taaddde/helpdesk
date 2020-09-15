@@ -42,7 +42,7 @@ export class SubTypeEditComponent implements OnInit {
   ) {
     this.token = _userService.getToken();
     this.identity = _userService.getIdentity();
-    this.subtype = new SubTypeTicket('','','',null,'',[],null,false,'','','',null);
+    this.subtype = new SubTypeTicket('','','',null,'',[],null,false,'','','', false,null);
     this.check = '';
    }
 
@@ -91,7 +91,7 @@ export class SubTypeEditComponent implements OnInit {
     if(this.subtype.name != ''){
       this._subTypeTicketService.edit(this.token, this.subtype._id, this.subtype).subscribe(
         response =>{
-            if(response.company){
+            if(response.subTypeTicket){
                 this.openSnackBar('Datos actualizados', 'Cerrar')
             }
         },

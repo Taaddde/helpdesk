@@ -18,9 +18,9 @@
             </div>
             
             <div class="col-md-6">
-                <div class="text-md-right dataTables_filter" id="dataTable_filter" *ngIf="identity['sectorRef']==true">
+                <div class="text-md-right dataTables_filter" id="dataTable_filter">
                     <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="ref" (change)="refCheck($event)" />
+                        <input type="checkbox" [disabled]="identity['sectorRef']==false" class="form-check-input" id="ref" (change)="refCheck($event)" />
                         <label class="form-check-label" for="ref">TICKETS DEL SECTOR</label></div>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                   <tr>
                       <th>Número</th>
                       <th>Solicitante</th>
-                      <th>Asunto</th>
+                      <th style="width: 300px">Asunto</th>
                       <th>Agente</th>
                       <th>Estado</th>
                       <th>Fecha</th>

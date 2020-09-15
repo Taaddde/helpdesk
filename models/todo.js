@@ -33,6 +33,11 @@ var TodoSchema = Schema({
         ref:'User',
         default: new Array()
     },
+
+    files:{
+        type: [String],
+        default: new Array()
+    },
 });
 
     

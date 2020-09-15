@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AppConfirmService } from '../../../shared/services/app-confirm/app-confirm.service';
@@ -8,7 +8,6 @@ import { userService } from 'app/shared/services/helpdesk/user.service';
 import { Params, ActivatedRoute, Router } from '@angular/router';
 import { ticketService } from 'app/shared/services/helpdesk/ticket.service';
 import { Ticket } from 'app/shared/models/helpdesk/ticket';
-import { User } from 'app/shared/models/helpdesk/user';
 import { GLOBAL } from 'app/shared/services/helpdesk/global';
 import { FilterComponent } from './filtro/filter.component';
 
@@ -23,7 +22,7 @@ declare var $: any;
 export class TicketListComponent implements OnInit {
 
   public token: string;
-  public identity: string;
+  public identity: string; 
   public url: string;
 
   public limit: number;
@@ -40,6 +39,7 @@ export class TicketListComponent implements OnInit {
 
   public tickets: Ticket[];
 
+
   constructor(
     private dialog: MatDialog,
     private _route: ActivatedRoute,
@@ -48,18 +48,21 @@ export class TicketListComponent implements OnInit {
     private loader: AppLoaderService,
     private snackBar: MatSnackBar,
     private _userService: userService,
-    private _ticketService: ticketService
+    private _ticketService: ticketService,
   ) {
     this.token = _userService.getToken();
     this.identity = _userService.getIdentity();
     this.url = GLOBAL.url;
 
     this.groupTicket = new Array<number>();
+
   }
 
   ngOnInit() {
     this.setQuery();
     this.getTickets();
+
+
   }
 
   setQuery(){
@@ -239,6 +242,7 @@ export class TicketListComponent implements OnInit {
 
       })
   }
+
 
 
 }

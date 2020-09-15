@@ -1,8 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { userService } from 'app/shared/services/helpdesk/user.service';
+import { todoService } from 'app/shared/services/helpdesk/todo.service';
+import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-sidenav',
-  templateUrl: './sidenav.template.html'
+  templateUrl: './sidenav.template.html',
+  providers: [userService, todoService]
 })
 export class SidenavComponent {
   @Input('items') public menuItemss: any[] = [];
@@ -11,12 +15,27 @@ export class SidenavComponent {
   @Input() identity;
 
   public menuItems: any[];
-  
-  constructor() {}
-  ngOnInit() {
-    
+  public token: string;
+  public refresh;
 
+  constructor(
+    private _userService: userService,
+    private _todoService: todoService
+  ) {
+    this.token = _userService.getToken();
+  }
+  ngOnInit() {
     this.setMenu();
+    if(this.identity['role'] != 'ROLE_REQUESTER'){
+      this.getCountTasks();
+      this.refresh = interval(15000).subscribe((val) => { 
+        this.getCountTasks();
+      }); 
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.refresh.unsubscribe();
   }
 
   setMenu(){
@@ -135,17 +154,17 @@ export class SidenavComponent {
                 { name: "Equipo", state: "list/team", cod: '6.1.3'},
               ]
             },
-            { 
-              name: "Depósito",
-              type: "dropDown",
-              icon: "group", 
-              cod: '6.3',  
-              state: "group",
-              sub: [
-                { name: "Articulos", state: "home", cod: '6.3.1' },
-                { name: "Depósitos", state: "home", cod: '6.3.2' },
-              ]
-            },
+            // { 
+            //   name: "Depósito",
+            //   type: "dropDown",
+            //   icon: "group", 
+            //   cod: '6.3',  
+            //   state: "group",
+            //   sub: [
+            //     { name: "Articulos", state: "home", cod: '6.3.1' },
+            //     { name: "Depósitos", state: "home", cod: '6.3.2' },
+            //   ]
+            // },
     
             { name: "Tipo/Subtipo de ticket", state: "settings/ticket/types", cod: '6.4'},
           ]
@@ -237,17 +256,17 @@ export class SidenavComponent {
                 { name: "Departamento", state: "company", role: "ROLE_ADMIN", cod: '6.2.1'}
               ]
             },
-            { 
-              name: "Depósito",
-              type: "dropDown",
-              icon: "group", 
-              cod: '6.3',  
-              state: "group",
-              sub: [
-                { name: "Articulos", state: "home", cod: '6.3.1' },
-                { name: "Depósitos", state: "home", cod: '6.3.2' },
-              ]
-            },
+            // { 
+            //   name: "Depósito",
+            //   type: "dropDown",
+            //   icon: "group", 
+            //   cod: '6.3',  
+            //   state: "group",
+            //   sub: [
+            //     { name: "Articulos", state: "home", cod: '6.3.1' },
+            //     { name: "Depósitos", state: "home", cod: '6.3.2' },
+            //   ]
+            // },
     
             { name: "Tipo/Subtipo de ticket", state: "settings/ticket/types", cod: '6.4'},
           ]
@@ -256,68 +275,17 @@ export class SidenavComponent {
     }
   }
 
-  authGuard(){
-    console.log(this.menuItems)
-    this.menuItems.forEach(e1 => {
-      //Saca 1 nivel
-      console.log(e1.name);
-      console.log(!this.access(e1.role, this.identity['role']))
-      if(!this.access(e1.role, this.identity['role'])){
-        this.menuItems.splice(this.menuItems.indexOf(e1), 1);
-      }
-      if(e1.sub){
-        let sub2 = e1.sub;
-        sub2.forEach(e2 => {
-          //Saca 2 nivel
-          if(!this.access(e2.role, this.identity['role'])){
-            sub2.splice(sub2.indexOf(e2), 1);
+  getCountTasks(){
+    let query: any = {users: this.identity['_id']};
+    this._todoService.getCount(this.token, query).subscribe(
+        response =>{
+          if(response.count && response.count != 0){
+              this.menuItems[1]['badges'] = {color: 'warn', value: response.count}
           }
-          if(e2.sub){
-            let sub3 = e2.sub;
-            sub3.forEach(e3 => {
-              //Saca 3 nivel
-              if(!this.access(e3.role, this.identity['role'])){
-                sub3.splice(sub3.indexOf(e3), 1);
-              }
-            });
-          }
-        });
-      }
-    });
-  }
-
-  access(role, myRole): boolean{
-    if(!role)
-      return true;
-
-    if(role == 'ROLE_REQUESTER' && myRole == 'ROLE_REQUESTER')
-      return true;
-
-    if(role == 'ROLE_AGENT'){
-      if(myRole == 'ROLE_AGENT' || myRole == 'ROLE_ADMIN')
-        return true;
-      else  return false;
-    }
-
-    if(role == 'ROLE_ADMIN' && myRole == 'ROLE_ADMIN')
-      return true;
-
-
-    return false;
-  }
-
-  // Only for demo purpose
-  addMenuItem() {
-    this.menuItems.push({
-      name: 'ITEM',
-      type: 'dropDown',
-      tooltip: 'Item',
-      icon: 'done',
-      state: 'material',
-      sub: [
-        {name: 'SUBITEM', state: 'cards'},
-        {name: 'SUBITEM', state: 'buttons'}
-      ]
-    });
+        },
+        error =>{
+          console.log(error);
+        }
+    );
   }
 }

@@ -1,7 +1,7 @@
 <mat-card class="p-0">
   <mat-card-content>
     <mat-horizontal-stepper [linear]="true">
-      <mat-step *ngIf="identity['role'] != 'ROLE_REQUESTER'" [stepControl]="requesterControl">
+      <mat-step *ngIf="identity['role'] != 'ROLE_REQUESTER'" [stepControl]="requesterControl" id="requesterStep">
         <ng-template matStepLabel>Solicitante</ng-template>
         <form fxFlex>
           <div fxLayout="row wrap" fxLayout.lt-sm="column">
@@ -45,7 +45,7 @@
           <button mat-raised-button color="primary" [disabled]="!requester" matStepperNext>Siguiente</button>
         </div>
       </mat-step>
-      <mat-step *ngIf="identity['role'] == 'ROLE_REQUESTER'" [stepControl]="typeControl">
+      <mat-step *ngIf="identity['role'] == 'ROLE_REQUESTER'" [stepControl]="typeControl" id="typeStep">
         <ng-template matStepLabel>Tipo de ticket</ng-template>
 
         <form fxFlex [formGroup]="typeControl">
@@ -105,7 +105,7 @@
           </div>
         </form>
       </mat-step> -->
-      <mat-step [stepControl]="descriptionControl">
+      <mat-step [stepControl]="descriptionControl" id="descriptionStep">
         <ng-template matStepLabel>Asunto y descripción</ng-template>
         <form fxFlex [formGroup]="descriptionControl">
           <div fxLayout="row wrap" fxLayout.lt-sm="column">
@@ -116,33 +116,25 @@
                       formControlName="sub"
                       matInput> 
               </mat-form-field>
+              
+              <span fxFlex="16px"></span>
+              <div fxFlex>
+                <mat-form-field>
+                  <ngx-mat-file-input #removableInput fxFlex formControlName="files" name="files" placeholder="Adjuntar archivos" multiple></ngx-mat-file-input>
+                  <button mat-icon-button matSuffix *ngIf="!removableInput.empty" (click)="removableInput.clear($event)">
+                    <mat-icon>clear</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+
               <span fxFlex="16px"></span>
               <mat-checkbox 
               fxFlex class="full-width"
+              *ngIf="identity['role'] != 'ROLE_REQUESTER'"
               [color]="'primary'"
               formControlName="important"
               name="sectorRef">Es urgente
               </mat-checkbox>
-              
-              <span fxFlex="16px"></span>
-              <div fxFlex *ngIf="!descriptionControl.controls['files'].value">
-                <label class="butt" matTooltip="Añadir adjuntos al ticket">
-                  <i class="fas fa-paperclip fa-lg  "></i>
-                  <br>
-                  Adjuntar
-                  <input type="file" 
-                        multiple class="d-none" 
-                        (change)="fileChangeEvent($event)" />
-                </label>
-              </div>
-
-              <div fxFlex *ngIf="descriptionControl.controls['files'].value">
-                <label class="butt-trash" (click)="resetFiles()" matTooltip="Eliminar los adjuntos añadidos al ticket">
-                  <i class="fas fa-trash fa-lg  "></i>
-                  <br>
-                  +{{getLenght(descriptionControl.controls['files'].value)}}
-                </label>
-              </div>
           </div>
           <div fxLayout="row wrap" fxLayout.lt-sm="column">
             <mat-card-content fxFlex class="p-0" >
@@ -157,12 +149,12 @@
           <div fxLayout="row">
             <button mat-raised-button color="accent" matStepperPrevious>Anterior</button>
             <span fxFlex="8px"></span>
-            <button mat-raised-button color="primary" [disabled]="descriptionControl.invalid" matStepperNext>Siguiente</button>
+            <button mat-raised-button color="primary" [disabled]="isInvalid()" matStepperNext>Siguiente</button>
           </div>
         </form>
         
       </mat-step>
-      <mat-step *ngIf="identity['role'] != 'ROLE_REQUESTER'" [stepControl]="respControl">
+      <mat-step *ngIf="identity['role'] != 'ROLE_REQUESTER'" [stepControl]="respControl" id="respStep">
         <ng-template matStepLabel>Responsables</ng-template>
 
         <form fxFlex [formGroup]="respControl">
@@ -197,7 +189,7 @@
           </div>
         </form>
       </mat-step>
-      <mat-step *ngIf="identity['role'] == 'ROLE_REQUESTER'" [stepControl]="">
+      <mat-step *ngIf="identity['role'] == 'ROLE_REQUESTER'" [stepControl]="" id="ccStep">
         <ng-template matStepLabel>En copia</ng-template>
 
         <form fxFlex>

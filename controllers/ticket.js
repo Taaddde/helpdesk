@@ -2,6 +2,7 @@
 var Ticket = require('../models/ticket');
 var TextBlock = require('../models/textblock');
 var Team = require('../models/team');
+var User = require('../models/user');
 const moment = require('moment');
 const mongoose =require('mongoose')
 
@@ -788,27 +789,157 @@ function getList(req, res){
     ];
 
     var query = req.query;
-    var sort = {numTicket:-1}
-    if(query['sub']){
-        query['sub'] = { "$regex": query['sub'], "$options": "i" }
-    }
+    var sort = {numTicket:-1};
 
-    Ticket.find(query).populate(populateQuery).sort(sort).exec(function(err, tickets){
-        if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
-            console.log(err)
-            res.status(500).send({message: err})
-        }else{
-            if(!tickets){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
-                res.status(404).send({message: 'No hay items'})
+    let arr = new Array();
+
+    if(query['sub']){
+
+        let str = new String(query['sub']);
+        //Numero de ticket
+        if(str.startsWith('#')){
+            let str2 = str.split('#');
+            let num = parseInt(str2[1], 10);
+            if(!Number.isNaN(num)){
+                query['numTicket'] = num;
+                delete query['sub'];
             }else{
-                res.status(200).send({
-                    tickets:tickets
+                query['sub'] = { "$regex": query['sub'], "$options": "i" }
+            }
+
+            Ticket.find(query).populate(populateQuery).sort(sort).exec(function(err, tickets){
+                if(err){
+                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                    res.status(500).send({message: err})
+                }else{
+                    if(!tickets){
+                        logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                        res.status(404).send({message: 'No hay items'})
+                    }else{
+                        res.status(200).send({
+                            tickets:tickets
+                        });
+                    }
+                }
+            });
+
+        }else{
+            //Busqueda por usuario
+            if(str.startsWith('@')){
+                let str2 = str.split('@');
+                let userQuery = [
+                    {$project: { "completeName" : { $concat : [ "$name", " ", "$surname" ] } }},
+                    {$match: {"completeName": {"$regex": str2[1], "$options": "i"}}}
+                ]
+
+                User.aggregate(userQuery).exec(function(err, users){
+                    if(users){
+                        users.forEach(e => {
+                            arr.push(ObjectId(e._id));
+                        });
+                        query['requester'] = {$in: arr};
+                        delete query['sub'];
+
+                        Ticket.find(query).populate(populateQuery).sort(sort).exec(function(err, tickets){
+                            if(err){
+                                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                                res.status(500).send({message: err})
+                            }else{
+                                if(!tickets){
+                                    logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                                    res.status(404).send({message: 'No hay items'})
+                                }else{
+                                    res.status(200).send({
+                                        tickets:tickets
+                                    });
+                                }
+                            }
+                        });
+
+                    }
+                    if(err){
+                        console.log(err);
+                    }
                 });
+            }else{
+                if(str.startsWith('*')){
+                    let str2 = str.split('*');
+                    let textQuery = [
+                        {
+                            $match: {
+                                "text": {"$regex": str2[1], "$options": "i"},
+                                "type": {"$ne": "INFO"}
+                            },
+                        }
+                    ];
+
+                    // if(str.startsWith('**')){
+                    //     str2 = str.split('**');
+                    //     textQuery = [
+                    //         {
+                    //             $match: {
+                    //                 "text": {"$regex": str2[1], "$options": "i"},
+                    //                 "type": {"$ne": "INFO"}
+                    //             },
+                    //         }
+                    //     ];
+                    // }
+
+                    TextBlock.aggregate(textQuery).exec(function(err, tb){
+                        if(tb){
+                            tb.forEach(e => {
+                                arr.push(ObjectId(e.ticket));
+                            });
+                            query['_id'] = {$in: arr};
+                            delete query['sub'];
+
+                            Ticket.find(query).populate(populateQuery).sort(sort).exec(function(err, tickets){
+                                if(err){
+                                    logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                                    res.status(500).send({message: err})
+                                }else{
+                                    if(!tickets){
+                                        logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                                        res.status(404).send({message: 'No hay items'})
+                                    }else{
+                                        res.status(200).send({
+                                            tickets:tickets
+                                        });
+                                    }
+                                }
+                            });
+    
+                        }
+                        if(err){
+                            console.log(err);
+                        }
+                    });
+                }else{
+                    query['sub'] = { "$regex": query['sub'], "$options": "i" }
+
+                    Ticket.find(query).populate(populateQuery).sort(sort).exec(function(err, tickets){
+                        if(err){
+                            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                            res.status(500).send({message: err})
+                        }else{
+                            if(!tickets){
+                                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                                res.status(404).send({message: 'No hay items'})
+                            }else{
+                                res.status(200).send({
+                                    tickets:tickets
+                                });
+                            }
+                        }
+                    });
+                }
+                
             }
         }
-    });
+    }
+    
+    
+
 }
 
 function getSectorListPaged(req, res){

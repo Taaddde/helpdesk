@@ -15,7 +15,8 @@ var SubTypeTicketSchema = Schema({
     deleted: {type: Boolean, default:false},
     autoSub: {type: String, default:''},
     autoDesc: {type:String, default:''},
-    workTime: {type:Number, default:null},
+    autoChange: {type:Boolean, default:false},
+    workTime: {type:Number, default:null}
 });
 
 module.exports = mongoose.model('SubTypeTicket', SubTypeTicketSchema);

@@ -6,7 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 //Inyeccion de dependencias
 @Injectable()
-export class todoService{
+export class notificationService{
     
     public url: string; //url del api
     public path: string;
@@ -21,11 +21,11 @@ export class todoService{
 
     constructor(private _httpClient: HttpClient){
         this.url = GLOBAL.url;
-        this.path = 'todo'
+        this.path = 'notification'
     }
 
-    add(token, todo){
-        let params = JSON.stringify(todo);
+    add(token, notification){
+        let params = JSON.stringify(notification);
         this.httpOptions.headers =
         this.httpOptions.headers.set('Authorization', token);
 
@@ -33,8 +33,8 @@ export class todoService{
 
     }
 
-    edit(token, id:string, todo){
-        let params = JSON.stringify(todo);
+    edit(token, id:string, notification){
+        let params = JSON.stringify(notification);
         this.httpOptions.headers =
         this.httpOptions.headers.set('Authorization', token);
 
@@ -76,36 +76,6 @@ export class todoService{
             this.httpOptions.headers.set('Authorization', token);
 
         return this._httpClient.get<any>(this.url+this.path+'/get/'+id, this.httpOptions);
-    }
-
-    addTag(token, id:string, tagId: string){
-        var params = {tag:tagId};
-        this.httpOptions.headers =
-        this.httpOptions.headers.set('Authorization', token);
-
-        return this._httpClient.put<any>(this.url+this.path+'/add-tag/'+id, params, this.httpOptions);
-    }
-
-    removeTag(token, id:string, tagId: string){
-        this.httpOptions.headers =
-        this.httpOptions.headers.set('Authorization', token);
-
-        return this._httpClient.put<any>(this.url+this.path+'/remove-tag/'+id, {tag:tagId}, this.httpOptions);
-    }
-
-    addUser(token, id:string, userId: string){
-        var params = {user:userId};
-        this.httpOptions.headers =
-        this.httpOptions.headers.set('Authorization', token);
-
-        return this._httpClient.put<any>(this.url+this.path+'/add-user/'+id, params, this.httpOptions);
-    }
-
-    removeUser(token, id:string, userId: string){
-        this.httpOptions.headers =
-        this.httpOptions.headers.set('Authorization', token);
-
-        return this._httpClient.put<any>(this.url+this.path+'/remove-user/'+id, {user:userId}, this.httpOptions);
     }
     
 

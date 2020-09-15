@@ -46,7 +46,7 @@ export class TypesTicketComponent implements OnInit {
     this.subtypes = new Array<SubTypeTicket[]>();
 
     this.newType = new TypeTicket('','',this.identity['company']['_id']);
-    this.newSubtype = new SubTypeTicket('','','',0,'',String[''],0,false, '','','',null);
+    this.newSubtype = new SubTypeTicket('','','',0,'',String[''],0,false, '','','',false,null);
   }
 
   ngOnInit() {

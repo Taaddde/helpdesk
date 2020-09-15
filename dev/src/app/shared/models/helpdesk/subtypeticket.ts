@@ -12,6 +12,7 @@ export class SubTypeTicket{
         public desc: string,
         public autoSub: string,
         public autoDesc: string,
+        public autoChange: boolean,
         public workTime: number,
     ){}
 }

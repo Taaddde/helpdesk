@@ -6,29 +6,40 @@ import { RoutePartsService } from "./shared/services/route-parts.service";
 // import { ThemeService } from './shared/services/theme.service';
 
 import { filter } from 'rxjs/operators';
+import { userService } from './shared/services/helpdesk/user.service';
 // import { LayoutService } from './shared/services/layout.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  providers: [userService]
 })
 export class AppComponent implements OnInit, AfterViewInit {
   appTitle = 'HSJD';
   pageTitle = '';
+
+  public identity;
 
   constructor(
     public title: Title, 
     private router: Router, 
     private activeRoute: ActivatedRoute,
     private routePartsService: RoutePartsService,
-    // private themeService: ThemeService,
+    private _userService: userService,
     // private layout: LayoutService,
     // private renderer: Renderer2
-  ) { }
+  ) {
+    this.identity = _userService.getIdentity();
+    
+   }
 
   ngOnInit() {
     this.changePageTitle();
+
+    if(this.identity['company']){
+      this.appTitle = this.identity['company']['name'];
+    }
   }
   ngAfterViewInit() {
   }

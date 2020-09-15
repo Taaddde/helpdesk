@@ -15,6 +15,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 import { TodoRoutingModule } from "./todo-routing.module";
 import { TodoComponent } from "./todo/todo.component";
@@ -40,6 +41,7 @@ import { teamService } from 'app/shared/services/helpdesk/team.service';
     FormsModule,
     MatMenuModule,
     MatButtonModule,
+    MaterialFileInputModule,
     MatFormFieldModule,
     MatDividerModule,
     DragDropModule,

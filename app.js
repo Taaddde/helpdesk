@@ -28,6 +28,7 @@ var stock_routes = require('./routes/stock');
 var movim_routes = require('./routes/movim');
 var calendarEvent_routes = require('./routes/calendarEvent');
 var todo_routes = require('./routes/todo');
+var notification_routes = require('./routes/notification');
 
 
 
@@ -67,6 +68,7 @@ app.use('/api/stock', stock_routes);
 app.use('/api/movim', movim_routes);
 app.use('/api/calendar-event', calendarEvent_routes);
 app.use('/api/todo', todo_routes);
+app.use('/api/notification', notification_routes);
 
 
 app.get('*', function(req, res, next){

@@ -13,19 +13,32 @@ import { Team } from 'app/shared/models/helpdesk/team';
 import { User } from 'app/shared/models/helpdesk/user';
 import { Tag } from 'app/shared/models/helpdesk/tag';
 import { TodoService } from '../todo.service';
+import { notificationService } from 'app/shared/services/helpdesk/notification.service';
+import { Notification } from 'app/shared/models/helpdesk/notification';
+import * as moment from 'moment';
+import { APP_DATE_FORMATS, AppDateAdapter } from 'app/shared/services/date-adapter';
+import { MAT_DATE_FORMATS, DateAdapter } from '@angular/material/core';
+import { FileInput } from 'ngx-material-file-input';
+import { uploadService } from 'app/shared/services/helpdesk/upload.service';
+import { GLOBAL } from 'app/shared/services/helpdesk/global';
 
 @Component({
   selector: 'app-todo-details',
   templateUrl: './todo-details.component.html',
   styleUrls: ['./todo-details.component.scss'],
+  providers: [
+    {provide: DateAdapter, useClass: AppDateAdapter},
+    {provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS},
+    notificationService, uploadService
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TodoDetailsComponent implements OnInit {
 
+export class TodoDetailsComponent implements OnInit {
   public todo: TodoItem = {
     title: '',
     note: '',
-    startDate: '',
+    startDate: '', 
     dueDate: '',
     done: false,
     important: false,
@@ -34,7 +47,8 @@ export class TodoDetailsComponent implements OnInit {
     selected: false,
     tags:[],
     users: [],
-    usersWhoRead: []
+    usersWhoRead: [],
+    files: []
   };
 
   a: PerfectScrollbar;
@@ -42,11 +56,14 @@ export class TodoDetailsComponent implements OnInit {
 
   public token: string;
   public identity;
+  public url: string = GLOBAL.url;
 
   public teams: Team[];
   public teamName = '';
   public agents: Array<any>;
   public agentsIn: Array<any>;
+
+  public files: FileInput;
 
   
   constructor(
@@ -56,9 +73,11 @@ export class TodoDetailsComponent implements OnInit {
     private _todoService: todoService,
     private _tagService: tagService,
     private _teamService: teamService,
+    private _notificationService: notificationService,
     private router: Router,
     private snackBar: MatSnackBar,
     private route: ActivatedRoute,
+    private _uploadService: uploadService,
     private cdr: ChangeDetectorRef) 
     {
       this.token = _userService.getToken();
@@ -83,6 +102,8 @@ export class TodoDetailsComponent implements OnInit {
       this._todoService.getOne(this.token, id).subscribe(
           response =>{
             if(response.todo){
+
+              console.log(response.todo);
                this.todo = response.todo;
                this.cdr.markForCheck();
                if(this.todo.users){
@@ -137,6 +158,7 @@ export class TodoDetailsComponent implements OnInit {
 
   
   saveTodo() {
+
     if(this.agentsIn){
       let ids = new Array();
       this.agentsIn.forEach(agent => {
@@ -149,6 +171,15 @@ export class TodoDetailsComponent implements OnInit {
       this._todoService.add(this.token, this.todo).subscribe(
         response =>{
           if(response.todo){
+            this.uploadFile(response.todo._id);
+            this.todo.users.forEach(user => {
+              let dateInit = moment(this.todo.startDate).format('YYYY-MM-DD HH:mm');
+              let notif = new Notification('',this.todo.title, 'list_alt', dateInit, dateInit, 'todo/list/'+response.todo._id, 'accent', user, null, response.todo._id);
+              this._notificationService.add(this.token, notif).subscribe(
+                  response =>{},
+                  error =>{}
+              );
+            });
             this.router.navigateByUrl("/todo/list");
           }
         },
@@ -160,6 +191,52 @@ export class TodoDetailsComponent implements OnInit {
       this._todoService.edit(this.token, this.todo._id, this.todo).subscribe(
         response =>{
           if(response.todo){
+            this.uploadFile(response.todo._id);
+            let query = {todo: this.todo._id};
+            this._notificationService.getList(this.token, query).subscribe(
+                response =>{
+                  if(response.notifications){
+                     let notif: Notification[] = response.notifications;
+                     notif.forEach(n => {
+
+                      if(this.todo.users.indexOf(n.user) != -1){
+                        this.todo.users.splice(this.todo.users.indexOf(n.user), 1);
+                        n.message = this.todo.title;
+                        let dateInit = moment(this.todo.startDate).format('YYYY-MM-DD HH:mm');
+                        n.date = dateInit;
+                        n.dateInit = dateInit;
+                        this._notificationService.edit(this.token, n._id, n).subscribe(
+                            response =>{
+                            },
+                            error =>{
+                              this.openSnackBar(error.message, 'Cerrar');
+                            }
+                        );
+                      }else{
+                        this._notificationService.delete(this.token, n._id).subscribe(
+                            response =>{},
+                            error =>{
+                              this.openSnackBar(error.message, 'Cerrar');
+                            }
+                        );
+                      }
+                     });
+                     if(this.todo.users.length > 0){
+                       this.todo.users.forEach(user => {
+                        let dateInit = moment(this.todo.startDate).format('YYYY-MM-DD HH:mm');
+                        let notif = new Notification('',this.todo.title, 'list_alt', dateInit, dateInit, 'todo/list/'+this.todo._id, 'accent', user, null, this.todo._id);
+                        this._notificationService.add(this.token, notif).subscribe(
+                            response =>{},
+                            error =>{}
+                        );
+                       });
+                     }
+                  }
+                },
+                error =>{
+                  this.openSnackBar(error.message, 'Cerrar');
+                }
+            );
             this.router.navigateByUrl("/todo/list");
           }
         },
@@ -169,6 +246,20 @@ export class TodoDetailsComponent implements OnInit {
       );
     }
 
+  }
+
+  uploadFile(id){
+    if(this.files != undefined && this.files != null){
+      let fileToUpload = this.files.files;
+      this._uploadService.makeFileRequest(this.url+'todo/file/'+id, [], fileToUpload, this.token, 'file')
+      .then(
+          result =>{
+          }, 
+          error =>{
+            this.openSnackBar(error.message, 'Cerrar');
+          }
+      );
+    }
   }
 
   deleteTodo() {
@@ -288,5 +379,43 @@ export class TodoDetailsComponent implements OnInit {
     this.snackBar.open(message, action, {
       duration: 10000,
     });
+  }
+
+  checkExt(url){
+    let data: string = url;
+    let ext = data.split('\.')[1];
+    if(
+      ext != 'pdf' && 
+
+      ext != 'xlsx' && 
+      ext != 'xls' && 
+
+      ext != 'msg' && 
+
+      ext != 'docx' &&
+      ext != 'odt' &&
+
+      ext != 'rar' && 
+      ext != 'zip' && 
+
+      ext != 'png' && 
+      ext != 'jpge' && 
+      ext != 'jpeg' && 
+      ext != 'jpg' && 
+      ext != 'tif' && 
+      ext != 'tiff'
+    ){
+      return false;
+    }else{
+      return ext;
+    }
+  }
+
+  goToLink(url: string){
+    window.open(this.url+'todo/file/'+url, "_blank");
+  }
+
+  removeFileFromTodo(file: string){
+    this.todo.files.splice(this.todo.files.indexOf(file), 1);
   }
 }

@@ -19,6 +19,9 @@ import { uploadService } from 'app/shared/services/helpdesk/upload.service';
 import { responseService } from 'app/shared/services/helpdesk/response.service';
 import { companyService } from 'app/shared/services/helpdesk/company.service';
 import { FormControl } from '@angular/forms';
+import { Notification } from 'app/shared/models/helpdesk/notification';
+import { notificationService } from 'app/shared/services/helpdesk/notification.service';
+import { FileInput } from 'ngx-material-file-input';
 
 declare var $: any;
 
@@ -26,7 +29,7 @@ declare var $: any;
   selector: 'app-ticket-gestion',
   templateUrl: './gestion.component.html',
   styleUrls: ['./gestion.component.css',],
-  providers: [userService, ticketService, teamService, textblockService, uploadService, responseService, companyService]
+  providers: [userService, ticketService, notificationService, teamService, textblockService, uploadService, responseService, companyService]
 })
 export class TicketGestionComponent implements OnInit {
 
@@ -47,6 +50,7 @@ export class TicketGestionComponent implements OnInit {
     public isCc: boolean;
     public space: string;
 
+    public files: FileInput;
 
     public lock: boolean;
 
@@ -79,6 +83,7 @@ export class TicketGestionComponent implements OnInit {
     private _uploadService: uploadService,
     private _responseService: responseService,
     private _companyService: companyService,
+    private _notificationService: notificationService,
   ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
@@ -258,10 +263,6 @@ export class TicketGestionComponent implements OnInit {
     }
   }
 
-  cleanAttach(){
-    this.filesToUpload = undefined;
-  }
-
   getChat(){
     this._route.params.forEach((params: Params) =>{
       let id = params['id'];
@@ -352,7 +353,8 @@ export class TicketGestionComponent implements OnInit {
       this._ticketService.getOne(this.token, id).subscribe(
         response => {
           this.ticket = response.ticket;
-          this.getChat();
+          setTimeout( () => { this.getChat(); }, 1000 );
+          
           this.getPrevNext(response.ticket['numTicket'], response.ticket['status']);
           this.getTeams(response.ticket.company['_id']);
           if(response.ticket.team){
@@ -423,6 +425,7 @@ export class TicketGestionComponent implements OnInit {
 
     if(text != ''){
       this.newInfo(this.identity['name']+' '+this.identity['surname']+' ha reabierto el ticket');
+      this.createMessageNotification(this.ticket.agent['_id'], '#'+this.ticket.numTicket+' - '+ this.identity['name']+' '+this.identity['surname']+' reabrió el ticket')
       this.onSubmit();
       this.ticket.status = 'Pendiente'
       this.editTicket();
@@ -533,6 +536,8 @@ export class TicketGestionComponent implements OnInit {
       this.newInfo(this.identity['name']+' '+this.identity['surname']+' ha cambiado el estado de la solicitud de '+this.ticket.status+' a '+val)
       this.ticket.status = val;
       this.editTicket(); 
+      if(val == 'Finalizado')
+        this.createMessageNotification(this.ticket.requester['_id'], '#'+this.ticket.numTicket+' - '+ this.identity['name']+' '+this.identity['surname']+' finalizó el ticket.')
       $("#timework").modal("hide"); 
     }else{
       this.openSnackBar('Debe seleccionar un responsable para cambiar el ticket a ese estado', 'Cerrar');
@@ -584,6 +589,7 @@ export class TicketGestionComponent implements OnInit {
   }
 
   onSubmit(){
+    let agent;
     if(this.textblock.text != ''){
       this.textblock.text = this.textblock.text.split('<span _ngco')[0];
     }
@@ -591,6 +597,7 @@ export class TicketGestionComponent implements OnInit {
     if(this.textblock.text != ''){
       if(this.identity['role'] == 'ROLE_REQUESTER'){
         this.textblock.type = 'REQUEST';
+        agent = this.ticket.agent;
         delete this.ticket.agent;
         delete this.ticket.team;
       }else{
@@ -608,12 +615,33 @@ export class TicketGestionComponent implements OnInit {
   
       this._textblockService.add(this.token,this.textblock).subscribe(
         response =>{
-            if(!response.textblock){
-              console.log('Error en el chat');
-            }else{
-              if(this.filesToUpload){
-                  this._uploadService.makeFileRequest(this.url+'textblock/file/'+response.textblock._id, [], this.filesToUpload, this.token, 'file');
+            if(response.textblock){
+              //Envío de notificación
+              let message = '#'+this.ticket.numTicket+' - Nuevo mensaje';
+              if(this.identity['role'] == 'ROLE_REQUESTER'){
+                if(agent){
+                  let user = agent['_id'];
+                  this.createMessageNotification(user, message);
+                }
+              }else{
+                let user = this.ticket.requester['_id'];
+                this.createMessageNotification(user, message);
+
+                if(this.ticket.cc){
+                  this.ticket.cc.forEach(ccUser => {
+                    user = ccUser['_id'];
+                    this.createMessageNotification(user, message);
+                  });
+                }
+                
               }
+
+              if(this.files != undefined && this.files != null){
+                let filesToUpload = this.files.files;
+                this._uploadService.makeFileRequest(this.url+'textblock/file/'+response.textblock._id, [], filesToUpload, this.token, 'file');
+                this.files = null;
+              }
+
             }
 
             let nameTo:string;
@@ -663,8 +691,6 @@ export class TicketGestionComponent implements OnInit {
             this.textblock = new TextBlock('','',this.identity['_id'],'','','',[''],false);
             document.getElementById('editable').innerHTML = ''
             //document.getElementById('editable').innerHTML += '<span id="antieditable" contentEditable="false"></span>';
-            this.filesToUpload = new Array<File>();
-            this.imagesToUpload = new Array<File>();
         },
         error =>{
           this.openSnackBar(error, 'Cerrar');
@@ -704,6 +730,18 @@ export class TicketGestionComponent implements OnInit {
     );
   }
 
+  createMessageNotification(user: string, message: string){
+    let now = moment().format('YYYY-MM-DD HH:mm');
+    let notification = new Notification('',message,'chat',now, now, 'ticket/gestion/'+this.ticket._id, 'primary', user, null, null);
+    this._notificationService.add(this.token, notification).subscribe(
+        response =>{
+        },
+        error =>{
+          this.openSnackBar('No pudo enviarse una notificación por sistema al usuario', 'Cerrar');
+        }
+    );
+  }
+
   changeDate(val:string){
     return moment(val, 'YYYY-MM-DD HH:mm').format('DD-MM-YYYY HH:mm');
   }
@@ -737,9 +775,4 @@ export class TicketGestionComponent implements OnInit {
     }
   }
 
-
-  public filesToUpload: Array<File>;
-  public fileChangeEvent(fileInput:any){
-    this.filesToUpload = <Array<File>>fileInput.target.files;
-  }
 }

@@ -47,6 +47,7 @@ var decoded = jwt_decode(req.headers.authorization);
 
     subTypeTicket.typeTicket = params.typeTicket;
     subTypeTicket.requireAttach = params.requireAttach;
+    subTypeTicket.autoChange = params.autoChange;
 
     subTypeTicket.save((err, subTypeTicketStored) =>{
         if(err){

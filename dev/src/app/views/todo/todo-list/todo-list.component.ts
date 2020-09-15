@@ -11,6 +11,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { userService } from "app/shared/services/helpdesk/user.service";
 import { Tag } from "app/shared/models/helpdesk/tag";
 import { tagService } from "app/shared/services/helpdesk/tag.service";
+import * as moment from 'moment';
 
 @Component({
   selector: "app-todo-list",
@@ -31,7 +32,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
   toggledItemNumber: number = 0;
   unsubscribeAll: Subject<any>;
 
-  filter = 'Mios';
+  filter = 'No Realizados';
 
   public token: string;
   public identity;
@@ -67,7 +68,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
         response =>{
           if(response.todos){
             this.tempList = response.todos;
-            this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1);
+            this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && !t.done);
           }
         },
         error =>{
@@ -123,7 +124,15 @@ export class TodoListComponent implements OnInit, OnDestroy {
         this.todoList = this.tempList;
         this.filter = 'Todo';
         break;
-      case "Mios":
+      case "Todo - Pendientes":
+        this.todoList = this.tempList.filter(t=>!t.done);
+        this.filter = 'Todo - Pendientes';
+        break;
+      case "Todo - Realizados":
+        this.todoList = this.tempList.filter(t=>t.done);
+        this.filter = 'Todo - Realizados';
+        break;
+      case "Todo - Mios":
         this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1);
         this.filter = 'Mios';
         break;
@@ -132,50 +141,39 @@ export class TodoListComponent implements OnInit, OnDestroy {
         this.filter = 'Leído';
         break;
 
-      case "No leído":
+      case "No Leído":
         this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && !t.usersWhoRead?.includes(this.identity['_id']));
-        this.filter = 'No leído';
+        this.filter = 'No Leído';
         break;
 
       case "Importante":
-        this.todoList = this.tempList.filter((todo: TodoItem) => {
-          return todo.important;
-        });
+        this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && t.important);
         this.filter = 'Importante';
         break;
 
       case "No Importante":
-        this.todoList = this.tempList.filter((todo: TodoItem) => {
-          return !todo.important;
-        });
+        this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && !t.important);
         this.filter = 'No Importante';
         break;
 
       case "Realizado":
-        this.todoList = this.tempList.filter((todo: TodoItem) => {
-          return todo.done;
-        });
+        this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && t.done);
+
         this.filter = 'Realizado';
         break;
 
       case "No Realizado":
-      this.todoList = this.tempList.filter((todo: TodoItem) => {
-        return !todo.done;
-      });
-      this.filter = 'No Realizado';
+        this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && !t.done);
+        this.filter = 'No Realizado';
       break;
 
       case "Favorito":
-        this.todoList = this.tempList.filter((todo: TodoItem) => {
-          return todo.starred;
-        });
+        this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && t.starred);
         this.filter = 'Favorito';
         break;
 
       case "No Favorito":
-        this.todoList = this.tempList.filter((todo: TodoItem) => {
-          return !todo.starred;
-        });
+        this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && !t.starred);
         this.filter = 'No favorito';
         break;
 
@@ -277,6 +275,10 @@ export class TodoListComponent implements OnInit, OnDestroy {
     }else{
       return false;
     }
+  }
+
+  changeDate(val): string{
+    return moment(val).format('DD-MM-YYYY');
   }
 
 }

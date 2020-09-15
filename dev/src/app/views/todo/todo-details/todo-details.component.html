@@ -14,6 +14,7 @@
   </mat-checkbox>
 
   <div fxLayout="row" fxFlex="1 1 0%" fxLayoutAlign="end center">
+
     <button mat-icon-button *ngIf="todo.team" [matMenuTriggerFor]="users" matTooltip="Añadir responsable">
       <mat-icon>person_add</mat-icon>
     </button>
@@ -176,6 +177,34 @@
         </mat-select>
     </mat-form-field>
   </div>
+
+  <div fxLayout="row" fxLayoutAlign="start center">
+    <mat-form-field>
+      <ngx-mat-file-input #removableInput fxFlex [(ngModel)]="files" name="files" placeholder="Adjuntar archivos" multiple></ngx-mat-file-input>
+      <button mat-icon-button matSuffix *ngIf="!removableInput.empty" (click)="removableInput.clear($event)">
+        <mat-icon>clear</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <span fxFlex="6px"></span>
+
+    <mat-chip-list #chipListFile>
+      <div *ngFor="let file of todo?.files; let i = index" fxFlex>
+        <mat-chip
+          fxLayout="row"
+          fxLayoutAlign="center center"
+          [selectable]="true"
+          (click)="goToLink(file)"
+          [removable]="true"
+          (removed)="removeFileFromTodo(file)"
+        >
+          <span><mat-icon style="font-size: 18px;">attach_file</mat-icon>Archivo {{ i+1 }}</span>
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+      </div>
+    </mat-chip-list>
+  </div>
+
   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
     <button type="button" mat-button routerLink="/todo/list">Cancelar</button>
     <button color="primary" mat-raised-button>Guardar</button>

@@ -1,5 +1,5 @@
 .body-cell {
-    width: 8em;
+    width: 25em;
     margin: 0 0 2em 0;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -14,3 +14,8 @@
     background-color: #018dda;
     color: white;
 } 
+
+.closed{
+    background-color: #F1F1F1;
+    font-style: italic;
+}

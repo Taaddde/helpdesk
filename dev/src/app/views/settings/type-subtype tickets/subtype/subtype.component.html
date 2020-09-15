@@ -41,16 +41,7 @@
                 [color]="'primary'"
                 name="requireAttach" 
                 [disabled]="!isAdmin">Requiere adjunto
-                <!-- <mat-form-field class="full-width">
-                  <input
-                  matInput
-                  name="attachDesc"
-                  type="text"
-                  placeholder="Descripción de adjunto"
-                  [readonly]="!isAdmin"
-                  [(ngModel)]="subtype.attachDesc">
-                </mat-form-field> -->
-              </mat-checkbox>
+                </mat-checkbox>
               </form>
               <button mat-raised-button color="primary" (click)="submit()">Guardar</button>
           </mat-card-content>
@@ -101,6 +92,12 @@
         <mat-tab label="Autocompletado">
           <mat-card-content class="mt-1">
             <form>
+              <mat-checkbox 
+                [(ngModel)]="subtype.autoChange"
+                [color]="'primary'"
+                name="autoChange" 
+                [disabled]="!isAdmin">Requiere modificación
+                </mat-checkbox>
               <mat-form-field class="full-width">
                 <input
                 matInput

@@ -6,10 +6,12 @@ import { ILayoutConf, LayoutService } from "app/shared/services/layout.service";
 import { JwtAuthService } from "app/shared/services/auth/jwt-auth.service";
 import { GLOBAL } from "app/shared/services/helpdesk/global";
 import { Router } from "@angular/router";
+import { userService } from "app/shared/services/helpdesk/user.service";
 
 @Component({
   selector: "app-sidebar-side",
-  templateUrl: "./sidebar-side.component.html"
+  templateUrl: "./sidebar-side.component.html",
+  providers: [userService]
 })
 export class SidebarSideComponent implements OnInit, OnDestroy, AfterViewInit {
   public menuItems: any[];
@@ -19,7 +21,10 @@ export class SidebarSideComponent implements OnInit, OnDestroy, AfterViewInit {
   public layoutConf: ILayoutConf;
   
   @Input() identity;
+  public token: string;
   public url;
+
+  public appName: string = 'HSJD';
 
   constructor(
     private navService: NavigationService,
@@ -27,9 +32,11 @@ export class SidebarSideComponent implements OnInit, OnDestroy, AfterViewInit {
     private layout: LayoutService,
     public jwtAuth: JwtAuthService,
     private router: Router,
+    private _userService: userService
 
   ) {
     this.url = GLOBAL.url;
+    this.token = _userService.getToken();
   }
 
   ngOnInit() {
@@ -42,6 +49,12 @@ export class SidebarSideComponent implements OnInit, OnDestroy, AfterViewInit {
       ).length;
     });
     this.layoutConf = this.layout.layoutConf;
+
+
+    // if(this.identity['company']){
+    //   this.appName = this.identity['company']['name'];
+    //   this.appName = this.appName.toUpperCase();
+    // }
   }
   ngAfterViewInit() {}
   ngOnDestroy() {
@@ -64,10 +77,33 @@ export class SidebarSideComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  changeTo(actualRole){
+    if(actualRole == 'ROLE_REQUESTER'){
+      this._userService.getOne(this.token, this.identity['_id']).subscribe(
+        response =>{
+          if(response.user){
+            localStorage.setItem('identity', JSON.stringify(response.user));
+            location.reload();      
+          }
+        },
+        error =>{
+          console.error(error);
+        }
+      )
+    }else{
+      let identity = this.identity;
+      identity['role'] = 'ROLE_REQUESTER';
+      identity['company'] = null;
+      identity['changedMode'] = true;
+      localStorage.setItem('identity', JSON.stringify(identity));
+      location.reload();
+    }
+  }
+
   signOut(){
     localStorage.removeItem('identity');
     localStorage.removeItem('token');
     
-    this.router.navigate(['/']);
+    this.router.navigate(['/sessions/signin']);
   }
 }

@@ -17,6 +17,11 @@ import { userService } from 'app/shared/services/helpdesk/user.service';
 import { calendarEventService } from 'app/shared/services/helpdesk/calendarEvent.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { teamService } from 'app/shared/services/helpdesk/team.service';
+import { notificationService } from 'app/shared/services/helpdesk/notification.service';
+import { Notification } from 'app/shared/models/helpdesk/notification';
+import * as moment from 'moment';
+import { Team } from 'app/shared/models/helpdesk/team';
+import { User } from 'app/shared/models/helpdesk/user';
 
 registerLocaleData(localeEs);
 @Component({
@@ -24,7 +29,7 @@ registerLocaleData(localeEs);
   templateUrl: './app-calendar.component.html',
   styleUrls: ['./app-calendar.component.css'],
   animations: egretAnimations,
-  providers: [teamService]
+  providers: [teamService, notificationService]
 })
 export class AppCalendarComponent implements OnInit {
   public view = 'month';
@@ -46,6 +51,7 @@ export class AppCalendarComponent implements OnInit {
     private confirmService: AppConfirmService,
     private _userService: userService,
     private _teamService: teamService,
+    private _notificationService: notificationService,
     private _calendarEventService: calendarEventService,
     private snackBar: MatSnackBar,
   ) {
@@ -127,6 +133,8 @@ export class AppCalendarComponent implements OnInit {
         this._calendarEventService.delete(this.token, event._id).subscribe(
           response =>{
               if(response.calendarEvent){
+                this.deleteNotification(response.calendarEvent);
+
                 this.loadEvents();
                 this.openSnackBar('Evento eliminado', 'Cerrar');
               }
@@ -158,19 +166,124 @@ export class AppCalendarComponent implements OnInit {
         }
         let dialogAction = res.action;
         let responseEvent = res.event;
+        if(responseEvent.title != '' && (responseEvent.type == 'Privado' || (responseEvent.type == 'Público' && responseEvent['team']))){
+          this._calendarEventService.add(this.token, responseEvent).subscribe(
+            response =>{
+                if(response.calendarEvent){
+                  this.saveNotification(response.calendarEvent);
+  
+                  this.loadEvents();
+                  this.openSnackBar('Evento añadido', 'Cerrar');
+                }
+            },
+            error =>{
+                this.openSnackBar(error.message, 'Cerrar');
+            }
+          );
+        }else{
+          return this.openSnackBar('Faltan completar datos', 'Cerrar');
+        }
+    
+        
+      });
+  }
 
-        this._calendarEventService.add(this.token, responseEvent).subscribe(
+  saveNotification(calendarEvent){
+    let notification: Notification;
+    let start = moment(calendarEvent.start).format('YYYY-MM-DD HH:mm');
+    let title = calendarEvent.title;
+    let event = calendarEvent._id;
+    if(calendarEvent.type == 'Privado'){
+      notification = new Notification('',title, 'event', start, start, 'calendar', 'accent', this.identity['_id'], event, null);
+      notification.event = event;
+      this._notificationService.add(this.token, notification).subscribe(
+        response =>{
+        },
+        error =>{
+          this.openSnackBar(error.message, 'Cerrar');
+        }
+      );
+    }else{
+      this._teamService.getOne(this.token, calendarEvent.team).subscribe(
           response =>{
-              if(response.calendarEvent){
-                this.loadEvents();
-                this.openSnackBar('Evento añadido', 'Cerrar');
-              }
+            if(response.team){
+              let team: Team = response.team;
+              let users = response.team.users;
+              users.forEach(user => {
+                notification = new Notification('',title, 'event', start, start, 'calendar', 'accent', user, event, null);
+                notification.event = event;
+                this._notificationService.add(this.token, notification).subscribe(
+                    response =>{},
+                    error =>{
+                      this.openSnackBar(error.message, 'Cerrar');
+                    }
+                );
+              });
+            }
           },
           error =>{
-              this.openSnackBar(error.message, 'Cerrar');
+            this.openSnackBar(error.message, 'Cerrar');
           }
-        );
-      });
+      );
+    }
+  }
+
+  editNotification(calendarEvent){
+    let start = moment(calendarEvent.start).format('YYYY-MM-DD HH:mm');
+    let title = calendarEvent.title;
+    let event = calendarEvent._id;
+    let query = {event: event};
+
+    this._notificationService.getList(this.token, query).subscribe(
+        response =>{
+          if(response.notifications){
+            let notifications: Notification[] = response.notifications;
+
+            notifications.forEach(notification => {
+              notification.date = start;
+              notification.dateInit = start;
+              notification.message = title;
+              this._notificationService.edit(this.token, notification._id, notification).subscribe(
+                response =>{},
+                error =>{
+                  this.openSnackBar(error.message, 'Cerrar');
+                }
+              );
+            });
+
+          }
+        },
+        error =>{
+          this.openSnackBar(error.message, 'Cerrar');
+        }
+    );
+  }
+
+
+  deleteNotification(calendarEvent){
+    let event = calendarEvent._id;
+    let query = {event: event};
+
+    this._notificationService.getList(this.token, query).subscribe(
+        response =>{
+          if(response.notifications){
+            let notifications: Notification[] = response.notifications;
+
+            notifications.forEach(notification => {
+              this._notificationService.delete(this.token, notification._id).subscribe(
+                response =>{},
+                error =>{
+                  this.openSnackBar(error.message, 'Cerrar');
+                }
+              );
+            });
+
+          }
+        },
+        error =>{
+          this.openSnackBar(error.message, 'Cerrar');
+        }
+    );
   }
 
   public handleEvent(action: string, event: EgretCalendarEvent): void {
@@ -203,6 +316,7 @@ export class AppCalendarComponent implements OnInit {
     this._calendarEventService.edit(this.token, event._id, event).subscribe(
       response =>{
           if(response.calendarEvent){
+            this.editNotification(event);
             this.loadEvents();
             this.openSnackBar('Evento editado', 'Cerrar');
           }

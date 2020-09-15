@@ -7,7 +7,7 @@ import { HomeComponent } from './views/home/home.component';
 export const rootRouterConfig: Routes = [
   { 
     path: '', 
-    redirectTo: 'sessions/signin', 
+    redirectTo: 'home', 
     pathMatch: 'full' 
   },
   {
@@ -26,7 +26,6 @@ export const rootRouterConfig: Routes = [
     component: AdminLayoutComponent,
     canActivate: [AuthGuard],
     children: [
-      
       {
         path: 'home', 
         component: HomeComponent, 
@@ -71,6 +70,12 @@ export const rootRouterConfig: Routes = [
       { 
         path: 'search', 
         loadChildren: () => import('./views/search-view/search-view.module').then(m => m.SearchViewModule),
+        data: { title: 'Busqueda', breadcrumb: 'BUSQUEDA'}
+      },
+
+      { 
+        path: 'tour', 
+        loadChildren: () => import('./views/app-tour/app-tour.module').then(m => m.AppTourModule),
         data: { title: 'Busqueda', breadcrumb: 'BUSQUEDA'}
       },
     ]

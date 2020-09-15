@@ -76,7 +76,7 @@ export class UserProfileComponent implements OnInit {
             this.user = response.user
             this.user.password = '';
 
-            if(this.identity['role'] == 'ROLE_ADMIN' || (this.user.role == 'ROLE_REQUESTER' && this.identity['role'] == 'ROLE_AGENT')){
+            if((this.identity['role'] == 'ROLE_ADMIN' || (this.user.role == 'ROLE_REQUESTER' && this.identity['role'] == 'ROLE_AGENT')) && (this.identity['company'] && this.identity['company']['name'] == 'Sistemas')){
               this.isAdmin = true;
             }
             if(this.user._id == this.identity['_id']){

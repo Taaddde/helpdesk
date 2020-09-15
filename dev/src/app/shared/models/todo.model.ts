@@ -14,6 +14,7 @@ export interface TodoItem {
     team?: string;
     users?: string[];
     usersWhoRead? : string[];
+    files?: string[];
 }
 
 export interface TagItem {
