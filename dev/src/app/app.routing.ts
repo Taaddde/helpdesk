@@ -68,6 +68,12 @@ export const rootRouterConfig: Routes = [
       },
 
       { 
+        path: 'deposit', 
+        loadChildren: () => import('./views/deposit/deposit-settings.module').then(m => m.AppDepositSettingsModule),
+        data: { title: 'Deposito', breadcrumb: 'DEPOSITO'}
+      },
+
+      { 
         path: 'search', 
         loadChildren: () => import('./views/search-view/search-view.module').then(m => m.SearchViewModule),
         data: { title: 'Busqueda', breadcrumb: 'BUSQUEDA'}

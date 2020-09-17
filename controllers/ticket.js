@@ -619,7 +619,9 @@ function saveTicket(req, res){
         ticket.resolveDate = params.resolveDate;
         ticket.subTypeTicket = params.subTypeTicket;
         ticket.workTime = params.workTime;
-        //ticket.cc = params.cc
+        if(params.cc){
+            ticket.cc = params.cc
+        }
 
         ticket.save((err, ticketStored) =>{
             if(err){

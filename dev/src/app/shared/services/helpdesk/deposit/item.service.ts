@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import {GLOBAL} from '../global'; // Hecho a mano
-import {Item} from '../../models/deposit/item';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Item } from 'app/shared/models/helpdesk/deposit/item';
 
 
 //Inyeccion de dependencias
@@ -49,11 +49,14 @@ export class itemService{
 
     }
 
-    getList(token){
+    getList(token, query){
         this.httpOptions.headers =
             this.httpOptions.headers.set('Authorization', token);
-
-        return this._httpClient.get<any>(this.url+'item/list', this.httpOptions);
+        let options = {
+            headers: this.httpOptions.headers,
+            params: query
+        };
+        return this._httpClient.get<any>(this.url+'item/list', options);
     }
 
     getOne(token, id){

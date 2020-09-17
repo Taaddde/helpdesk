@@ -350,13 +350,17 @@ export class NewTicketComponent implements OnInit {
     if(this.descriptionControl.invalid){
       return true;
     }else{
-      if(!this.subType.autoChange){
+      if(this.identity['role'] != 'ROLE_REQUESTER'){
         return false;
       }else{
-        if(this.descriptionControl.controls['text'].value == this.subType.autoDesc && this.descriptionControl.controls['sub'].value == this.subType.autoSub){
-          return true;
-        }else{
+        if(this.subType.autoChange == false || this.subType.autoChange == undefined){
           return false;
+        }else{
+          if(this.descriptionControl.controls['text'].value == this.subType.autoDesc && this.descriptionControl.controls['sub'].value == this.subType.autoSub){
+            return true;
+          }else{
+            return false;
+          }
         }
       }
     }

@@ -120,6 +120,7 @@ export class SidenavComponent {
           state: "ticket",
           role: 'ROLE_AGENT',
           sub: [
+            { name: "Todos", state: "list/1/10", cod: '5.4'},
             { 
               name: "Pendientes", state: "list/1/10", 
               cod: '5.1',
@@ -131,7 +132,6 @@ export class SidenavComponent {
               query:{status:'Finalizado', agent:this.identity['_id']}
             },
             { name: "Abiertos", state: "list/1/10", cod: '5.3', query:{status:'Abierto'}},
-            { name: "Todos", state: "list/1/10", cod: '5.4'},
           ]
         },
         {
@@ -210,6 +210,7 @@ export class SidenavComponent {
           state: "ticket",
           role: 'ROLE_AGENT',
           sub: [
+            { name: "Todos", state: "list/1/10", cod: '5.4'},
             { 
               name: "Pendientes", state: "list/1/10", 
               cod: '5.1',
@@ -221,7 +222,6 @@ export class SidenavComponent {
               query:{status:'Finalizado', agent:this.identity['_id']}
             },
             { name: "Abiertos", state: "list/1/10", cod: '5.3', query:{status:'Abierto'}},
-            { name: "Todos", state: "list/1/10", cod: '5.4'},
           ]
         },
         {
@@ -276,7 +276,7 @@ export class SidenavComponent {
   }
 
   getCountTasks(){
-    let query: any = {users: this.identity['_id']};
+    let query: any = {users: this.identity['_id'], done: false};
     this._todoService.getCount(this.token, query).subscribe(
         response =>{
           if(response.count && response.count != 0){

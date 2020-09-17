@@ -1,27 +1,94 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>HSJD - Mesa de ayuda</title>
-  <base href="/">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="./assets/img/system/hsjd-logo.png">
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/Login-Form-Dark.css">
-    <link rel="stylesheet" href="assets/css/styles.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Audiowide">
-    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
-
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>HSJD</title>
+    <meta name="description" content="Pure Angular admin template built with official material design ui library">
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="assets/images/system/logo.png" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Material+Icons"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <script src="assets/js/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
-    <script src="assets/scripts/theme.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link rel="stylesheet" href="styles.38cb93b4edb4dc290867.css"></head>
-<body id="page-top" class>
-  <app-root>Cargando...</app-root>
-<script src="runtime-es2015.edb2fcf2778e7bf1d426.js" type="module"></script><script src="runtime-es5.edb2fcf2778e7bf1d426.js" nomodule defer></script><script src="polyfills-es5.6696c533341b95a3d617.js" nomodule defer></script><script src="polyfills-es2015.2987770fde9daa1d8a2e.js" type="module"></script><script src="scripts.b2b2c476821b0f07ec12.js" defer></script><script src="main-es2015.0936a67b930de43f78d7.js" type="module"></script><script src="main-es5.0936a67b930de43f78d7.js" nomodule defer></script></body>
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <style>
+      .app-loader {
+        height: 100vh !important;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+      }
+      .spinner {
+        width: 40px;
+        height: 40px;
+        position: relative;
+        margin: auto;
+      }
+      .double-bounce1,
+      .double-bounce2 {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        opacity: 0.6;
+        position: absolute;
+        top: 0;
+        left: 0;
+        -webkit-animation: sk-bounce 2s infinite ease-in-out;
+        animation: sk-bounce 2s infinite ease-in-out;
+      }
+      .double-bounce2 {
+        -webkit-animation-delay: -1s;
+        animation-delay: -1s;
+      }
+      @-webkit-keyframes sk-bounce {
+        0%,
+        100% {
+          -webkit-transform: scale(0);
+        }
+        50% {
+          -webkit-transform: scale(1);
+        }
+      }
+      @keyframes sk-bounce {
+        0%,
+        100% {
+          transform: scale(0);
+          -webkit-transform: scale(0);
+        }
+        50% {
+          transform: scale(1);
+          -webkit-transform: scale(1);
+        }
+      }
+    </style>
+  <link rel="stylesheet" href="styles.af29fb46328b4a501b31.css"></head>
+  <body class="egret-navy">
+    <app-root>
+      <div class="app-loader">
+        <div class="spinner">
+          <div
+            class="double-bounce1 mat-bg-primary"
+            style="background: #fcc02e;"
+          ></div>
+          <div
+            class="double-bounce2 mat-bg-accent"
+            style="background: #03a9f4;"
+          ></div>
+        </div>
+      </div>
+    </app-root>
+
+    <!-- <script>
+    __Zone_enable_cross_context_check = true;
+  </script> -->
+  <script src="runtime-es2015.4ab16b12fe22dadf7d0f.js" type="module"></script><script src="runtime-es5.4ab16b12fe22dadf7d0f.js" nomodule defer></script><script src="polyfills-es5.6fc748b5a2f191c31c1b.js" nomodule defer></script><script src="polyfills-es2015.ca999be3544b9a8081a6.js" type="module"></script><script src="main-es2015.22b7b631b9d8b26df1bb.js" type="module"></script><script src="main-es5.22b7b631b9d8b26df1bb.js" nomodule defer></script></body>
 </html>

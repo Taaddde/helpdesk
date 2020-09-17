@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import {GLOBAL} from '../global'; // Hecho a mano
-import {Movim} from '../../models/deposit/movim';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Movim } from 'app/shared/models/helpdesk/deposit/movim';
 
 
 //Inyeccion de dependencias

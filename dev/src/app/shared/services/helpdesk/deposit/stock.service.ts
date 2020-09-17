@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import {GLOBAL} from '../global'; // Hecho a mano
-import {Stock} from '../../models/deposit/stock';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Stock } from 'app/shared/models/helpdesk/deposit/stock';
 
 
 //Inyeccion de dependencias
@@ -49,11 +49,25 @@ export class stockService{
 
     }
 
-    getList(token){
+    deleteMany(token, query){
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
+        let options = {
+            headers: this.httpOptions.headers,
+            params: query
+        };
+        return this._httpClient.delete<any>(this.url+'stock/delete', options);
+
+    }
+
+    getList(token, query){
         this.httpOptions.headers =
             this.httpOptions.headers.set('Authorization', token);
-
-        return this._httpClient.get<any>(this.url+'stock/list', this.httpOptions);
+            let options = {
+                headers: this.httpOptions.headers,
+                params: query
+            };
+        return this._httpClient.get<any>(this.url+'stock/list', options);
     }
 
     getOne(token, id){

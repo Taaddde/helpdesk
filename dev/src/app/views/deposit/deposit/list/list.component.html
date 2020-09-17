@@ -1,0 +1,24 @@
+<mat-form-field class="margin-333" style="width: 100%">
+  <input 
+  matInput 
+  placeholder="Filtrar por todas las columnas" 
+  value=""
+  (keyup)='updateFilter($event)'>
+</mat-form-field>
+
+<div *ngIf="canCreate" class="profile-actions mb-1" style="margin-left: 5px;">
+  <button mat-raised-button (click)="toNew()" color="primary">Nuevo</button>
+</div>
+
+<div class="mat-box-shadow margin-333">
+    <ngx-datatable class="material bg-white" 
+    [columnMode]="'flex'"  
+    [headerHeight]="40"
+    [footerHeight]="50" 
+    [rowHeight]="50"
+    [limit]="7" 
+    [rows]="rows"
+    [columns]="columns"
+    (activate)="toProfile($event)">
+    </ngx-datatable>
+</div>

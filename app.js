@@ -22,14 +22,14 @@ var chat_routes = require('./routes/chat');
 var message_routes = require('./routes/message');
 var work_routes = require('./routes/work');
 var workobservation_routes = require('./routes/workobservation');
-var deposit_routes = require('./routes/deposit');
-var item_routes = require('./routes/item');
-var stock_routes = require('./routes/stock');
-var movim_routes = require('./routes/movim');
+var deposit_routes = require('./routes/deposit/deposit');
+var item_routes = require('./routes/deposit/item');
+var stock_routes = require('./routes/deposit/stock');
+var movim_routes = require('./routes/deposit/movim');
+var reason_routes = require('./routes/deposit/reason');
 var calendarEvent_routes = require('./routes/calendarEvent');
 var todo_routes = require('./routes/todo');
 var notification_routes = require('./routes/notification');
-
 
 
 app.use(bodyparser.urlencoded({limit: '50mb', extended: true}));
@@ -66,6 +66,7 @@ app.use('/api/deposit', deposit_routes);
 app.use('/api/item', item_routes);
 app.use('/api/stock', stock_routes);
 app.use('/api/movim', movim_routes);
+app.use('/api/reason', reason_routes);
 app.use('/api/calendar-event', calendarEvent_routes);
 app.use('/api/todo', todo_routes);
 app.use('/api/notification', notification_routes);

@@ -1,0 +1,33 @@
+<h1 matDialogTitle>{{data.title}}</h1>
+
+<mat-card class="p-0">
+  <mat-card-content>
+        <form>
+          <div fxLayout="row wrap" fxLayout.lt-sm="column">
+            <div fxFlex="100"  class="pr-1">
+              <mat-form-field class="full-width">
+                <input type="text"
+                       placeholder="Nombre"
+                       aria-label="Text"
+                       matInput
+                       name="name"
+                       [(ngModel)]='item.name'>
+              </mat-form-field>
+              <div fxLayout="row wrap" fxLayout.lt-sm="column">
+                <div fxFlex="100"  class="pr-1">
+                  <label>Habilitar en:</label>
+                  <ul style="list-style-type: none;">
+                    <li *ngFor="let deposit of deposits">
+                      <mat-checkbox color="primary" (change)="changeCheck(deposit)" [checked]="include(deposit)">
+                        {{deposit.name}}
+                      </mat-checkbox>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button mat-raised-button color="primary" (click)="submit()">Guardar</button>
+        </form>
+  </mat-card-content>
+</mat-card>

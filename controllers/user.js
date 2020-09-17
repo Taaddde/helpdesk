@@ -113,7 +113,6 @@ var decoded = jwt_decode(req.headers.authorization);
         {path:'sector',select:['name','email']}
     ];
 
-
     User.findOne({_id: ObjectId(userId),userName:update.userName}, (err, userCheck) =>{
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
@@ -320,7 +319,7 @@ function getUsers(req, res){
             });
         }else{
             let query = {$or:[{role:'ROLE_REQUESTER'},{company:{$ne:company}}], deleted:false};
-            User.find(query).sort('surname').exec(function(err, users){
+            User.find(query).sort('name').exec(function(err, users){
                 if(err){
                     logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
