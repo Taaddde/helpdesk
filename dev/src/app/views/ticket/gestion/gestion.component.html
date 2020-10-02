@@ -180,6 +180,50 @@
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>
+              <strong class="accordion-text">Insumos</strong>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ul class="list-group">
+            <span *ngIf="movimsTicket && getLenght(movimsTicket) != 0">
+                <li class="list-group-item" *ngFor="let movim of movimsTicket">
+                    <span>{{movim.item['name']}}</span><small *ngIf="movim.item['brand'] && identity['role'] != 'ROLE_REQUESTER'">  |  {{movim.item['brand']}}</small>
+                </li>    
+            </span>
+              <li class="list-group-item text-center" 
+              *ngIf="identity['role'] != 'ROLE_REQUESTER' && identity['company']['_id'] == ticket['company']['_id'] && ticket.status != 'Cerrado'">
+                
+              <mat-form-field class="full-width">
+                <mat-label>Depósito</mat-label>
+                <mat-select [(ngModel)]="deposit">
+                  <mat-option *ngFor="let deposit of deposits" [value]="deposit" (click)="getStock(deposit)">
+                    {{deposit.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              
+              <mat-form-field class="full-width">
+                  <input type="text"
+                         placeholder="Buscar insumo"
+                         aria-label="Text"
+                         matInput
+                         (input)="filterStock()" 
+                         [(ngModel)]="stockFilter"
+                         [matAutocomplete]="autoStock">
+                  <mat-autocomplete #autoStock="matAutocomplete">
+                    <mat-option 
+                    matTooltip="{{stock.item['name']}} ({{stock.cant}}) - {{stock.item['brand']}}"
+                    (click)="setStock(stock)"
+                    *ngFor="let stock of stocks">
+                      <span>{{stock.item['name']}} ({{stock.cant}})</span> | <small>{{stock.item['brand']}}</small>
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </li>
+          </ul>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
               <strong class="accordion-text">En copia</strong>
             </mat-panel-title>
           </mat-expansion-panel-header>

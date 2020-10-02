@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { DepositAnalyticsComponent } from './home/analytics.component';
 
 
 export const DepositSettingsRoutes: Routes = [
@@ -6,14 +7,19 @@ export const DepositSettingsRoutes: Routes = [
     path: '',
     children: [
       { 
-        path: 'deposit', 
-        loadChildren: () => import('./deposit/deposit.module').then(m => m.AppDepositModule),
-        data: { title: 'Deposito', breadcrumb: 'DEPOSITO'}
+        path: 'movim', 
+        loadChildren: () => import('./movim/movim.module').then(m => m.AppMovimModule),
+        data: { title: 'Movimientos', breadcrumb: 'MOVIMIENTOS'}
       },
       { 
-        path: 'item', 
-        loadChildren: () => import('./item/item.module').then(m => m.AppItemModule),
-        data: { title: 'Articulo', breadcrumb: 'ARTICULO'}
+        path: 'order', 
+        loadChildren: () => import('./order/order.module').then(m => m.AppOrderModule),
+        data: { title: 'Ordenes', breadcrumb: 'ORDENES'}
+      },
+      { 
+        path: 'home', 
+        component: DepositAnalyticsComponent,
+        data: { title: 'Principal', breadcrumb: 'PRINCIPAL'}
       },
     ]
   }

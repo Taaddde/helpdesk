@@ -188,24 +188,60 @@ export class UserProfileComponent implements OnInit {
       this.user.userName != '' && 
       this.user.email != ''
       ){
-      
       if(this.user.sign = ''){
         this.user.sign = null
       }
-  
-      if(this.user.password == ''){
-        delete this.user.password;
-      }else{
+
+      let pass: string = '';
+      if(this.isAdmin && this.password.new != ''){
         if(this.password.new != this.password.confirm){
           return this.openSnackBar('La nueva contraseña no coincide con su confirmación', 'Cerrar')
+        }else{
+          pass = this.user.password;
+        }
+      }else{
+        if(this.user.password != ''){
+          if(this.password.new != this.password.confirm){
+            return this.openSnackBar('La nueva contraseña no coincide con su confirmación', 'Cerrar')
+          }else{
+            pass = this.user.password;
+          }
         }
       }
-    
+
+      delete this.user.password;
+      let newPass = this.password.new;
+      this.password.new = '';
+      this.password.confirm = '';
+
       this._userService.edit(this.token, this.user).subscribe(
-        response =>{
-            if(response.user){
-                this.openSnackBar('Datos actualizados', 'Cerrar')
-                this.getUser();
+        resp =>{
+            if(resp.user){
+                if(pass != ''){
+                  this._userService.login({userName: this.user.userName, password: pass}).subscribe(
+                    response =>{
+                      if(response.user){
+                        this._userService.edit(this.token, {_id: this.user._id, password: newPass}).subscribe(
+                          r =>{
+                            this.openSnackBar('Contraseña cambiada.', 'Cerrar');
+                            this.openSnackBar('Datos actualizados', 'Cerrar');
+                            this.getUser();
+                          },
+                          error =>{}
+                        );
+                      }else{
+                        this.openSnackBar('La contraseña actual no es la correcta.', 'Cerrar')
+                      }
+                    },
+                    error =>{
+                      this.openSnackBar('La contraseña actual no es la correcta.', 'Cerrar')
+                    }
+                  )
+                  
+                }else{
+                  this.openSnackBar('Datos actualizados', 'Cerrar');
+                  this.getUser();
+                }
             }
         },
         error =>{

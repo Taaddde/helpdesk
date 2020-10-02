@@ -1,0 +1,40 @@
+<mat-card>
+    <mat-card-header>
+      <mat-card-title>{{data.title}}</mat-card-title>
+      <mat-card-subtitle>{{movim.item['name']}} | {{movim.item['brand']}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content style="margin-top: 10px;">
+        <p>Tipo:
+            <strong>{{movim.type}}</strong>
+        </p>
+        <p>Agente: 
+            <strong>{{movim.agent['name']}} {{movim.agent['surname']}}</strong>
+        </p>
+        <p *ngIf="movim.reason">Motivo: 
+            <strong>{{movim.reason['name']}}</strong>
+        </p>
+        
+        <p>Depósito: 
+            <strong>{{movim.deposit['name']}}</strong>
+        </p>
+        <p *ngIf="movim.type == 'Transferencia'">Depósito destino: 
+            <strong>{{movim.depositDestiny['name']}}</strong>
+        </p>
+        <p *ngIf="movim.type == 'Egreso' && movim.requester">Solicitante: 
+            <strong>{{movim.requester['name']}} {{movim.requester['surname']}}</strong>
+        </p>
+        <p *ngIf="movim.type == 'Egreso' && movim.sector">Sector: 
+            <strong>{{movim.sector['name']}}</strong>
+        </p>
+        <p *ngIf="movim.ticket">Ticket asociado: 
+            <button (click)="dialogRef.close(false)" color="primary" [routerLink]="[ 'ticket/gestion', movim.ticket['_id'] ]" mat-raised-button>#{{movim.ticket['numTicket']}}</button>
+        </p>
+        <p>Observaciones: 
+            <strong>{{movim.obs}}</strong>
+        </p>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-button color="warn" type="button" (click)="dialogRef.close(false)">Cerrar</button>
+    </mat-card-actions>
+  </mat-card>

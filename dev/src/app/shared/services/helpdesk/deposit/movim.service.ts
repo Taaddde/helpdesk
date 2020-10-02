@@ -49,11 +49,24 @@ export class movimService{
 
     }
 
-    getList(token){
+    getList(token, query){
         this.httpOptions.headers =
             this.httpOptions.headers.set('Authorization', token);
+            let options = {
+                headers: this.httpOptions.headers,
+                params: query
+            };
+        return this._httpClient.get<any>(this.url+'movim/list', options);
+    }
 
-        return this._httpClient.get<any>(this.url+'movim/list', this.httpOptions);
+    getLastestList(token, query, limit){
+        this.httpOptions.headers =
+            this.httpOptions.headers.set('Authorization', token);
+            let options = {
+                headers: this.httpOptions.headers,
+                params: query
+            };
+        return this._httpClient.get<any>(this.url+'movim/lastest-list/'+limit, options);
     }
 
     getOne(token, id){

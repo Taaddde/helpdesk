@@ -157,7 +157,9 @@ export class TodoDetailsComponent implements OnInit {
   }
 
   
-  saveTodo() {
+  saveTodo(finish:boolean) {
+    if(finish)
+      this.todo.done = true;
 
     if(this.agentsIn){
       let ids = new Array();

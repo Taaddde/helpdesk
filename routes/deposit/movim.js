@@ -9,6 +9,7 @@ var api = express.Router();
 //CONSULTAS
 api.get('/get/:id', md_auth.ensureAuth, controller.getOne);
 api.get('/list', md_auth.ensureAuth, controller.getList);
+api.get('/lastest-list/:limit', md_auth.ensureAuth, controller.getLastestList);
 
 //ABM
 api.post('/add',md_auth.ensureAuth, controller.save);

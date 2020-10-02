@@ -127,7 +127,7 @@
   fxLayout="column"
   fxLayoutGap="8px"
   style="padding: 0px 16px;margin-top: 20px;"
-  (ngSubmit)="saveTodo()"
+  (ngSubmit)="saveTodo(false)"
 >
   <mat-form-field>
     <input [(ngModel)]="todo.title" type="text" name="title" matInput placeholder="Título" required />
@@ -208,5 +208,6 @@
   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
     <button type="button" mat-button routerLink="/todo/list">Cancelar</button>
     <button color="primary" mat-raised-button>Guardar</button>
+    <button type="primary" (click)="saveTodo(true)" color="accent" mat-raised-button>Guardar y finalizar</button>
   </div>
 </form>

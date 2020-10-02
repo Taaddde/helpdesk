@@ -786,7 +786,7 @@ function getList(req, res){
     var functionName = 'getList';
     var decoded = jwt_decode(req.headers.authorization);
     var populateQuery = [
-        {path:'requester',select:['name','surname','image']},
+        {path:'requester',select:['name','surname','image', 'sector']},
         {path:'agent',select:['name','surname','image']}, 
     ];
 

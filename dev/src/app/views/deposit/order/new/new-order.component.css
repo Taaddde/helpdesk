@@ -1,0 +1,27 @@
+.butt{
+font-size: 12px;
+ font-weight: 300;
+ color: #fff;
+ background-color: #018aca;
+ display: inline-block;
+ transition: all .5s;
+ cursor: pointer;
+ padding: 10px 15px !important;
+ text-transform: uppercase;
+ width: fit-content;
+ text-align: center;
+}
+
+.butt-trash{
+    font-size: 12px;
+     font-weight: 300;
+     color: #fff;
+     background-color: #ff1717;
+     display: inline-block;
+     transition: all .5s;
+     cursor: pointer;
+     padding: 10px 15px !important;
+     text-transform: uppercase;
+     width: fit-content;
+     text-align: center;
+    }

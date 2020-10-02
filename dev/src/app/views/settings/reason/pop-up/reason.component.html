@@ -1,0 +1,38 @@
+<h1 matDialogTitle>{{data.title}}</h1>
+
+<mat-card class="p-0">
+  <mat-card-content>
+        <form>
+          <div fxLayout="row wrap" fxLayout.lt-sm="column">
+            <div fxFlex="100"  class="pr-1">
+              <mat-form-field class="full-width">
+                <input type="text"
+                       placeholder="Nombre"
+                       aria-label="Text"
+                       matInput
+                       name="name"
+                       [(ngModel)]='reason.name'>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Tipo</mat-label>
+                <mat-select [(ngModel)]="reason.type" name="type">
+                  <mat-option value="Ingreso">
+                    Ingreso
+                  </mat-option>
+                  <mat-option value="Egreso">
+                    Egreso
+                  </mat-option>
+                  <mat-option value="Transferencia">
+                    Transferencia
+                  </mat-option>
+                  <mat-option value="Ajuste">
+                    Ajuste
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <button mat-raised-button color="primary" (click)="submit()">Guardar</button>
+        </form>
+  </mat-card-content>
+</mat-card>

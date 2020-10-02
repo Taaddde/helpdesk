@@ -1,0 +1,88 @@
+<mat-form-field class="margin-333" style="width: 100%">
+  <input 
+  matInput 
+  placeholder="Filtrar por todas las columnas" 
+  value=""
+  (keyup)='updateFilter($event)'>
+</mat-form-field>
+
+<div class="mat-box-shadow margin-333">
+  <ngx-datatable
+    class="material bg-white"
+    [columnMode]="'force'"
+    [headerHeight]="50"
+    [footerHeight]="50"
+    [rowHeight]="50"
+    [limit]="8"
+    [rows]="rows"
+    [scrollbarH]="true"
+    (activate)="goToMovim($event)"
+  >
+    <ngx-datatable-column name="num" [maxWidth]="70">
+      <ng-template ngx-datatable-header-template>
+        Número
+      </ng-template>
+      <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+        {{row.numMovim}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="type" [maxWidth]="100">
+      <ng-template ngx-datatable-header-template>
+        Tipo
+      </ng-template>
+      <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+        {{row.type}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="item" [maxWidth]="350">
+      <ng-template ngx-datatable-header-template>
+        Articulo
+      </ng-template>
+      <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+        <span [matTooltip]="row.item['name'] + ' | ' + row.item['brand']">
+          <span>{{ row.item['name'] }}</span>  |
+          <small>{{ row.item['brand'] }}</small>
+        </span>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="cant" [maxWidth]="80">
+      <ng-template ngx-datatable-header-template>
+        Cantidad
+      </ng-template>
+      <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+        {{row.cant}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="date" [maxWidth]="150">
+      <ng-template ngx-datatable-header-template>
+        Fecha
+      </ng-template>
+      <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+        {{ changeDate(row.date)  }}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="uploadDate" [maxWidth]="150">
+      <ng-template ngx-datatable-header-template>
+        Carga
+      </ng-template>
+      <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+        {{ changeDate(row.lastActivity)  }}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="obs" [maxWidth]="300">
+      <ng-template ngx-datatable-header-template>
+        Observaciones
+      </ng-template>
+      <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+        <span [matTooltip]="row.obs">{{ row.obs }}</span>
+      </ng-template>
+    </ngx-datatable-column>
+
+  </ngx-datatable>
+</div>

@@ -1,0 +1,23 @@
+
+
+<mat-form-field class="margin-333" style="width: 100%">
+  <mat-label>Depósito</mat-label>
+  <mat-select [(ngModel)]="deposit">
+    <mat-option *ngFor="let deposit of deposits" [value]="deposit" (click)="getStocks(deposit)">
+      {{deposit.name}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<div class="mat-box-shadow margin-333">
+    <ngx-datatable class="material bg-white" 
+    [columnMode]="'flex'"  
+    [headerHeight]="40"
+    [footerHeight]="50" 
+    [rowHeight]="50"
+    [limit]="7" 
+    [rows]="rows"
+    [columns]="columns"
+    (activate)="openPopUp($event)">
+    </ngx-datatable>
+</div>

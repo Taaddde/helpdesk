@@ -18,10 +18,15 @@ import { textblockService } from 'app/shared/services/helpdesk/textblock.service
 import { uploadService } from 'app/shared/services/helpdesk/upload.service';
 import { responseService } from 'app/shared/services/helpdesk/response.service';
 import { companyService } from 'app/shared/services/helpdesk/company.service';
-import { FormControl } from '@angular/forms';
 import { Notification } from 'app/shared/models/helpdesk/notification';
 import { notificationService } from 'app/shared/services/helpdesk/notification.service';
 import { FileInput } from 'ngx-material-file-input';
+import { movimService } from 'app/shared/services/helpdesk/deposit/movim.service';
+import { stockService } from 'app/shared/services/helpdesk/deposit/stock.service';
+import { depositService } from 'app/shared/services/helpdesk/deposit/deposit.service';
+import { Deposit } from 'app/shared/models/helpdesk/deposit/deposit';
+import { Stock } from 'app/shared/models/helpdesk/deposit/stock';
+import { Movim } from 'app/shared/models/helpdesk/deposit/movim';
 
 declare var $: any;
 
@@ -29,7 +34,7 @@ declare var $: any;
   selector: 'app-ticket-gestion',
   templateUrl: './gestion.component.html',
   styleUrls: ['./gestion.component.css',],
-  providers: [userService, ticketService, notificationService, teamService, textblockService, uploadService, responseService, companyService]
+  providers: [userService, ticketService, notificationService, teamService, textblockService, uploadService, responseService, companyService, movimService, stockService, depositService]
 })
 export class TicketGestionComponent implements OnInit {
 
@@ -69,6 +74,17 @@ export class TicketGestionComponent implements OnInit {
 
     public info: string;
 
+
+    //+++++DEPOSITO+++++
+
+    public deposits: Deposit[];
+    public deposit: Deposit;
+    public stocks: Stock[] = [];
+    public allStocks: Stock[] = [];
+    public stockFilter: string = '';
+
+    public movimsTicket: Movim[] = [];
+
   constructor(
     private dialog: MatDialog,
     private _route: ActivatedRoute,
@@ -84,6 +100,9 @@ export class TicketGestionComponent implements OnInit {
     private _responseService: responseService,
     private _companyService: companyService,
     private _notificationService: notificationService,
+    private _depositService: depositService,
+    private _stockService: stockService,
+    private _movimService: movimService
   ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
@@ -117,7 +136,134 @@ export class TicketGestionComponent implements OnInit {
     this.getCompanies();
     this.checkInfo();
     this.getCc();
+
+    this.getDeposits();
   }
+
+  //#region DEPOSITO
+
+  getDeposits(){
+    this._depositService.getList(this.token, {company: this.identity['company']['_id']}).subscribe(
+        response =>{
+          if(response.deposits){
+             this.deposits = response.deposits;
+             this.deposit = this.deposits[0];
+             this.getStock(this.deposits[0]);
+          }
+        },
+        error =>{
+          this.openSnackBar(error.message, 'Cerrar');
+        }
+    );
+  }
+
+  getStock(deposit: Deposit){
+    let query = {deposit: deposit._id};
+    this.stockFilter = '';
+    this.stocks = [];
+
+    this._stockService.getList(this.token, query).subscribe(
+        response =>{
+          if(response.stocks){
+             this.allStocks = response.stocks;
+
+             console.log(this.allStocks);
+          }
+        },
+        error =>{
+          this.openSnackBar(error.message, 'Cerrar');
+        }
+    );
+  }
+
+  filterStock(){
+    this.stocks = this.allStocks.filter(stock =>{
+      return (stock.item['name']+stock.item['brand']).toLowerCase().includes(this.stockFilter.toString().toLowerCase());
+    })
+  }
+
+  getMovims(ticket : Ticket){
+    let query = {ticket: ticket._id};
+    this._movimService.getList(this.token, query).subscribe(
+        response =>{
+          if(response.movims){
+             this.movimsTicket = response.movims;
+          }
+        },
+        error =>{
+          this.openSnackBar(error.message, 'Cerrar');
+        }
+    );
+  }
+
+  setStock(stock: Stock){
+    if(stock.cant == 0)
+      return this.openSnackBar('No hay insumo en stock para descontar', 'Cerrar');
+      
+    this.confirmService.confirm({
+      message: '¿Descontar ' + stock.item['name'] + ' ' +stock.item['brand'] + ' del depósito ' + stock.deposit['name'] + '?',
+    })
+    .subscribe(res => {
+      if (!res) {
+        return;
+      }
+
+      let update = null;
+      update = {$inc: {cant: -1}};
+
+      this._stockService.edit(this.token, stock._id, update).subscribe(
+        response =>{
+          if(response.stock){
+            this.saveMovim(stock);
+          }
+        },
+        error =>{
+          this.openSnackBar(error.message, 'Cerrar');
+        }
+      );
+      
+    })
+  }
+
+  saveMovim(stock: Stock){
+    let movim = new Movim(
+      '',
+      null,
+      'Egreso',
+      stock.deposit['_id'],
+      stock.item['_id'],
+      this.ticket.company['_id'],
+      1,
+      this.identity['_id'],
+      null,
+      new Date(),
+      new Date(),
+      null,
+      this.ticket.requester['_id'],
+      this.ticket._id,
+      null,
+      ''
+    );
+
+    if(this.ticket.requester['sector'])
+      movim.sector = this.ticket.requester['sector']['_id'];
+
+    this._movimService.add(this.token, movim).subscribe(
+        response =>{
+          if(response.movim){
+            this.openSnackBar('Movimiento realizado correctamente', 'Cerrar');
+            this.newInfo(this.identity['name'] + ' ' + this.identity['surname'] + ' agregó un/a ' + stock.item['name'] + ' como insumo en este ticket.');
+            stock.cant = stock.cant - 1;
+            this.getMovims(this.ticket);
+          }
+        },
+        error =>{
+          this.openSnackBar(error.message, 'Cerrar');
+        }
+    );
+  }
+
+  //#endregion
 
   checkInfo(){
     if(this.identity['infoView'] != false){
@@ -145,6 +291,9 @@ export class TicketGestionComponent implements OnInit {
       }
     );
   }
+
+
+  
 
   changeInfo(){
     if(this.info == 'false'){
@@ -371,6 +520,8 @@ export class TicketGestionComponent implements OnInit {
             }
     
           }
+
+          this.getMovims(response.ticket);
       },
         error => {
           this.openSnackBar(error.message, 'Cerrar');

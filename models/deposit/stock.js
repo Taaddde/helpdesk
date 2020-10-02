@@ -9,6 +9,8 @@ var Stock = Schema({
 
     cant: {type: Number, default: 0},
     cantMin: {type: Number, default: 0},
+
+    onOrder: Boolean,
 });
 
 module.exports = mongoose.model('Stock', Stock);

@@ -104,6 +104,14 @@ export class SidenavComponent {
           state: "todo/list",
         },
         {
+          name: "Depósito",
+          cod: '8',
+          type: "icon",
+          tooltip: "Depósito",
+          icon: "shopping_basket",
+          state: "deposit/home",
+        },
+        {
           name: "Principal",
           cod: '3',
           type: "link",
@@ -135,6 +143,20 @@ export class SidenavComponent {
           ]
         },
         {
+          name: "Deposito",
+          cod: '7',
+          type: "dropDown",
+          tooltip: "Depósito",
+          icon: "shopping_basket",
+          state: "deposit",
+          sub: [
+            { name: "Principal", state: "home", cod: '7.1'},
+            { name: "Nuevo movimiento", state: "movim/new", cod: '7.2'},
+            { name: "Ver movimientos", state: "movim/list", cod: '7.3'},
+            { name: "Crear pedido", state: "order/new", cod: '7.4'},
+          ]
+        },
+        {
           name: "Configuración",
           type: "dropDown",
           cod: '6',
@@ -154,17 +176,19 @@ export class SidenavComponent {
                 { name: "Equipo", state: "list/team", cod: '6.1.3'},
               ]
             },
-            // { 
-            //   name: "Depósito",
-            //   type: "dropDown",
-            //   icon: "group", 
-            //   cod: '6.3',  
-            //   state: "group",
-            //   sub: [
-            //     { name: "Articulos", state: "home", cod: '6.3.1' },
-            //     { name: "Depósitos", state: "home", cod: '6.3.2' },
-            //   ]
-            // },
+            { 
+              name: "Depósito",
+              type: "dropDown",
+              icon: "group", 
+              cod: '6.3',  
+              state: "settings",
+              sub: [
+                { name: "Articulos", state: "item/list", cod: '6.3.1' },
+                //{ name: "Habilitar articulos", state: "item/item", cod: '6.3.3' },
+                { name: "Depósitos", state: "deposit/list", cod: '6.3.2' },
+                { name: "Motivos", state: "reason/list", cod: '6.3.4' },
+              ]
+            },
     
             { name: "Tipo/Subtipo de ticket", state: "settings/ticket/types", cod: '6.4'},
           ]
@@ -194,6 +218,14 @@ export class SidenavComponent {
           state: "todo/list",
         },
         {
+          name: "Depósito",
+          cod: '8',
+          type: "icon",
+          tooltip: "Depósito",
+          icon: "shopping_basket",
+          state: "deposit/home",
+        },
+        {
           name: "Principal",
           cod: '3',
           type: "link",
@@ -222,6 +254,21 @@ export class SidenavComponent {
               query:{status:'Finalizado', agent:this.identity['_id']}
             },
             { name: "Abiertos", state: "list/1/10", cod: '5.3', query:{status:'Abierto'}},
+          ]
+        },
+        {
+          name: "Deposito",
+          cod: '7',
+          type: "dropDown",
+          tooltip: "Depósito",
+          icon: "shopping_basket",
+          state: "deposit",
+          sub: [
+            { name: "Principal", state: "home", cod: '7.1'},
+            { name: "Nuevo movimiento", state: "movim/new", cod: '7.2'},
+            { name: "Ver movimientos", state: "movim/list", cod: '7.3'},
+            { name: "Crear pedido", state: "order/new", cod: '7.4'},
+            { name: "Autorizar pedido", state: "order/authorize", cod: '7.5'},
           ]
         },
         {
@@ -256,17 +303,20 @@ export class SidenavComponent {
                 { name: "Departamento", state: "company", role: "ROLE_ADMIN", cod: '6.2.1'}
               ]
             },
-            // { 
-            //   name: "Depósito",
-            //   type: "dropDown",
-            //   icon: "group", 
-            //   cod: '6.3',  
-            //   state: "group",
-            //   sub: [
-            //     { name: "Articulos", state: "home", cod: '6.3.1' },
-            //     { name: "Depósitos", state: "home", cod: '6.3.2' },
-            //   ]
-            // },
+            { 
+              name: "Depósito",
+              type: "dropDown",
+              icon: "group", 
+              cod: '6.3',  
+              state: "settings",
+              sub: [
+                { name: "Articulos", state: "item/list", cod: '6.3.1' },
+                { name: "Habilitar articulos", state: "item/enable", cod: '6.3.3' },
+                { name: "Stock minimo", state: "item/stockmin", cod: '6.3.5' },
+                { name: "Depósitos", state: "deposit/list", cod: '6.3.2' },
+                { name: "Motivos", state: "reason/list", cod: '6.3.4' },
+              ]
+            },
     
             { name: "Tipo/Subtipo de ticket", state: "settings/ticket/types", cod: '6.4'},
           ]
@@ -284,7 +334,7 @@ export class SidenavComponent {
           }
         },
         error =>{
-          console.log(error);
+          this.menuItems[1]['badges'] = null;
         }
     );
   }

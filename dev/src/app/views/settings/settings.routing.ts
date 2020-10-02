@@ -15,6 +15,21 @@ export const SettingsRoutes: Routes = [
         component: SectorListComponent,
         data: { title: 'Lista de sectores', breadcrumb: 'LISTA DE SECTORES' }
       },
+      { 
+        path: 'deposit', 
+        loadChildren: () => import('./deposit/deposit.module').then(m => m.AppDepositModule),
+        data: { title: 'Deposito', breadcrumb: 'DEPOSITO'}
+      },
+      { 
+        path: 'item', 
+        loadChildren: () => import('./item/item.module').then(m => m.AppItemModule),
+        data: { title: 'Articulo', breadcrumb: 'ARTICULOS'}
+      },
+      { 
+        path: 'reason', 
+        loadChildren: () => import('./reason/reason.module').then(m => m.AppReasonModule),
+        data: { title: 'Motivos', breadcrumb: 'MOTIVOS'}
+      },
       {
         path: 'company',
         component: CompanyProfileComponent,

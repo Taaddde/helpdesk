@@ -1,0 +1,8 @@
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+  }
+
+  .option-img {
+    vertical-align: middle;
+    margin-right: 8px;
+  }

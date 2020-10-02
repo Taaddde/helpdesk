@@ -5,6 +5,7 @@ export class Stock{
         public item: string,
         public deposit: string,
         public cant: number,
-        public cantMin: number
+        public cantMin: number,
+        public onOrder: boolean
     ){}
 }

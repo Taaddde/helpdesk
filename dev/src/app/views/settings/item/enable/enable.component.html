@@ -1,0 +1,65 @@
+<div fxLayout="row" fxLayoutWrap="wrap">
+  <div fxFlex="100" fxFlex.gt-xs="100">
+    <mat-card class="p-0">
+      <mat-card-title class="">
+        <div class="card-title-text">Depósito</div>
+        <mat-divider></mat-divider>
+      </mat-card-title>
+      <mat-card-content>
+        <mat-form-field appearance="fill">
+          <mat-label>Depósito</mat-label>
+          <mat-select [(ngModel)]="depName">
+            <mat-option *ngFor="let deposit of deposits" (click)="setDeposit(deposit)" [value]="deposit.name">{{deposit.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<div fxLayout="row" fxLayoutWrap="wrap">
+  
+  <div fxFlex="100" fxFlex.gt-xs="50">
+    <mat-card class="p-0">
+      <mat-card-title class="">
+        <div class="card-title-text">Articulos no habilitados</div>
+        <mat-divider></mat-divider>
+      </mat-card-title>
+      <mat-card-content>
+        <mat-list dragula='item' [(dragulaModel)]='itemsOut' id="out">
+          <mat-list-item  *ngFor="let item of itemsOut" class="mb-1 dnd-item" [dragulaItem]="item">
+            <div fxFlex="row" fxLayoutWrap="wrap">
+              <mat-icon mat-list-icon color="primary" class="mr-1 icon-circle">adjust</mat-icon>
+              <div fxFlex="column">
+                <h4 matLine class="m-0 font-normal fz-1">{{item.name}}</h4>
+                <p matLine class="m-0"> {{item.brand}} </p>
+              </div>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div fxFlex="100" fxFlex.gt-xs="50">
+    <mat-card class="p-0">
+      <mat-card-title class="">
+        <div class="card-title-text">Articulos habilitados</div>
+        <mat-divider></mat-divider>
+      </mat-card-title>
+      <mat-card-content>
+        <mat-list dragula='item' id="in" [(dragulaModel)]='itemsIn'>
+          <mat-list-item *ngFor="let item of itemsIn" class="mb-1 dnd-item">
+            <div fxFlex="row" fxLayoutWrap="wrap">
+              <mat-icon mat-list-icon color="primary" class="mr-1 icon-circle">adjust</mat-icon>
+              <div fxFlex="column">
+                <h4 matLine class="m-0 font-normal fz-1">{{item.name}}</h4>
+                <p matLine class="m-0"> {{item.brand}} </p>
+              </div>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+</div>

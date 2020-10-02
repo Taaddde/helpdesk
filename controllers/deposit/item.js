@@ -35,6 +35,7 @@ function save(req, res){
     var params = req.body;
 
     item.name = params.name;
+    item.brand = params.brand;
     item.company = params.company;
 
     item.save((err, stored) =>{

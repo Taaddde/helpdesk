@@ -8,6 +8,7 @@ import { sectorService } from 'app/shared/services/helpdesk/sector.service';
 import { Sector } from 'app/shared/models/helpdesk/sector';
 import { GLOBAL } from 'app/shared/services/helpdesk/global';
 import { uploadService } from 'app/shared/services/helpdesk/upload.service';
+import { Response } from 'app/shared/models/helpdesk/response';
 
 @Component({
   selector: 'app-user-profile',
@@ -26,6 +27,7 @@ export class NewUserComponent implements OnInit {
   public isAdmin: boolean;
 
   public sectors: Sector[];
+  public newResponse: Response;
 
   constructor(
     private _userService: userService,
@@ -38,10 +40,13 @@ export class NewUserComponent implements OnInit {
     this.token = _userService.getToken();
     this.identity = _userService.getIdentity();
     this.url = GLOBAL.url;
-    this.user = new User('',null ,'','',null,'','','',null,'', false,'','','','',true,'',true,true);
+    this.user = new User('',null ,'','',null,'','','',null,null, false,'','','',null,true,'',true,true);
     this.isNew = true;
     this.isUser = true;
     this.isAdmin = true;
+
+    this.newResponse = new Response('','','','');
+
   }
 
   ngOnInit() {
@@ -56,6 +61,7 @@ export class NewUserComponent implements OnInit {
           this.user.role = 'ROLE_REQUESTER';
       }else{
           this.user.role = 'ROLE_AGENT';
+          this.user.company = this.identity['company']['_id'];
       }
     })
   }
@@ -66,15 +72,11 @@ export class NewUserComponent implements OnInit {
       this.user.surname != '' && 
       this.user.userName != '' && 
       this.user.email != '' &&
-      this.user.password == ''
+      this.user.password != ''
       ){
       
       if(this.user.sign == ''){
         this.user.sign = null
-      }
-
-      if(this.user.sector == ''){
-          delete this.user.sector;
       }
       
       this._userService.add(this.token, this.user).subscribe(

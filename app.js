@@ -31,6 +31,8 @@ var calendarEvent_routes = require('./routes/calendarEvent');
 var todo_routes = require('./routes/todo');
 var notification_routes = require('./routes/notification');
 
+var order_routes = require('./routes/deposit/order');
+var orderitem_routes = require('./routes/deposit/orderitem');
 
 app.use(bodyparser.urlencoded({limit: '50mb', extended: true}));
 app.use(bodyparser.json({limit: '50mb', extended: true}));
@@ -70,6 +72,8 @@ app.use('/api/reason', reason_routes);
 app.use('/api/calendar-event', calendarEvent_routes);
 app.use('/api/todo', todo_routes);
 app.use('/api/notification', notification_routes);
+app.use('/api/order', order_routes);
+app.use('/api/orderitem', orderitem_routes);
 
 
 app.get('*', function(req, res, next){

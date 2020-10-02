@@ -1,0 +1,189 @@
+<!-- First row -->
+<mat-card
+  [@animate]="{ value: '*', params: { y: '50px', delay: '300ms' } }"
+>
+  <div fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center">
+    <!-- <div
+      fxFlex="50"
+      fxFlex.gt-sm="33"
+      fxFlex.sm="50"
+    >
+      <div class="text-center pt-1 pb-1 border-right-light">
+        <mat-icon class="text-green">comment</mat-icon>
+        <h4 class="m-0 ">4829</h4>
+        <small class="m-0 ">Tickets</small>
+      </div>
+    </div>
+    <div
+      fxFlex="50"
+      fxFlex.gt-sm="33"
+      fxFlex.sm="50"
+    >
+      <div class="text-center pt-1 pb-1 border-right-light">
+        <mat-icon class="text-blue">person</mat-icon>
+        <h4 class="m-0 ">102</h4>
+        <small class="m-0 ">Usuarios</small>
+      </div>
+    </div>
+    <div
+      fxFlex="50"
+      fxFlex.gt-sm="33"
+      fxFlex.sm="50"
+    >
+      <div class="text-center pt-1 pb-1">
+        <mat-icon class="text-red">list</mat-icon>
+        <h4 class="m-0 ">126</h4>
+        <small class="m-0 ">Tareas</small>
+      </div>
+    </div> -->
+    <h1>Depósito</h1>
+  </div>
+</mat-card>
+<!--/ End first row -->
+
+<!-- 2nd, 3rd row -->
+<div fxLayout="row wrap">
+  <mat-card
+      class="p-0 "
+      fxFlex
+      [@animate]="{ value: '*', params: { scale: '.9', delay: '600ms' } }"
+  >
+  <button [routerLink]="[ '/deposit/order/new' ]" mat-raised-button color="primary">Crear pedido</button>
+    <ngx-datatable class="material bg-white" 
+      [columnMode]="'flex'"  
+      [headerHeight]="40"
+      [footerHeight]="50" 
+      [rowHeight]="50"
+      [limit]="5" 
+      [rows]="stockMissing"
+      [columns]="stockMissingColumns">
+    </ngx-datatable>
+  </mat-card>
+  <mat-card
+      class="p-0 "
+      fxFlex
+      [@animate]="{ value: '*', params: { scale: '.9', delay: '900ms' } }"
+  >
+  <button mat-raised-button [routerLink]="[ '/deposit/movim/list' ]" color="primary">Ver lista completa</button>
+  <ngx-datatable
+    class="material bg-white"
+    [columnMode]="'flex'"
+    [headerHeight]="40"
+    [rowHeight]="50"
+    [rows]="lastestMovims"
+  >
+    <ngx-datatable-column name="num" [flexGrow]="1">
+      <ng-template ngx-datatable-header-template>
+        #
+      </ng-template>
+      <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+        {{row.numMovim}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="type" [flexGrow]="2">
+      <ng-template ngx-datatable-header-template>
+        Tipo
+      </ng-template>
+      <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+        {{row.type}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="item" [flexGrow]="5">
+      <ng-template ngx-datatable-header-template>
+        Articulo
+      </ng-template>
+      <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+        <span [matTooltip]="row.item['name'] + ' | ' + row.item['brand']">
+          <span>{{ row.item['name'] }}</span>  |
+          <small>{{ row.item['brand'] }}</small>
+        </span>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="cant" [flexGrow]="1">
+      <ng-template ngx-datatable-header-template>
+        Cantidad
+      </ng-template>
+      <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+        {{row.cant}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="date" [flexGrow]="2">
+      <ng-template ngx-datatable-header-template>
+        Fecha
+      </ng-template>
+      <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+        {{ changeDate(row.date)  }}
+      </ng-template>
+    </ngx-datatable-column>
+
+  </ngx-datatable>
+  </mat-card>
+
+  
+</div>
+
+<div fxLayout="row wrap">
+  <mat-card
+      class="p-0 "
+      fxFlex
+      [@animate]="{ value: '*', params: { scale: '.9', delay: '1200ms' } }"
+  >
+    <mat-form-field class="full-width">
+      <mat-select [(ngModel)]="deposit" name="deposit">
+        <mat-option *ngFor="let deposit of deposits" [value]="deposit" (click)="getStock(deposit)">
+          {{deposit.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="margin-333" style="width: 100%">
+      <input 
+      matInput 
+      placeholder="Filtrar por articulo" 
+      value=""
+      (keyup)='updateFilter($event)'>
+    </mat-form-field>
+      
+    <ngx-datatable ngx-resize-watcher
+    class="material bg-white"
+    [columnMode]="'flex'"
+    [headerHeight]="40"
+    [footerHeight]="50"
+    [rowHeight]="40"
+    [limit]="8"
+    [rows]="stocks"
+    >
+      <ngx-datatable-column name="itemName" [flexGrow]="3">
+        <ng-template ngx-datatable-header-template>
+          Articulo
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+          {{row['itemName']}}
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column name="brandName" [flexGrow]="3">
+        <ng-template ngx-datatable-header-template>
+          Marca
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+          {{row['brandName']}}
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column name="cant" [flexGrow]="1">
+        <ng-template ngx-datatable-header-template>
+          Stock
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+          {{row.cant}}
+        </ng-template>
+      </ngx-datatable-column>
+
+    </ngx-datatable>
+  </mat-card>
+</div>

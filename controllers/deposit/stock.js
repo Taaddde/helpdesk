@@ -1,5 +1,7 @@
 'use strict'
 var Stock = require('../../models/deposit/stock');
+const mongoose =require('mongoose')
+const ObjectId = mongoose.Types.ObjectId;
 
 //Sistema de log
 var logger = require('../../services/logger');
@@ -7,7 +9,7 @@ var jwt_decode = require('jwt-decode');var path = require('path');
 
 var populateQuery = [
     {path:'deposit', select:['name']},
-    {path:'item',select:['name']}
+    {path:'item',select:['name', 'brand']}
 ];
 
 function getOne(req, res){
@@ -42,6 +44,7 @@ function save(req, res){
     stock.item = params.item;
     stock.cant = params.cant;
     stock.cantMin = params.cantMin;
+    stock.onOrder = false;
 
     stock.save((err, stored) =>{
         if(err){
@@ -54,6 +57,22 @@ function save(req, res){
             }else{
               logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
                 res.status(200).send({stock:stored})
+            }
+        }
+    });
+}
+
+function updateMany(req, res){
+    let item = req.params.item;
+    var update =  req.body;
+
+    Stock.updateMany({item:ObjectId(item)}, update, (err, updated) =>{
+        if(err){
+            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+            res.status(500).send({message: 'Error del servidor en la petición'});
+        }else{
+            if(updated){
+                res.status(200).send({stock:updated});
             }
         }
     });
@@ -132,7 +151,7 @@ function remove(req, res){
 function removeMany(req, res){
     var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'removeMany';
-    var query = req.params.query;
+    var query = req.query;
 
     Stock.deleteMany(query, (err, removed) =>{
         if(err){
@@ -153,6 +172,7 @@ function removeMany(req, res){
 module.exports = {
     getOne,
     getList,
+    updateMany,
 
     save,
     update,

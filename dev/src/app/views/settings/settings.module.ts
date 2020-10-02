@@ -28,15 +28,21 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { SharedModule } from 'app/shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { SettingsRoutes } from './settings.routing';
+import { QuillModule } from 'ngx-quill';
+import {DragDropModule} from '@angular/cdk/drag-drop';
+
+
+
+
+
+
 import { SectorListComponent } from './list/sector-list.component';
 import { SectorComponent } from './sector/sector.component';
 import { CompanyProfileComponent } from './company/company.component';
 import { TypesTicketComponent } from './type-subtype tickets/type.component';
 import {  SubTypeEditComponent } from './type-subtype tickets/subtype/subtype-edit.component';
-import { QuillModule } from 'ngx-quill';
 import { SubTypeNewComponent } from './type-subtype tickets/subtype/subtype-new.component';
 import { TypePopupComponent } from './type-subtype tickets/type/type-popup.component';
-
 
 
 @NgModule({
@@ -53,6 +59,7 @@ import { TypePopupComponent } from './type-subtype tickets/type/type-popup.compo
     MatPaginatorModule,
     MatTableModule,
     SharedModule,
+    DragDropModule,
     MatListModule,
     MatTooltipModule,
     MatIconModule,

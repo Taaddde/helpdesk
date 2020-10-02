@@ -6,6 +6,7 @@ export class Movim{
         public type: string,
         public deposit: string,
         public item: string,
+        public company: string,
         public cant: number,
         public agent: string,
         public reason: string,
@@ -17,5 +18,7 @@ export class Movim{
         public ticket: string,
         
         public depositDestiny: string,
+
+        public obs: string
     ){}
 }

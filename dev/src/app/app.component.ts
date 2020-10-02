@@ -37,7 +37,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.changePageTitle();
 
-    if(this.identity['company']){
+    if(this.identity && this.identity['company']){
       this.appTitle = this.identity['company']['name'];
     }
   }

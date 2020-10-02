@@ -1,0 +1,162 @@
+<mat-card class="p-0">
+    <mat-card-content>
+        <form [formGroup]="form" #f="ngForm" (ngSubmit)="submit()" style="margin-top: 20px;">
+            <div fxLayout="row wrap">
+                <div fxFlex="100" fxFlex.gt-xs="50" class="pr-1">
+
+                    <div class="pb-1">
+                        <label id="radio-type">Tipo (*)</label>
+                        <br>
+                        <mat-radio-group 
+                        aria-labelledby="radio-type"
+                        name="type" 
+                        (change)="setType($event.value)"
+                        formControlName="type">
+                            <mat-radio-button value="Ingreso">Ingreso</mat-radio-button>
+                            <mat-radio-button value="Egreso">Egreso</mat-radio-button>
+                            <mat-radio-button value="Transferencia">Transferencia</mat-radio-button>
+                            <mat-radio-button value="Ajuste">Ajuste</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+
+
+                    <div class="pb-1">
+                        <mat-form-field class="full-width">
+                            <mat-label>Depósito (*)</mat-label>
+                            <mat-select [formControl]="form.controls['deposit']" name="deposit">
+                              <mat-option *ngFor="let deposit of deposits" (click)="setDeposit(deposit)" [value]="deposit._id">
+                                {{deposit.name}}
+                              </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+
+                    <div class="pb-1">
+                        <mat-form-field class="full-width">
+                            <mat-label>Fecha (*)</mat-label>
+                            <input matInput [formControl]="form.controls['date']" [matDatepicker]="date">
+                            <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+                            <mat-datepicker #date></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="pb-1">
+                        <mat-form-field class="full-width">
+                            <mat-label>Ticket</mat-label>
+                            <input matInput type="number" (click)="searchTicket()" [formControl]="form.controls['ticket']" [value]="form.controls['ticket'].value['numTicket']" readonly>
+                            <button mat-button matSuffix mat-icon-button aria-label="Search" type="button" (click)="searchTicket()">
+                              <mat-icon>search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="pb-1" *ngIf="form.controls['type'].value == 'Egreso'">
+                        <mat-form-field class="full-width">
+                            <input type="text"
+                            placeholder="Solicitante"
+                            aria-label="Text"
+                            matInput
+                            (input)="filterRequester($event.target.value)"
+                            [formControl]="form.controls['requester']"
+                            [matAutocomplete]="user">
+
+                            <mat-autocomplete autoActiveFirstOption #user="matAutocomplete" [displayWith]="displayUser">
+                                <mat-option (click)="setRequester(requester)" *ngFor="let requester of tmpRequesters" [value]="requester">
+                                    <img *ngIf="requester.image && requester.image != 'null'" class="option-img" aria-hidden [src]="url+'user/image/'+requester.image" height="25" width="25">
+                                    <img *ngIf="!requester.image || requester.image == 'null'" class="option-img" aria-hidden src="assets/images/system/user-placeholder.png" height="25" width="25">
+                                    <span>{{requester.name}} {{requester.surname}}</span>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
+
+                    
+
+                </div>
+
+                <div fxFlex="100" fxFlex.gt-xs="50">
+
+                    <div class="pb-1">
+                        <mat-form-field class="full-width">
+                            <mat-label>Motivo (*)</mat-label>
+                            <mat-select [formControl]="form.controls['reason']" name="reason">
+                              <mat-option *ngFor="let reason of reasons" [value]="reason._id">
+                                {{reason.name}}
+                              </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="pb-1">
+                        <mat-form-field class="full-width">
+                            <input type="text"
+                            placeholder="Articulo (*)"
+                            aria-label="Text"
+                            matInput
+                            (input)="filterStock($event.target.value)"
+                            [formControl]="form.controls['item']"
+                            [matAutocomplete]="auto">
+
+                        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayItem">
+                            <mat-option *ngFor="let stock of tmpStocks" [value]="stock">
+                                <span>{{stock.item['name']}}</span>  |
+                                <small>{{stock.item['brand']}} - {{stock.cant}}</small>
+                            </mat-option>
+                        </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="pb-1">
+                        <mat-form-field class="full-width">
+                            <input 
+                            type="number"
+                            min="1"
+                            placeholder="Cantidad (*)"
+                            aria-label="Number"
+                            matInput
+                            [formControl]="form.controls['cant']">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="pb-1">
+                        <mat-form-field class="full-width">
+                            <mat-label>Observaciones</mat-label>
+                            <input matInput type="text" [formControl]="form.controls['obs']">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="pb-1" *ngIf="form.controls['type'].value == 'Egreso'">
+                        <mat-form-field class="full-width">
+                            <mat-label>Sector</mat-label>
+                            <mat-select [formControl]="form.controls['sector']" name="sector">
+                              <mat-option *ngFor="let sector of sectors" [value]="sector._id">
+                                {{sector.name}}
+                              </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="pb-1" *ngIf="form.controls['type'].value == 'Transferencia'">
+                        <mat-form-field class="full-width">
+                            <mat-label>Depósito destino (*)</mat-label>
+                            <mat-select [formControl]="form.controls['depositDestiny']" name="deposit">
+                              <mat-option *ngFor="let deposit of deposits" [value]="deposit._id">
+                                {{deposit.name}}
+                              </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    
+                </div>
+
+            </div>
+            <button 
+            mat-raised-button 
+            type="submit"
+            color="primary" 
+            [disabled]="form.invalid || (form.controls['type'].value == 'Transferencia' && form.controls['depositDestiny'].value == '')">Guardar</button>
+        </form>
+    </mat-card-content>
+</mat-card>
+

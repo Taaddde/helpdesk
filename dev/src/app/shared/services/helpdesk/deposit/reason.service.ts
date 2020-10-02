@@ -49,11 +49,14 @@ export class reasonService{
 
     }
 
-    getList(token){
+    getList(token, query){
         this.httpOptions.headers =
             this.httpOptions.headers.set('Authorization', token);
-
-        return this._httpClient.get<any>(this.url+'reason/list', this.httpOptions);
+            let options = {
+                headers: this.httpOptions.headers,
+                params: query
+            };
+        return this._httpClient.get<any>(this.url+'reason/list', options);
     }
 
     getOne(token, id){

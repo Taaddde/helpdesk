@@ -60,7 +60,7 @@ export class HeaderSideComponent implements OnInit {
       this.configTour();
       this.tour();
       this.getCountNotifications();
-      this.refresh = interval(15000).subscribe((val) => { 
+      this.refresh = interval(5000).subscribe((val) => { 
         this.getCountNotifications();
       });
     }
@@ -118,15 +118,16 @@ export class HeaderSideComponent implements OnInit {
     getCountNotifications(){
       let now = moment().format('YYYY-MM-DD HH:mm')
       let query = {user: this.identity['_id'], dateInit: now};
-
       this._notificationService.getCount(this.token, query).subscribe(
           response =>{
             if(response.count){
               this.count = response.count;
+            }else{
+              this.count = 0;
             }
           },
           error =>{
-            console.log(error)
+            this.count = 0;
           });
     }
 

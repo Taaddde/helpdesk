@@ -1,0 +1,110 @@
+<h1 matDialogTitle>Buscador de ticket</h1>
+
+<mat-card class="p-0">
+  <mat-card-header>
+    <mat-form-field class="full-width">
+      <input 
+      type="text"
+      (keyup.enter)="getTickets()"
+      placeholder="Buscar ticket (busca por asunto por defecto) | Por número: #4932, Por solicitante: @Juan, Por chat: *buenas tardes"
+      aria-label="Text"
+      matInput
+      [(ngModel)]="filter">
+      <button mat-button matSuffix mat-icon-button aria-label="Search" type="button" (click)="getTickets()">
+        <mat-icon>search</mat-icon>
+      </button>
+
+    </mat-form-field>
+  </mat-card-header>
+  <mat-card-content>
+    <ngx-datatable
+    *ngIf="tickets"
+      class="material bg-white"
+      [columnMode]="'force'"
+      [headerHeight]="50"
+      [footerHeight]="50"
+      [rowHeight]="50"
+      [limit]="8"
+      [rows]="tickets"
+      [scrollbarH]="true"
+      (activate)="submit($event)"
+    >
+      <ngx-datatable-column name="num" [maxWidth]="70">
+        <ng-template ngx-datatable-header-template>
+          Número
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+          {{row.numTicket}}
+        </ng-template>
+      </ngx-datatable-column>
+  
+      <ngx-datatable-column name="requester" [maxWidth]="250">
+        <ng-template ngx-datatable-header-template>
+          Solicitante
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+          <img *ngIf="row.requester && row.requester.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+row.requester.image}}" />
+          <img *ngIf="!row.requester || row.requester.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="assets/images/system/user-placeholder.png" />
+          {{row.requester.name}}
+          <span> </span>
+          {{row.requester.surname}}
+        </ng-template>
+      </ngx-datatable-column>
+  
+      <ngx-datatable-column name="sub" [maxWidth]="350">
+        <ng-template ngx-datatable-header-template>
+          Asunto
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+          {{ row.sub }}
+        </ng-template>
+      </ngx-datatable-column>
+  
+      <ngx-datatable-column name="agent" [maxWidth]="250">
+        <ng-template ngx-datatable-header-template>
+          Agente
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+          <ng-container *ngIf="row.agent; else noAgent">
+            <img *ngIf="row.agent && row.agent.image != 'null'" class="rounded-circle mr-2" width="30" height="30" src="{{url+'user/image/'+row.agent.image}}" />
+            <img *ngIf="!row.agent || row.agent.image == 'null'" class="rounded-circle mr-2" width="30" height="30" src="assets/images/system/user-placeholder.png" />
+            {{row.agent.name}}
+            <span> </span>
+            {{row.agent.surname}}
+          </ng-container>
+          <ng-template #noAgent>
+            
+          </ng-template>
+          
+        </ng-template>
+      </ngx-datatable-column>
+  
+      <ngx-datatable-column name="status" [maxWidth]="100">
+        <ng-template ngx-datatable-header-template>
+          Estado
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+          {{ row.status }}
+        </ng-template>
+      </ngx-datatable-column>
+  
+      <ngx-datatable-column name="createDate" [maxWidth]="150">
+        <ng-template ngx-datatable-header-template>
+          Fecha
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+          {{ changeDate(row.createDate)  }}
+        </ng-template>
+      </ngx-datatable-column>
+  
+      <ngx-datatable-column name="lastActivity" [maxWidth]="150">
+        <ng-template ngx-datatable-header-template>
+          Novedad
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+          {{ changeDate(row.lastActivity)  }}
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </mat-card-content>
+</mat-card>

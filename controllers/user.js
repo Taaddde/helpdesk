@@ -276,9 +276,11 @@ function getUsers(req, res){
     var company = req.params.company;
     var functionName = 'getUsers';
 
+    let sort = {name: 1, surname: 1};
+
 
     if(!role){
-        User.find({company:company, deleted:false}).sort('name').exec(function(err, users){
+        User.find({company:company, deleted:false}).sort(sort).exec(function(err, users){
             if(err){
                 logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+getUsers.name, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -302,7 +304,7 @@ function getUsers(req, res){
             }else{
                 query = {$or: [{role: 'ROLE_AGENT'}, {role: 'ROLE_ADMIN'}], deleted:false, company:company}
             }
-            User.find(query).sort('name').exec(function(err, users){
+            User.find(query).sort(sort).exec(function(err, users){
                 if(err){
                     logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -319,7 +321,7 @@ function getUsers(req, res){
             });
         }else{
             let query = {$or:[{role:'ROLE_REQUESTER'},{company:{$ne:company}}], deleted:false};
-            User.find(query).sort('name').exec(function(err, users){
+            User.find(query).sort(sort).exec(function(err, users){
                 if(err){
                     logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})
@@ -558,7 +560,7 @@ function forgotPassword(req, res){
                                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: userName+' ('+req.ip+') Objeto no encontrado'}});
                                 res.status(404).send({message: 'El nombre de usuario no existe'});
                             }else{
-                                let txt = '<div style="position: relative;display: flex;flex-direction: column;min-width: 0;word-wrap: break-word;background-color: #fff;background-clip: border-box;border: 1px solid #e3e6f0;border-radius: .35rem;font-family: Nunito,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;"><div style="flex: 1 1 auto;padding: 1.25rem;"><h4 style="margin-bottom: .75rem;"><strong>¡Hola '+user.name+'!</strong></h4><hr/><p class="card-text">Se ha solicitado un cambio de contraseña para el usuario '+userUpdated.userName+', tiene 30 minutos para utilizar este link</p><hr /><a style="" href="http://10.0.0.98:3977/reset-password/'+userUpdated._id+'/'+update.passToken+'" role="button" >Cambiar contraseña</a><hr /><a style="" href="http://190.220.159.37:3977/reset-password/'+userUpdated._id+'/'+update.passToken+'" role="button" >Si estas fuera de la red del hospital, utiliza este link</a></div></div>'
+                                let txt = '<div style="position: relative;display: flex;flex-direction: column;min-width: 0;word-wrap: break-word;background-color: #fff;background-clip: border-box;border: 1px solid #e3e6f0;border-radius: .35rem;font-family: Nunito,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;"><div style="flex: 1 1 auto;padding: 1.25rem;"><h4 style="margin-bottom: .75rem;"><strong>¡Hola '+user.name+'!</strong></h4><hr/><p class="card-text">Se ha solicitado un cambio de contraseña para el usuario '+userUpdated.userName+', tiene 30 minutos para utilizar este link</p><hr /><a style="" href="http://10.0.0.98:3977/sessions/reset-password/'+userUpdated._id+'/'+update.passToken+'" role="button" >Cambiar contraseña</a><hr /><a style="" href="http://190.220.159.37:3977/sessions/reset-password/'+userUpdated._id+'/'+update.passToken+'" role="button" >Si estas fuera de la red del hospital, utiliza este link</a></div></div>'
                                 let title = 'Recuperación de contraseña';
                                 mail.forgot(userUpdated.email, title, txt);
                                 logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});

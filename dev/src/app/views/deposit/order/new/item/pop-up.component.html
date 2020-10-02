@@ -1,0 +1,54 @@
+<h1 matDialogTitle>{{data.title}}</h1>
+
+<mat-card class="p-0">
+  <mat-card-content>
+        <form>
+          <div fxLayout="row wrap" fxLayout.lt-sm="column">
+            <div fxFlex="100"  class="pr-1">
+              <mat-form-field class="full-width">
+                <mat-select [placeholder]="place" [(ngModel)]="orderItem.item" name="item">
+                    <mat-option *ngFor="let item of items" [value]="item">
+                        {{item.name}}
+                        <small *ngIf="item.brand"> | {{item.brand}}</small>
+                    </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="full-width">
+                <input type="number"
+                       placeholder="Cantidad"
+                       aria-label="Text"
+                       min="1"
+                       matInput
+                       name="cant"
+                       [(ngModel)]='orderItem.cant'>
+              </mat-form-field>
+              <mat-form-field class="full-width">
+                <input type="text"
+                       placeholder="Observacion"
+                       aria-label="Text"
+                       matInput
+                       name="obs"
+                       [(ngModel)]='orderItem.obs'>
+              </mat-form-field>
+              <mat-form-field class="full-width">
+                <input type="text"
+                      placeholder="Centro de costo"
+                      aria-label="Text"
+                      matInput
+                      (input)="filterSector($event.target.value)"
+                      name="costSector"
+                      [(ngModel)]="orderItem.costSector"
+                      [matAutocomplete]="autoSector">
+                    <mat-autocomplete autoActiveFirstOption #autoSector="matAutocomplete">
+                        <mat-option *ngFor="let sector of tmpSectors" [value]="sector.name">
+                            <span>{{sector.name}}</span>
+                        </mat-option>
+                    </mat-autocomplete>
+              </mat-form-field>
+            </div>
+          </div>
+          <button mat-raised-button color="primary" (click)="submit()">Guardar</button>
+          <button mat-raised-button color="warn" (click)="submit(true)">Eliminar</button>
+        </form>
+  </mat-card-content>
+</mat-card>

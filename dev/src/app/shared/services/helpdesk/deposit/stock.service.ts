@@ -41,6 +41,15 @@ export class stockService{
 
     }
     
+
+    editMany(token, item:string, update){
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.put<any>(this.url+'stock/update-many/'+item, update, this.httpOptions);
+
+    }
+
     delete(token, id){
         this.httpOptions.headers =
         this.httpOptions.headers.set('Authorization', token);
@@ -56,6 +65,8 @@ export class stockService{
             headers: this.httpOptions.headers,
             params: query
         };
+
+        
         return this._httpClient.delete<any>(this.url+'stock/delete', options);
 
     }

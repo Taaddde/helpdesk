@@ -8,10 +8,12 @@ var Movim = Schema({
     type: String, //Transferencia, Entrada, Salida, Ajuste
     deposit: {type: Schema.ObjectId, ref:'Deposit'}, //DEPOSITO
     item: {type: Schema.ObjectId, ref:'Item'}, //ITEM
+    company: {type: Schema.ObjectId, ref:'Company'}, //DEPARTAMENTO
+    obs: String,
 
-    cant: {type: Number, default: 1}, //CUANTO
+    cant: Number, //CUANTO
     agent: {type: Schema.ObjectId, ref:'User'}, //QUIEN LO HACE
-    reason: String, //POR QUE
+    reason: {type: Schema.ObjectId, ref:'Reason'}, //POR QUE
     date: Date, 
     uploadDate: Date, 
 
