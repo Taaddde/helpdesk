@@ -29,6 +29,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { OrderRoutes } from './order.routing';
 import { NewOrderComponent } from './new/new-order.component';
 import { OrderDetailComponent } from './new/order.component';
+import { OrderListComponent } from './list/list-order.component';
+import { ReceiveOrderComponent } from './receive/receive-order.component';
 
 
 
@@ -59,7 +61,7 @@ import { OrderDetailComponent } from './new/order.component';
     FlexLayoutModule,
     RouterModule.forChild(OrderRoutes)
   ], 
-  declarations: [NewOrderComponent, OrderDetailComponent],
+  declarations: [NewOrderComponent, OrderDetailComponent, OrderListComponent, ReceiveOrderComponent],
   entryComponents: []
 })
 export class AppOrderModule { }

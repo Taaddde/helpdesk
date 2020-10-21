@@ -1,0 +1,39 @@
+<h1 matDialogTitle>{{data.title}}</h1>
+
+<mat-card class="p-0">
+  <mat-card-content>
+        <form>
+          <div fxLayout="row wrap" fxLayout.lt-sm="column">
+            <div fxFlex="100"  class="pr-1">
+              <mat-form-field class="full-width">
+                <input type="text"
+                       placeholder="Nombre"
+                       aria-label="Text"
+                       matInput
+                       name="name"
+                       [(ngModel)]='phone.name'>
+              </mat-form-field>
+              <mat-form-field class="full-width">
+                <input type="text"
+                       placeholder="Número"
+                       aria-label="Text"
+                       matInput
+                       name="phone"
+                       [(ngModel)]='phone.phone'>
+              </mat-form-field>
+              <mat-form-field class="full-width">
+                <input type="number"
+                        min="1"
+                       placeholder="Orden"
+                       aria-label="Text"
+                       matInput
+                       name="order"
+                       [(ngModel)]='phone.order'>
+              </mat-form-field>
+            </div>
+          </div>
+          <button mat-raised-button color="primary" (click)="submit(true)">Guardar</button>
+          <button mat-raised-button color="danger" *ngIf="phone._id != ''" (click)="submit(false)">Eliminar</button>
+        </form>
+  </mat-card-content>
+</mat-card>

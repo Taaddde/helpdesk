@@ -42,6 +42,7 @@ function save(req, res){
     orderItem.obs = params.obs;
     orderItem.code = params.code;
     orderItem.costSector = params.costSector;
+    orderItem.cantReceived = 0;
 
     orderItem.save((err, stored) =>{
         if(err){

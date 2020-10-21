@@ -1,0 +1,153 @@
+<div class="m-333" [@animate]="{value:'*',params:{y:'50px',delay:'300ms'}}">
+    <!-- <span fxFlex></span> -->
+    <button mat-raised-button class="mb-05" color="primary" [routerLink]="[ '/deposit/order/new' ]">Nueva orden</button>
+    <mat-divider [vertical]="true"></mat-divider>
+</div>
+
+
+<mat-card class="p-0" [@animate]="{value:'*',params:{x:'50px',delay:'600ms'}}">
+<mat-card-content class="p-0">
+    <ngx-datatable
+        class="material ml-0 mr-0"
+        [rows]="orders"
+        [columnMode]="'flex'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [scrollbarH]="true"
+        [limit]="10"
+        [rowHeight]="50"
+        >
+        <ngx-datatable-column name="#" prop="numOrder" [flexGrow]="1">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+                {{ row?.numOrder }}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Destino" prop="sectorDestiny" [flexGrow]="6">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+                {{ row?.sectorDestiny }}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Estado" prop="status" [flexGrow]="3">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+                {{ row?.status }}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Genera" prop="date" [flexGrow]="3">
+            <ng-template  let-row="row" ngx-datatable-cell-template>
+                {{changeDate(row?.date)}}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Entrega" prop="dateRequired" [flexGrow]="3">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+                {{changeDate(row?.dateRequired)}}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Acciones" [flexGrow]="3">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+                <button mat-icon-button mat-sm-button color="primary" 
+                    [matTooltip]="row.status == 'Autorizado' || row.status == 'Recibido' ? 'Imprimir orden' : 'La orden aún esta pendiente de autorizar'" 
+                    [disabled]="row.status != 'Autorizado' && row.status != 'Recibido'"
+                    (click)="print(row)">
+                    <mat-icon>print</mat-icon>
+                </button>
+                <button mat-icon-button mat-sm-button color="primary" 
+                    matTooltip="Ver orden"
+                    [routerLink]="['/deposit/order/get/',row._id]">
+                    <mat-icon>list_alt</mat-icon>
+                </button>
+                <button mat-icon-button mat-sm-button color="primary" 
+                    matTooltip="Recibir insumos"
+                    [disabled]="row.status != 'Autorizado' && row.status != 'Recibido'"
+                    [routerLink]="['/deposit/order/receive/',row._id]">
+                    <mat-icon>add_task</mat-icon>
+                </button>
+            </ng-template>
+        </ngx-datatable-column>
+    </ngx-datatable>
+</mat-card-content>
+</mat-card>
+
+
+<div id="order" class="card print" *ngIf="orderPrint._id != ''">
+    <div class="card-body">
+        <div class="table-responsive table-bordered">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr style="background-color: #3f9ecb;">
+                        <td class="cell">Fecha: <strong>{{changeDate(orderPrint.date)}}</strong></td>
+                        <td class="text-center cell" colspan="3"><strong>FORMULARIO ÚNICO DE REQUERIMIENTO</strong></td>
+                        <td class="text-left cell">Número</td>
+                        <td class="text-center cell"><strong></strong> {{num}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center cell">A</td>
+                        <td class="text-center cell" colspan="3">FECHA DE ENTREGA REQUERIDA: <strong>{{changeDate(orderPrint.dateRequired)}}</strong></td>
+                        <td class="text-left cell">ORIGINAL</td>
+                        <td class="text-center cell">X</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left cell" colspan="6">Solicitante: <strong>{{orderPrint.company['name']}}</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="text-left cell" colspan="6">Destino: <strong>{{orderPrint.sectorDestiny}}</strong></td>
+                    </tr>
+                    <tr style="background-color: #3f9ecb;">
+                        <td class="text-center cell" colspan="6"><strong>JUSTIFICACIÓN DE LA COMPRA</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="cell" colspan="6">
+                            <div [innerHTML]="orderPrint.justification"></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="table-responsive table-bordered">
+            <table class="table-bordered" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th class="cell" style="width: 50px;">Item</th>
+                        <th class="text-center cell" style="width: 50px;">Cant</th>
+                        <th class="text-center cell" style="width: 134px;">Articulo</th>
+                        <th class="text-center cell">Marca</th>
+                        <th class="text-center cell">Observaciones</th>
+                        <th class="text-center cell" style="width: 137px;">Centro de costo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let orderItem of orderItems; let i=index">
+                        <td class="text-right cell" style="padding-right: 5px;">{{i+1}}</td>
+                        <td class="text-right cell" style="padding-right: 5px;">{{orderItem.cant}}</td>
+                        <td class="cell" style="padding-left: 5px;">{{orderItem.item['name']}}</td>
+                        <td class="cell" style="padding-left: 5px;">{{orderItem.item['brand']}}</td>
+                        <td class="cell obs" style="padding-left: 5px;">{{orderItem.obs}}</td>
+                        <td class="text-center cell" style="padding-left: 5px;">{{orderItem.costSector}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="table-responsive table-bordered">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr class="cell">
+                        <td style="font-size: 12px" colspan="3">
+                            <strong>Observaciones:</strong>
+                            <span> {{orderPrint.obs}}</span>
+                        </td>
+                    </tr>
+                    <tr class="cell">
+                        <td class="text-center cell firma">
+                            <p style="font-size: 10px;">SOLICITO: FIRMA Y ACLARACIÓN</p>
+                            <div style="height: 25px;"></div><span style="color: rgb(255,0,0);">Guillermo Luparia</span></td>
+                        <td class="text-center cell firma">
+                            <p style="font-size: 10px;">AUTORIZO: FIRMA Y ACLARACIÓN</p>
+                            <div style="height: 25px;"></div><span style="color: rgb(255,0,0);">Guillermo Luparia</span></td>
+                        <td class="text-center cell firma">
+                            <p style="font-size: 10px;">GERENCIA: FIRMA Y ACLARACIÓN</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

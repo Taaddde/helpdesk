@@ -961,23 +961,8 @@ function getSectorListPaged(req, res){
     }
     var perPage = req.params.perPage;
 
-    var query = req.query;
     var sort = {numTicket:-1}
 
-
-    delete query['requester'];
-
-    if(query['sub']){
-        query['sub'] = { "$regex": query['sub'], "$options": "i" }
-    }
-
-    if(query['status'] && !query['company'] && query['status'] == 'Pendiente'){
-        query['status'] = {$in:['Pendiente','Abierto']};
-    }
-
-    if(query['status'] && query['status'] == 'Finalizado'){
-        query['status'] = {$in:['Finalizado','Cerrado']};
-    }
 
     User.find({sector: req.params.sector}).distinct('_id').exec((err, users) =>{
         if(err){
@@ -989,8 +974,13 @@ function getSectorListPaged(req, res){
                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 return res.status(404).send({message: 'No hay items'})
             }else{
-                query['requester'] = users;
-                Ticket.paginate(query,{page:page, limit:perPage, populate:populateQuery, sort:sort}, function(err, tickets){
+                let requesters = new Array();
+                users.forEach(e => {
+                    requesters.push(ObjectId(e));
+                });
+                let query = {requester: requesters};
+                
+                Ticket.paginate(query,{page:page, limit:10, populate:populateQuery, sort:sort}, function(err, tickets){
                     if(err){
                         logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                         console.log(err)
@@ -1000,7 +990,7 @@ function getSectorListPaged(req, res){
                             logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                             res.status(404).send({message: 'No hay items'})
                         }else{
-                            
+                            console.log(tickets)
                             res.status(200).send({
                                 tickets:tickets
                             });

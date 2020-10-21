@@ -1,0 +1,59 @@
+<mat-card class="p-0">
+  <mat-card-content>
+    <mat-form-field class="full-width" style="margin-top: 20px; padding-bottom: 0px; padding-top: 0px;">
+      <mat-select placeholder="Depósito" [(ngModel)]="deposit" name="deposit">
+        <mat-option *ngFor="let deposit of deposits" [value]="deposit">
+          {{deposit.name}}
+        </mat-option>
+      </mat-select>  
+    </mat-form-field>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="p-0">
+  <mat-card-content>
+        <ngx-datatable
+          class="material bg-white"
+          [rows]="orderItems"
+          [columnMode]="'flex'"
+          [headerHeight]="40"
+          [footerHeight]="50"
+          [limit]="10"
+          [rowHeight]="45">
+          <ngx-datatable-column name="Item" [flexGrow]="1">
+            <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+                {{rowIndex + 1}}
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Articulo" [flexGrow]="4">
+            <ng-template let-rowIndex="rowIndex" let-row="row"  ngx-datatable-cell-template>
+                <span [matTooltip]="row.item['name'] + ' ' + row.item['brand']">
+                  {{row.item['name']}} <small>{{row.item['brand']}}</small> 
+                </span>
+            </ng-template>
+          </ngx-datatable-column>
+           <ngx-datatable-column name="Observaciones" [flexGrow]="4">
+            <ng-template let-rowIndex="rowIndex" let-row="row"  ngx-datatable-cell-template>
+                <span [matTooltip]="row.obs">
+                  {{row.obs}}
+                </span>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Faltante" [flexGrow]="1">
+            <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+                {{row.cant - row.cantReceived}}
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Recibido" [flexGrow]="2">
+            <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template style="padding-bottom: 10px;">
+                <input style="border: 0;" [min]="row.cantReceived2" [max]="row.cant" type="number" matInput [(ngModel)]="row.cantReceived" >
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+        <div>
+          <button mat-raised-button color="accent" [routerLink]="[ '/deposit/order/list' ]">Volver</button>
+          <span fxFlex="16px"></span>
+          <button mat-raised-button color="primary" (click)="send()">Recibir</button>
+        </div>
+  </mat-card-content>
+</mat-card>

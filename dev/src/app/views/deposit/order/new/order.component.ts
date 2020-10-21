@@ -43,6 +43,11 @@ export class OrderDetailComponent implements OnInit {
   public sectors: Sector[];
   public tmpSectors: Sector[] = [];
 
+  public addOrderItems: OrderItem[] = new Array<OrderItem>();
+  public deleteOrderItems: OrderItem[] = new Array<OrderItem>();
+  public editOrderItems: OrderItem[] = new Array<OrderItem>();
+
+
   constructor(
     private _userService: userService,
     private snackBar: MatSnackBar,
@@ -57,7 +62,7 @@ export class OrderDetailComponent implements OnInit {
   ) {
     this.token = _userService.getToken();
     this.identity = _userService.getIdentity();
-    this.order = new Order('',null,new Date(),new Date(),null,this.identity['company']['_id'],null,'','','Pendiente');
+    this.order = new Order('',null,new Date(),new Date(),null,this.identity['company']['_id'],null,'','','No creado');
   }
 
   ngOnInit() {
@@ -147,26 +152,31 @@ export class OrderDetailComponent implements OnInit {
           return;
         }
 
-        let order: OrderItem = res.item;
+        if(res.delete){
 
-        console.log(order);
+          if(orderItem._id != '')
+            this.deleteOrderItems.push(orderItem);
+          else
+            this.addOrderItems.splice(this.addOrderItems.indexOf(orderItem), 1);
 
+          this.orderItems.splice(this.orderItems.indexOf(orderItem), 1);
+          this.orderItems = [...this.orderItems];
+        }else{
+          let resOrderItem = new OrderItem('', null, res.item['item'], res.item['cant'], res.item['obs'], res.item['code'], res.item['costSector'], 0);
+          this.loader.open();
+          if (isNew) {
+            this.addOrderItems.push(resOrderItem);
+            this.orderItems = this.orderItems.concat([resOrderItem]);
+          } else {
+            orderItem.cant = resOrderItem.cant;
+            orderItem.item = resOrderItem.item;
+            orderItem.obs = resOrderItem.obs;
+            orderItem.costSector = resOrderItem.costSector;
 
-        // if(res.delete){
-        //   this.orderItems.splice(this.orderItems.indexOf(orderItem), 1);
-        //   this.orderItems = [...this.orderItems]
-        // }else{
-        //   let resOrderItem = new OrderItem('', null, res.item['item'], res.item['cant'], res.item['obs'], res.item['code'], res.item['costSector']);
-        //   this.loader.open();
-        //   if (isNew) {
-        //     this.orderItems = this.orderItems.concat([resOrderItem]);
-        //   } else {
-        //     orderItem.cant = resOrderItem.cant;
-        //     orderItem.item = resOrderItem.item;
-        //     orderItem.obs = resOrderItem.obs;
-        //     orderItem.costSector = resOrderItem.costSector;
-        //   }
-        // }
+            if(orderItem._id != '')
+              this.editOrderItems.push(orderItem);
+          }
+        }
         this.loader.close();
       })
   }
@@ -180,17 +190,45 @@ export class OrderDetailComponent implements OnInit {
       this.order.status = "Pendiente";
     }
 
-    this._orderService.add(this.token, this.order).subscribe(
-        response =>{
-          if(response.order){
-             let o = response.order;
+  
 
-          }
-        },
-        error =>{
-          this.openSnackBar(error.message, 'Cerrar');
+    this._orderService.edit(this.token, this.order._id, this.order).subscribe(
+      response =>{
+        if(response.order){
+
+          this.addOrderItems.forEach(e => {
+            e.order = this.order._id;
+            this._orderItemService.add(this.token, e).subscribe(
+                response =>{},
+                error =>{}
+            );
+          });
+
+          this.editOrderItems.forEach(e => {
+            this._orderItemService.edit(this.token, e._id, e).subscribe(
+                response =>{},
+                error =>{}
+            );
+          });
+
+          this.deleteOrderItems.forEach(e => {
+            this._orderItemService.delete(this.token, e._id).subscribe(
+                response =>{},
+                error =>{}
+            );
+          });
+           
+          if(authorize)
+            this.openSnackBar('Pedido autorizado', 'Cerrar');
+          else 
+            this.openSnackBar('Pedido guardado', 'Cerrar');
+
+          this._router.navigate(['deposit/home']);
         }
+      },
+      error =>{
+        this.openSnackBar(error.message, 'Cerrar');
+      }
     );
-
   }
 }

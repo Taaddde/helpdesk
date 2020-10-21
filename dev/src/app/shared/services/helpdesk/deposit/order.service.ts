@@ -33,6 +33,18 @@ export class orderService{
 
     }
 
+    print(token, body, orderId){
+        let params = { body:body};
+
+        this.httpOptions.headers =
+        this.httpOptions.headers.set('Authorization', token);
+
+        return this._httpClient.post<any>(this.url+'order/print/'+orderId, params, this.httpOptions);
+    }
+
+    getPrint(orderId){
+        return this._httpClient.get<any>(this.url+'order/print/'+orderId, this.httpOptions);
+    }
     edit(token, id:string, order){
         let params = JSON.stringify(order);
         this.httpOptions.headers =

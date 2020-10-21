@@ -59,7 +59,6 @@ export class NewTicketComponent implements OnInit {
 
   public cc: Array<User>;
 
-
   constructor(
     private _ticketService: ticketService,
     private _userService: userService,
@@ -266,6 +265,10 @@ export class NewTicketComponent implements OnInit {
 
   getLenght(arr: any): number{
     return arr.length;
+  }
+
+  displayRequester(req: User) {
+    return req.name + ' ' + req.surname;
   }
   
   submit() {

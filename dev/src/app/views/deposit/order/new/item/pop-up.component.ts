@@ -42,10 +42,10 @@ export class OrderItemPopUpComponent implements OnInit {
     ngOnInit() {
         if(this.data.payload){
             let o: OrderItem = this.data.payload;
-            this.orderItem = new OrderItem('', o.order, o.item, o.cant, o.obs, o.code, o.costSector);
+            this.orderItem = new OrderItem('', o.order, o.item, o.cant, o.obs, o.code, o.costSector, 0);
             this.place = this.orderItem.item['name'] + ' | ' + this.orderItem.item['brand'];
         }else{
-            this.orderItem = new OrderItem('',null,null,1,'','','');
+            this.orderItem = new OrderItem('',null,null,1,'','','', 0);
         }
 
         this.getItems();

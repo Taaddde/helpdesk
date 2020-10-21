@@ -89,7 +89,7 @@
           <div fxLayout="row wrap">
               <div fxFlex="100" fxFlex.gt-xs="100" class="pr-1">
                 <div class="pb-1">
-                  <button mat-raised-button color="primary" (click)="newItem(true)">Añadir articulo</button>
+                  <button mat-raised-button color="primary" [disabled]="(order.status != 'No creado' && identity['role'] != 'ROLE_ADMIN') || (order.status == 'Autorizado' || order.status == 'Finalizado')" (click)="newItem(true)">Añadir articulo</button>
                 </div>
               </div>
           </div>
@@ -134,9 +134,11 @@
 
 
         <div>
-          <button mat-raised-button color="primary" (click)="send(false)" matStepperNext>Enviar a autorizar</button>
+          <button mat-raised-button color="primary" *ngIf="order.status == 'Pendiente' && identity['role'] == 'ROLE_ADMIN'" (click)="send(false)" matStepperNext>Guardar</button>
+          <button mat-raised-button color="primary" *ngIf="order.status == 'No creado'" (click)="send(false)" matStepperNext>Enviar a autorizar</button>
           <span fxFlex="16px"></span>
-          <button mat-raised-button color="primary" *ngIf="identity['role'] == 'ROLE_ADMIN'" matStepperNext>Crear y autorizar</button>
+          <button mat-raised-button color="primary" *ngIf="order.status == 'No creado' && identity['role'] == 'ROLE_ADMIN'" (click)="send(true)" matStepperNext>Crear y autorizar</button>
+          <button mat-raised-button color="primary" *ngIf="order.status == 'Pendiente' && identity['role'] == 'ROLE_ADMIN'" (click)="send(true)" matStepperNext>Autorizar</button>
         </div>
       </mat-step>
     </mat-horizontal-stepper>

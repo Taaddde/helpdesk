@@ -62,6 +62,7 @@ function save(req, res){
 
         movim.save((err, stored) =>{
             if(err){
+                console.log(err)
                 logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                     res.status(500).send({message: 'Error del servidor en la petición'})
             }else{

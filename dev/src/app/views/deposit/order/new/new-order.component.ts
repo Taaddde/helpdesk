@@ -20,6 +20,7 @@ import { AppDateAdapter, APP_DATE_FORMATS } from 'app/shared/services/date-adapt
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { OrderItemPopUpComponent } from './item/pop-up.component';
+import { AppConfirmService } from 'app/shared/services/app-confirm/app-confirm.service';
 
 @Component({
   selector: 'app-new-order',
@@ -54,6 +55,7 @@ export class NewOrderComponent implements OnInit {
     private _router: Router,
     private loader: AppLoaderService,
     private dialog: MatDialog,
+    private confirmService: AppConfirmService,
 
     private _orderService: orderService,
     private _orderItemService: orderItemService,
@@ -64,9 +66,9 @@ export class NewOrderComponent implements OnInit {
     this.token = _userService.getToken();
     this.identity = _userService.getIdentity();
 
-    this.order = new Order('',null,new Date(),new Date(),null,this.identity['company']['_id'],null,'','','Pendiente');
+    this.order = new Order('',null,new Date(),new Date(),null,this.identity['company']['_id'],null,'','','No creado');
 
-    this.orderItem = new OrderItem('', '', null, 1, '', '', '');
+    this.orderItem = new OrderItem('', '', null, 1, '', '', '', 0);
   }
 
   ngOnInit() {
@@ -114,10 +116,23 @@ export class NewOrderComponent implements OnInit {
           if(response.stocks){
             this.orderItems = new Array<OrderItem>();
             this.lowStocks = response.stocks;
-            this.lowStocks.forEach(e => {
-              let o = new OrderItem('', null, e.item, e.cantMin-e.cant, '', '', null);
-              this.orderItems.push(o);
-            });
+
+            if(this.lowStocks.length != 0){
+              this.confirmService.confirm({message: `Existen insumos por debajo del stock minimo ¿Deseas añadirlos a esta orden?`})
+              .subscribe(res => {
+                if (res) {
+                  this.lowStocks.forEach(e => {
+                    let o = new OrderItem('', null, e.item, e.cantMin-e.cant, '', '', null, 0);
+                    this.orderItems.push(o);
+                  });
+                  this.orderItems = [...this.orderItems];
+
+                }
+              })
+            }
+
+           
+            
           }
         },
         error =>{
@@ -163,9 +178,9 @@ export class NewOrderComponent implements OnInit {
 
         if(res.delete){
           this.orderItems.splice(this.orderItems.indexOf(orderItem), 1);
-          this.orderItems = [...this.orderItems]
+          this.orderItems = [...this.orderItems];
         }else{
-          let resOrderItem = new OrderItem('', null, res.item['item'], res.item['cant'], res.item['obs'], res.item['code'], res.item['costSector']);
+          let resOrderItem = new OrderItem('', null, res.item['item'], res.item['cant'], res.item['obs'], res.item['code'], res.item['costSector'], 0);
           this.loader.open();
           if (isNew) {
             this.orderItems = this.orderItems.concat([resOrderItem]);
@@ -209,8 +224,11 @@ export class NewOrderComponent implements OnInit {
 
              });
 
-             this.openSnackBar('Pedido enviado para autorizar', 'Cerrar');
-             this._router.navigate(['deposit/home']);
+              if(authorize)
+                this.openSnackBar('Pedido autorizado', 'Cerrar');
+              else 
+                this.openSnackBar('Pedido enviado para autorizar', 'Cerrar');
+              this._router.navigate(['deposit/home']);
 
           }
         },

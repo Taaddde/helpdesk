@@ -12,11 +12,10 @@
                         matInput
                         (input)="filterRequester($event.target.value)" 
                         [matAutocomplete]="autoReq">
-                <mat-autocomplete #autoReq="matAutocomplete">
+                <mat-autocomplete (optionSelected)='setRequester($event.option.value)' [displayWith]="displayRequester" #autoReq="matAutocomplete">
                   <mat-option 
                   *ngFor="let requester of requesters"
-                  [value]="requester.name+' '+requester.surname"
-                  (click)="setRequester(requester)">
+                  [value]="requester">
                     {{requester.name+' '+requester.surname}}
                   </mat-option>
                 </mat-autocomplete>

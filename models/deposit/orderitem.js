@@ -8,6 +8,7 @@ var OrderItem = Schema({
 
     item: {type: Schema.ObjectId, ref:'Item'},
     cant: Number,
+    cantReceived: {type: Number, default:0},
     obs: String,
     code: String,
     costSector: String

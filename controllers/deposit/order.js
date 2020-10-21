@@ -5,6 +5,13 @@ var Order = require('../../models/deposit/order');
 var logger = require('../../services/logger');
 var jwt_decode = require('jwt-decode');var path = require('path');
 
+
+//Sistema de print
+const createHTML = require('create-html');
+const pdf = require('html-pdf');
+var fs = require('fs');
+var path = require('path');
+
 var populateQuery = [
     {path:'company',select:['name']},
 ];
@@ -65,6 +72,38 @@ function save(req, res){
         });
     })
     
+}
+
+async function print(req, res){
+    var id = req.params.id;
+    var body = req.body.body;
+
+
+    var htmlCreated = createHTML({
+        scriptAsync: true,
+        head: '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> <style>.cell{color: rgb(0,0,0);font-size: 12px;}.card::after {content: "";background: url(https://upload.wikimedia.org/wikipedia/commons/7/7d/Sanatorio_Mar%C3%ADtimo_de_Vi%C3%B1a_del_Mar.svg) no-repeat;opacity: 0.1;top: 0;left: 0;bottom: 0;right: 0;position: absolute;z-index: 1;height: 100%;width: 100%;margin: 20px;}</style>',
+        body: body,
+    })
+    
+    let dir = path.join(__dirname, '../../uploads/html/'+id+'.html');
+
+    fs.writeFile(dir, htmlCreated, function (err) {
+        if (err) console.log(err)
+    })
+
+    let dirPdf = path.join(__dirname, '../../uploads/orders/'+id+'.pdf');
+    var options = { 
+        format: 'A4',
+        orientation: "landscape",
+    };
+
+    await pdf.create(htmlCreated, options).toStream(function(err, stream){
+        if(err){console.log(err)}
+        stream.pipe(fs.createWriteStream(dirPdf));
+    });
+
+    res.status(200).send({done: true});
+
 }
 
 
@@ -134,9 +173,26 @@ function remove(req, res){
     });
 }
 
+function getPrint(req, res){
+    var id = req.params.id;
+    var pathFile = './uploads/orders/'+id+'.pdf';
+
+
+    fs.exists(pathFile, function(exists){
+        if(exists){
+            res.sendFile(path.resolve(pathFile));
+        }else{
+            res.status(200).send({message: 'No existe la imagen...'});
+        }
+    });
+}
+
+
 module.exports = {
     getOne,
     getList,
+    print,
+    getPrint,
 
     save,
     update,

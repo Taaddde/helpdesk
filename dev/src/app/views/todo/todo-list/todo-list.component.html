@@ -74,7 +74,8 @@
     cdkDrag
     cdkDragHandle
   >
-    <mat-icon class="move-handler">open_with</mat-icon>
+    <mat-icon *ngIf="!todo.numTodo" class="move-handler">open_with</mat-icon>
+    <strong *ngIf="todo.numTodo" style="font-size: 20px;">#{{todo.numTodo}}</strong>
 
     <div fxLayout="row" fxLayoutAlign="space-between center" fxFlex="1 1 0%">
       <div

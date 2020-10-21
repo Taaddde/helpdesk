@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema; //Para crear documentos en la coleccion
 
 var TodoSchema = Schema({
+    numTodo: Number,
     title: String,
     note: String,
     important: {type: Boolean, default: false},

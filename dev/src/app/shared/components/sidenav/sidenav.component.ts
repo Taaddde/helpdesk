@@ -2,11 +2,13 @@ import { Component, OnInit, Input } from '@angular/core';
 import { userService } from 'app/shared/services/helpdesk/user.service';
 import { todoService } from 'app/shared/services/helpdesk/todo.service';
 import { interval } from 'rxjs';
+import { depositService } from 'app/shared/services/helpdesk/deposit/deposit.service';
+import { stockService } from 'app/shared/services/helpdesk/deposit/stock.service';
 
 @Component({
   selector: 'app-sidenav',
   templateUrl: './sidenav.template.html',
-  providers: [userService, todoService]
+  providers: [userService, todoService, depositService, stockService]
 })
 export class SidenavComponent {
   @Input('items') public menuItemss: any[] = [];
@@ -20,7 +22,9 @@ export class SidenavComponent {
 
   constructor(
     private _userService: userService,
-    private _todoService: todoService
+    private _todoService: todoService,
+    private _stockService: stockService,
+    private _depositService: depositService
   ) {
     this.token = _userService.getToken();
   }
@@ -28,9 +32,11 @@ export class SidenavComponent {
     this.setMenu();
     if(this.identity['role'] != 'ROLE_REQUESTER'){
       this.getCountTasks();
+      this.getCountMissingStock();
       this.refresh = interval(15000).subscribe((val) => { 
         this.getCountTasks();
-      }); 
+        this.getCountMissingStock();
+      });
     }
   }
 
@@ -152,6 +158,7 @@ export class SidenavComponent {
           sub: [
             { name: "Principal", state: "home", cod: '7.1'},
             { name: "Nuevo movimiento", state: "movim/new", cod: '7.2'},
+            { name: "Pedidos", state: "order/list", cod: '7.5'},
             { name: "Ver movimientos", state: "movim/list", cod: '7.3'},
             { name: "Crear pedido", state: "order/new", cod: '7.4'},
           ]
@@ -189,6 +196,9 @@ export class SidenavComponent {
                 { name: "Motivos", state: "reason/list", cod: '6.3.4' },
               ]
             },
+
+            { name: "Internos",cod: '6.6', state: "settings/list/phonegroup",},
+
     
             { name: "Tipo/Subtipo de ticket", state: "settings/ticket/types", cod: '6.4'},
           ]
@@ -267,8 +277,8 @@ export class SidenavComponent {
             { name: "Principal", state: "home", cod: '7.1'},
             { name: "Nuevo movimiento", state: "movim/new", cod: '7.2'},
             { name: "Ver movimientos", state: "movim/list", cod: '7.3'},
+            { name: "Pedidos", state: "order/list", cod: '7.5'},
             { name: "Crear pedido", state: "order/new", cod: '7.4'},
-            { name: "Autorizar pedido", state: "order/authorize", cod: '7.5'},
           ]
         },
         {
@@ -317,7 +327,8 @@ export class SidenavComponent {
                 { name: "Motivos", state: "reason/list", cod: '6.3.4' },
               ]
             },
-    
+            { name: "Internos",cod: '6.6', state: "settings/list/phonegroup",},
+
             { name: "Tipo/Subtipo de ticket", state: "settings/ticket/types", cod: '6.4'},
           ]
         },
@@ -338,4 +349,36 @@ export class SidenavComponent {
         }
     );
   }
+
+  getCountMissingStock(){
+    let query = {company: this.identity['company']['_id']};
+    this._depositService.getList(this.token, query).subscribe(
+        response =>{
+          if(response.deposits){
+            let depositsIds = new Array();
+            response.deposits.forEach(e => {
+              depositsIds.push(e._id);
+            });
+
+            let query = { deposit: depositsIds, onOrder: false, $where: "this.cant < this.cantMin"};
+            this._stockService.getList(this.token, query).subscribe(
+              response =>{
+                if(response.stocks){
+                  let arr: Array<any> = response.stocks;
+                  let count = arr.length;
+                  this.menuItems[2]['badges'] = {color: 'warn', value: count}
+                }
+              },
+              error =>{
+                console.error(error);
+              }
+            );
+          }
+        },
+        error =>{
+          console.error(error);
+        }
+    );
+  }
+
 }

@@ -126,7 +126,7 @@ export class TicketListComponent implements OnInit {
         this.page = params['page'];
         this.limit = params['perPage'];
         var sector = this.identity['sector']['_id']
-
+        console.log(this.identity)
         this._ticketService.getSectorPaginatedList(this.token, this.page, this.limit, query, sector).subscribe(
           response =>{
               if(response.tickets){

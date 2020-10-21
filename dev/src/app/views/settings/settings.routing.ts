@@ -4,6 +4,8 @@ import { CompanyProfileComponent } from './company/company.component';
 import { TypesTicketComponent } from './type-subtype tickets/type.component';
 import { SubTypeEditComponent } from './type-subtype tickets/subtype/subtype-edit.component';
 import { SubTypeNewComponent } from './type-subtype tickets/subtype/subtype-new.component';
+import { PhoneListComponent } from './phone/phone/list.component';
+import { PhoneGroupListComponent } from './phone/phonegroup/list.component';
 
 
 export const SettingsRoutes: Routes = [
@@ -14,6 +16,16 @@ export const SettingsRoutes: Routes = [
         path: 'list/sector',
         component: SectorListComponent,
         data: { title: 'Lista de sectores', breadcrumb: 'LISTA DE SECTORES' }
+      },
+      {
+        path: 'list/phonegroup',
+        component: PhoneGroupListComponent,
+        data: { title: 'Lista de grupos', breadcrumb: 'LISTA DE GRUPOS' }
+      },
+      {
+        path: 'list/phone/:id',
+        component: PhoneListComponent,
+        data: { title: 'Lista de telefonos', breadcrumb: 'LISTA DE TELEFONOS' }
       },
       { 
         path: 'deposit', 

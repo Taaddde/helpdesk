@@ -1,0 +1,26 @@
+.cell {
+    color: rgb(0,0,0);
+    font-size: 12px;
+}
+  
+  
+.print{
+    display: none;
+}
+
+.card::after {
+    content: "";
+    background: url(https://upload.wikimedia.org/wikipedia/commons/7/7d/Sanatorio_Mar%C3%ADtimo_de_Vi%C3%B1a_del_Mar.svg) no-repeat;
+    opacity: 0.1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    margin: 20px;
+}
+  
+  

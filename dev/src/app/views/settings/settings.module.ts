@@ -43,6 +43,10 @@ import { TypesTicketComponent } from './type-subtype tickets/type.component';
 import {  SubTypeEditComponent } from './type-subtype tickets/subtype/subtype-edit.component';
 import { SubTypeNewComponent } from './type-subtype tickets/subtype/subtype-new.component';
 import { TypePopupComponent } from './type-subtype tickets/type/type-popup.component';
+import { PhoneGroupComponent } from './phone/phonegroup/pop-up.component';
+import { PhoneComponent } from './phone/phone/pop-up.component';
+import { PhoneListComponent } from './phone/phone/list.component';
+import { PhoneGroupListComponent } from './phone/phonegroup/list.component';
 
 
 @NgModule({
@@ -74,7 +78,7 @@ import { TypePopupComponent } from './type-subtype tickets/type/type-popup.compo
     SharedPipesModule,
     RouterModule.forChild(SettingsRoutes)
   ],
-  declarations: [SectorListComponent, SectorComponent, TypePopupComponent, CompanyProfileComponent, TypesTicketComponent, SubTypeEditComponent, SubTypeNewComponent],
-  entryComponents: []
+  declarations: [SectorListComponent, PhoneGroupComponent, PhoneComponent, PhoneListComponent, PhoneGroupListComponent, SectorComponent, TypePopupComponent, CompanyProfileComponent, TypesTicketComponent, SubTypeEditComponent, SubTypeNewComponent],
+  entryComponents: [PhoneGroupComponent,PhoneComponent]
 })
 export class AppSettingsModule { }

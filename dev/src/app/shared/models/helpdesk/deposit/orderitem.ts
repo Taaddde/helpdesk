@@ -8,5 +8,6 @@ export class OrderItem{
         public obs: string,
         public code: string,
         public costSector: string,
+        public cantReceived: number
     ){}
 }

@@ -43,34 +43,37 @@ function save(req, res){
     var todo = new Todo();
 
     var params = req.body;
+    Todo.countDocuments({}, function(err, count) {
+        todo.numTodo = count+1;
+        todo.title = params.title;
+        todo.note = params.note;
+        todo.important = params.important;
+        todo.starred = params.starred;
+        todo.done = params.done;
+        todo.read = params.read;
+        todo.selected = params.selected;
+        todo.startDate = params.startDate;
+        todo.dueDate = params.dueDate;
+        todo.tags = params.tags;
+        todo.team = params.team;
+        todo.users = params.users;
 
-    todo.title = params.title;
-    todo.note = params.note;
-    todo.important = params.important;
-    todo.starred = params.starred;
-    todo.done = params.done;
-    todo.read = params.read;
-    todo.selected = params.selected;
-    todo.startDate = params.startDate;
-    todo.dueDate = params.dueDate;
-    todo.tags = params.tags;
-    todo.team = params.team;
-    todo.users = params.users;
-
-    todo.save((err, stored) =>{
-        if(err){
-            logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
-                res.status(500).send({message: 'Error del servidor en la petición'})
-        }else{
-            if(!stored){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
-                res.status(404).send({message: 'La etiqueta no ha sido guardado'})
+        todo.save((err, stored) =>{
+            if(err){
+                logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
+                    res.status(500).send({message: 'Error del servidor en la petición'})
             }else{
-              logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
-                res.status(200).send({todo:stored})
+                if(!stored){
+                    logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
+                    res.status(404).send({message: 'La etiqueta no ha sido guardado'})
+                }else{
+                logger.info({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Petición realizada | params:'+JSON.stringify(req.params)+' body:'+JSON.stringify(req.body)}});
+                    res.status(200).send({todo:stored})
+                }
             }
-        }
-    });
+        });
+    })
+    
 }
 
 
@@ -111,8 +114,7 @@ function getCount(req, res){
                 res.status(500).send({message: 'Error del servidor en la peticion'})
         }else{
             if(!c){
-                logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
-                res.status(404).send({message: 'No hay etiquetas'})
+                res.status(200).send({message: 'No hay etiquetas'})
             }else{
                 res.status(200).send({
                     count: c
