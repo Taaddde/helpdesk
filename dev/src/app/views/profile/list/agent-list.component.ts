@@ -35,7 +35,7 @@ export class AgentListComponent implements OnInit {
     this.getColumns();
     this.getUsers();
 
-    if(this.identity['role'] == 'ROLE_ADMIN'){
+    if(this.identity['company']['name'] == 'Sistemas'){
       this.canCreate = true;
     }
   }

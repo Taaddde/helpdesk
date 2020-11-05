@@ -39,6 +39,8 @@ export class TicketListComponent implements OnInit {
 
   public tickets: Ticket[];
 
+  public isSectorTickets: boolean = false;
+
 
   constructor(
     private dialog: MatDialog,
@@ -70,42 +72,48 @@ export class TicketListComponent implements OnInit {
   }
 
   getTickets(){
-    this.loader.open('Cargando tickets');
     this._route.params.forEach((params: Params) =>{
       this._route.queryParams.forEach((query: Params) =>{
-        this.query = query;
-        this.page = params['page'];
-        this.limit = params['limit'];
-        var c;
-        var r;
-        if(this.identity['company'] && this.identity['company'] != null){
-          c = this.identity['company']['_id'];
+        this.loader.open('Cargando tickets');
+        if(query['isSectorTickets']){
+          this.query = query;
+          this.getSectorTickets();
         }else{
-          c = null;
-        }
-
-        if(this.identity['role'] == 'ROLE_REQUESTER'){
-          r = this.identity['_id']
-        }
-
-        this._ticketService.getList(this.token, this.page, this.limit, query, c, r).subscribe(
-          response =>{
-              if(response.tickets){
-                this.tickets = response.tickets.docs;
-                this.limit = response.tickets.limit;
-                this.nextPage = response.tickets.nextPage;
-                this.prevPage = response.tickets.prevPage;
-                this.totalDocs = response.tickets.totalDocs;
-                this.totalPages = response.tickets.totalPages;
-                this.pagingCounter = response.tickets.pagingCounter;
-
-                this.loader.close();
-              }
-          },
-          error =>{
-              this.openSnackBar(error.message, 'Cerrar');
+          this.query = query;
+          this.page = params['page'];
+          this.limit = params['limit'];
+          var c;
+          var r;
+          if(this.identity['company'] && this.identity['company'] != null){
+            c = this.identity['company']['_id'];
+          }else{
+            c = null;
           }
-        );
+
+          if(this.identity['role'] == 'ROLE_REQUESTER'){
+            r = this.identity['_id']
+          }
+          this._ticketService.getList(this.token, this.page, this.limit, query, c, r).subscribe(
+            response =>{
+                if(response.tickets){
+                  this.tickets = response.tickets.docs;
+                  this.limit = response.tickets.limit;
+                  this.nextPage = response.tickets.nextPage;
+                  this.prevPage = response.tickets.prevPage;
+                  this.totalDocs = response.tickets.totalDocs;
+                  this.totalPages = response.tickets.totalPages;
+                  this.pagingCounter = response.tickets.pagingCounter;
+  
+                  this.loader.close();
+                }
+            },
+            error =>{
+                this.openSnackBar(error.message, 'Cerrar');
+            }
+          );
+        }
+
+       
       })
     })
   }
@@ -119,14 +127,12 @@ export class TicketListComponent implements OnInit {
 
   
   getSectorTickets(){
-    this.loader.open('Cargando tickets');
     this._route.params.forEach((params: Params) =>{
       this._route.queryParams.forEach((query: Params) =>{
         this.query = query;
         this.page = params['page'];
         this.limit = params['perPage'];
         var sector = this.identity['sector']['_id']
-        console.log(this.identity)
         this._ticketService.getSectorPaginatedList(this.token, this.page, this.limit, query, sector).subscribe(
           response =>{
               if(response.tickets){
@@ -139,6 +145,7 @@ export class TicketListComponent implements OnInit {
                 this.pagingCounter = response.tickets.pagingCounter;
                 this.loader.close();
               }
+              this.loader.close();
           },
           error =>{
             this.openSnackBar(error.message, 'Cerrar');
@@ -218,8 +225,11 @@ export class TicketListComponent implements OnInit {
 
   refCheck(event:any){
     if(event.currentTarget.checked){
+      this.isSectorTickets = true;
       this.getSectorTickets();
     }else{
+      this.isSectorTickets = false;
+      location.reload(); 
       this.getTickets();
     }
   }
@@ -235,7 +245,8 @@ export class TicketListComponent implements OnInit {
     dialogRef.afterClosed()
       .subscribe(res => {
         if(res) {
-          
+          if(this.isSectorTickets)
+            res['isSectorTickets'] = true;
           this._router.navigate(['ticket/list',1,this.limit], { queryParams: res });
         }
         this.loader.close();

@@ -87,7 +87,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.refresh.unsubscribe();
+    if(this.refresh){
+      this.refresh.unsubscribe();
+    }
   }
 
   getCountTickets(){

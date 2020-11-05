@@ -25,6 +25,7 @@ var UserSchema = Schema({
     deleted: {type: Boolean, default:false},
     infoView: {type: Boolean, default:false},
     approved: {type: Boolean, default:true},
+    permits: {type: [String], default:new Array()},
 });
 
 module.exports = mongoose.model('User', UserSchema);

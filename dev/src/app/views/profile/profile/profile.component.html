@@ -124,7 +124,7 @@
                 name="userName"
                 type="text"
                 placeholder="Nombre de usuario"
-                [readonly]="identity['role'] != 'ROLE_ADMIN'"
+                [readonly]="identity['role'] != 'ROLE_ADMIN' && !isNew"
                 [(ngModel)]="user.userName">
               </mat-form-field>
               <mat-checkbox 
@@ -155,6 +155,23 @@
                 name="infoView" 
                 [disabled]="!isAdmin && !isUser">Visualizar mensajes de información de tickets
               </mat-checkbox>
+              <mat-divider></mat-divider>
+              <span>
+                <h3 style="margin-top: 10px;">Permisos:</h3>
+                <mat-checkbox 
+                  (change)="setPermit('HELPDESK', $event.checked)"
+                  [checked]="user.permits.includes('HELPDESK')"
+                  [color]="'primary'">Gestor de tickets
+                </mat-checkbox>
+                <br>
+                <mat-checkbox 
+                  (change)="setPermit('TRACKING', $event.checked)"
+                  [checked]="user.permits.includes('TRACKING')"
+                  [color]="'primary'">Gestor de tracking
+                </mat-checkbox>
+              </span>
+              
+              
             </form>
             <button mat-raised-button color="primary" (click)="editUser()">Guardar</button>
           </mat-card-content>

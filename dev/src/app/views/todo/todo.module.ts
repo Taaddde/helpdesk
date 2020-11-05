@@ -16,6 +16,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+import {MatCardModule} from '@angular/material/card';
 
 import { TodoRoutingModule } from "./todo-routing.module";
 import { TodoComponent } from "./todo/todo.component";
@@ -30,15 +31,17 @@ import { todoService } from 'app/shared/services/helpdesk/todo.service';
 import { tagService } from 'app/shared/services/helpdesk/tag.service';
 import { MatSelectModule } from '@angular/material/select';
 import { teamService } from 'app/shared/services/helpdesk/team.service';
+import { TodoRepiteComponent } from './todo-details/todo-repite/todo-repite.component';
 
 @NgModule({
-  declarations: [TodoComponent, TodoListComponent, TodoDetailsComponent, TodoSearchPipe, TagDialogueComponent],
+  declarations: [TodoComponent, TodoListComponent, TodoDetailsComponent, TodoSearchPipe, TagDialogueComponent, TodoRepiteComponent],
   imports: [
     CommonModule, 
     TodoRoutingModule,
     MatIconModule,
     MatCheckboxModule,
     FormsModule,
+    MatCardModule,
     MatMenuModule,
     MatButtonModule,
     MaterialFileInputModule,
@@ -60,6 +63,6 @@ import { teamService } from 'app/shared/services/helpdesk/team.service';
     PerfectScrollbarModule
   ],
   entryComponents: [TagDialogueComponent],
-  providers: [userService, todoService, tagService, teamService]
+  providers: [userService, todoService, tagService, teamService, TodoRepiteComponent]
 })
 export class TodoModule {}

@@ -62,7 +62,7 @@ export class SigninComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   signin() {
-    let user = new User('',null ,'','',null,'','','',null,'', false,'','','','',false,'',false,true);
+    let user = new User('',null ,'','',null,'','','',null,null, false,'', [],'','',null,true,'',true,true);
     user.userName = this.signinForm.value['userName'];
     user.password = this.signinForm.value['password'];
 
@@ -75,36 +75,46 @@ export class SigninComponent implements OnInit, AfterViewInit, OnDestroy {
       response =>{
         let identity = response.user;
 
-        if(!identity._id){
-          this.openSnackBar('El usuario no esta correctamente identificado', 'Cerrar');
+        let arr: Array<string> = response.user.permits;
+
+        if(!arr.includes('HELPDESK')){
+          this.openSnackBar('El usuario no tiene permitido acceder a esta aplicación.', 'Cerrar');
           this.submitButton.disabled = false;
           this.progressBar.mode = 'determinate';
         }else{
-          localStorage.setItem('identity', JSON.stringify(identity));
-
-          // Conseguir el token para enviarselo a cada peticion http
-          this._userService.login(user, 'true').subscribe(
-            response =>{
-              let token = response.token;
-              if(token.lenght <= 0){
+          if(!identity._id){
+            this.openSnackBar('El usuario no esta correctamente identificado', 'Cerrar');
+            this.submitButton.disabled = false;
+            this.progressBar.mode = 'determinate';
+          }else{
+            localStorage.setItem('identity', JSON.stringify(identity));
+  
+            // Conseguir el token para enviarselo a cada peticion http
+            this._userService.login(user, 'true').subscribe(
+              response =>{
+                let token = response.token;
+                if(token.lenght <= 0){
+                  this.submitButton.disabled = false;
+                  this.progressBar.mode = 'determinate';
+                  this.openSnackBar('El token no se ha generado correctamente', 'Cerrar')
+                }else{
+                  // Crear elemento en el localstorage para tener el token en sesion
+                  localStorage.setItem('token', token);
+                  user = new User('',null ,'','',null,'','','', null,'', false,'',[],'','','',false,'',false,true);
+                  this.router.navigateByUrl('/home');
+                  //window.location.href='http://'+window.location.hostname+':'+window.location.port+'/home'
+                }
+              },
+              error =>{
                 this.submitButton.disabled = false;
                 this.progressBar.mode = 'determinate';
-                this.openSnackBar('El token no se ha generado correctamente', 'Cerrar')
-              }else{
-                // Crear elemento en el localstorage para tener el token en sesion
-                localStorage.setItem('token', token);
-                user = new User('',null ,'','',null,'','','', null,'', false,'','','','',false,'',false,true);
-                this.router.navigateByUrl('/home');
-                //window.location.href='http://'+window.location.hostname+':'+window.location.port+'/home'
+                this.openSnackBar('Credenciales incorrecta, revise si su usuario y/o contraseña es correcto', 'Cerrar')
               }
-            },
-            error =>{
-              this.submitButton.disabled = false;
-              this.progressBar.mode = 'determinate';
-              this.openSnackBar('Credenciales incorrecta, revise si su usuario y/o contraseña es correcto', 'Cerrar')
-            }
-          )          
-        }   
+            )          
+          }   
+        }
+
+        
       },
       error =>{
         this.submitButton.disabled = false;

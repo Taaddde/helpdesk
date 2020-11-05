@@ -99,13 +99,18 @@ export class FilterComponent implements OnInit {
   }
 
   getRequesters(){
-    this._userService.getListReq(this.token, this.identity['company']['_id']).subscribe(
+    this._userService.getList(this.token).subscribe(
       response =>{
-          if(!response.users){
-            //this._router.navigate(['/']);
-          }else{
-            this.allRequesters = response.users;
-            this.requesters = response.users;
+          if(response.users){
+            if(this.identity['role'] != 'ROLE_REQUESTER'){
+              this.allRequesters = response.users;
+              this.requesters = response.users;  
+            }else{
+              if(this.identity['sector']){
+                this.allRequesters = response.users.filter(x => x.sector == this.identity['sector']['_id']);
+                this.requesters = this.allRequesters;
+              }
+            }
           }
       },
       error =>{
@@ -143,9 +148,9 @@ export class FilterComponent implements OnInit {
     if(this.filter['sub'] == ''){
       this.filter['sub'] = null;
     }
-    if(this.identity['role'] == 'ROLE_REQUESTER'){
-      this.filter['requester'] = this.identity['_id'];
-    }
+    // if(this.identity['role'] == 'ROLE_REQUESTER'){
+    //   this.filter['requester'] = this.identity['_id'];
+    // }
 
     this.dialogRef.close(this.filter);
   }

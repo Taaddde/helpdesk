@@ -149,7 +149,7 @@
                 <hr />
                 <span style="font-size: 18px;"><strong>Agente</strong></span>
                 <span *ngIf="identity['company']">
-                  <div class="dropdown d-inline float-right" *ngIf="identity['company']['_id'] == ticket.company['_id'] && ticket.status != 'Cerrado'">
+                  <div class="dropup d-inline float-right" *ngIf="identity['company']['_id'] == ticket.company['_id'] && ticket.status != 'Cerrado'">
                     <button class="btn btn-dark dropdown-toggle dark" data-toggle="dropdown" aria-expanded="false" type="button">
                       Cambiar
                     </button>

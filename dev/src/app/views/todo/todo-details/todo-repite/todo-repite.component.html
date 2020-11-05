@@ -1,0 +1,143 @@
+<h1 matDialogTitle>{{data.title}}</h1>
+
+<mat-card class="p-0">
+  <mat-card-content>
+        <form>
+          <div fxLayout="row wrap" fxLayout.lt-sm="column">
+            <div fxFlex="100"  class="pr-1">
+              <mat-form-field class="full-width">
+                <mat-select (selectionChange)="type = $event.value" placeholder="Tipo de repetición">
+                  <mat-option *ngFor="let t of types" [value]="t">
+                    {{t}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxFlex="25" *ngIf="type == 'Cada semana'" class="pr-1">
+              <mat-form-field class="full-width">
+                <input
+                  [(ngModel)]="firstDate" name="firstDate"
+                  matInput
+                  [matDatepicker]="picker4"
+                  placeholder="Fecha de inicio"
+                  required
+                />
+                <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                <mat-datepicker #picker4></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div fxFlex="50" *ngIf="type == 'Cada semana'" class="pr-1">
+              <div class="form-group" >
+                <div class="form-row">
+                    <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                        <div class="form-row">
+                            <div class="col text-center"><label class="col-form-label">Lun</label></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col text-center">
+                              <input type="checkbox" name="lun" #lun="ngModel" [(ngModel)]="dayOfWeek.lun"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                        <div class="form-row">
+                            <div class="col text-center"><label class="col-form-label">Mar</label></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col text-center">
+                              <input type="checkbox" name="mar" #mar="ngModel" [(ngModel)]="dayOfWeek.mar"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                        <div class="form-row">
+                            <div class="col text-center"><label class="col-form-label">Mie</label></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col text-center">
+                              <input type="checkbox" name="mie" #mie="ngModel" [(ngModel)]="dayOfWeek.mie"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                        <div class="form-row">
+                            <div class="col text-center"><label class="col-form-label">Jue</label></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col text-center">
+                              <input type="checkbox" name="jue" #jue="ngModel" [(ngModel)]="dayOfWeek.jue"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                        <div class="form-row">
+                            <div class="col text-center"><label class="col-form-label">Vie</label></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col text-center">
+                              <input type="checkbox" name="vie" #vie="ngModel" [(ngModel)]="dayOfWeek.vie"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                        <div class="form-row">
+                            <div class="col text-center"><label class="col-form-label">Sab</label></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col text-center">
+                              <input type="checkbox" name="sab" #sab="ngModel" [(ngModel)]="dayOfWeek.sab"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="25" *ngIf="type == 'Cada semana'" class="pr-1">
+              <mat-form-field class="full-width">
+                <input
+                  [(ngModel)]="lastDate" name="lastDate"
+                  matInput
+                  [matDatepicker]="picker2"
+                  placeholder="Fecha de fin"
+                  required
+                />
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div fxFlex="25" *ngIf="type == 'Cada X días'" class="pr-1">
+              <mat-form-field class="full-width">
+                <input
+                  [(ngModel)]="firstDate" name="firstDate"
+                  matInput
+                  [matDatepicker]="picker"
+                  placeholder="Fecha de inicio"
+                  required
+                />
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div fxFlex="50" *ngIf="type == 'Cada X días'" class="pr-1">
+              <mat-form-field class="full-width">
+                <input matInput type="number" min="1" placeholder="¿Repetir cada cuantos días?" [(ngModel)]="forDays" name="forDays">
+              </mat-form-field>
+            </div>
+            <div fxFlex="25" *ngIf="type == 'Cada X días'" class="pr-1">
+              <mat-form-field class="full-width">
+                <input
+                  [(ngModel)]="lastDate" name="lastDate"
+                  matInput
+                  [matDatepicker]="picker3"
+                  placeholder="Fecha de fin"
+                  required
+                />
+                <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                <mat-datepicker #picker3></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+          <button mat-raised-button color="primary" (click)="submit()">Guardar</button>
+        </form>
+  </mat-card-content>
+</mat-card>

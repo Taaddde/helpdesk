@@ -57,6 +57,7 @@ function save(req, res){
         todo.tags = params.tags;
         todo.team = params.team;
         todo.users = params.users;
+        todo.company = params.company;
 
         todo.save((err, stored) =>{
             if(err){
@@ -82,7 +83,7 @@ function getList(req, res){
     var functionName = 'getList';
     var query = req.query;
 
-    Todo.find(query).populate(populateQuery).sort({'startDate': -1}).exec(function(err, list){
+    Todo.find(query).populate(populateQuery).sort({'startDate': 1}).exec(function(err, list){
         if(err){
             logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
                 res.status(500).send({message: 'Error del servidor en la peticion'})

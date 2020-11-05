@@ -44,6 +44,7 @@ function saveUser(req, res){
     user.sector = params.sector;
     user.infoView = params.infoView;
     user.approved = true;
+    user.permits = params.permits;
 
     User.findOne({userName:user.userName}, (err, userCheck) =>{
         if(err){
@@ -119,6 +120,7 @@ var decoded = jwt_decode(req.headers.authorization);
             res.status(500).send({message: 'Error en el servidor al actualizar el usuario'});
         }else{
             if(userCheck){
+                console.log(update)
                 if(update.password && update.password != ''){
                     //encriptar y guardar
                     bcrypt.hash(update.password, null, null, function(err, hash){

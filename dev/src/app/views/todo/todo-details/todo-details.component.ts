@@ -21,6 +21,7 @@ import { MAT_DATE_FORMATS, DateAdapter } from '@angular/material/core';
 import { FileInput } from 'ngx-material-file-input';
 import { uploadService } from 'app/shared/services/helpdesk/upload.service';
 import { GLOBAL } from 'app/shared/services/helpdesk/global';
+import { TodoRepiteComponent } from './todo-repite/todo-repite.component';
 
 @Component({
   selector: 'app-todo-details',
@@ -48,7 +49,8 @@ export class TodoDetailsComponent implements OnInit {
     tags:[],
     users: [],
     usersWhoRead: [],
-    files: []
+    files: [],
+    company: ''
   };
 
   a: PerfectScrollbar;
@@ -65,6 +67,7 @@ export class TodoDetailsComponent implements OnInit {
 
   public files: FileInput;
 
+  public repite: any;
   
   constructor(
     private todoService: TodoService,
@@ -102,8 +105,6 @@ export class TodoDetailsComponent implements OnInit {
       this._todoService.getOne(this.token, id).subscribe(
           response =>{
             if(response.todo){
-
-              console.log(response.todo);
                this.todo = response.todo;
                this.cdr.markForCheck();
                if(this.todo.users){
@@ -169,26 +170,19 @@ export class TodoDetailsComponent implements OnInit {
       this.todo.users = ids;
     }
 
+    this.todo.company = this.identity['company']['_id'];
+
     if(!this.todo._id){
-      this._todoService.add(this.token, this.todo).subscribe(
-        response =>{
-          if(response.todo){
-            this.uploadFile(response.todo._id);
-            this.todo.users.forEach(user => {
-              let dateInit = moment(this.todo.startDate).format('YYYY-MM-DD HH:mm');
-              let notif = new Notification('',this.todo.title, 'list_alt', dateInit, dateInit, 'todo/list/'+response.todo._id, 'accent', user, null, response.todo._id);
-              this._notificationService.add(this.token, notif).subscribe(
-                  response =>{},
-                  error =>{}
-              );
-            });
-            this.router.navigateByUrl("/todo/list");
-          }
-        },
-        error =>{
-          this.openSnackBar(error.message, 'Cerrar');
-        }
-      );
+      if(this.repite){
+        let dates = this.getRepiteDates();
+        dates.forEach(date => {
+          this.todo.startDate = moment(date).format('YYYY-MM-DD');
+          this.todo.dueDate = moment(date).format('YYYY-MM-DD');
+          this.addTodo();
+        });
+      }else{
+        this.addTodo();
+      }
     }else{
       this._todoService.edit(this.token, this.todo._id, this.todo).subscribe(
         response =>{
@@ -248,6 +242,85 @@ export class TodoDetailsComponent implements OnInit {
       );
     }
 
+  }
+
+  getRepiteDates(): string[]{
+    var result: string[] = new Array<string>();
+
+    let now = moment(this.repite['firstDate']);
+    let limitDay = this.repite['lastDate'];
+
+    if(this.repite.type == 'Cada semana'){
+      let repeatParams = this.repite['dayOfWeek'];
+      let daysRepeat = [];
+
+      if(repeatParams['lun']){
+          daysRepeat.push(1);
+      }
+      if(repeatParams['mar']){
+          daysRepeat.push(2);
+      }
+      if(repeatParams['mie']){
+          daysRepeat.push(3);
+      }
+      if(repeatParams['jue']){
+          daysRepeat.push(4);
+      }
+      if(repeatParams['vie']){
+          daysRepeat.push(5);
+      }
+      if(repeatParams['sab']){
+          daysRepeat.push(6);
+      }
+      
+      if(!daysRepeat.includes(now.weekday())){
+          //Buscar primer día
+          now.add(1, 'day');
+          while (!daysRepeat.includes(now.weekday())) {
+            now.add(1, 'day');
+          }
+      }
+
+      while (now.isBefore(limitDay)) {
+          if(daysRepeat.includes(now.weekday())){
+            result.push(now.format('YYYY-MM-DD'))
+          }
+
+          now.add(1, 'day');
+      }
+    }else{
+      let cantDays = this.repite['forDays']
+      result.push(now.format('YYYY-MM-DD'));
+      while (now.isBefore(limitDay)) {
+        now.add(cantDays, 'day');
+        if(now.weekday() == 0)
+          now.add(1, 'day');
+        result.push(now.format('YYYY-MM-DD'));
+      }
+    }
+    return result;
+  }
+
+  addTodo(){
+    this._todoService.add(this.token, this.todo).subscribe(
+      response =>{
+        if(response.todo){
+          this.uploadFile(response.todo._id);
+          this.todo.users.forEach(user => {
+            let dateInit = moment(this.todo.startDate).format('YYYY-MM-DD HH:mm');
+            let notif = new Notification('',this.todo.title, 'list_alt', dateInit, dateInit, 'todo/list/'+response.todo._id, 'accent', user, null, response.todo._id);
+            this._notificationService.add(this.token, notif).subscribe(
+                response =>{},
+                error =>{}
+            );
+          });
+          this.router.navigateByUrl("/todo/list");
+        }
+      },
+      error =>{
+        this.openSnackBar(error.message, 'Cerrar');
+      }
+    );
   }
 
   uploadFile(id){
@@ -331,6 +404,24 @@ export class TodoDetailsComponent implements OnInit {
       this.getTags();
     });
   }
+
+  openRepiteTodos() {
+    const dialogRef = this.tagDialogue.open(TodoRepiteComponent, {
+      width: '80%',
+      data: {title: "Repetición"}
+    });
+
+    dialogRef.afterClosed().subscribe(res => {
+
+      if(!res)
+        return;
+
+      this.repite = res;
+      this.todo.startDate = this.repite['fistDate'];
+      this.todo.dueDate = this.repite['lastDate'];
+    });
+  }
+
 
   toggleImportant() {
     if(this.userInTodo()){

@@ -31,7 +31,7 @@ export class SearchInputOverComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.searchCtrl.valueChanges.pipe(debounceTime(200))
+    this.searchCtrl.valueChanges.pipe(debounceTime(1000))
     .subscribe(value => {
       this.search.emit(value);
       this.searchService.searchTerm.next(value);
@@ -53,6 +53,7 @@ export class SearchInputOverComponent implements OnInit, OnDestroy {
     this.navigateToResult();
   }
   close() {
+    this.searchCtrl.setValue('');
     this.isOpen = false;
   }
   toggle() {

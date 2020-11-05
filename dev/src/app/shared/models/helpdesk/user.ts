@@ -16,6 +16,8 @@ export class User{
         public sectorRef: boolean,
 
         public role: string,
+        public permits: string[],
+
         public sign: string,
         public image: string,
         public company: string,

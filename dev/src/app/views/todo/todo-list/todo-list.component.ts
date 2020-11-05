@@ -64,7 +64,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
   }
 
   getTodo(){
-    this._todoService.getList(this.token, {}).subscribe(
+    this._todoService.getList(this.token, {company: this.identity['company']['_id']}).subscribe(
         response =>{
           if(response.todos){
             this.tempList = response.todos;
@@ -78,7 +78,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
   }
 
   getTags(){
-    this._tagService.getList(this.token, {}).subscribe(
+    this._tagService.getList(this.token, {company: this.identity['company']['_id']}).subscribe(
         response =>{
           if(response.tags){
              this.tags = response.tags;
@@ -122,14 +122,17 @@ export class TodoListComponent implements OnInit, OnDestroy {
     switch (event.target.innerText) {
       case "Todo":
         this.todoList = this.tempList;
+        this.todoList.sort(this.compareDatesLow);
         this.filter = 'Todo';
         break;
       case "Todo - Pendientes":
         this.todoList = this.tempList.filter(t=>!t.done);
+        this.todoList.sort(this.compareDatesLow);
         this.filter = 'Todo - Pendientes';
         break;
       case "Todo - Realizados":
         this.todoList = this.tempList.filter(t=>t.done);
+        this.todoList.sort(this.compareDatesHigh);
         this.filter = 'Todo - Realizados';
         break;
       case "Todo - Mios":
@@ -138,42 +141,50 @@ export class TodoListComponent implements OnInit, OnDestroy {
         break;
       case "Leído":
         this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && t.usersWhoRead?.includes(this.identity['_id']));
+        this.todoList.sort(this.compareDatesLow);
         this.filter = 'Leído';
         break;
 
       case "No Leído":
         this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && !t.usersWhoRead?.includes(this.identity['_id']));
+        this.todoList.sort(this.compareDatesLow);
         this.filter = 'No Leído';
         break;
 
       case "Importante":
         this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && t.important);
+        this.todoList.sort(this.compareDatesLow);
         this.filter = 'Importante';
         break;
 
       case "No Importante":
         this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && !t.important);
+        this.todoList.sort(this.compareDatesLow);
+
         this.filter = 'No Importante';
         break;
 
       case "Realizado":
         this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && t.done);
-
+        this.todoList.sort(this.compareDatesHigh);
         this.filter = 'Realizado';
         break;
 
       case "No Realizado":
         this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && !t.done);
+        this.todoList.sort(this.compareDatesLow);
         this.filter = 'No Realizado';
       break;
 
       case "Favorito":
         this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && t.starred);
+        this.todoList.sort(this.compareDatesLow);
         this.filter = 'Favorito';
         break;
 
       case "No Favorito":
         this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && !t.starred);
+        this.todoList.sort(this.compareDatesLow);
         this.filter = 'No favorito';
         break;
 
@@ -182,6 +193,19 @@ export class TodoListComponent implements OnInit, OnDestroy {
     }
 
     this.cdr.detectChanges();
+  }
+
+  compareDatesHigh(a: TodoItem, b: TodoItem){
+    if(a.startDate < b.startDate)
+      return 1;
+    else
+      return -1;
+  }
+  compareDatesLow(a: TodoItem, b: TodoItem){
+      if(a.startDate < b.startDate)
+        return -1;
+      else
+        return 1;
   }
 
   masterToggle() {

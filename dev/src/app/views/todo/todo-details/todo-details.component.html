@@ -14,6 +14,9 @@
   </mat-checkbox>
 
   <div fxLayout="row" fxFlex="1 1 0%" fxLayoutAlign="end center">
+    <button *ngIf="!todo._id" (click)="openRepiteTodos()" mat-icon-button matTooltip="Añadir repetición">
+      <mat-icon [color]="repite ? 'warn' : ''">alarm_add</mat-icon>
+    </button>
 
     <button mat-icon-button *ngIf="todo.team" [matMenuTriggerFor]="users" matTooltip="Añadir responsable">
       <mat-icon>person_add</mat-icon>
@@ -88,6 +91,8 @@
       <mat-icon>delete_outline</mat-icon>
     </button>
   </div>
+
+  
 </mat-toolbar>
 
 <div style="margin: 20px 0px 0px 16px;">
@@ -127,7 +132,6 @@
   fxLayout="column"
   fxLayoutGap="8px"
   style="padding: 0px 16px;margin-top: 20px;"
-  (ngSubmit)="saveTodo(false)"
 >
   <mat-form-field>
     <input [(ngModel)]="todo.title" type="text" name="title" matInput placeholder="Título" required />
@@ -207,7 +211,7 @@
 
   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
     <button type="button" mat-button routerLink="/todo/list">Cancelar</button>
-    <button color="primary" mat-raised-button>Guardar</button>
-    <button type="primary" (click)="saveTodo(true)" color="accent" mat-raised-button>Guardar y finalizar</button>
+    <button color="primary" (click)="saveTodo(false)" mat-raised-button>Guardar</button>
+    <button type="primary" *ngIf="todo._id" (click)="saveTodo(true)" color="accent" mat-raised-button>Guardar y finalizar</button>
   </div>
 </form>

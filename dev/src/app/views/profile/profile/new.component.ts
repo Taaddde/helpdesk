@@ -40,7 +40,7 @@ export class NewUserComponent implements OnInit {
     this.token = _userService.getToken();
     this.identity = _userService.getIdentity();
     this.url = GLOBAL.url;
-    this.user = new User('',null ,'','',null,'','','',null,null, false,'','','',null,true,'',true,true);
+    this.user = new User('',null ,'','',null,'','','',null,null, false,'', ["HELPDESK"],'','',null,true,'',true,true);
     this.isNew = true;
     this.isUser = true;
     this.isAdmin = true;
@@ -125,6 +125,13 @@ export class NewUserComponent implements OnInit {
     }else{
       this.user.role = 'ROLE_AGENT';
     }
+  }
+
+  setPermit(type: string, checked: boolean){
+    if(checked)
+      this.user.permits.push(type);
+    else
+      this.user.permits.splice(this.user.permits.indexOf(type), 1);
   }
 
 }

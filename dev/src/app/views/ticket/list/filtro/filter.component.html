@@ -19,7 +19,7 @@
         <div fxFlex="50"  class="pr-1">
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>Solicitante</mat-label>
-            <mat-select>
+            <mat-select [disabled]="(identity['role'] == 'ROLE_REQUESTER' && !data.sectorTickets) || !identity['sector']">
               <mat-option (click)="deleteFilter('requester')"></mat-option>
               <mat-option [value]="requester.name+' '+requester.surname" (click)="set(requester, 'requester')" *ngFor="let requester of requesters">{{requester.name}} {{requester.surname}}</mat-option>
             </mat-select>

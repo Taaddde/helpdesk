@@ -39,6 +39,8 @@ var TodoSchema = Schema({
         type: [String],
         default: new Array()
     },
+
+    company: {type: Schema.ObjectId, ref:'Company'},
 });
 
     

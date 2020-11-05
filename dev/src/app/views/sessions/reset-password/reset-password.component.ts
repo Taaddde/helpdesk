@@ -29,7 +29,7 @@ export class ResetPasswordComponent implements OnInit {
     this.validUrl = false;
     this.confirmPass = '';
     this.url = GLOBAL.url;
-    this.user = new User('',null ,'','',null,'','','',null,'', false,'','','','',false,'',false,true);
+    this.user = new User('',null ,'','',null,'','','', null,'', false,'',[],'','','',false,'',false,true);
   }
 
   ngOnInit() {

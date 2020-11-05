@@ -954,6 +954,7 @@ function getSectorListPaged(req, res){
         {path:'company',select:['name','email','image','mailSender']}
     ];
 
+
     if(req.params.page){
         var page = req.params.page;
     }else{
@@ -962,7 +963,6 @@ function getSectorListPaged(req, res){
     var perPage = req.params.perPage;
 
     var sort = {numTicket:-1}
-
 
     User.find({sector: req.params.sector}).distinct('_id').exec((err, users) =>{
         if(err){
@@ -974,12 +974,36 @@ function getSectorListPaged(req, res){
                 logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                 return res.status(404).send({message: 'No hay items'})
             }else{
+
                 let requesters = new Array();
                 users.forEach(e => {
                     requesters.push(ObjectId(e));
                 });
+
+
                 let query = {requester: requesters};
+                let q = req.query;            
+                if(q['sub']){
+                    query['sub'] = { "$regex": q['sub'], "$options": "i" }
+                }
                 
+                if(q['status'] && !q['company'] && q['status'] == 'Pendiente'){
+                    query['status'] = {$in:['Pendiente','Abierto']};
+                }
+            
+                if(q['status'] && q['status'] == 'Finalizado'){
+                    query['status'] = {$in:['Finalizado','Cerrado']};
+                }
+
+                if(q['numTicket']){
+                    query['numTicket'] = q['numTicket'];
+                }
+
+                if(q['requester']){
+                    query['$or'] = [{requester: q['requester']},{cc: ObjectId(q['requester'])}]
+                    delete query['requester']
+                }
+                console.log('Query: ', query)
                 Ticket.paginate(query,{page:page, limit:10, populate:populateQuery, sort:sort}, function(err, tickets){
                     if(err){
                         logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});
@@ -990,7 +1014,6 @@ function getSectorListPaged(req, res){
                             logger.warn({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') Objeto no encontrado'}});
                             res.status(404).send({message: 'No hay items'})
                         }else{
-                            console.log(tickets)
                             res.status(200).send({
                                 tickets:tickets
                             });
@@ -1004,6 +1027,8 @@ function getSectorListPaged(req, res){
 
 
 function getReqTicketsPaged(req, res){
+
+    console.log('Pase')
 var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getReqTicketsPaged';
     var populateQuery = [
