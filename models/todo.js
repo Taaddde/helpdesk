@@ -7,6 +7,7 @@ var TodoSchema = Schema({
     numTodo: Number,
     title: String,
     note: String,
+    response: String,
     important: {type: Boolean, default: false},
     starred: {type: Boolean, default: false},
     done: {type: Boolean, default: false},
@@ -41,6 +42,7 @@ var TodoSchema = Schema({
     },
 
     company: {type: Schema.ObjectId, ref:'Company'},
+    userCreate: {type: Schema.ObjectId, ref:'User'},
 });
 
     

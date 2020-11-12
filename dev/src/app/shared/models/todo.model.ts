@@ -1,8 +1,10 @@
 export interface TodoItem {
     id?: number;
+    numTodo?: number;
     _id?: string;
     title?: string;
     note?: string;
+    response?: string;
     important?: boolean;
     starred?: boolean;
     done?: boolean;
@@ -15,7 +17,8 @@ export interface TodoItem {
     users?: string[];
     usersWhoRead? : string[];
     files?: string[];
-    company?: string
+    company?: string;
+    userCreate?: string;
 }
 
 export interface TagItem {

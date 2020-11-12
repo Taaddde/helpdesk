@@ -1003,7 +1003,6 @@ function getSectorListPaged(req, res){
                     query['$or'] = [{requester: q['requester']},{cc: ObjectId(q['requester'])}]
                     delete query['requester']
                 }
-                console.log('Query: ', query)
                 Ticket.paginate(query,{page:page, limit:10, populate:populateQuery, sort:sort}, function(err, tickets){
                     if(err){
                         logger.error({message:{module:path.basename(__filename).substring(0, path.basename(__filename).length - 3)+'/'+functionName, msg: decoded.userName+' ('+req.ip+') '+err}});

@@ -133,15 +133,32 @@
   fxLayoutGap="8px"
   style="padding: 0px 16px;margin-top: 20px;"
 >
-  <mat-form-field>
-    <input [(ngModel)]="todo.title" type="text" name="title" matInput placeholder="Título" required />
-  </mat-form-field>
+  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="50px">
+    <mat-form-field class="full-width">
+      <input [(ngModel)]="todo.title" type="text" name="title" matInput placeholder="Título" required />
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input *ngIf="todo.userCreate" readonly [value]="todo.userCreate?.name + ' ' + todo.userCreate?.surname" type="text" name="userCreate" matInput placeholder="Creado por" />
+      <input *ngIf="!todo.userCreate" readonly value="Sin descripción" type="text" name="userCreate" matInput placeholder="Creado por" />
+    </mat-form-field>
+  </div>
+ 
 
   <mat-form-field>
     <textarea
       [(ngModel)]="todo.note" name="note"
       matInput
       placeholder="Nota"
+      matTextareaAutosize
+      
+    ></textarea>
+  </mat-form-field>
+
+  <mat-form-field *ngIf="todo._id && todo._id != ''">
+    <textarea
+      [(ngModel)]="todo.response" name="response"
+      matInput
+      placeholder="Respuesta"
       matTextareaAutosize
       
     ></textarea>

@@ -39,6 +39,7 @@ export class TodoDetailsComponent implements OnInit {
   public todo: TodoItem = {
     title: '',
     note: '',
+    response: '',
     startDate: '', 
     dueDate: '',
     done: false,
@@ -159,6 +160,8 @@ export class TodoDetailsComponent implements OnInit {
 
   
   saveTodo(finish:boolean) {
+    if(this.agentsIn.length == 0)
+      return this.openSnackBar('Se debe asignar algún agente responsable de esta tarea', 'Cerrar');
     if(finish)
       this.todo.done = true;
 
@@ -173,6 +176,7 @@ export class TodoDetailsComponent implements OnInit {
     this.todo.company = this.identity['company']['_id'];
 
     if(!this.todo._id){
+      this.todo.userCreate = this.identity['_id'];
       if(this.repite){
         let dates = this.getRepiteDates();
         dates.forEach(date => {
@@ -189,7 +193,8 @@ export class TodoDetailsComponent implements OnInit {
           if(response.todo){
             this.uploadFile(response.todo._id);
             let query = {todo: this.todo._id};
-            this._notificationService.getList(this.token, query).subscribe(
+            if(this.todo.done == false){
+              this._notificationService.getList(this.token, query).subscribe(
                 response =>{
                   if(response.notifications){
                      let notif: Notification[] = response.notifications;
@@ -232,7 +237,9 @@ export class TodoDetailsComponent implements OnInit {
                 error =>{
                   this.openSnackBar(error.message, 'Cerrar');
                 }
-            );
+              );
+            }
+            
             this.router.navigateByUrl("/todo/list");
           }
         },

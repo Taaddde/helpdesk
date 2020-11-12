@@ -1,11 +1,11 @@
-import { ChangeDetectorRef, OnDestroy } from "@angular/core";
+import { ChangeDetectorRef, ElementRef, OnDestroy, ViewChild } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { TodoService } from "../todo.service";
 import { TodoItem, TagItem } from "app/shared/models/todo.model";
-import { debounceTime, takeUntil } from "rxjs/operators";
-import { Subject } from "rxjs";
+import { debounceTime, map, takeUntil } from "rxjs/operators";
+import { fromEvent, Observable, Subject } from "rxjs";
 import { todoService } from "app/shared/services/helpdesk/todo.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { userService } from "app/shared/services/helpdesk/user.service";
@@ -21,7 +21,11 @@ import * as moment from 'moment';
 })
 
 export class TodoListComponent implements OnInit, OnDestroy {
+
+  @ViewChild('searcher') button: ElementRef;
+
   todoList: TodoItem[];
+  searchTempList: TodoItem[];
   tempList: TodoItem[];
   searchTerm: string;
   test: string;
@@ -37,6 +41,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
   public token: string;
   public identity;
 
+
   constructor(
     private todoService: TodoService,
     private _todoService: todoService,
@@ -49,18 +54,57 @@ export class TodoListComponent implements OnInit, OnDestroy {
 
     this.token = _userService.getToken();
     this.identity = _userService.getIdentity();
+
+
   }
 
   ngOnInit() {
     this.getTodo();
     this.getTags();
+  }
 
-    this.todoService.getSearchTerm().pipe(debounceTime(250))
-    .pipe(takeUntil(this.unsubscribeAll))
-    .subscribe(term => {
-      this.searchTerm = term;
-      this.cdr.markForCheck();
-    });
+  ngAfterViewInit() {
+    const search = fromEvent<KeyboardEvent>(document.getElementById('searcher'), 'keyup')
+                        .pipe(
+                          debounceTime(250), 
+                          map<KeyboardEvent, String>((value) => {return value.target['value']})
+                        )
+                        .subscribe(value => {
+                          let startWith = value[0];
+                          this.todoList = this.searchTempList;
+                          switch (startWith) {
+                            case '#':
+                              let num = Number(value.split('#')[1]);
+                              this.todoList = this.searchTempList
+                                                .filter(t=> t.numTodo == num);
+                              break;
+                            case '@':
+                              let name = String(value.split('@')[1]);
+                              this.todoList = this.searchTempList
+                                                  .filter(t =>{
+                                                    let allString = '';
+                                                    let arr = t.users.map(x => x['name'].toLowerCase()+x['surname'].toLowerCase());
+                                                    console.log(arr);
+                                                    arr.forEach(todo => {
+                                                      allString += todo;
+                                                    });
+                                                    return allString.includes(name.toLowerCase())
+                                                  })
+                              break;
+                            case '*':
+                              let text = String(value.split('*')[1]).toLowerCase();
+                              this.todoList = this.searchTempList
+                                                  .filter(t=> t.note.toLowerCase().includes(text));
+                              break;
+                            default:
+                              let title = value.toLowerCase();
+                              this.todoList = this.searchTempList
+                                                  .filter(t=> t.title.toLowerCase().includes(title));
+                              break;
+                          }
+
+                          this.cdr.markForCheck();
+                        });
   }
 
   getTodo(){
@@ -69,6 +113,8 @@ export class TodoListComponent implements OnInit, OnDestroy {
           if(response.todos){
             this.tempList = response.todos;
             this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && !t.done);
+            this.searchTempList = this.todoList;
+            this.cdr.markForCheck();
           }
         },
         error =>{
@@ -122,39 +168,46 @@ export class TodoListComponent implements OnInit, OnDestroy {
     switch (event.target.innerText) {
       case "Todo":
         this.todoList = this.tempList;
+        this.searchTempList = this.tempList;
         this.todoList.sort(this.compareDatesLow);
         this.filter = 'Todo';
         break;
       case "Todo - Pendientes":
         this.todoList = this.tempList.filter(t=>!t.done);
         this.todoList.sort(this.compareDatesLow);
+        this.searchTempList = this.todoList;
         this.filter = 'Todo - Pendientes';
         break;
       case "Todo - Realizados":
         this.todoList = this.tempList.filter(t=>t.done);
         this.todoList.sort(this.compareDatesHigh);
+        this.searchTempList = this.todoList;
         this.filter = 'Todo - Realizados';
         break;
       case "Todo - Mios":
         this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1);
         this.filter = 'Mios';
+        this.searchTempList = this.todoList;
         break;
       case "Leído":
         this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && t.usersWhoRead?.includes(this.identity['_id']));
         this.todoList.sort(this.compareDatesLow);
         this.filter = 'Leído';
+        this.searchTempList = this.todoList;
         break;
 
       case "No Leído":
         this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && !t.usersWhoRead?.includes(this.identity['_id']));
         this.todoList.sort(this.compareDatesLow);
         this.filter = 'No Leído';
+        this.searchTempList = this.todoList;
         break;
 
       case "Importante":
         this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && t.important);
         this.todoList.sort(this.compareDatesLow);
         this.filter = 'Importante';
+        this.searchTempList = this.todoList;
         break;
 
       case "No Importante":
@@ -162,30 +215,35 @@ export class TodoListComponent implements OnInit, OnDestroy {
         this.todoList.sort(this.compareDatesLow);
 
         this.filter = 'No Importante';
+        this.searchTempList = this.todoList;
         break;
 
       case "Realizado":
         this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && t.done);
         this.todoList.sort(this.compareDatesHigh);
         this.filter = 'Realizado';
+        this.searchTempList = this.todoList;
         break;
 
       case "No Realizado":
         this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && !t.done);
         this.todoList.sort(this.compareDatesLow);
         this.filter = 'No Realizado';
+        this.searchTempList = this.todoList;
       break;
 
       case "Favorito":
         this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && t.starred);
         this.todoList.sort(this.compareDatesLow);
         this.filter = 'Favorito';
+        this.searchTempList = this.todoList;
         break;
 
       case "No Favorito":
         this.todoList = this.tempList.filter(t=>t.users?.map(x => x['_id']).indexOf(this.identity['_id']) != -1 && !t.starred);
         this.todoList.sort(this.compareDatesLow);
         this.filter = 'No favorito';
+        this.searchTempList = this.todoList;
         break;
 
       default:

@@ -13,6 +13,7 @@ var populateQuery = [
     {path:'tags', model:'Tag', select:['name']},
     {path:'users', model:'User', select:['name','surname','image']},
     {path:'team', select:['name','image', 'users'], populate:{path: 'users', model: 'User',select:['name','surname','image']}},
+    {path:'userCreate', select:['name','surname']},
 
 ];
 
@@ -58,6 +59,7 @@ function save(req, res){
         todo.team = params.team;
         todo.users = params.users;
         todo.company = params.company;
+        todo.userCreate = params.userCreate;
 
         todo.save((err, stored) =>{
             if(err){
