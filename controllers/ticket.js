@@ -11,6 +11,7 @@ const ObjectId = mongoose.Types.ObjectId;
 //Sistema de log
 var logger = require('../services/logger');
 var jwt_decode = require('jwt-decode');var path = require('path');
+const { data } = require('../services/logger');
 
 
 
@@ -469,7 +470,7 @@ var decoded = jwt_decode(req.headers.authorization);
 }
 
 function getTicketReports(req, res){
-var decoded = jwt_decode(req.headers.authorization);
+    var decoded = jwt_decode(req.headers.authorization);
     var functionName = 'getTicketReports';
     let company = req.params.company;
 
@@ -595,6 +596,252 @@ var decoded = jwt_decode(req.headers.authorization);
             }
         }
     })
+}
+
+
+async function getReports(req, res){
+    var decoded = jwt_decode(req.headers.authorization);
+    var functionName = 'getReports';
+    let company = req.params.company;
+
+    
+
+    let agentQuery =[
+        {
+            $match: {company: ObjectId(company), $or:[{status:'Finalizado'}, {status:'Cerrado'}]}
+        },
+        {
+            $group : {
+                _id: {agent:"$agent"},
+                count: { $sum: 1 }
+            },
+        },
+        { $sort : {"count":-1 }},
+        {
+            $lookup: {
+                from: 'users', 
+                localField: '_id.agent', 
+                foreignField: '_id', 
+                as: '_id.agent'} 
+        },
+        {
+            $unwind:"$_id.agent"
+        },
+        {
+            $project : {
+                count:1, 
+                _id :{
+                    agent: {
+                        _id:1,
+                        name:1,
+                        surname:1,
+                    },
+                }
+            }
+        },
+    ]
+
+    let subQuery =[
+        {
+            $match: {company: ObjectId(company)}
+        },
+        {
+            $group : {
+                _id: {subTypeTicket:"$subTypeTicket"},
+                count: { $sum: 1 }
+            },
+        },
+        { $sort : {"count":-1 }},
+        {
+            $lookup: {
+                from: 'subtypetickets', 
+                localField: '_id.subTypeTicket', 
+                foreignField: '_id', 
+                as: '_id.subTypeTicket'} 
+        },
+        {
+            $unwind:"$_id.subTypeTicket"
+        },
+        {
+            $lookup: {
+                from: 'typetickets', 
+                localField: '_id.subTypeTicket.typeTicket', 
+                foreignField: '_id', 
+                as: '_id.subTypeTicket.typeTicket'
+            } 
+        },
+        {
+            $unwind:"$_id.subTypeTicket.typeTicket"
+        },
+        {
+            $project : {
+                count:1, 
+                _id :{
+                    subTypeTicket: {
+                        _id:1,
+                        name:1,
+                        typeTicket:{
+                            _id:1,
+                            name:1
+                        }
+                    },
+                }
+            }
+        },
+    ]
+
+    let teamQuery =[
+        {
+            $match: {company: ObjectId(company)}
+        },
+        {
+            $group : {
+                _id: {team:"$team"},
+                count: { $sum: 1 }
+            },
+        },
+        { $sort : {"count":-1 }},
+        {
+            $lookup: {
+                from: 'teams', 
+                localField: '_id.team', 
+                foreignField: '_id', 
+                as: '_id.team'
+            } 
+        },
+        {
+            $unwind:"$_id.team"
+        },
+        {
+            $project : {
+                count:1, 
+                _id :{
+                    team: {
+                        _id:1,
+                        name:1
+                    },
+                }
+            }
+        },
+    ]
+
+    let requesterQuery =[
+        {
+            $match: {company: ObjectId(company)}
+        },
+        {
+            $group : {
+                _id: {requester:"$requester"},
+                count: { $sum: 1 }
+            },
+        },
+        { $sort : {"count":-1 }},
+        { $limit: 10},
+        {
+            $lookup: {
+                from: 'users', 
+                localField: '_id.requester', 
+                foreignField: '_id', 
+                as: '_id.requester'} 
+        },
+        {
+            $unwind:"$_id.requester"
+        },
+        {
+            $project : {
+                count:1, 
+                _id :{
+                    requester: {
+                        _id:1,
+                        name:1,
+                        surname:1,
+                    },
+                }
+            }
+        },
+        
+    ]
+
+    let timeQuery =[
+        {
+            $match: {company: ObjectId(company)}
+        },
+        { 
+            $group : {
+                _id: {$substr: ['$createDate', 2, 10]},
+                count: { $sum: 1 }
+            } 
+        },
+        { $sort : {"_id": 1 }},
+        { $limit: 365}
+    ]
+
+    let monthQuery =[
+        {
+            $match: {company: ObjectId(company)}
+        },
+        { 
+            $group : {
+                _id: {$substr: ['$createDate', 1, 7]},
+                count: { $sum: 1 }
+            } 
+        },
+        { $sort : {"_id": 1 }},
+    ]
+
+    let byAgent;
+    let bySubtype;
+    let byTeam;
+    let byRequester;
+    let byTime;
+    let byMonth;
+    
+    await Ticket.aggregate(agentQuery, function(err, tickets){
+        if(err){
+            byAgent = null;
+        }else{
+            byAgent = tickets
+        }
+    })
+    await Ticket.aggregate(subQuery, function(err, tickets){
+        if(err){
+            bySubtype = null;
+        }else{
+            bySubtype = tickets
+        }
+    })
+    await Ticket.aggregate(teamQuery, function(err, tickets){
+        if(err){
+            byTeam = null;
+        }else{
+            byTeam = tickets
+        }
+    })
+    await Ticket.aggregate(requesterQuery, function(err, tickets){
+        if(err){
+            byRequester = null;
+        }else{
+            byRequester =  tickets
+        }
+    })
+    await Ticket.aggregate(timeQuery, function(err, tickets){
+        if(err){
+            byTime = null;
+        }else{
+            byTime =  tickets
+        }
+    })
+    await Ticket.aggregate(monthQuery, function(err, tickets){
+        if(err){
+            byMonth = null;
+        }else{
+            byMonth =  tickets
+        }
+    })
+    await setTimeout(() => {
+        res.status(200).send({agent: byAgent, subtype: bySubtype, team: byTeam, requester: byRequester, time: byTime, month: byMonth})
+    }, 1000);
+
 }
 
 function saveTicket(req, res){
@@ -1684,7 +1931,8 @@ module.exports = {
     getDateTickets,
     getTeamTickets,
     getList,
-    
+    getReports,
+
     getTimeWork,
     getTypeTimeWork,
     getTimeWorkPhases,

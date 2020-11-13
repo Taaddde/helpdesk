@@ -8,6 +8,7 @@ import tinyColor from 'tinycolor2';
 import { ActivatedRoute } from "@angular/router";
 import { userService } from "app/shared/services/helpdesk/user.service";
 import { ticketService } from "app/shared/services/helpdesk/ticket.service";
+import * as moment from 'moment';
 
 @Component({
   selector: "app-analytics",
@@ -22,21 +23,46 @@ export class AnalyticsComponent implements OnInit {
   public ticketForAgentSource: any;
   public token: string;
 
-  trafficVsSaleOptions: any;
-  trafficVsSale: any;
-  trafficData: any;
-  saleData: any;
+  public reports: any;
 
-  sessionOptions: any;
-  sessions: any;
-  sessionsData: any;
+  public colors = ['warn', 'primary', 'accent', 'warn', 'primary', 'accent', 'warn', 'primary', 'accent', 'warn', 'primary', 'accent', 'warn', 'primary', 'accent', 'warn', 'primary', 'accent', 'warn', 'primary', 'accent', 'warn', 'primary', 'accent'];
 
-  trafficGrowthChart: any;
-  bounceRateGrowthChart: any;
+  monthOptions: any;
+  month: any;
+  monthData: any;
+  
+  dayOptions: any;
+  day: any;
+  dayData: any;
 
-  dailyTrafficChartBar: any;
-  trafficSourcesChart: any;
-  countryTrafficStats: any[];
+  agentChart: any;
+  agentBounceRate: any;
+  requesterChartBar: any;
+
+  columns = [
+    {
+      prop: 'subtype',
+      name: 'Sub-tipo',
+      flexGrow: 3
+    },
+    {
+      prop: 'type',
+      name: 'Tipo',
+      flexGrow: 2
+    },
+    {
+      prop: 'count',
+      name: 'Tickets',
+      flexGrow: 1
+    },
+  ];
+
+
+  subtypeStats: any[];
+
+  teams: any[];
+
+  totalTickets: number;
 
   constructor(
     private themeService: ThemeService,
@@ -53,166 +79,6 @@ export class AnalyticsComponent implements OnInit {
 
     this.getReports();
 
-
-
-
-    
-    this.initTrafficVsSaleChart(this.themeService.activatedTheme);
-    this.initSessionsChart(this.themeService.activatedTheme);
-    this.initTrafficSourcesChart(this.themeService.activatedTheme)
-    this.initDailyTrafficChartBar(this.themeService.activatedTheme)
-    this.initTrafficGrowthChart(this.themeService.activatedTheme)
-
-    this.countryTrafficStats = [
-      {
-        country: "US",
-        visitor: 14040,
-        pageView: 10000,
-        download: 1000,
-        bounceRate: 30,
-        flag: "flag-icon-us"
-      },
-      {
-        country: "India",
-        visitor: 12500,
-        pageView: 10000,
-        download: 1000,
-        bounceRate: 45,
-        flag: "flag-icon-in"
-      },
-      {
-        country: "UK",
-        visitor: 11000,
-        pageView: 10000,
-        download: 1000,
-        bounceRate: 50,
-        flag: "flag-icon-gb"
-      },
-      {
-        country: "Brazil",
-        visitor: 4000,
-        pageView: 10000,
-        download: 1000,
-        bounceRate: 30,
-        flag: "flag-icon-br"
-      },
-      {
-        country: "Spain",
-        visitor: 4000,
-        pageView: 10000,
-        download: 1000,
-        bounceRate: 45,
-        flag: "flag-icon-es"
-      },
-      {
-        country: "Mexico",
-        visitor: 4000,
-        pageView: 10000,
-        download: 1000,
-        bounceRate: 70,
-        flag: "flag-icon-mx"
-      },
-      {
-        country: "Russia",
-        visitor: 4000,
-        pageView: 10000,
-        download: 1000,
-        bounceRate: 40,
-        flag: "flag-icon-ru"
-      }
-    ];
-
-    
-    this.bounceRateGrowthChart = {
-      tooltip: {
-        trigger: "axis",
-
-        axisPointer: {
-          animation: true
-        }
-      },
-      grid: {
-        left: "0",
-        top: "0",
-        right: "0",
-        bottom: "0"
-      },
-      xAxis: {
-        type: "category",
-        boundaryGap: false,
-        data: ["0", "1", "2", "3", "4"],
-        axisLabel: {
-          show: false
-        },
-        axisLine: {
-          lineStyle: {
-            show: false
-          }
-        },
-        axisTick: {
-          show: false
-        },
-        splitLine: {
-          show: false
-        }
-      },
-      yAxis: {
-        type: "value",
-        min: 0,
-        max: 200,
-        interval: 50,
-        axisLabel: {
-          show: false
-        },
-        axisLine: {
-          show: false
-        },
-        axisTick: {
-          show: false
-        },
-        splitLine: {
-          show: false
-        }
-      },
-      series: [
-        {
-          name: "Bounce Rate",
-          type: "line",
-          smooth: false,
-          data: [0, 20, 90, 120, 190],
-          symbolSize: 8,
-          showSymbol: false,
-          lineStyle: {
-            opacity: 0,
-            width: 0
-          },
-          itemStyle: {
-            borderColor: "rgba(233, 31, 99, 0.4)"
-          },
-          areaStyle: {
-            normal: {
-              color: {
-                type: "linear",
-                x: 0,
-                y: 0,
-                x2: 0,
-                y2: 1,
-                colorStops: [
-                  {
-                    offset: 0,
-                    color: "rgba(244, 67, 54, 1)"
-                  },
-                  {
-                    offset: 1,
-                    color: "rgba(244, 67, 54, .4)"
-                  }
-                ]
-              }
-            }
-          }
-        }
-      ]
-    };
   }
 
 
@@ -332,38 +198,43 @@ export class AnalyticsComponent implements OnInit {
 
       this._ticketService.getReports(this.token, companyId).subscribe(
         response =>{
-            console.log(response);
-      },
-      error =>{
-          console.error(error);
+            this.reports = response;
+            this.monthInit(this.themeService.activatedTheme);
+            this.dayInit(this.themeService.activatedTheme);
+            this.agentInit(this.themeService.activatedTheme);
+            this.requesterInit(this.themeService.activatedTheme);
+
+            this.subtypeStats = this.reports.subtype.map(x => {
+              return {
+                subtype: x._id.subTypeTicket.name,
+                type: x._id.subTypeTicket.typeTicket.name,
+                count: x.count
+              }
+            })
+
+            this.teams = this.reports.team;
+            this.totalTickets = 0;
+            this.teams.forEach(e => {
+              this.totalTickets += e.count;
+            });
+        },
+        error =>{
+            console.error(error);
       }
   );
   })
-}
+  }
 
+  getPercentage(num):number{
+    return Math.floor((num / this.totalTickets) * 100);
+  }
 
+  monthInit(theme) {
 
+    let data = this.reports.month.map(x => moment(x._id, 'YY-MM').format('MM/YY'));
+    this.monthData = this.reports.month.map(x => x.count);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  initTrafficVsSaleChart(theme) {
-    this.trafficVsSaleOptions = {
+    this.monthOptions = {
       tooltip: {
         show: true,
         trigger: "axis",
@@ -383,23 +254,7 @@ export class AnalyticsComponent implements OnInit {
       xAxis: {
         type: "category",
         boundaryGap: false,
-        data: [
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15"
-        ],
+        data: data,
         axisLabel: {
           show: true,
           margin: 20,
@@ -441,71 +296,31 @@ export class AnalyticsComponent implements OnInit {
       },
       series: [
         {
-          name: "Traffic",
+          name: "Tickets",
           label: { show: false, color: "#0168c1" },
           type: "bar",
           barGap: 0,
           color: tinyColor(theme.baseColor).setAlpha(.4).toString(),
           smooth: true
         },
-        {
-          name: "Sales",
-          label: { show: false, color: "#639" },
-          type: "bar",
-          color: tinyColor(theme.baseColor).toString(),
-          smooth: true
-        }
       ]
     };
-    
-    this.trafficData = [
-      1400,
-      1350,
-      950,
-      1150,
-      950,
-      1260,
-      930,
-      1450,
-      1150,
-      1400,
-      1350,
-      950,
-      1150,
-      950,
-      1260
-    ];
-    this.saleData = [
-      500,
-      700,
-      350,
-      840,
-      750,
-      800,
-      700,
-      500,
-      700,
-      650,
-      104,
-      750,
-      800,
-      700,
-      500
-    ];
-    this.trafficVsSale = {
+
+    this.month = {
       series: [
         {
-          data: this.trafficData
-        },
-        {
-          data: this.saleData
+          data: this.monthData
         }
       ]
     };
   }
 
-  initSessionsChart(theme) {
-    this.sessionOptions = {
+  dayInit(theme) {
+
+    let data = this.reports.time.map(x => moment(x._id, 'YY-MM-DD').format('DD/MM/YY'));
+    this.dayData = this.reports.time.map(x => x.count);
+
+    this.dayOptions = {
       tooltip: {
         show: true,
         trigger: "axis",
@@ -524,47 +339,24 @@ export class AnalyticsComponent implements OnInit {
       },
       xAxis: {
         type: "category",
-        data: [
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15",
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28",
-          "29",
-          "30"
-        ],
-        axisLine: {
-          show: false
-        },
+        boundaryGap: false,
+        data: data,
         axisLabel: {
           show: true,
-          margin: 30,
+          margin: 20,
           color: "#888"
         },
         axisTick: {
+          show: false
+        },
+
+        axisLine: {
+          show: false,
+          lineStyle: {
+            show: false
+          }
+        },
+        splitLine: {
           show: false
         }
       },
@@ -575,7 +367,7 @@ export class AnalyticsComponent implements OnInit {
         },
         axisLabel: {
           show: true,
-          margin: 20,
+          margin: 30,
           color: "#888"
         },
         axisTick: {
@@ -590,77 +382,30 @@ export class AnalyticsComponent implements OnInit {
       },
       series: [
         {
-          data: [],
-          type: "line",
-          name: "User",
-          smooth: true,
-          color: tinyColor(theme.baseColor).toString(),
-          lineStyle: {
-            opacity: 1,
-            width: 3
-          },
-          itemStyle: {
-            opacity: 0
-          },
-          emphasis: {
-            itemStyle: {
-              color: "rgba(16, 23, 76, 1)",
-              borderColor: "rgba(16, 23, 76, .4)",
-              opacity: 1,
-              borderWidth: 8
-            },
-            label: {
-              show: false,
-              backgroundColor: "#fff"
-            }
-          }
-        }
+          name: "Tickets",
+          label: { show: false, color: "#0168c1" },
+          type: "bar",
+          barGap: 0,
+          color: tinyColor(theme.baseColor).setAlpha(.4).toString(),
+          smooth: true
+        },
       ]
     };
-    this.sessionsData = [
-      140,
-      135,
-      95,
-      115,
-      95,
-      126,
-      93,
-      145,
-      115,
-      140,
-      135,
-      95,
-      115,
-      95,
-      126,
-      125,
-      145,
-      115,
-      140,
-      135,
-      95,
-      115,
-      95,
-      126,
-      93,
-      145,
-      115,
-      140,
-      135,
-      95
-    ];
 
-    this.sessions = {
+    this.day = {
       series: [
         {
-          data: this.sessionsData
+          data: this.dayData
         }
       ]
     };
   }
 
-  initTrafficSourcesChart(theme) {
-    this.trafficSourcesChart = {
+  agentInit(theme) {
+
+    let data = this.reports.agent.map(x => { return {value: x.count, name: x._id.agent.name + ' ' + x._id.agent.surname}})
+
+    this.agentChart = {
       grid: {
         left: "3%",
         right: "4%",
@@ -700,7 +445,7 @@ export class AnalyticsComponent implements OnInit {
 
       series: [
         {
-          name: "Sessions",
+          name: "Tickets",
           type: "pie",
           radius: ["55%", "85%"],
           center: ["50%", "50%"],
@@ -732,17 +477,7 @@ export class AnalyticsComponent implements OnInit {
               show: false
             }
           },
-          data: [
-            {
-              value: 335,
-              name: "Direct"
-            },
-            {
-              value: 310,
-              name: "Search Eng."
-            },
-            { value: 148, name: "Social" }
-          ],
+          data: data,
           itemStyle: {
             emphasis: {
               shadowBlur: 10,
@@ -755,8 +490,11 @@ export class AnalyticsComponent implements OnInit {
     };
   }
 
-  initDailyTrafficChartBar(theme) {
-    this.dailyTrafficChartBar = {
+  requesterInit(theme) {
+    let data = this.reports.requester.map(x => x._id.requester.name + ' ' + x._id.requester.surname);
+    let count = this.reports.requester.map(x => x.count);
+
+    this.requesterChartBar = {
       legend: {
         show: false
       },
@@ -769,13 +507,14 @@ export class AnalyticsComponent implements OnInit {
       },
       tooltip: {
         show: true,
-        backgroundColor: "rgba(0, 0, 0, .8)"
+        backgroundColor: "rgba(0, 0, 0, .8)",
+        titleAlign: 'right'
       },
       xAxis: [
         {
           type: "category",
           // data: ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-          data: ["1", "2", "3", "4", "5", "6", "7"],
+          data: data,
           axisTick: {
             show: false
           },
@@ -798,8 +537,8 @@ export class AnalyticsComponent implements OnInit {
             formatter: "${value}"
           },
           min: 0,
-          max: 100000,
-          interval: 25000,
+          max: count[0],
+          interval: 2,
           axisTick: {
             show: false
           },
@@ -815,8 +554,7 @@ export class AnalyticsComponent implements OnInit {
 
       series: [
         {
-          name: "Online",
-          data: [35000, 69000, 22500, 60000, 50000, 50000, 30000],
+          data: count,
           label: { show: true, color: tinyColor(theme.baseColor).toString(), position: "top" },
           type: "bar",
           barWidth: "12",
@@ -830,97 +568,5 @@ export class AnalyticsComponent implements OnInit {
     };
   }
 
-  initTrafficGrowthChart(theme) {
-    this.trafficGrowthChart = {
-      tooltip: {
-        trigger: "axis",
-
-        axisPointer: {
-          animation: true
-        }
-      },
-      grid: {
-        left: "0",
-        top: "0",
-        right: "0",
-        bottom: "0"
-      },
-      xAxis: {
-        type: "category",
-        boundaryGap: false,
-        data: ["0", "1", "2", "3", "4"],
-        axisLabel: {
-          show: false
-        },
-        axisLine: {
-          lineStyle: {
-            show: false
-          }
-        },
-        axisTick: {
-          show: false
-        },
-        splitLine: {
-          show: false
-        }
-      },
-      yAxis: {
-        type: "value",
-        min: 0,
-        max: 200,
-        interval: 50,
-        axisLabel: {
-          show: false
-        },
-        axisLine: {
-          show: false
-        },
-        axisTick: {
-          show: false
-        },
-        splitLine: {
-          show: false
-        }
-      },
-      series: [
-        {
-          name: "Visit",
-          type: "line",
-          smooth: false,
-          data: [0, 40, 140, 90, 160],
-          symbolSize: 8,
-          showSymbol: false,
-          lineStyle: {
-            opacity: 0,
-            width: 0
-          },
-          itemStyle: {
-            borderColor: "rgba(233, 31, 99, 0.4)"
-          },
-          areaStyle: {
-            normal: {
-              color: {
-                type: "linear",
-                x: 0,
-                y: 0,
-                x2: 0,
-                y2: 1,
-                colorStops: [
-                  {
-                    offset: 0,
-                    color: tinyColor(theme.baseColor).toString()
-                  },
-                  {
-                    offset: 1,
-                    color: tinyColor(theme.baseColor).setAlpha(.6).toString()
-                  }
-                ]
-              }
-            }
-          }
-        }
-      ]
-    };
-  }
 
 }

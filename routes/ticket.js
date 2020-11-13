@@ -20,7 +20,7 @@ api.get('/counts-agent/:company/:userId', md_auth.ensureAuth, ticketController.g
 api.get('/counts-requester/:userId', md_auth.ensureAuth, ticketController.getCountReqTickets);
 api.get('/unread/:userId', md_auth.ensureAuth, ticketController.getUnreadTickets);
 api.get('/req-unread/:userId', md_auth.ensureAuth, ticketController.getUnreadTicketsReq);
-api.get('/report/:company', md_auth.ensureAuth, ticketController.getTicketReports);
+api.get('/report/:company', md_auth.ensureAuth, ticketController.getReports);
 api.get('/calendar/:userId', md_auth.ensureAuth, ticketController.getDateTickets);
 api.get('/teamPaged/:page/:perPage/:userId', md_auth.ensureAuth, ticketController.getTeamTickets);
 api.get('/timework/report/:companyId', md_auth.ensureAuth, ticketController.getTimeWork);

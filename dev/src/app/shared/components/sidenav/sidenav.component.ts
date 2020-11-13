@@ -332,6 +332,16 @@ export class SidenavComponent {
             { name: "Tipo/Subtipo de ticket", state: "settings/ticket/types", cod: '6.4'},
           ]
         },
+
+        {
+          name: "Analytics",
+          cod: '9',
+          type: "link",
+          tooltip: "Analytics",
+          icon: "leaderboard",
+          state: "analytics/"+this.identity['company']['_id'],
+        },
+
       ];
     }
   }

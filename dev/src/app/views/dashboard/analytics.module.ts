@@ -17,6 +17,7 @@ import { ChartsModule } from 'ng2-charts';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { SharedPipesModule } from 'app/shared/pipes/shared-pipes.module';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 import { AnalyticsRoutes } from "./analytics.routing";
 import { AnalyticsComponent } from './analytics/analytics.component';
@@ -34,6 +35,7 @@ import { AnalyticsComponent } from './analytics/analytics.component';
     MatListModule,
     MatTabsModule,
     MatTableModule,
+    MatPaginatorModule,
     MatGridListModule,
     FlexLayoutModule,
     ChartsModule,

@@ -66,6 +66,8 @@ export class NewUserComponent implements OnInit {
     })
   }
 
+  delete(){}
+
   editUser(){
     if(
       this.user.name != '' && 

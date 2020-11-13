@@ -9,7 +9,7 @@ mongoose.connect('mongodb://localhost:27017/helpdesk',{ useUnifiedTopology: true
     if(err){
         throw err;
     }else{
-        console.log('La base de datos esta corriendo bien');
+        console.log('Aplicación TICKETS corriendo correctamente en puerto ' + port);
         app.listen(port, function(){
             logger.info({message:{module:'index', msg:'Servidor iniciado en puerto '+port}});
         })

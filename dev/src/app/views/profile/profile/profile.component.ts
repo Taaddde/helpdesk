@@ -1,5 +1,5 @@
 import { Component, OnInit} from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as moment from 'moment';
 import { userService } from 'app/shared/services/helpdesk/user.service';
@@ -45,6 +45,7 @@ export class UserProfileComponent implements OnInit {
     private _responseService: responseService,
     private _route: ActivatedRoute,
     private snackBar: MatSnackBar,
+    private _router: Router
   ) {
     this.token = _userService.getToken();
     this.identity = _userService.getIdentity();
@@ -251,6 +252,28 @@ export class UserProfileComponent implements OnInit {
     }else{
       this.openSnackBar('Faltan campos para completar', 'Cerrar');
     }
+  }
+
+  delete(){
+    this.confirmService.confirm({message: `¿Estas seguro que quieres eliminar a ${this.user.name} ${this.user.surname}?`})
+    .subscribe(res => {
+      if(res){
+        let delQuery = {_id: this.user._id, deleted: true};
+        this._userService.edit(this.token, delQuery).subscribe(
+            response =>{
+              if(this.user.role != 'ROLE_REQUESTER')
+                this._router.navigateByUrl('/user/list/agent');
+              else
+                this._router.navigateByUrl('/user/list/requester');
+
+              this.openSnackBar('Usuario eliminado', 'Cerrar');
+            },
+            error =>{
+              this.openSnackBar(error.message, 'Cerrar');
+            }
+        );
+      }
+    })
   }
 
   openAttachment() {

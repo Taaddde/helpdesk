@@ -81,7 +81,7 @@
           </div>
         </mat-toolbar>
         
-        <div cdkDropList class="todo-list" (cdkDropListDropped)="drop($event)">
+        <div cdkDropList class="todo-list" (cdkDropListDropped)="drop($event)" [perfectScrollbar]>
           <div
             class="todo-box"
             *ngIf="todoList?.length < 1"
